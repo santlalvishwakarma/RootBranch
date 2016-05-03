@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context crossContext="true" path="/p" aliases="/staticcontent=C:/dev/workspace/PortalBase/staticcontent">
+<Context crossContext="true" path="/p" aliases="/staticcontent=C:/dev/Git_Repository/PortalBase/staticcontent">
 	<Resource name="WebDS" auth="Container" type="javax.sql.DataSource" maxActive="100" maxIdle="30" maxWait="10000"
 		username="root" password="root" driverClassName="com.mysql.jdbc.Driver" validationQuery="SELECT 1" testWhileIdle="true"
 		timeBetweenEvictionRunsMillis="60000" removeAbandoned="true" removeAbandonedTimeout="300"
