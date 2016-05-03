@@ -1,0 +1,122 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<f:view>
+		<h:head>
+			<title>Admin User Login</title>
+			<style>
+#wrapper {
+	margin: 0px auto;
+	min-height: 100%;
+	width: 40%;
+}
+
+.login-header,.login-footer {
+	width: 100%;
+	height: 20%;
+}
+
+.main-container {
+	box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.8);
+	border-radius: 5px;
+	width: 100%;
+	background-color: #f7f7f7;
+	height: 60%;
+	zoom: 1;
+}
+
+.login-header {
+	text-align: center;
+	font-size: 20px;
+	line-height: 6;
+}
+
+.login-form {
+	margin: 0px auto;
+	width: 60%;
+	margin-top: 10%;
+}
+
+h1 {
+	font-family: monospace;
+	text-align: center;
+	padding-top: 25px;
+}
+
+.login-labels {
+	float: left;
+	width: 40%;
+	text-align: right;
+}
+
+.login-input-fields {
+	float: right;
+	width: 55%;
+}
+
+.login-button {
+	width: 100%;
+	min-width: 100%;
+	padding-top: 2%;
+}
+
+.clear {
+	clear: both;
+}
+
+.
+.ui-growl-item-container,.ui-state-highlight,.ui-corner-all,.ui-helper-hidden,.ui-shadow
+	{
+	border: 1px solid #FFFFFF !important;
+	background: #FFFFFF !important;
+}
+
+.ui-inputfield {
+	width: 100%;
+}
+
+.align-login-buttons {
+	float: right;
+}
+</style>
+		</h:head>
+		<h:body>
+			<p:growl autoUpdate="true" life="5000000" />
+			<div id="wrapper">
+				<div class="login-header"></div>
+				<div class="main-container">
+					<div class="login-header">
+						<span>Please login to access admin modules...</span>
+					</div>
+					<div class="login-form">
+						<h:form id="adminLoginPage">
+							<div class="login-labels">
+								<span>Login Id :</span> <span>Password :</span>
+							</div>
+							<div class="login-input-fields">
+								<span> <p:inputText
+										value="#{loginPanelBean.loginOpr.userRecord.userLogin}"
+										id="loginUserName" />
+								</span> <span><p:password
+										value="#{loginPanelBean.loginOpr.userRecord.loginPassword}"
+										id="loginUserPassword" /></span>
+							</div>
+							<div class="clear"></div>
+							<div class="login-button">
+								<div class="align-login-buttons">
+									<p:commandButton value="Login Me"
+										actionListener="#{loginPanelBean.performLogin}"
+										process="@this, :adminLoginPage" />
+								</div>
+							</div>
+						</h:form>
+					</div>
+				</div>
+				<div class="login-footer"></div>
+			</div>
+		</h:body>
+	</f:view>
+</ui:composition>

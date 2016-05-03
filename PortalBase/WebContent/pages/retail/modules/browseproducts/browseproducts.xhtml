@@ -1,0 +1,119 @@
+<ui:composition template="/pages/retail/template/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<ui:define name="content">
+		<!-- Page Content Wrapper Start -->
+		<div id="homecat-wrapper" class="wrapper">
+			<h:form id="browseProductsForm" style="float: left;">
+				<div id="breadcrumbs" class="breadcrum">
+					<ul>
+						<li class="home"><h:outputLink value="http://#{facesContext.externalContext.request.serverName}">
+								Home
+							</h:outputLink></li>
+						<li><a> > </a> <span> <h:outputText
+									value="#{retailBrowseProductsBB.browseProductsOpr.productSkuRecord.hierarchicalBreadcrumbTitle}" escape="false" />
+						</span></li>
+
+					</ul>
+				</div>
+				<br />
+				<br />
+				<br />
+				<div class="clear"></div>
+				<div class="productBrowser">
+					<div class="leftbar">
+						<div class="block bluebg">
+							<div class="select-design grey rounded-five">
+								<h3>Select Category</h3>
+								<p:outputPanel id="selctCheckBox">
+									<p>
+										<p:selectBooleanCheckbox id="selectAll" value="#{retailBrowseProductsBB.selectAll}">
+											<p:ajax event="change" listener="#{retailBrowseProductsBB.selectAllProduct}"
+												process="selectAll,searchResultDataTable, @this"
+												update=":browseProductsForm:product, :browseProductsForm:priceRangePanel, searchResultDataTable, :browseProductsForm:searchResultDataTable:selectCB"
+												partialSubmit="true" />
+										</p:selectBooleanCheckbox>
+										<label for="selectAll">All</label>
+									</p>
+									<ui:repeat id="searchResultDataTable" value="#{retailBrowseProductsBB.browseProductsOpr.subCategoryList}"
+										var="searchRow">
+										<li style="list-style-type: none;"><p>
+												<p:selectBooleanCheckbox id="selectCB" style="vertical-align: middle;" value="#{searchRow.selectedCategory}">
+													<p:ajax event="change" listener="#{retailBrowseProductsBB.fileterOnCategories(searchRow)}"
+														process="selectCB, @this"
+														update=":browseProductsForm:product, :browseProductsForm:priceRangePanel, :browseProductsForm:selectAll"
+														partialSubmit="true" />
+												</p:selectBooleanCheckbox>
+												<h:outputText id="categoryCode" value="#{searchRow.name}"
+													style=" color: #3E3E3E; padding-left: 5px;vertical-align: middle;" />
+											</p></li>
+									</ui:repeat>
+								</p:outputPanel>
+							</div>
+						</div>
+						<div class="block1 bluebg">
+							<p:outputPanel id="priceRangePanel">
+								<h:outputText id="displayRange"
+									value="Between #{retailBrowseProductsBB.browseProductsOpr.productSkuRecord.minPrice} and #{retailBrowseProductsBB.browseProductsOpr.productSkuRecord.maxPrice}">
+								</h:outputText>
+								<br />
+								<p:slider for="min,max" display="displayRange" range="true" displayTemplate="Between {min} and {max}"
+									minValue="#{retailBrowseProductsBB.browseProductsOpr.productSkuRecord.minPrice}"
+									maxValue="#{retailBrowseProductsBB.browseProductsOpr.productSkuRecord.maxPrice}">
+									<p:ajax event="slideEnd" listener="#{retailBrowseProductsBB.onSlideEnd}"
+										process="min, max, :browseProductsForm:product, @this" update=":browseProductsForm:product"
+										partialSubmit="true" />
+								</p:slider>
+								<h:inputHidden id="min" value="#{retailBrowseProductsBB.browseProductsOpr.productSkuRecord.minPrice}" />
+								<h:inputHidden id="max" value="#{retailBrowseProductsBB.browseProductsOpr.productSkuRecord.maxPrice}" />
+							</p:outputPanel>
+							<br />
+							<div class="blockdvider"></div>
+							<h3>FILTER PRODUCT BY</h3>
+							<p:selectOneMenu value="#{retailBrowseProductsBB.filterBy}">
+								<p:ajax event="change" update=":browseProductsForm:product, :browseProductsForm:priceRangePanel" process="@this"
+									listener="#{retailBrowseProductsBB.filterOnSelection}" />
+								<f:selectItem itemLabel="--Select--" itemValue="" />
+								<f:selectItem itemLabel="Newly Arrived" itemValue="Newly Arrived" />
+								<f:selectItem itemLabel="Alphabetic" itemValue="Alphabetic" />
+								<f:selectItem itemLabel="Low To High" itemValue="LToH" />
+								<f:selectItem itemLabel="High To Low" itemValue="HToL" />
+							</p:selectOneMenu>
+						</div>
+						<div class="buyblog">
+							<p:graphicImage value="/staticcontent/retail/images/call.png" alt="" />
+							<div class="buytxt">BUY ON PHONE</div>
+							<div class="number">+9122 40497436/35</div>
+							<ul>
+								<li>We also accept payments by Cheque, DD and IVR.</li>
+								<li>To order, call us between 8am to 10pm IST, 365 days of the year</li>
+							</ul>
+							<div class="line1"></div>
+							<div class="buytxt1">powered by Phone pe deal</div>
+						</div>
+						<div class="bear-img"></div>
+						<div class="clear"></div>
+					</div>
+					<div class="arjun-img"></div>
+					<div class="productbar">
+						<div class="productbox">
+							<div class="ttletxt1">
+								<h:outputText value="#{retailBrowseProductsBB.browseTitle}" />
+							</div>
+							<DIV class="clear"></DIV>
+							<ui:include src="productgrid.xhtml" />
+							<DIV class="clear"></DIV>
+							<div id="showcase-nav1"></div>
+						</div>
+					</div>
+					<div class="tenali-img"></div>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</h:form>
+		</div>
+		<div class="clear"></div>
+		<!-- Page Content Wrapper Ends -->
+	</ui:define>
+</ui:composition>

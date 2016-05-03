@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<style>
+a {
+	padding-right: 0px !important;
+}
+</style>
+	<h:form id="categoryMenuForm">
+
+		<div class="jqueryslidemenu-upper-div">
+			<table>
+				<tr>
+					<td>
+						<div id="myslidemenu" class="jqueryslidemenu">
+							<h:outputText value="#{applicationScope['PORTAL_BASE_RETAIL_DETAILS_MENU_ELEMENT']}" escape="false" />
+						</div>
+					</td>
+				</tr>
+			</table>
+			<br style="clear: left" />
+		</div>
+
+	</h:form>
+</ui:composition>
+

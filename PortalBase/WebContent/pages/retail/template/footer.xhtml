@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<div class="footer">
+		<div class="footerHolder">
+			<div id="footer_inner">
+				<div class="footer_widget fst">
+					<span style="font-size: 15px; font-weight: bold;">Shipping &amp; Delivery</span>
+					<ul style="width: 200px; text-align: left;">
+						<li><h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}#{applicationScope['PAGE_NAVIGATION_MAP']['/freeshippingpolicy'].webResourceAttributes.canonicalURI}">
+								<span>About Free Shipping</span>
+							</h:outputLink></li>
+						<li><h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}#{applicationScope['PAGE_NAVIGATION_MAP']['/shippingpolicy'].webResourceAttributes.canonicalURI}">
+								<span>About Shipping</span>
+							</h:outputLink></li>
+						<!-- <li><h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}#{applicationScope['PAGE_NAVIGATION_MAP']['/retail/information/shippingpolicy'].webResourceAttributes.canonicalURI}">
+								<span>Shipping Rates</span>
+							</h:outputLink>
+						</li> -->
+					</ul>
+				</div>
+				<div class="footer_widget3">
+					<span style="font-size: 15px; font-weight: bold;">Quick Help</span>
+					<ul style="width: 130px; text-align: left;">
+						<li><h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}#{applicationScope['PAGE_NAVIGATION_MAP']['/contactus'].webResourceAttributes.canonicalURI}">
+								<span>Contact Us</span>
+							</h:outputLink></li>
+						<li><h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}#{applicationScope['PAGE_NAVIGATION_MAP']['/faqs'].webResourceAttributes.canonicalURI}">
+								<span>Order Status</span>
+							</h:outputLink></li>
+						<li><h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}#{applicationScope['PAGE_NAVIGATION_MAP']['/faqs'].webResourceAttributes.canonicalURI}">
+								<span>FAQs</span>
+							</h:outputLink></li>
+						<!-- 	<li><h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}#{applicationScope['PAGE_NAVIGATION_MAP']['/retail/information/businessPartner'].webResourceAttributes.canonicalURI}">
+								<span>Business Partner</span>
+							</h:outputLink>
+						</li> -->
+					</ul>
+				</div>
+				<div class="footer_widget">
+					<span style="font-size: 15px; font-weight: bold;">About Us</span>
+					<ul style="width: 170px; text-align: left;">
+						<li><h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}#{applicationScope['PAGE_NAVIGATION_MAP']['/aboutus'].webResourceAttributes.canonicalURI}">
+								<span>About Amar Chitra Katha</span>
+							</h:outputLink></li>
+						<li style="width: 170px;"><h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}#{applicationScope['PAGE_NAVIGATION_MAP']['/careers'].webResourceAttributes.canonicalURI}">
+								<span>Careers</span>
+							</h:outputLink></li>
+						<!-- <li style="width: 170px;"><h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}#{applicationScope['PAGE_NAVIGATION_MAP']['/retail/information/customercare'].webResourceAttributes.canonicalURI}">
+								<span>Contact us</span>
+							</h:outputLink></li> -->
+						<li class="last"><h:outputLink
+								value="#{facesContext.externalContext.requestContextPath}#{applicationScope['PAGE_NAVIGATION_MAP']['/termsandconditions'].webResourceAttributes.canonicalURI}">
+								<span>Terms of Use</span>
+							</h:outputLink></li>
+					</ul>
+				</div>
+				<div class="footer_widget1">
+					<span style="padding-left: 17px; font-size: 15px; font-weight: bold;">FOLLOW US</span>
+					<!-- <a href="http://www.ack-media.com" target="_blank" class="icon ackmedia">ACK media</a> -->
+					<a href="https://www.facebook.com/AmarChitraKatha" target="_blank" class="icon facebook">Facebook</a>
+					<!-- <a
+						href="http://ack.wordpress.com/" target="_blank" class="icon rss">RSS</a> -->
+				</div>
+				<div class="footer_widget2">
+					<span style="font-size: 15px; font-weight: bold;">NEWSLETTER SUBSCRIPTION</span><br /> Be the first to know about
+					special offers, new products, and special events<br />
+					<div>
+						<ui:include src="/pages/retail/modules/subscribetonewsletter/subscribetonewsletter.xhtml" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</ui:composition>

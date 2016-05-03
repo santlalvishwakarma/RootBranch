@@ -1,0 +1,84 @@
+<pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.3.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.3.3
+                                     http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.3.xsd">
+	<!-- Begin RewriteRules -->
+	<rewrite trailingSlash="ignore" />
+
+	<!-- Begin url mapping -->
+	<url-mapping id="homePage">
+		<pattern value="/" />
+		<view-id value="/pages/retail/modules/home/home.jsf" />
+		<!-- <action onPostback="false">#{homeBean.retrieveData}</action> -->
+	</url-mapping>
+	<url-mapping id="home">
+		<pattern value="/home/"></pattern>
+		<view-id value="/pages/retail/modules/home/home.jsf" />
+	</url-mapping>
+
+	<!-- LIST OF ATTRIBUTES TO IGNORE: javax.faces.resource -->
+	<url-mapping id="retail_products_search_cat1">
+		<pattern value="/#{retailBrowseProductsBB.hierarchyName}/#{retailBrowseProductsBB.categoryCodeLevel1}/products/" />
+		<view-id value="/pages/retail/modules/browseproducts/browseproducts.jsf" />
+		<!-- <action onPostback="false">#{retailBrowseProductsBB.getCountryDependentCurrencyConversion} </action> -->
+		<action onPostback="false">#{retailBrowseProductsBB.doProductSearch}
+		</action>
+		<action onPostback="false" phaseId="RENDER_RESPONSE">#{retailBrowseProductsBB.populateProductSearchWebAttributes}
+		</action>
+		<!-- <action onPostback="false" phaseId="RENDER_RESPONSE">#{retailBrowseProductsBB.populateProductSearchWebAttributes}</action> -->
+	</url-mapping>
+	<url-mapping id="retail_products_search_cat2">
+		<pattern
+			value="/#{retailBrowseProductsBB.hierarchyName}/#{retailBrowseProductsBB.categoryCodeLevel1}/#{retailBrowseProductsBB.categoryCodeLevel2}/products/" />
+		<view-id value="/pages/retail/modules/browseproducts/browseproducts.jsf" />
+		<!-- <action onPostback="false">#{retailBrowseProductsBB.getCountryDependentCurrencyConversion} </action> -->
+		<action onPostback="false">#{retailBrowseProductsBB.doProductSearch}
+		</action>
+		<action onPostback="false" phaseId="RENDER_RESPONSE">#{retailBrowseProductsBB.populateProductSearchWebAttributes}
+		</action>
+	</url-mapping>
+	<url-mapping id="retail_products_search_cat3">
+		<pattern
+			value="/#{retailBrowseProductsBB.hierarchyName}/#{retailBrowseProductsBB.categoryCodeLevel1}/#{retailBrowseProductsBB.categoryCodeLevel2}/#{retailBrowseProductsBB.categoryCodeLevel3}/products/" />
+		<view-id value="/pages/retail/modules/browseproducts/browseproducts.jsf" />
+		<!-- <action onPostback="false">#{retailBrowseProductsBB.getCountryDependentCurrencyConversion} </action> -->
+		<action onPostback="false">#{retailBrowseProductsBB.doProductSearch}
+		</action>
+		<action onPostback="false" phaseId="RENDER_RESPONSE">#{retailBrowseProductsBB.populateProductSearchWebAttributes}
+		</action>
+	</url-mapping>
+	<url-mapping id="retail_products_search_cat4">
+		<pattern
+			value="/#{retailBrowseProductsBB.hierarchyName}/#{retailBrowseProductsBB.categoryCodeLevel1}/#{retailBrowseProductsBB.categoryCodeLevel2}/#{retailBrowseProductsBB.categoryCodeLevel3}/#{retailBrowseProductsBB.categoryCodeLevel4}/products/" />
+		<view-id value="/pages/retail/modules/browseproducts/browseproducts.jsf" />
+		<!-- <action onPostback="false">#{retailBrowseProductsBB.getCountryDependentCurrencyConversion} </action> -->
+		<action onPostback="false">#{retailBrowseProductsBB.doProductSearch}
+		</action>
+		<action onPostback="false" phaseId="RENDER_RESPONSE">#{retailBrowseProductsBB.populateProductSearchWebAttributes}
+		</action>
+	</url-mapping>
+	<url-mapping id="retail_product_information">
+		<pattern value="/#{retailReadMoreBB.currentProductId}" />
+		<view-id value="/pages/retail/modules/readmorepanel/readmorewrapper.jsf" /> <!-- <action onPostback="false">#{retailReadMoreBB.getCountryDependentCurrencyConversion} </action> -->
+		<action onPostback="false">#{retailReadMoreBB.loadProductFromURL} </action>
+		<action onPostback="false" phaseId="RENDER_RESPONSE">#{retailReadMoreBB.populateWebAttributes} </action>
+	</url-mapping>
+	<url-mapping id="shoppingCart">
+		<pattern value="/retail/shoppingcart" />
+		<view-id value="/pages/retail/modules/shoppingcart/shoppingcart.jsf" />
+		<action onPostback="false" phaseId="RENDER_RESPONSE">#{retailShoppingCartBB.populateWebAttributes}
+		</action>
+		<action onPostback="false">#{retailShoppingCartBB.retrieveData}</action>
+	</url-mapping>
+
+	<url-mapping id="ordertracking">
+		<pattern value="/trackyourorder" />
+		<view-id value="/ui/retail/modules/ordertracking/ordertracking.jsf" />
+		<action onPostback="false" phaseId="RENDER_RESPONSE">#{retailHomeBB.populateWebAttributes}
+		</action>
+	</url-mapping>
+	<url-mapping id="shoppingPayment">
+		<pattern value="/retail/payment" />
+		<view-id value="/pages/retail/modules/payment/payment.jsf" />
+	</url-mapping>
+
+</pretty-config>

@@ -1,0 +1,37 @@
+CREATE TABLE order_detail (
+  order_detail_id int(10) unsigned NOT NULL AUTO_INCREMENT,
+  order_header_id int(10) unsigned NOT NULL,
+  product_id int(10) unsigned NOT NULL,
+  product_sku_id int(10) unsigned NOT NULL,
+  price_per_piece float(15,3) NOT NULL,
+  original_price_per_piece float(15,3) NOT NULL,
+  total_price float(15,3) NOT NULL,
+  original_total_price float(15,3) NOT NULL,
+  quantity int(11) NOT NULL,
+  delivery_date date DEFAULT NULL,
+  jewellery_valuation tinyint(1) DEFAULT NULL,
+  customization_text varchar(25) DEFAULT NULL,
+  customization_font varchar(50) DEFAULT NULL,
+  size_id int(10) unsigned DEFAULT NULL,
+  product_shipping_charges float(15,3) DEFAULT NULL,
+  product_shipping_charges_original float(15,3) DEFAULT NULL,
+  product_shipping_duties float(15,3) DEFAULT NULL,
+  product_shipping_duties_original float(15,3) DEFAULT NULL,
+  product_shipping_express_charges float(15,3) DEFAULT NULL,
+  product_shipping_express_charges_original float(15,3) DEFAULT NULL,
+  product_shipping_processing_charges float(15,3) DEFAULT NULL,
+  product_shipping_processing_charges_original float(15,3) DEFAULT NULL,
+  product_shipping_mapped float(15,3) DEFAULT NULL,
+  store_location_id int(10) unsigned DEFAULT NULL,
+  shipping_status varchar(25) DEFAULT NULL,
+  PRIMARY KEY (order_detail_id),
+  KEY FK_order_detail_1 (order_header_id),
+  KEY FK_order_detail_2 (size_id),
+  KEY FK_order_detail_3 (store_location_id),
+  CONSTRAINT FK_order_detail_1 FOREIGN KEY (order_header_id) REFERENCES order_header (order_header_id),
+  CONSTRAINT FK_order_detail_2 FOREIGN KEY (size_id) REFERENCES core_size_master (size_id),
+  CONSTRAINT FK_order_detail_3 FOREIGN KEY (store_location_id) REFERENCES core_store_location_master (store_location_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+

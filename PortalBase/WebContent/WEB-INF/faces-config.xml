@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+	version="2.0">
+
+	<!-- retail entry starts here -->
+
+	<managed-bean>
+		<managed-bean-name>loginPanelBean</managed-bean-name>
+		<managed-bean-class>com.web.bb.retail.module.loginpanel.LoginPanelBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>retailHomeBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.retail.module.home.HomeBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>retailBrowseProductsBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.retail.module.browseproducts.BrowseProductsBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>retailReadMoreBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.retail.module.readmorepanel.ReadMoreBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>retailShoppingCartBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.retail.module.shoppingcart.ShoppingCartBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>retailPaymentBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.retail.module.payment.PaymentBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>subscribeToNewsletterBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.retail.module.subscribetonewsletter.SubscribeToNewsletterBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<!-- retail entry ends here -->
+
+	<!-- common entry starts here -->
+
+	<managed-bean>
+		<managed-bean-name>enlargeImageBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.retail.module.enlargeimagepanel.EnlargeImageBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<!-- common entry ends here -->
+
+	<!-- Admin entry starts here -->
+	<managed-bean>
+		<managed-bean-name>searchWebsiteBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.websitemaster.SearchWebsiteBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>addWebsiteBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.websitemaster.AddWebsiteBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>websiteMasterBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.websitemaster.WebsiteMasterBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<!-- Admin entry ends here -->
+
+</faces-config>

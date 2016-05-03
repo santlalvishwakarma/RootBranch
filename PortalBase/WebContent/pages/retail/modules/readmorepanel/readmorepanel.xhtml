@@ -1,0 +1,157 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:panelGroup layout="block" id="readMorePanel">
+		<div id="breadcrumbs" class="breadcrum">
+			<ul>
+				<li class="home"><a href="/p"> Home </a></li>
+				<li><a> > </a></li>
+				<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.hierarchicalProductTitle}" escape="false" />
+			</ul>
+		</div>
+		<br />
+		<br />
+		<div class="clear"></div>
+		<div id="middlewrapper" class="productdetail">
+			<!---middlewrapper starts-->
+			<div id="productgallery">
+				<!---prod-thumbnail Ends-->
+				<div id="mainproduct" class="productdetleft">
+					<img src="#{retailReadMoreBB.readMoreOpr.productSkuRecord.imageRecord.imageURL}" class="bookdetimg" />
+					<div class="iconbox">
+						<ul>
+							<li>
+								<table>
+									<tr>
+										<td class="vamtal"><div class="addthis_toolbox addthis_default_style ">
+												<a href="http://www.addthis.com/bookmark.php?v=250&amp;pubid=xa-4f607e9158136673"
+													class="addthis_button_compact" />
+											</div></td>
+										<td class="vamtal" width="71px"><div class="fb-like"
+												data-href="http://#{facesContext.externalContext.request.serverName}#{facesContext.externalContext.requestContextPath}#{retailReadMoreBB.readMoreOpr.productSkuRecord.productURL}"
+												data-send="false" data-layout="button_count" data-width="200px" data-show-faces="false"></div></td>
+										<td class="vamtal"><a href="http://#{facesContext.externalContext.request.serverName}" data-width="75px"
+											data-text="#{retailReadMoreBB.readMoreOpr.productSkuRecord.name}" class="twitter-share-button"
+											data-url="http://#{facesContext.externalContext.request.serverName}#{facesContext.externalContext.requestContextPath}#{retailReadMoreBB.readMoreOpr.productSkuRecord.productURL}"
+											data-count="horizontal" data-via="Amar Chitra Katha" /></td>
+									</tr>
+								</table>
+							</li>
+						</ul>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<!---mainproduct ends-->
+				<div class="productdetail">
+					<div class="productdetright">
+						<h:outputText styleClass="producttitle" value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.name}" />
+						<br /> <br /> <br />
+						<h:outputText style="margin: 24px 0 0 30px; color: #BC7504;"
+							value="ISBN:#{retailReadMoreBB.readMoreOpr.productSkuRecord.code}" />
+						<br />
+						<div class="productprice">
+							<h:panelGroup styleClass="productpricelft" id="pricePanel">
+								<h:panelGroup rendered="#{!(retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice eq null)}">
+									<span>List Price: </span>
+									<span class="WebRupee"><h:outputText value="Rs." /> </span>
+									<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.basePrice}" styleClass="overline light">
+										<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
+									</h:outputText>
+									<br />
+									<span>Our Price: </span>
+									<span class="WebRupee"><h:outputText value="Rs." /> </span>
+									<h:outputText styleClass="org-color" value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice}">
+										<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
+									</h:outputText>
+								</h:panelGroup>
+								<h:panelGroup rendered="#{retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice eq null}">
+									<span>Our Price: </span>
+									<span class="WebRupee"><h:outputText value="Rs." /> </span>
+									<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.basePrice}">
+										<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
+									</h:outputText>
+								</h:panelGroup>
+							</h:panelGroup>
+							<!-- <h:panelGroup id="discountPanel"
+								rendered="#{!(retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice eq null)}">
+								<div class="discount-rate">
+									<h:outputText styleClass="percent-discount"
+										rendered="#{!(retailReadMoreBB.readMoreOpr.productSkuRecord.discountAmount eq null)}"
+										value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.discountAmount}">
+										<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
+									</h:outputText>
+									<h:panelGroup rendered="#{!(retailReadMoreBB.readMoreOpr.productSkuRecord.discountPercent eq null)}">
+										<h:outputText styleClass="percent-discount"
+											value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.discountPercent}">
+											<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
+										</h:outputText>
+										<span class="percent-discount-span">%</span>
+									</h:panelGroup>
+								</div>
+							</h:panelGroup> -->
+						</div>
+						<br /> <br /> <br />
+						<div class="addcart">
+							<p:commandLink styleClass="addtocart" process="@this" id="addToCartLink" action="#{retailReadMoreBB.addToCart}"
+								update="navigationPanel" value="Add to cart" oncomplete="PF('navigationPanel').show()">
+								<f:setPropertyActionListener value="#{retailReadMoreBB.readMoreOpr.productSkuRecord}"
+									target="#{retailReadMoreBB.addToCartProductRecord.shoppingCartProduct.productSkuRecord}" />
+								<f:setPropertyActionListener value="1"
+									target="#{retailReadMoreBB.addToCartProductRecord.shoppingCartProduct.quantity}" />
+							</p:commandLink>
+						</div>
+						<div class="productcontent">
+							<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.description}" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<!---product gallery Ends-->
+		</div>
+	</h:panelGroup>
+	<!---middlewrapper Ends-->
+	<p:dialog id="navigationPanel" autosized="true" widgetVar="navigationPanel" showEffect="fade" hideEffect="fade"
+		dynamic="true" modal="true" width="500" resizable="false" height="500">
+		<f:facet name="header">
+			<!-- <h:outputText rendered="#{!retailReadMoreBB.addProductSuccessful}" value="Please Select Proper Customization" /> -->
+			<h:outputText rendered="#{!retailReadMoreBB.sizeSelect}" value="Your session has expired" />
+			<h:outputText rendered="#{retailReadMoreBB.navigatePanel}" value="Product Added To Shopping Bag" />
+		</f:facet>
+		<h:panelGroup id="navigationPanelGroup">
+			<p:outputPanel rendered="#{retailReadMoreBB.navigatePanel}">
+				<div class="productImage">
+					<h:graphicImage value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.imageRecord.thumbnailImageURL}" />
+				</div>
+				<!-- Product Info Box Starts -->
+				<div class="productContent">
+					<h3>
+						<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.name}" />
+					</h3>
+					<div class="price">
+						Our Price : <span class="WebRupee"><h:outputText value="Rs." /> </span>
+						<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice}"
+							rendered="#{!(retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice eq null)}">
+							<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
+						</h:outputText>
+						<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.basePrice}"
+							rendered="#{retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice eq null}">
+							<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
+						</h:outputText>
+					</div>
+					Quantity: 1
+				</div>
+				<div class="clear"></div>
+				<!-- Product Info Box Ends -->
+				<!-- Product Detail Box Ends -->
+				<!-- Action Bar Starts -->
+				<div class="contShopping">
+					<p:commandLink process="@this" value="Continue Shopping" oncomplete="PF('navigationPanel').hide()" />
+				</div>
+				<div class="checkout">
+					<p:commandLink process="@this" action="pretty:shoppingCart" value="Checkout Now" />
+				</div>
+				<!-- Action Bar Ends -->
+			</p:outputPanel>
+		</h:panelGroup>
+	</p:dialog>
+</ui:composition>

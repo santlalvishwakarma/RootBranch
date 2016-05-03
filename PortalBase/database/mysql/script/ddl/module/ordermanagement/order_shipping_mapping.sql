@@ -1,0 +1,37 @@
+CREATE TABLE order_shipping_mapping (
+  order_shipping_mapping_id int(10) unsigned NOT NULL AUTO_INCREMENT,
+  order_header_id int(10) unsigned NOT NULL,
+  order_detail_id int(10) unsigned NOT NULL,
+  shipping_first_name varchar(50) NOT NULL,
+  shipping_middle_name varchar(50) DEFAULT NULL,
+  shipping_last_name varchar(50) NOT NULL,
+  shipping_email_address_1 varchar(100) NOT NULL,
+  shipping_email_address_2 varchar(100) DEFAULT NULL,
+  shipping_mobile_1 varchar(25) NOT NULL,
+  shipping_mobile_2 varchar(25) DEFAULT NULL,
+  shipping_address_line_1 varchar(100) NOT NULL,
+  shipping_address_line_2 varchar(100) DEFAULT NULL,
+  shipping_address_line_3 varchar(100) DEFAULT NULL,
+  shipping_city varchar(25) NOT NULL,
+  shipping_zip_code varchar(15) NOT NULL,
+  shipping_state varchar(25) NOT NULL,
+  shipping_country varchar(25) NOT NULL,
+  created_by varchar(50) NOT NULL,
+  created_date datetime NOT NULL,
+  modified_by varchar(50) NOT NULL,
+  modified_date datetime NOT NULL,
+  PRIMARY KEY (order_shipping_mapping_id),
+  KEY FK_order_shipping_mapping_1 (order_header_id),
+  KEY FK_order_shipping_mapping_2 (order_detail_id),
+  KEY FK_order_shipping_mapping_3 (shipping_city),
+  KEY FK_order_shipping_mapping_4 (shipping_state),
+  KEY FK_order_shipping_mapping_5 (shipping_country),
+  CONSTRAINT FK_order_shipping_mapping_1 FOREIGN KEY (order_header_id) REFERENCES order_header (order_header_id),
+  CONSTRAINT FK_order_shipping_mapping_2 FOREIGN KEY (order_detail_id) REFERENCES order_detail (order_detail_id),
+  CONSTRAINT FK_order_shipping_mapping_3 FOREIGN KEY (shipping_city) REFERENCES core_city_master (city_code),
+  CONSTRAINT FK_order_shipping_mapping_4 FOREIGN KEY (shipping_state) REFERENCES core_state_master (state_code),
+  CONSTRAINT FK_order_shipping_mapping_5 FOREIGN KEY (shipping_country) REFERENCES core_country_master (country_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+

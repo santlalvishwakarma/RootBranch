@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<p:dialog id="loginDialogId" resizable="false" widgetVar="loginDialog" header="Login Panel" showEffect="explode"
+		hideEffect="explode" dynamic="true" modal="true">
+		<h:form id="loginDialogForm">
+			<p:panel id="loginDialogPanel">
+				<table style="width: 100%">
+					<tr>
+						<td><label class="labelClass boldClass">Enter User Id</label></td>
+						<td><p:inputText id="userId" value="#{loginPanelBean.loginPanelOpr.userDetails.userLogin}" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Enter Password</label></td>
+						<td><p:password id="userPassword" value="#{loginPanelBean.loginPanelOpr.userDetails.loginPassword}" /></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><p:commandLink value="Forgot Pasword ?" process="@this" update=":forgotPasswordForm:forgotPasswordPanel"
+								oncomplete="PF('forgotPasswordDialog').show()" /></td>
+					</tr>
+				</table>
+				<br />
+				<div align="center">
+					<p:commandButton id="loginSubmit" rendered="#{(sessionScope['LOGIN_TYPE'] eq 'RETAIL_LOGIN_TYPE')}"
+						actionListener="#{loginPanelBean.executeLogin}" value="Login" process="loginDialogPanel, @this"
+						oncomplete="PF('loginDialog').hide()" />
+					<p:tooltip for="loginSubmit" value="Click to Login" />
+					<p:commandButton id="executeLoginSystemOwner" process="loginDialogPanel, @this" value="Login admin"
+						rendered="#{(sessionScope['LOGIN_TYPE'] eq 'SYSTEMOWNER_LOGIN_TYPE')}" />
+					&#160;
+					<p:commandButton id="closeLogin" actionListener="#{loginPanelBean.closeModalWindow}" value="Close" process="@this"
+						oncomplete="PF('loginDialog').hide()" />
+					<p:tooltip for="closeLogin" value="Click to Close" />
+				</div>
+				<ui:include src="/pages/retail/template/errorMessagePage.xhtml" />
+			</p:panel>
+		</h:form>
+	</p:dialog>
+</ui:composition>

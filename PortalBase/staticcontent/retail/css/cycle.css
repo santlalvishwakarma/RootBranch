@@ -1,0 +1,143 @@
+@CHARSET "ISO-8859-1";
+
+#controls1_content {
+	height: 35px;
+}
+
+#main {
+	margin: 20px;
+}
+
+#numbers {
+	margin: 20px;
+	z-index: 1000;
+	left: 0;
+	background-color: transparent;
+	margin: 0;
+	padding-top: 2px;
+	position: absolute;
+}
+
+#demos {
+	position: relative;
+	width: 1020px;
+	/* height: 230px; */
+	/* padding-left: 250px; */
+	/* padding-top: 15px; */
+}
+
+#nav {
+	margin: 10px;
+	position: relative;
+	padding-left: 0;
+}
+
+#nav li {
+	float: left;
+	list-style: none;
+}
+
+#nav a {
+	margin: 5px;
+	padding: 3px 5px;
+	/* border: 1px solid #ccc; */
+	background: #C7DBF6;
+	text-decoration: none;
+}
+
+#nav li.activeSlide a { /* background: #faa; */
+	background: #012A7C;
+	color: white !important;
+}
+
+#nav a:focus {
+	outline: none;
+}
+
+pre {
+	text-align: left;
+	overflow: visible;
+}
+
+code {
+	background-color: #ffc;
+}
+
+pre code {
+	background-color: #eee
+}
+
+.pics {
+	height: 438px;
+	width: 960px;
+	padding: 0;
+	margin: 0;
+	overflow: hidden
+}
+
+.pics img { /* height: 438px;
+	width: 960px; */
+	/* padding: 15px; */
+	/* border: 1px solid #ccc;
+	background-color: #eee; */
+	top: 0;
+	left: 0
+}
+
+/* .pics img {
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+} */
+#controls {
+	z-index: 1000;
+	position: absolute;
+	/* top: 0; */
+	right: 0;
+	/* display: none; */
+	background-color: transparent;
+	margin: 0;
+	/* padding: 6px; */
+	padding-right: 6px;
+	padding-top: 2px;
+}
+
+#controls span {
+	margin: 0 5px;
+	display: block;
+	float: left;
+}
+
+#controls span a {
+	display: block;
+	float: left;
+	height: 23px;
+	background-image: url(/s/staticcontent/images/buttons-sprite.png);
+	background-repeat: no-repeat;
+	width: 11px;
+	text-indent: -5000px;
+	cursor: pointer;
+}
+
+#controls span a img {
+	visibility: hidden;
+}
+
+#controls span a#prev {
+	background-position: left top;
+	padding-right: 10px;
+}
+
+#controls span a#next {
+	background-position: -40px top;
+	padding-right: 10px;
+}
+
+#controls span a#pause {
+	background-position: -120px top;
+	padding-right: 10px;
+}
+
+#controls span a#play {
+	background-position: -80px top;
+	padding-right: 10px;
+}

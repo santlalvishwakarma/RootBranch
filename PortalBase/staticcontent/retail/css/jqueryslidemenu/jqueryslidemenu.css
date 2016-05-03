@@ -1,0 +1,142 @@
+.jqueryslidemenu-upper-div { /* width: 940px; */
+	width: 931px;
+	/* padding-left: 160px; */
+	/* margin: 0 auto 31px; */
+}
+
+.jqueryslidemenu {
+	font-size: 10pt;
+	text-transform: uppercase;
+	text-decoration: none;
+	text-align: center;
+	line-height: 31px;
+	/* 	background: #444242; */
+	/* width: 785px; */
+	/* width: 795px; */
+	width: 931px;
+	margin: -1px auto;
+	height: 40px;
+}
+
+.jqueryslidemenu ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	z-index: 1000;
+	background-image: url("/p/staticcontent/retail/images/menu/menu_inner_bg.jpg");
+	height: 40px;
+	margin: 0 -10px 0 0;
+	/* width: 785px; */
+	/* width: 810px; */
+	width: 931px;
+}
+
+/*Top level list items*/
+.jqueryslidemenu ul li {
+	position: relative;
+	display: inline;
+	float: left;
+	/* width: 157px; */
+	width: 133px;
+	height: 40px;
+	background-image: url("/p/staticcontent/retail/images/menu/menu_outer_bg2.jpg");
+	background-position: right top;
+	background-repeat: no-repeat;
+}
+
+/*Top level menu link items style*/
+.jqueryslidemenu ul li a {
+	font-size: 10px;
+	display: block;
+	color: white;
+	text-decoration: none;
+}
+
+/* * html .jqueryslidemenu ul li a { IE6 hack to get sub menu links to behave correctly
+	display: inline-block;
+} */
+
+/* .jqueryslidemenu ul li a:link,.jqueryslidemenu ul li a:visited {
+	color: white;
+} */
+.jqueryslidemenu ul li a:hover {
+	color: black;
+}
+
+/*1st sub level menu*/
+.jqueryslidemenu ul li ul {
+	position: absolute;
+	left: 0;
+	display: block;
+	visibility: hidden;
+	background-image: none;
+	width: 132px;
+	margin: 0px 0px 0px -1px;
+}
+
+/*Sub level menu list items (undo style from Top level List Items)*/
+.jqueryslidemenu ul li ul li {
+	background-color: #9ED9F3;
+	display: list-item;
+	float: none;
+	height: 32px;
+	/* width: 155px; */
+	width: 135px;
+	/* 	width: 159px; */
+	background-image: none;
+}
+
+/*All subsequent sub menu levels vertical offset after 1st level sub menu */
+.jqueryslidemenu ul li ul li ul {
+	top: 0;
+}
+
+/* Sub level menu links style */
+.jqueryslidemenu ul li ul li a { /* font-size: 11px; */
+	font-size: 10px;
+	text-transform: uppercase;
+	color: #000000;
+	display: block;
+	text-decoration: none;
+	text-align: center;
+	line-height: 31px;
+	/* width: 153px; */
+	width: 134px;
+	border-bottom: 1px solid gray;
+	/* text-indent: -4px; */
+	text-indent: -2px;
+	font-weight: bold;
+	border: 1px solid #2C8DB7;
+	background-image: none;
+	/* padding: 7px 5px 0 15px; */
+}
+
+.jqueryslidemenuz ul li ul li a:hover { /*sub menus hover style*/
+	color: black;
+	background-color: white;
+}
+
+/* ######### CSS classes applied to down and right arrow images  ######### */
+.downarrowclass {
+	position: relative;
+	/* left: 10px; */
+	left: 5px;
+}
+
+.rightarrowclass {
+	position: absolute;
+	top: 10px;
+	right: 2px;
+}
+
+/* overrided the style of richfaces css for level 1 menu */
+.input,select,textarea,button,keygen,isindex,legend,a { /*color: #000000;*/
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.jqueryslidemenu ul li ul li a:hover,.jqueryslidemenu ul li ul li a.current {
+	color: #000;
+	background-color: #ffffff;
+}

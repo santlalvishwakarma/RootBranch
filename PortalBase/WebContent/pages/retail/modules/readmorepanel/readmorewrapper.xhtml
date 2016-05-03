@@ -1,0 +1,15 @@
+<ui:composition template="/pages/retail/template/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<ui:define name="content">
+		<!-- Page Content Wrapper Start -->
+		<h:form id="readMoreForm">
+			<div id="homecat-wrapper" class="wrapper">
+				<ui:include src="readmorepanel.xhtml" />
+			</div>
+		</h:form>
+		<div class="clr"></div>
+		<!-- Page Content Wrapper Ends -->
+	</ui:define>
+</ui:composition>

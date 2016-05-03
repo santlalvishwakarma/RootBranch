@@ -1,0 +1,22 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<p:dialog id="enlargeImageDialogId" header="View Images" widgetVar="enlargeImageDialog" showEffect="explode"
+		hideEffect="explode" modal="true" height="500" width="650" dynamic="false">
+		<p:ajax event="close" listener="#{enlargeImageBB.closeModalWindow}" />
+		<h:panelGroup id="enlargeImageDialogPanelGroup">
+			<h:form id="enlargeImageDialogForm">
+				<p:panel id="imagePanel">
+					<h:graphicImage value="#{enlargeImageBB.imageRecord.imageURL}" id="enlargedImage"
+						style="border:0;width:354px; height:311px" />
+				</p:panel>
+				<br />
+				<div align="center">
+					<p:commandButton id="close" value="Close" actionListener="#{enlargeImageBB.closeModalWindow}" process="@this"
+						oncomplete="PF('enlargeImageDialog').hide()" />
+					<p:tooltip for="close" value="Click to Close" />
+				</div>
+			</h:form>
+		</h:panelGroup>
+	</p:dialog>
+</ui:composition>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+	<appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${catalina.home}/logs/tomcat.log" />
+		<param name="datePattern" value="'.'yyyy-MM" />
+		<param name="append" value="false" />
+		<param name="Threshold" value="WARN" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] %-5p %C{6} (%F:%L) - %m%n" />
+		</layout>
+	</appender>
+	<appender name="dao_log" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${catalina.home}/logs/svastrino-dao.log" />
+		<param name="datePattern" value="'.'yyyy-MM" />
+		<param name="append" value="false" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c] %m%n" />
+		</layout>
+	</appender>
+	<appender name="log" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${catalina.home}/logs/svastrino-general.log" />
+		<param name="datePattern" value="'.'yyyy-MM" />
+		<param name="append" value="false" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c] %m%n" />
+		</layout>
+	</appender>
+	<appender name="faces_log" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${catalina.home}/logs/svastrino-faces.log" />
+		<param name="datePattern" value="'.'yyyy-MM" />
+		<param name="append" value="false" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c] %m%n" />
+		</layout>
+	</appender>
+	<appender name="primefaces_log" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${catalina.home}/logs/svastrino-primefaces.log" />
+		<param name="datePattern" value="'.'yyyy-MM" />
+		<param name="append" value="false" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c] %m%n" />
+		</layout>
+	</appender>
+	<appender name="prettyfaces_log" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${catalina.home}/logs/svastrino-prettyfaces.log" />
+		<param name="datePattern" value="'.'yyyy-MM" />
+		<param name="append" value="false" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c] %m%n" />
+		</layout>
+	</appender>
+	<appender name="mail_log" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${catalina.home}/logs/svastrino-mail.log" />
+		<param name="datePattern" value="'.'yyyy-MM" />
+		<param name="append" value="false" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c] %m%n" />
+		</layout>
+	</appender>
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<param name="Threshold" value="ERROR" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<!-- The default pattern: Date Priority [Category] Message\n -->
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n" />
+		</layout>
+	</appender>
+	<!-- ======================= -->
+	<!-- Setup the Root category -->
+	<!-- ======================= -->
+	<category name="com.tsd.base">
+		<priority value="ERROR" />
+		<appender-ref ref="log" />
+	</category>
+	<category name="com.tsd.foundation">
+		<priority value="ERROR" />
+		<appender-ref ref="log" />
+	</category>
+	<category name="com.web">
+		<priority value="DEBUG" />
+		<appender-ref ref="log" />
+		<!-- DEBUG -->
+	</category>
+	<category name="dao_log">
+		<priority value="ERROR" />
+		<appender-ref ref="dao_log" />
+	</category>
+	<category name="javax.faces">
+		<priority value="ERROR" />
+		<appender-ref ref="faces_log" />
+	</category>
+	<category name="com.sun.faces">
+		<priority value="ERROR" />
+		<appender-ref ref="faces_log" />
+	</category>
+	<category name="org.primefaces">
+		<priority value="ERROR" />
+		<appender-ref ref="primefaces_log" />
+	</category>
+	<category name="com.ocpsoft">
+		<priority value="ERROR" />
+		<appender-ref ref="prettyfaces_log" />
+	</category>
+	<category name="com.tsd.svastrino.core.foundation.mail">
+		<priority value="ERROR" />
+		<appender-ref ref="mail_log" />
+	</category>
+	<category name="com.tsd.svastrino.core.messaging.email">
+		<priority value="ERROR" />
+		<appender-ref ref="mail_log" />
+	</category>
+	<category name="com.tsd.svastrino.core.http.context">
+		<priority value="ERROR" />
+		<appender-ref ref="mail_log" />
+	</category>
+	<category name="org.apache">
+		<priority value="ERROR" />
+	</category>
+	<category name="org.jboss">
+		<priority value="ERROR" />
+	</category>
+	<root>
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+	</root>
+</log4j:configuration>
+
