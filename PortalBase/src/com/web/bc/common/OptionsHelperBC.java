@@ -78,8 +78,8 @@ public class OptionsHelperBC extends BackingClass {
 				userRecord.setFirstName((String) resultSetMap.get("first_name"));
 				userRecord.setMiddleName((String) resultSetMap.get("middle_name"));
 				userRecord.setLastName((String) resultSetMap.get("last_name"));
-				userRecord.setPrimaryEmailId((String) resultSetMap.get("email_id"));
-				userRecord.setSecondaryEmailId((String) resultSetMap.get("alt_email_id"));
+				userRecord.setPrimaryEmailId((String) resultSetMap.get("primary_email_id"));
+				userRecord.setSecondaryEmailId((String) resultSetMap.get("alternate_email_id"));
 				userRecord.setIsAdmin((Boolean) resultSetMap.get("is_admin"));
 				loginOpr.setUserDetails(userRecord);
 			}
