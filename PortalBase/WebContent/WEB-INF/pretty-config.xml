@@ -81,4 +81,15 @@
 		<view-id value="/pages/retail/modules/payment/payment.jsf" />
 	</url-mapping>
 
+	<!-- Admin Entries Starts from here -->
+	<url-mapping id="adminLogin">
+		<pattern value="/admin/login" />
+		<view-id value="/pages/systemowner/modules/login/login.jsf" />
+	</url-mapping>
+
+	<url-mapping id="adminHome">
+		<pattern value="/admin/home" />
+		<view-id value="/pages/systemowner/modules/home/home.jsf" />
+	</url-mapping>
+
 </pretty-config>
