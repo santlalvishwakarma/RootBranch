@@ -183,19 +183,19 @@
 		timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="true"
 		maxElementsOnDisk="10000000" diskPersistent="false"
 		diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
-	<cache name="ACK_GLOBAL_MENU_NAVIGATION_CACHE" maxElementsInMemory="10000"
+	<cache name="PORTAL_BASE_GLOBAL_MENU_NAVIGATION_CACHE" maxElementsInMemory="10000"
 		eternal="false" timeToIdleSeconds="120" timeToLiveSeconds="120"
 		overflowToDisk="true" maxElementsOnDisk="10000000" diskPersistent="false"
 		diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
-	<cache name="ACK_GLOBAL_ROLE_CACHE" maxElementsInMemory="10000"
+	<cache name="PORTAL_BASE_GLOBAL_ROLE_CACHE" maxElementsInMemory="10000"
 		eternal="false" timeToIdleSeconds="120" timeToLiveSeconds="120"
 		overflowToDisk="true" maxElementsOnDisk="10000000" diskPersistent="false"
 		diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
-	<cache name="ACK_GLOBAL_WEBSITE_CACHE" maxElementsInMemory="10000"
+	<cache name="PORTAL_BASE_GLOBAL_WEBSITE_CACHE" maxElementsInMemory="10000"
 		eternal="false" timeToIdleSeconds="120" timeToLiveSeconds="120"
 		overflowToDisk="true" maxElementsOnDisk="10000000" diskPersistent="false"
 		diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />	
-	<cache name="ACK_GLOBAL_PAYMENT_CACHE" maxElementsInMemory="10000"
+	<cache name="PORTAL_BASE_GLOBAL_PAYMENT_CACHE" maxElementsInMemory="10000"
 		eternal="false" timeToIdleSeconds="120" timeToLiveSeconds="120"
 		overflowToDisk="true" maxElementsOnDisk="10000000" diskPersistent="false"
 		diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
