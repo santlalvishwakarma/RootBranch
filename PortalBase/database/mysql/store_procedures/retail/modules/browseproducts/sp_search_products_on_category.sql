@@ -18,8 +18,6 @@ DECLARE v_level_2_category_id INT(10);
 DECLARE v_level_3_category_id INT(10);
 DECLARE v_level_4_category_id INT(10);
 
-SELECT 11111111111;
-
 SET v_hierarchy_id = fn_get_hierarchy_id_based_on_name(p_hierarchy_name);
 
 IF p_level_4_category_code IS NOT NULL THEN

@@ -488,7 +488,7 @@ public class BrowseProductsBC extends BackingClass {
 
 		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
 		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
-		myLog.debug(" executeSave :: Resultset got ::" + responseMap);
+		myLog.debug(" searchProductsOnCategoryCodes :: Resultset got ::" + responseMap);
 		if (responseMap.size() > 0) {
 			for (int i = 0; i < responseMap.size(); i++) {
 				HashMap<String, Object> resultSetMap = responseMap.get(i);

@@ -677,7 +677,6 @@ public class BrowseProductsBB extends BackingBean {
 	public void doSearch(BrowseProductsOpr searchBrowseProductsOpr) {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 
-		BrowseProductsOpr commentsOpr = new BrowseProductsOpr();
 		try {
 
 			searchBrowseProductsOpr.getProductSkuRecord().setUserLogin(
