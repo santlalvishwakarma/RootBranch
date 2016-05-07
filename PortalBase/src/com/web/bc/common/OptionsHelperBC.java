@@ -11,6 +11,7 @@ import com.web.common.dvo.common.StateDVO;
 import com.web.common.dvo.opr.common.ParameterOpr;
 import com.web.common.dvo.opr.retail.LoginPanelOpr;
 import com.web.common.dvo.retail.modules.user.UserDVO;
+import com.web.common.dvo.retail.modules.user.UserRoleMappingDVO;
 import com.web.common.dvo.systemowner.CityDVO;
 import com.web.common.parents.BackingClass;
 import com.web.foundation.dao.DAOResult;
@@ -398,6 +399,76 @@ public class OptionsHelperBC extends BackingClass {
 		}
 
 		return cityList;
+	}
+
+	public LoginPanelOpr getUserBasedRole(LoginPanelOpr loginOpr)
+			throws FrameworkException, BusinessException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside getUserBasedRole ::: ");
+
+		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
+
+		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE,
+				IDAOConstant.PREPARED_STATEMENT);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT,
+				OptionsSqlTemplate.GET_USER_BASED_ROLE);
+
+		Object[][] strSqlParams = new Object[1][3];
+
+		strSqlParams[0][0] = "1";
+		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
+		strSqlParams[0][2] = loginOpr.getUserDetails().getId();
+		myLog.debug(" parameter 1 ::: " + strSqlParams[0][2]);
+
+		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams,
+				null);
+
+		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult
+				.getInvocationResult();
+		myLog.debug(" resultset got ::: " + responseMap);
+
+		if (responseMap != null && responseMap.size() > 0) {
+			for (int i = 0; i < responseMap.size();) {
+				HashMap<String, Object> resultRow = responseMap.get(i);
+				UserRoleMappingDVO userRoleMappingRecord = new UserRoleMappingDVO();
+
+				if (resultRow.get("users_roles_mapping_id") != null) {
+					userRoleMappingRecord.setId(Long.valueOf(resultRow.get(
+							"users_roles_mapping_id").toString()));
+				}
+
+				if (resultRow.get("role_id") != null) {
+					userRoleMappingRecord.getRoleRecord().setId(
+							Long.valueOf(resultRow.get("role_id").toString()));
+				}
+
+				userRoleMappingRecord.getRoleRecord().setCode(
+						(String) resultRow.get("role_code"));
+
+				userRoleMappingRecord.getRoleRecord().setName(
+						(String) resultRow.get("role_name"));
+
+				userRoleMappingRecord.getRoleRecord().setDescription(
+						(String) resultRow.get("role_description"));
+
+				if (resultRow.get("user_id") != null) {
+					userRoleMappingRecord.getUserRecord().setId(
+							Long.valueOf(resultRow.get("user_id").toString()));
+				}
+
+				userRoleMappingRecord.getUserRecord().setUserLogin(
+						(String) resultRow.get("user_login"));
+
+				loginOpr.getUserDetails().getUserRolesMappingList()
+						.add(userRoleMappingRecord);
+				break;
+			}
+		} else {
+			throw new BusinessException("Roles not Defined for current user.");
+		}
+
+		return loginOpr;
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.web.bb.retail.module.loginpanel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 
+import com.ocpsoft.pretty.PrettyContext;
+import com.web.bf.retail.modules.home.HomeBF;
 import com.web.bf.retail.modules.loginpanel.LoginPanelBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.retail.LoginPanelOpr;
@@ -27,6 +30,7 @@ public class LoginPanelBB extends BackingBean {
 
 	private static final long serialVersionUID = 7781795087882864778L;
 	private String propertiesLocation = "com/web/bb/retail/module/loginpanel/loginpanel";
+	private String commonPropertiesLocation = CommonConstant.MessageLocation.COMMON_MESSAGES;
 	private LoginPanelOpr loginPanelOpr;
 	private LoginPanelOpr forgotPasswordOpr;
 	private String displayName;
@@ -36,6 +40,7 @@ public class LoginPanelBB extends BackingBean {
 	private String fromShoppingCartPage;
 	private boolean navigationFlag = true;
 	private boolean forgotPasswordSent;
+	private LoginPanelOpr loginOpr;
 
 	public boolean isNavigationFlag() {
 		return navigationFlag;
@@ -282,6 +287,92 @@ public class LoginPanelBB extends BackingBean {
 		return returnNavigationString;
 	}
 
+	public void performLogin(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside performLogin ::: ");
+
+		if (validateLogin()) {
+			try {
+				loginOpr = new HomeBF().performLogin(loginOpr);
+				loginOpr = new HomeBF().getUserBasedRole(loginOpr);
+
+				putObjectInCache(CommonConstant.LOGGED_USER_KEY, loginOpr
+						.getUserDetails().getUserLogin());
+
+				putObjectInCache(CommonConstant.LOGGED_USER_DATA,
+						loginOpr.getUserDetails());
+
+				String userName = "";
+				if (loginOpr.getUserDetails().getFirstName() != null) {
+					userName += loginOpr.getUserDetails().getFirstName();
+				}
+				if (loginOpr.getUserDetails().getLastName() != null) {
+					userName += " " + loginOpr.getUserDetails().getLastName();
+				}
+				putObjectInCache(CommonConstant.LOGGED_USER_NAME, userName);
+
+				for (int i = 0; i < loginOpr.getUserDetails()
+						.getUserRolesMappingList().size();) {
+					putObjectInCache(CommonConstant.LOGGED_USER_ROLES, loginOpr
+							.getUserDetails().getUserRolesMappingList().get(i)
+							.getRoleRecord().getCode());
+					break;
+				}
+
+				ExternalContext externalContext = FacesContext
+						.getCurrentInstance().getExternalContext();
+
+				String websiteUrl = ((HttpServletRequest) externalContext
+						.getRequest()).getServerName();
+
+				String requestPage = "p"
+						+ PrettyContext.getCurrentInstance().getRequestURL();
+
+				websiteUrl = "http://" + websiteUrl + ":8081/" + requestPage;
+				myLog.debug(" websiteUrl ::: " + websiteUrl);
+				externalContext.redirect(websiteUrl);
+
+			} catch (FrameworkException e) {
+				handleException(e, commonPropertiesLocation);
+			} catch (BusinessException e) {
+				handleException(e, commonPropertiesLocation);
+			} catch (IOException e) {
+				myLog.error(" error message occured during redirect ::: "
+						+ e.getMessage());
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private boolean validateLogin() {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside validateLogin ::: ");
+
+		FoundationValidator validator = new FoundationValidator();
+		PropertiesReader propertiesReader = new PropertiesReader(
+				propertiesLocation);
+
+		boolean validateFlag = true;
+
+		String userLogin = loginPanelOpr.getUserDetails().getUserLogin();
+		String password = loginPanelOpr.getUserDetails().getLoginPassword();
+
+		if (!validator.validateNull(userLogin)) {
+			addToErrorList(propertiesReader.getValueOfKey("login_null"));
+		}
+
+		if (!validator.validateNull(password)) {
+			addToErrorList(propertiesReader
+					.getValueOfKey("login_password_null"));
+		}
+
+		if (getErrorList().size() > 0) {
+			validateFlag = false;
+		}
+
+		return validateFlag;
+	}
+
 	public void executeForgotPassword(ActionEvent event) {
 		// ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		setErrorList(new ArrayList<String>());
@@ -345,24 +436,42 @@ public class LoginPanelBB extends BackingBean {
 	}
 
 	public void executeLogout(ActionEvent event) {
-		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-		removeUserCache((String) externalContext.getSessionMap().get(CommonConstant.LOGGED_USER_KEY));
+		ExternalContext externalContext = FacesContext.getCurrentInstance()
+				.getExternalContext();
+
+		removeUserCache((String) externalContext.getSessionMap().get(
+				CommonConstant.LOGGED_USER_KEY));
 		externalContext.getSessionMap().remove(CommonConstant.LOGGED_USER_KEY);
 		externalContext.getSessionMap().remove(CommonConstant.LOGGED_USER_NAME);
 		removeObjectFromCache(CommonConstant.LOGGED_USER_DATA);
 
 		try {
-
-			HttpSession httpSession = (HttpSession) externalContext.getSession(false);
+			HttpSession httpSession = (HttpSession) externalContext
+					.getSession(false);
 			httpSession.invalidate();
 			httpSession = null;
 
-			PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+			PropertiesReader propertiesReader = new PropertiesReader(
+					commonPropertiesLocation);
 			setSuccessMsg(propertiesReader.getValueOfKey("logout_success"));
-			RequestContext.getCurrentInstance().execute("refreshLoginDetails();");
 
-		} catch (Throwable t) {
-			t.printStackTrace();
+			externalContext.redirect("http://localhost:8081/p/admin/login");
+			// RequestContext.getCurrentInstance().execute(
+			// "refreshLoginDetails();");
+
+		} catch (Exception e) {
+			handleException(e, "Logout was not successfull.");
 		}
+	}
+
+	public LoginPanelOpr getLoginOpr() {
+		if (loginOpr == null) {
+			loginOpr = new LoginPanelOpr();
+		}
+		return loginOpr;
+	}
+
+	public void setLoginOpr(LoginPanelOpr loginOpr) {
+		this.loginOpr = loginOpr;
 	}
 }
