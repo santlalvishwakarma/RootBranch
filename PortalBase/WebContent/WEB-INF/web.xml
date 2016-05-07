@@ -124,5 +124,5 @@
 		<servlet-name>RetailStartupServlet</servlet-name>
 		<url-pattern>/RetailStartupServlet</url-pattern>
 	</servlet-mapping>
-
+<!-- Testing if commit working properly -->
 </web-app>
