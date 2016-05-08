@@ -125,7 +125,7 @@
 		<url-pattern>/RetailStartupServlet</url-pattern>
 	</servlet-mapping>
 
-	<filter>
+	<!-- <filter>
 		<description>Authorization Filter used for restricting common user from admin module access.
 		url containing such pattern (/pages/systemowner/) will only be passed through this filter
 		</description>
@@ -138,6 +138,6 @@
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>ERROR</dispatcher>
-	</filter-mapping>
+	</filter-mapping> -->
 
 </web-app>

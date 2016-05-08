@@ -1,17 +1,34 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
-
-<div
-	style="width: 100%; font-size: 36px; line-height: 48px; background-color: navy; color: white">My
-	Facelet Application</div>
-<h:form id="admin-header">
-	<p:commandLink actionListener="#{loginPanelBean.executeLogout}"
-		value="Logout" />
-</h:form>
-
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<link href="/p/staticcontent/retail/css/style.css" rel="stylesheet" type="text/css" />
+	<p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+	<p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+		<p:graphicImage value="/staticcontent/retail/images/ajaxloadingbar.gif" />
+	</p:dialog>
+	<f:loadBundle basename="com.web.common.parents.messages" var="commonLabel" />
+	<ui:include src="/pages/retail/modules/login/login.xhtml" />
+	<ui:include src="/pages/retail/modules/login/forgotPassword.xhtml" />
+	<h:form>
+		<div align="right">
+			<table style="width: 200px; float: right;">
+				<tr>
+					<td style="font-size: 18px; float: right;" class="blueColorClass">
+						 <h:panelGroup id="loginLinkGroup">
+							<p:commandLink value="Login" style="text-align: center; font-size: 15px !important;"
+								actionListener="#{loginPanelBean.openAdminLoginPopup}" rendered="#{(sessionScope['LOGGED_USER_KEY'] eq null)}"
+								oncomplete="PF('loginDialog').show()" styleClass="linkClass" process="@this"
+								update=":loginDialogForm:loginDialogPanel" />
+							<p:commandLink value="Logout" style="text-align: center; font-size: 15px !important;"
+								rendered="#{!(sessionScope['LOGGED_USER_KEY'] eq null)}" styleClass="linkClass" process="@this"
+								partialSubmit="true" actionListener="#{loginPanelBean.executeLogout}" oncomplete="refreshLoginDetails();" />
+						</h:panelGroup>
+					</td>
+				</tr>
+			</table>
+			<br /> <br />
+		</div>
+		<p:remoteCommand name="refreshLoginDetails" partialSubmit="true" process="@this"
+			update="loginLinkGroup, :menuPanelGroup" />
+	</h:form>
+</ui:composition>

@@ -27,6 +27,7 @@
 						oncomplete="PF('loginDialog').hide()" />
 					<p:tooltip for="loginSubmit" value="Click to Login" />
 					<p:commandButton id="executeLoginSystemOwner" process="loginDialogPanel, @this" value="Login admin"
+						actionListener="#{loginPanelBean.executeLogin}"
 						rendered="#{(sessionScope['LOGIN_TYPE'] eq 'SYSTEMOWNER_LOGIN_TYPE')}" />
 					&#160;
 					<p:commandButton id="closeLogin" actionListener="#{loginPanelBean.closeModalWindow}" value="Close" process="@this"
@@ -36,5 +37,6 @@
 				<ui:include src="/pages/retail/template/errorMessagePage.xhtml" />
 			</p:panel>
 		</h:form>
+		
 	</p:dialog>
 </ui:composition>

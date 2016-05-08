@@ -175,7 +175,6 @@ public class LoginPanelBC extends BackingClass {
 			}
 		} else {
 			myLog.error("LoginPanelBC :: executeLogin failed :: Return Record empty ::::: ");
-			throw new BusinessException("login_invalid");
 		}
 
 		loginPanelOpr.setUserDetails(userDVO);

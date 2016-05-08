@@ -108,6 +108,10 @@ public interface CommonConstant {
 
 	public static final String ROLE_CODE_SEPARATOR = ",";
 
+	public static final String SYSTEM_OWNER = "SYSTEM_OWNER";
+
+	public static final String ADMINISTRATOR = "ADMINISTRATOR";
+
 	public interface MessageLocation {
 
 		public static final String COMMON_MESSAGES = "com/web/common/parents/messages";

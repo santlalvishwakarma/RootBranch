@@ -26,8 +26,8 @@ public class PortalAdminFilter implements Filter {
 	}
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response,
-			FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+			ServletException {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
@@ -47,23 +47,18 @@ public class PortalAdminFilter implements Filter {
 		 * then based on roles, user is allowed to access admin modules.
 		 */
 		if (session.getAttribute(CommonConstant.LOGGED_USER_KEY) != null) {
-			String userRoles = (String) session
-					.getAttribute(CommonConstant.LOGGED_USER_ROLES);
+			String userRoles = (String) session.getAttribute(CommonConstant.LOGGED_USER_ROLES);
 			if (userRoles != null) {
-				if (!(userRoles
-						.contains(CommonConstant.UserRoles.ADMINISTRATOR)
-						|| userRoles
-								.contains(CommonConstant.UserRoles.SYSTEM_OWNER)
-						|| userRoles
-								.contains(CommonConstant.UserRoles.REPORTS_USER) || userRoles
+				if (!(userRoles.contains(CommonConstant.UserRoles.ADMINISTRATOR)
+						|| userRoles.contains(CommonConstant.UserRoles.SYSTEM_OWNER)
+						|| userRoles.contains(CommonConstant.UserRoles.REPORTS_USER) || userRoles
 							.contains(CommonConstant.UserRoles.COMPANY_ADMINISTRATOR))) {
 					/**
 					 * if none of the roles are mapped for user then user is
 					 * redirected to forbidden page
 					 */
 					unauthorized = true;
-				} else if (currentPage
-						.contains("/pages/systemowner/modules/login/login.jsf")) {
+				} else if (currentPage.contains("/pages/systemowner/modules/login/login.jsf")) {
 					/**
 					 * if user hit admin login page url and is logged in and has
 					 * specified role then user is redirected to admin home page
@@ -78,8 +73,7 @@ public class PortalAdminFilter implements Filter {
 				 */
 				unauthorized = true;
 			}
-		} else if (!currentPage
-				.contains("/pages/systemowner/modules/login/login.jsf")) {
+		} else if (!currentPage.contains("/pages/systemowner/modules/login/login.jsf")) {
 			/**
 			 * if user requests different url(inside admin module) then login
 			 * page, the user is then redirected to login page.
@@ -100,6 +94,7 @@ public class PortalAdminFilter implements Filter {
 			chain.doFilter(request, response);
 		}
 	}
+
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 	}

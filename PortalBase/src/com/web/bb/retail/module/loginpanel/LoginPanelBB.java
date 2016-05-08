@@ -17,6 +17,7 @@ import com.web.bf.retail.modules.home.HomeBF;
 import com.web.bf.retail.modules.loginpanel.LoginPanelBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.retail.LoginPanelOpr;
+import com.web.common.dvo.retail.modules.user.UserRoleMappingDVO;
 import com.web.common.dvo.util.OptionsDVO;
 import com.web.common.parents.BackingBean;
 import com.web.foundation.exception.BusinessException;
@@ -29,7 +30,7 @@ import com.web.util.PropertiesReader;
 public class LoginPanelBB extends BackingBean {
 
 	private static final long serialVersionUID = 7781795087882864778L;
-	private String propertiesLocation = "com/web/bb/retail/module/loginpanel/loginpanel";
+	private String propertiesLocation = CommonConstant.MessageLocation.COMMON_MESSAGES;
 	private String commonPropertiesLocation = CommonConstant.MessageLocation.COMMON_MESSAGES;
 	private LoginPanelOpr loginPanelOpr;
 	private LoginPanelOpr forgotPasswordOpr;
@@ -40,7 +41,6 @@ public class LoginPanelBB extends BackingBean {
 	private String fromShoppingCartPage;
 	private boolean navigationFlag = true;
 	private boolean forgotPasswordSent;
-	private LoginPanelOpr loginOpr;
 
 	public boolean isNavigationFlag() {
 		return navigationFlag;
@@ -204,20 +204,83 @@ public class LoginPanelBB extends BackingBean {
 			try {
 				myLog.debug("login type:::" + externalContext.getSessionMap().get(CommonConstant.LOGIN_TYPE));
 				if (externalContext.getSessionMap().get(CommonConstant.LOGIN_TYPE) != null) {
-					loginPanelOpr
-							.getApplicationFlags()
-							.getApplicationFlagMap()
-							.put(CommonConstant.LOGIN_TYPE,
-									externalContext.getSessionMap().get(CommonConstant.LOGIN_TYPE));
-					loginPanelOpr = new LoginPanelBF().executeLogin(loginPanelOpr);
-					externalContext.getSessionMap().put(CommonConstant.LOGGED_USER_KEY,
-							loginPanelOpr.getUserDetails().getUserLogin());
 
-					FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-							.put(CommonConstant.LOGGED_USER_DATA, loginPanelOpr.getUserDetails());
-					FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-							.put(CommonConstant.LOGGED_USER_NAME, loginPanelOpr.getUserDetails().getFirstName());
-					RequestContext.getCurrentInstance().execute("refreshLoginDetails();");
+					if (externalContext.getSessionMap().get(CommonConstant.LOGIN_TYPE)
+							.equals(CommonConstant.SYSTEMOWNER_LOGIN_TYPE)) {
+						boolean adminValidationFlag = false;
+						loginPanelOpr = new LoginPanelBF().executeLogin(loginPanelOpr);
+						loginPanelOpr = new HomeBF().getUserBasedRole(loginPanelOpr);
+
+						if (loginPanelOpr.getUserDetails().getUserRolesMappingList() != null
+								&& !loginPanelOpr.getUserDetails().getUserRolesMappingList().isEmpty()) {
+							for (UserRoleMappingDVO userRoleMappingDVO : loginPanelOpr.getUserDetails()
+									.getUserRolesMappingList()) {
+								if (CommonConstant.SYSTEM_OWNER.equals(userRoleMappingDVO.getRoleRecord().getCode())
+										|| CommonConstant.ADMINISTRATOR.equals(userRoleMappingDVO.getRoleRecord()
+												.getCode())) {
+									navigationFlag = true;
+									adminValidationFlag = true;
+									String userLogin = loginPanelOpr.getUserDetails().getUserLogin();
+									// putting user login into session
+									externalContext.getSessionMap().put(CommonConstant.LOGGED_USER_KEY, userLogin);
+
+									putObjectInCache(CommonConstant.LOGGED_USER_ROLES, userRoleMappingDVO
+											.getRoleRecord().getCode());
+
+									// RequestContext.getCurrentInstance().execute("refreshLoginDetails();");
+
+									setSuccessMsg(propertiesReader.getValueOfKey("user_logged_in_successfully_message"));
+									break;
+								}
+							}
+
+							if (!adminValidationFlag) {
+								navigationFlag = false;
+								String errorMessage = propertiesReader.getValueOfKey("not_authorized_admin");
+								addToErrorList(errorMessage);
+							} else {
+								loginPanelOpr
+										.getApplicationFlags()
+										.getApplicationFlagMap()
+										.put(CommonConstant.LOGIN_TYPE,
+												externalContext.getSessionMap().get(CommonConstant.LOGIN_TYPE));
+								externalContext.getSessionMap().put(CommonConstant.LOGGED_USER_KEY,
+										loginPanelOpr.getUserDetails().getUserLogin());
+
+								FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+										.put(CommonConstant.LOGGED_USER_DATA, loginPanelOpr.getUserDetails());
+								putObjectInCache(CommonConstant.LOGGED_USER_DATA, loginPanelOpr.getUserDetails());
+								FacesContext
+										.getCurrentInstance()
+										.getExternalContext()
+										.getSessionMap()
+										.put(CommonConstant.LOGGED_USER_NAME,
+												loginPanelOpr.getUserDetails().getFirstName());
+								RequestContext.getCurrentInstance().execute("refreshLoginDetails();");
+							}
+						} else {
+							navigationFlag = false;
+							String errorMessage = propertiesReader.getValueOfKey("not_authorized_admin");
+							addToErrorList(errorMessage);
+						}
+
+					} else {
+						loginPanelOpr
+								.getApplicationFlags()
+								.getApplicationFlagMap()
+								.put(CommonConstant.LOGIN_TYPE,
+										externalContext.getSessionMap().get(CommonConstant.LOGIN_TYPE));
+						loginPanelOpr = new LoginPanelBF().executeLogin(loginPanelOpr);
+						externalContext.getSessionMap().put(CommonConstant.LOGGED_USER_KEY,
+								loginPanelOpr.getUserDetails().getUserLogin());
+
+						FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+								.put(CommonConstant.LOGGED_USER_DATA, loginPanelOpr.getUserDetails());
+						putObjectInCache(CommonConstant.LOGGED_USER_DATA, loginPanelOpr.getUserDetails());
+						FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+								.put(CommonConstant.LOGGED_USER_NAME, loginPanelOpr.getUserDetails().getFirstName());
+						RequestContext.getCurrentInstance().execute("refreshLoginDetails();");
+					}
 				} else {
 					String errorMessage = propertiesReader.getValueOfKey("system_error_login_type_null");
 					addToErrorList(errorMessage);
@@ -240,8 +303,15 @@ public class LoginPanelBB extends BackingBean {
 		doLogin();
 	}
 
-	public String navigateAfterLogin() {
+	public String navigateAfterLogin() throws FrameworkException, BusinessException {
 		doLogin();
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		String websiteURL = ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest())
+				.getServerName();
+		String requestUrl = ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest())
+				.getContextPath() + PrettyContext.getCurrentInstance().getRequestURL();
+		myLog.debug("websiteURL " + websiteURL + "AND" + requestUrl);
+		websiteURL = "http://" + websiteURL + requestUrl;
 		String returnNavigationString = null;
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		if (navigationFlag) {
@@ -249,7 +319,12 @@ public class LoginPanelBB extends BackingBean {
 			if (externalContext.getSessionMap().get(CommonConstant.LOGIN_TYPE) != null) {
 				if (CommonConstant.RETAIL_LOGIN_TYPE.equals(externalContext.getSessionMap().get(
 						CommonConstant.LOGIN_TYPE))) {
-					returnNavigationString = "pretty:homePage";
+					// returnNavigationString = "pretty:homePage";
+					try {
+						externalContext.redirect(websiteURL);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				} else if (CommonConstant.SYSTEMOWNER_LOGIN_TYPE.equals(externalContext.getSessionMap().get(
 						CommonConstant.LOGIN_TYPE))) {
 					returnNavigationString = "pretty:adminHome";
@@ -293,40 +368,33 @@ public class LoginPanelBB extends BackingBean {
 
 		if (validateLogin()) {
 			try {
-				loginOpr = new HomeBF().performLogin(loginOpr);
-				loginOpr = new HomeBF().getUserBasedRole(loginOpr);
+				loginPanelOpr = new HomeBF().performLogin(loginPanelOpr);
+				loginPanelOpr = new HomeBF().getUserBasedRole(loginPanelOpr);
 
-				putObjectInCache(CommonConstant.LOGGED_USER_KEY, loginOpr
-						.getUserDetails().getUserLogin());
+				putObjectInCache(CommonConstant.LOGGED_USER_KEY, loginPanelOpr.getUserDetails().getUserLogin());
 
-				putObjectInCache(CommonConstant.LOGGED_USER_DATA,
-						loginOpr.getUserDetails());
+				putObjectInCache(CommonConstant.LOGGED_USER_DATA, loginPanelOpr.getUserDetails());
 
 				String userName = "";
-				if (loginOpr.getUserDetails().getFirstName() != null) {
-					userName += loginOpr.getUserDetails().getFirstName();
+				if (loginPanelOpr.getUserDetails().getFirstName() != null) {
+					userName += loginPanelOpr.getUserDetails().getFirstName();
 				}
-				if (loginOpr.getUserDetails().getLastName() != null) {
-					userName += " " + loginOpr.getUserDetails().getLastName();
+				if (loginPanelOpr.getUserDetails().getLastName() != null) {
+					userName += " " + loginPanelOpr.getUserDetails().getLastName();
 				}
 				putObjectInCache(CommonConstant.LOGGED_USER_NAME, userName);
 
-				for (int i = 0; i < loginOpr.getUserDetails()
-						.getUserRolesMappingList().size();) {
-					putObjectInCache(CommonConstant.LOGGED_USER_ROLES, loginOpr
-							.getUserDetails().getUserRolesMappingList().get(i)
-							.getRoleRecord().getCode());
+				for (int i = 0; i < loginPanelOpr.getUserDetails().getUserRolesMappingList().size();) {
+					putObjectInCache(CommonConstant.LOGGED_USER_ROLES, loginPanelOpr.getUserDetails()
+							.getUserRolesMappingList().get(i).getRoleRecord().getCode());
 					break;
 				}
 
-				ExternalContext externalContext = FacesContext
-						.getCurrentInstance().getExternalContext();
+				ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
-				String websiteUrl = ((HttpServletRequest) externalContext
-						.getRequest()).getServerName();
+				String websiteUrl = ((HttpServletRequest) externalContext.getRequest()).getServerName();
 
-				String requestPage = "p"
-						+ PrettyContext.getCurrentInstance().getRequestURL();
+				String requestPage = "p" + PrettyContext.getCurrentInstance().getRequestURL();
 
 				websiteUrl = "http://" + websiteUrl + ":8080/" + requestPage;
 				myLog.debug(" websiteUrl ::: " + websiteUrl);
@@ -337,8 +405,7 @@ public class LoginPanelBB extends BackingBean {
 			} catch (BusinessException e) {
 				handleException(e, commonPropertiesLocation);
 			} catch (IOException e) {
-				myLog.error(" error message occured during redirect ::: "
-						+ e.getMessage());
+				myLog.error(" error message occured during redirect ::: " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -349,21 +416,19 @@ public class LoginPanelBB extends BackingBean {
 		myLog.debug(" inside validateLogin ::: ");
 
 		FoundationValidator validator = new FoundationValidator();
-		PropertiesReader propertiesReader = new PropertiesReader(
-				propertiesLocation);
+		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 
 		boolean validateFlag = true;
 
-		String userLogin = loginOpr.getUserDetails().getUserLogin();
-		String password = loginOpr.getUserDetails().getLoginPassword();
+		String userLogin = loginPanelOpr.getUserDetails().getUserLogin();
+		String password = loginPanelOpr.getUserDetails().getLoginPassword();
 
 		if (!validator.validateNull(userLogin)) {
 			addToErrorList(propertiesReader.getValueOfKey("login_null"));
 		}
 
 		if (!validator.validateNull(password)) {
-			addToErrorList(propertiesReader
-					.getValueOfKey("login_password_null"));
+			addToErrorList(propertiesReader.getValueOfKey("login_password_null"));
 		}
 
 		if (getErrorList().size() > 0) {
@@ -436,26 +501,22 @@ public class LoginPanelBB extends BackingBean {
 	}
 
 	public void executeLogout(ActionEvent event) {
-		ExternalContext externalContext = FacesContext.getCurrentInstance()
-				.getExternalContext();
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
-		removeUserCache((String) externalContext.getSessionMap().get(
-				CommonConstant.LOGGED_USER_KEY));
+		removeUserCache((String) externalContext.getSessionMap().get(CommonConstant.LOGGED_USER_KEY));
 		externalContext.getSessionMap().remove(CommonConstant.LOGGED_USER_KEY);
 		externalContext.getSessionMap().remove(CommonConstant.LOGGED_USER_NAME);
 		removeObjectFromCache(CommonConstant.LOGGED_USER_DATA);
 
 		try {
-			HttpSession httpSession = (HttpSession) externalContext
-					.getSession(false);
+			HttpSession httpSession = (HttpSession) externalContext.getSession(false);
 			httpSession.invalidate();
 			httpSession = null;
 
-			PropertiesReader propertiesReader = new PropertiesReader(
-					commonPropertiesLocation);
+			PropertiesReader propertiesReader = new PropertiesReader(commonPropertiesLocation);
 			setSuccessMsg(propertiesReader.getValueOfKey("logout_success"));
 
-			externalContext.redirect("http://localhost:8080/p/admin/login");
+			// externalContext.redirect("http://localhost:8080/p/admin/login");
 			// RequestContext.getCurrentInstance().execute(
 			// "refreshLoginDetails();");
 
@@ -464,14 +525,4 @@ public class LoginPanelBB extends BackingBean {
 		}
 	}
 
-	public LoginPanelOpr getLoginOpr() {
-		if (loginOpr == null) {
-			loginOpr = new LoginPanelOpr();
-		}
-		return loginOpr;
-	}
-
-	public void setLoginOpr(LoginPanelOpr loginOpr) {
-		this.loginOpr = loginOpr;
-	}
 }

@@ -1,14 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><ui:insert name="title">Portal Admin</ui:insert></title>
+	<ui:insert name="meta">
+		<meta name="keywords" content="Portal Admin" />
+		<meta name="description" content="Portal Admin" />
+	</ui:insert>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</h:head>
 <f:view>
-	<!-- <h:head>
-		<title><ui:insert name="title">Default title</ui:insert></title>
-	</h:head> -->
 	<ui:include src="headinclude.xhtml" />
 	<h:body>
 
@@ -16,14 +18,18 @@
 			<div id="header">
 				<ui:insert name="header">
 					<ui:include src="header.xhtml" />
-					<ui:include src="menu.xhtml" />
 				</ui:insert>
-			</div>
-
-
-			<div id="content">
-				<ui:insert name="content">
-				</ui:insert>
+				<h:panelGroup id="menuPanelGroup">
+				<p:outputPanel rendered="#{!(sessionScope['LOGGED_USER_KEY'] eq null)}">
+					<ui:insert name="adminmenu">
+						<ui:include src="menu.xhtml" />
+					</ui:insert>
+					<br />
+					<ui:insert name="content">
+						<!--  this is where the body page is supposed to be -->
+					</ui:insert>
+				</p:outputPanel>
+			</h:panelGroup>
 			</div>
 
 			<div id="footer">
