@@ -328,7 +328,7 @@ public class LoginPanelBB extends BackingBean {
 				String requestPage = "p"
 						+ PrettyContext.getCurrentInstance().getRequestURL();
 
-				websiteUrl = "http://" + websiteUrl + ":8081/" + requestPage;
+				websiteUrl = "http://" + websiteUrl + ":8080/" + requestPage;
 				myLog.debug(" websiteUrl ::: " + websiteUrl);
 				externalContext.redirect(websiteUrl);
 
@@ -354,8 +354,8 @@ public class LoginPanelBB extends BackingBean {
 
 		boolean validateFlag = true;
 
-		String userLogin = loginPanelOpr.getUserDetails().getUserLogin();
-		String password = loginPanelOpr.getUserDetails().getLoginPassword();
+		String userLogin = loginOpr.getUserDetails().getUserLogin();
+		String password = loginOpr.getUserDetails().getLoginPassword();
 
 		if (!validator.validateNull(userLogin)) {
 			addToErrorList(propertiesReader.getValueOfKey("login_null"));
@@ -455,7 +455,7 @@ public class LoginPanelBB extends BackingBean {
 					commonPropertiesLocation);
 			setSuccessMsg(propertiesReader.getValueOfKey("logout_success"));
 
-			externalContext.redirect("http://localhost:8081/p/admin/login");
+			externalContext.redirect("http://localhost:8080/p/admin/login");
 			// RequestContext.getCurrentInstance().execute(
 			// "refreshLoginDetails();");
 

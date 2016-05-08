@@ -4,8 +4,8 @@ import com.web.foundation.dao.SqlTemplate;
 
 public interface OptionsSqlTemplate extends SqlTemplate {
 
-	static final String VALIDATE_LOGIN_DETAILS = "SELECT user_id, user_login, first_name, middle_name, last_name, email_id, alt_email_id, is_admin "
-			+ " FROM user_master WHERE BINARY(user_login) = BINARY(?) AND user_password = MD5(?);";
+	public static final String VALIDATE_LOGIN_DETAILS = "SELECT user_id, user_login, first_name, middle_name, last_name, primary_email_id,"
+			+ " alternate_email_id, is_admin FROM core_user_master WHERE BINARY(user_login) = BINARY(?) AND login_password = MD5(?);";
 
 	public static final String GET_USER_BASED_ROLE = " SELECT crm.role_id, crm.role_code, crm.role_name, crm.role_description, "
 			+ " curm.users_roles_mapping_id, cum.user_id, cum.user_login FROM core_user_master cum, core_users_roles_mapping curm, "
