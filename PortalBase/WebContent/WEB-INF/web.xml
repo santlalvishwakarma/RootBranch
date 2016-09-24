@@ -25,7 +25,7 @@
 	</context-param>
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>bluesky</param-value>
+		<param-value>humanity</param-value>
 	</context-param>
 	<context-param>
 		<description>Compress the view after serialization but before encoding</description>

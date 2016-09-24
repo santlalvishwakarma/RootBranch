@@ -11,42 +11,46 @@
 	<ui:include src="/pages/retail/modules/login/forgotPassword.xhtml" />
 	<p:growl autoUpdate="true" life="5000" />
 	<div id="templatemo_top" class="header">
-
-		<h:form id="headerForm">
-			<div align="right" class="headerLink">
-				<table style="float: right;">
-					<tr>
-						<td><p:commandLink id="goToShoppingCartLink1" styleClass="#{retailHomeBB.shoppingBagStyleString}"
-								action="pretty:shoppingCart">
-								<h:outputText value="#{retailHomeBB.shoppingCartString}" />
-							</p:commandLink></td>
-						<td><h:panelGroup id="loginLinkGroup">
-								<p:commandLink value="Login" style="text-align: center;" actionListener="#{loginPanelBean.openLoginPopup}"
-									rendered="#{(sessionScope['LOGGED_USER_KEY'] eq null)}" oncomplete="PF('loginDialog').show()"
-									styleClass="linkClass" process="@this" update=":loginDialogForm:loginDialogPanel" />
+		<div align="center" class="headerContainer">
+			<h:form id="headerForm">
+				<div align="right" class="headerLink">
+					<table style="float: right;">
+						<tr>
+							<td><p:commandLink id="goToShoppingCartLink1" styleClass="#{retailHomeBB.shoppingBagStyleString}"
+									action="pretty:shoppingCart">
+									<h:outputText value="#{retailHomeBB.shoppingCartString}" />
+								</p:commandLink></td>
+							<td><h:panelGroup id="loginLinkGroup">
+									<p:commandLink value="Login" style="text-align: center;" actionListener="#{loginPanelBean.openLoginPopup}"
+										rendered="#{(sessionScope['LOGGED_USER_KEY'] eq null)}" oncomplete="PF('loginDialog').show()"
+										styleClass="linkClass" process="@this" update=":loginDialogForm:loginDialogPanel" />
 									&#160;&#160;
 								<p:commandLink value="Signup" rendered="#{(sessionScope['LOGGED_USER_KEY'] eq null)}" styleClass="linkClass"
-									process="@this" action="#{homeBean.openUserRegistrationPage}" />
-								<h:panelGroup id="logoutLinkGroup" rendered="#{!(sessionScope['LOGGED_USER_KEY'] eq null)}">
-									<span class="labelClass colorClass">Welcome </span>
-									<span class="labelClass colorClass boldClass">#{sessionScope['LOGGED_USER_NAME']}</span>
+										process="@this" action="#{homeBean.openUserRegistrationPage}" />
+									<h:panelGroup id="logoutLinkGroup" rendered="#{!(sessionScope['LOGGED_USER_KEY'] eq null)}">
+										<span class="labelClass colorClass">Welcome </span>
+										<span class="labelClass colorClass boldClass">#{sessionScope['LOGGED_USER_NAME']}</span>
 									&#160;&#160;
 								<p:commandLink value="Logout" style="text-align: center; font-size: 15px !important;" styleClass="linkClass"
-										process="@this" partialSubmit="true" actionListener="#{loginPanelBean.executeLogout}"
-										oncomplete="refreshLoginDetails();" />
-								</h:panelGroup>
+											process="@this" partialSubmit="true" actionListener="#{loginPanelBean.executeLogout}"
+											oncomplete="refreshLoginDetails();" />
+									</h:panelGroup>
 									&#160;&#160;
 							</h:panelGroup></td>
-						<td><p:commandLink style="" rendered="#{(sessionScope['LOGGED_USER_KEY'] eq null)}" process="@this"
-								id="orderTrackingLink" value="Track My Order" action="pretty:ordertracking" /></td>
-					</tr>
-				</table>
+							<td><p:commandLink style="" rendered="#{(sessionScope['LOGGED_USER_KEY'] eq null)}" process="@this"
+									id="orderTrackingLink" value="Track My Order" action="pretty:ordertracking" /></td>
+						</tr>
+					</table>
+				</div>
+				<div class="sitename_panel">
+					<a href="/p/home/"><span>Ankit Logo</span></a>
+				</div>
+				<p:remoteCommand name="refreshLoginDetails" partialSubmit="true" process="@this" update="loginLinkGroup" />
+			</h:form>
+			<div class="mainmenu">
+				<ui:include src="/pages/retail/modules/menu/menu.xhtml" />
 			</div>
-			<div class="sitename_panel">
-				<a href="/p/home/"><img src="/p/staticcontent/retail/images/scs_banner.jpg" width="770" height="130" alt="SCS" /></a>
-			</div>
-			<p:remoteCommand name="refreshLoginDetails" partialSubmit="true" process="@this" update="loginLinkGroup" />
-		</h:form>
+		</div>
 	</div>
 	<br />
 </ui:composition>

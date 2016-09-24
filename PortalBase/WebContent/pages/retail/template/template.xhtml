@@ -5,19 +5,20 @@
 <f:view>
 	<ui:include src="headinclude.xhtml" />
 	<h:body>
+		<ui:insert name="header">
+			<ui:include src="header.xhtml" />
+		</ui:insert>
 		<div id="templatemo_container">
-			<p:panel style="width: 1050px;" styleClass="bodyClass">
-				<ui:insert name="header">
-					<ui:include src="header.xhtml" />
-				</ui:insert>
-				<ui:insert name="menu">
-					<ui:include src="/pages/retail/modules/menu/menu.xhtml" />
-				</ui:insert>
-				<br />
-				<ui:insert name="content">
-					<!--  this is where the body page is supposed to be -->
-				</ui:insert>
-			</p:panel>
+			<!-- <p:panel style="width: 1050px;" styleClass="bodyClass"> -->
+
+			<!-- <ui:insert name="menu">
+				<ui:include src="/pages/retail/modules/menu/menu.xhtml" />
+			</ui:insert> -->
+			<br />
+			<ui:insert name="content">
+				<!--  this is where the body page is supposed to be -->
+			</ui:insert>
+			<!-- </p:panel> -->
 		</div>
 		<ui:insert name="footer">
 			<ui:include src="footer.xhtml" />
