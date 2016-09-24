@@ -3,16 +3,32 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<h:form id="categoryMenuForm">
 		<p:megaMenu>
-			<p:submenu label="Manage admin">
+			<p:submenu label="Product">
 				<p:column>
 					<p:submenu style="display: none;">
-						<p:menuitem value="Notice Master" process="@this" />
-						<p:menuitem value="Flat Master" process="@this" />
-						<p:menuitem value="Event Master" process="@this" />
-						<p:menuitem value="Maintainance Bill Master" process="@this" />
+						<p:menuitem value="Product Master" process="@this" />
+						<p:menuitem value="Sku Master" process="@this" />
+						<p:menuitem value="Product Sku Mapping" process="@this" />
 					</p:submenu>
 				</p:column>
 			</p:submenu>
+			<p:submenu label="Category">
+				<p:column>
+					<p:submenu style="display: none;">
+						<p:menuitem value="Category Master" process="@this" />
+						<p:menuitem value="Category Mapping Master" process="@this" />
+					</p:submenu>
+				</p:column>
+			</p:submenu>
+			<p:submenu label="Relationship Menu">
+				<p:column>
+					<p:submenu style="display: none;">
+						<p:menuitem value="Product Sku Mapping" process="@this" />
+						<p:menuitem value="Category Product Mapping" process="@this" />
+					</p:submenu>
+				</p:column>
+			</p:submenu>
+			
 		</p:megaMenu>
 	</h:form>
 </ui:composition>

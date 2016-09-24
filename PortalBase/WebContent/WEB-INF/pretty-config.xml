@@ -56,12 +56,12 @@
 		<action onPostback="false" phaseId="RENDER_RESPONSE">#{retailBrowseProductsBB.populateProductSearchWebAttributes}
 		</action>
 	</url-mapping>
-	<url-mapping id="retail_product_information">
+	<!-- <url-mapping id="retail_product_information">
 		<pattern value="/#{retailReadMoreBB.currentProductId}" />
-		<view-id value="/pages/retail/modules/readmorepanel/readmorewrapper.jsf" /> <!-- <action onPostback="false">#{retailReadMoreBB.getCountryDependentCurrencyConversion} </action> -->
+		<view-id value="/pages/retail/modules/readmorepanel/readmorewrapper.jsf" /> <action onPostback="false">#{retailReadMoreBB.getCountryDependentCurrencyConversion} </action>
 		<action onPostback="false">#{retailReadMoreBB.loadProductFromURL} </action>
 		<action onPostback="false" phaseId="RENDER_RESPONSE">#{retailReadMoreBB.populateWebAttributes} </action>
-	</url-mapping>
+	</url-mapping> -->
 	<url-mapping id="shoppingCart">
 		<pattern value="/retail/shoppingcart" />
 		<view-id value="/pages/retail/modules/shoppingcart/shoppingcart.jsf" />
@@ -85,6 +85,11 @@
 	
 	<url-mapping id="adminHome">
 		<pattern value="/admin/" />
+		<view-id value="/pages/systemowner/modules/home/home.jsf" />
+	</url-mapping>
+	
+	<url-mapping id="admin">
+		<pattern value="/admin" />
 		<view-id value="/pages/systemowner/modules/home/home.jsf" />
 	</url-mapping>
 	

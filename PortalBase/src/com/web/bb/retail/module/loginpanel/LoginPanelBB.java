@@ -184,21 +184,10 @@ public class LoginPanelBB extends BackingBean {
 		setErrorList(new ArrayList<String>());
 		setSuccessMsg("");
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-		FoundationValidator validator = new FoundationValidator();
-		boolean validationFlag = true;
+		boolean validationFlag = validateLogin();
 		PropertiesReader propertiesReader = new PropertiesReader();
 		propertiesReader.setResourceBundle(propertiesLocation, Locale.getDefault());
-
-		if (!validator.validateNull(loginPanelOpr.getUserDetails().getUserLogin())) {
-			String errorMessage = propertiesReader.getValueOfKey("login_null");
-			addToErrorList(errorMessage);
-			validationFlag = false;
-		}
-		if (!validator.validateNull(loginPanelOpr.getUserDetails().getLoginPassword())) {
-			String errorMessage = propertiesReader.getValueOfKey("login_password_null");
-			addToErrorList(errorMessage);
-			validationFlag = false;
-		}
+		boolean invalidEmailPassCombinationFlag = false;
 
 		if (validationFlag) {
 			try {
@@ -208,11 +197,20 @@ public class LoginPanelBB extends BackingBean {
 					if (externalContext.getSessionMap().get(CommonConstant.LOGIN_TYPE)
 							.equals(CommonConstant.SYSTEMOWNER_LOGIN_TYPE)) {
 						boolean adminValidationFlag = false;
-						loginPanelOpr = new LoginPanelBF().executeLogin(loginPanelOpr);
+						try {
+							loginPanelOpr = new LoginPanelBF().executeLogin(loginPanelOpr);
+						} catch (BusinessException e) {
+							invalidEmailPassCombinationFlag = true;
+							navigationFlag = false;
+							String errorMessage = propertiesReader.getValueOfKey("invalid_user_msg");
+							addToErrorList(errorMessage);
+						}
+
 						loginPanelOpr = new HomeBF().getUserBasedRole(loginPanelOpr);
 
 						if (loginPanelOpr.getUserDetails().getUserRolesMappingList() != null
-								&& !loginPanelOpr.getUserDetails().getUserRolesMappingList().isEmpty()) {
+								&& !loginPanelOpr.getUserDetails().getUserRolesMappingList().isEmpty()
+								&& !invalidEmailPassCombinationFlag) {
 							for (UserRoleMappingDVO userRoleMappingDVO : loginPanelOpr.getUserDetails()
 									.getUserRolesMappingList()) {
 								if (CommonConstant.SYSTEM_OWNER.equals(userRoleMappingDVO.getRoleRecord().getCode())
@@ -258,7 +256,7 @@ public class LoginPanelBB extends BackingBean {
 												loginPanelOpr.getUserDetails().getFirstName());
 								RequestContext.getCurrentInstance().execute("refreshLoginDetails();");
 							}
-						} else {
+						} else if (!invalidEmailPassCombinationFlag) {
 							navigationFlag = false;
 							String errorMessage = propertiesReader.getValueOfKey("not_authorized_admin");
 							addToErrorList(errorMessage);
