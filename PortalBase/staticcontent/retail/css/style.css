@@ -1261,7 +1261,7 @@ div#breadcrumbs ul li a:hover {
 	overflow: hidden;
 	margin: 0px auto;
 	width: 100%;
-	min-height: 130px;
+	min-height: 100px;
 	/* margin-top: 50px; */
 }
 

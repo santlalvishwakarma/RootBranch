@@ -15,11 +15,101 @@
 			<p:graphicImage value="/staticcontent/retail/images/banner/banner5.jpg" width="980" height="438" />
 		</div>
 	</div> -->
-	<p:imageSwitch effect="fade" id="fadeEffect">
+	<!-- <p:imageSwitch effect="zoom">
 		<p:graphicImage value="/staticcontent/retail/images/banner/banner1.jpg" width="980" height="438" />
 		<p:graphicImage value="/staticcontent/retail/images/banner/banner2.jpg" width="980" height="438" />
 		<p:graphicImage value="/staticcontent/retail/images/banner/banner3.jpg" width="980" height="438" />
 		<p:graphicImage value="/staticcontent/retail/images/banner/banner4.jpg" width="980" height="438" />
 		<p:graphicImage value="/staticcontent/retail/images/banner/banner5.jpg" width="980" height="438" />
-	</p:imageSwitch>
+	</p:imageSwitch> -->
+
+	<style type="text/css">
+#image-rotator {
+	position: relative;
+	overflow: hidden;
+	z-index: 888;
+}
+
+#image-rotator ul {
+	list-style: none;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+#image-rotator ul li {
+	float: left;
+	position: relative;
+}
+
+#image-rotator ul li img {
+	width: 100%;
+	height: 100%;
+}
+
+#image-rotator ol {
+	position: absolute;
+	bottom: 15px;
+	right: 10px;
+	list-style: none;
+	z-index: 999;
+}
+
+#image-rotator ol li {
+	width: 10px;
+	height: 10px;
+	float: left;
+	margin: 5px;
+	border-radius: 50%;
+	cursor: pointer;
+	background-color: #fff;
+}
+
+#image-rotator ol li.on {
+	background: #FF5C1B;
+}
+</style>
+
+	<script type="text/javascript">
+		$('#image-rotator').zSlider({
+
+			// interval time in ms
+			interval : 2000,
+
+			// 'a': horizontal sliding
+			// 'b': vertical sliding
+			// 'c': cross fading
+			turnTo : "c",
+
+			// shows pagiantion
+			paper : true,
+
+			// width and height of the rotator
+			width : 1198,
+			height : 438
+
+		});
+
+		$(document).ready(function() {
+			$('#image-rotator').zSlider();
+		});
+	</script>
+
+
+	<div id="image-rotator">
+		<ul>
+			<li><a href="#"><p:graphicImage value="/staticcontent/retail/images/banner/BG_Master1.jpg" width="1198"
+						height="438" /></a></li>
+			<li><a href="#"><p:graphicImage value="/staticcontent/retail/images/banner/banner2.jpg" width="1198"
+						height="438" /></a></li>
+			<li><a href="#"><p:graphicImage value="/staticcontent/retail/images/banner/banner3.jpg" width="1198"
+						height="438" /></a></li>
+			<li><a href="#"><p:graphicImage value="/staticcontent/retail/images/banner/banner4.jpg" width="1198"
+						height="438" /></a></li>
+			<li><a href="#"><p:graphicImage value="/staticcontent/retail/images/banner/banner5.jpg" width="1198"
+						height="438" /></a></li>
+		</ul>
+	</div>
+
+
 </ui:composition>
