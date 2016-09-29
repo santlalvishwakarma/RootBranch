@@ -70,6 +70,22 @@
 		<managed-bean-class>com.web.bb.systemowner.modules.websitemaster.WebsiteMasterBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>productDefinitionBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.productmanagement.ProductDefinitionBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>productDefinitionSearchListBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.productmanagement.ProductDefinitionSearchBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>productDefinitionAddEditBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.productmanagement.ProductDefinitionAddEditBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
 	<!-- Admin entry ends here -->
 
 </faces-config>

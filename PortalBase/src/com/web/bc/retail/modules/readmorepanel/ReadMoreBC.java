@@ -169,7 +169,7 @@ public class ReadMoreBC extends BackingClass {
 
 				productSkuDVO.getProductRecord().setCode((String) (resultRow.get("product_code")));
 				productSkuDVO.getProductRecord().setName((String) (resultRow.get("product_name")));
-				productSkuDVO.getProductRecord().setStatusCode((String) (resultRow.get("status_code")));
+				productSkuDVO.getProductRecord().getStatusRecord().setCode((String) (resultRow.get("status_code")));
 
 				if (resultRow.get("default_hierarchy_id") != null) {
 					productSkuDVO.getProductRecord().getHierarchyRecord()

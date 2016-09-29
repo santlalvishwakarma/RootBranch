@@ -12,6 +12,7 @@ import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.common.BaseDVO;
 import com.web.common.dvo.common.CatalogDVO;
 import com.web.common.dvo.common.Parameter;
+import com.web.common.dvo.common.StatusDVO;
 import com.web.foundation.logger.ITSDLogger;
 import com.web.foundation.logger.TSDLogger;
 import com.web.util.CommonUtil;
@@ -106,6 +107,7 @@ public class ProductSkuDVO extends BaseDVO {
 	private String skuSEOKeyword;
 	private String skuSEODescription;
 	private ArrayList<ProductSizeMappingDVO> productSizeMappingList;
+	private StatusDVO statusRecord;
 
 	public Float getPercentDiscount() {
 		if ((basePrice != null && basePrice != 0) && (discountPrice != null && discountPrice != 0)) {
@@ -1159,6 +1161,17 @@ public class ProductSkuDVO extends BaseDVO {
 
 	public void setProductSizeMappingList(ArrayList<ProductSizeMappingDVO> productSizeMappingList) {
 		this.productSizeMappingList = productSizeMappingList;
+	}
+
+	public StatusDVO getStatusRecord() {
+		if (statusRecord == null) {
+			statusRecord = new StatusDVO();
+		}
+		return statusRecord;
+	}
+
+	public void setStatusRecord(StatusDVO statusRecord) {
+		this.statusRecord = statusRecord;
 	}
 
 }

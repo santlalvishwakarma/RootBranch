@@ -139,6 +139,8 @@ public interface CommonConstant {
 		public static final String MAX_LEVEL_LIMIT = "MAX_LEVEL_LIMIT";
 		public static final String COUNSELING_TYPE = "COUNSELING_TYPE";
 		public static final String GENDER_TYPE = "GENDER_TYPE";
+		public static final String PRODUCT_PROPERTIES_CONDITIONS = "PRODUCT_PROPERTIES_CONDITIONS";
+		public static final String PRODUCT_STATUS = "PRODUCT_STATUS";
 	}
 
 	public interface ParamDatatype {
@@ -192,6 +194,27 @@ public interface CommonConstant {
 	}
 
 	public static final String RETAIL_DETAILS_MENU_ELEMENT = "PORTAL_BASE_RETAIL_DETAILS_MENU_ELEMENT";
+
+	public interface StatusCodes {
+		public static final String NEW = "NEW";
+		public static final String PENDING_APPROVAL = "PENDING_APPROVAL";
+		public static final String APPROVED = "APPROVED";
+		public static final String INACTIVE = "INACTIVE";
+		public static final String REJECT = "REJECT";
+		public static final String REWORK = "REWORK";
+		public static final String CLOSED = "CLOSED";
+		public static final String PARTIALLY_FULFILLED = "PARTIALLY_FULFILLED";
+		public static final String PENDING = "PENDING";
+		public static final String CONFIRMED = "CONFIRMED";
+		public static final String INTRANSIT = "INTRANSIT";
+		public static final String RECEIVED = "RECEIVED";
+		public static final String CANCELLED = "CANCELLED";
+		public static final String AVAILABLE = "AVAILABLE";
+		public static final String GENERATED = "GENERATED";
+		public static final String FULLY_SETTLED = "FULLY_SETTLED";
+		public static final String FULFILLED = "FULFILLED";
+		public static final String NOT_GENERATED = "NOT_GENERATED";
+	}
 
 	public interface PopulateFacebookData {
 		public static final String PRODUCT_IMAGE_URL = "PRODUCT_IMAGE_URL";

@@ -12,9 +12,9 @@ public interface OptionsSqlTemplate extends SqlTemplate {
 			+ " core_role_master crm WHERE cum.user_id = curm.user_id AND curm.role_id = crm.role_id AND cum.user_id = ?; ";
 
 	public static final String GET_PARAM_CODE_OPTIONS = " SELECT parameter_id, param_code, sequence_number, param_description, value_data_type, "
-			+ " value_text, value_numeric, value_date, editable, record_deleted, effective_date_from, effective_date_to, "
-			+ " created_by, created_date, modified_by, modified_date FROM parameter_master "
-			+ " WHERE param_code = ? AND CURRENT_DATE() BETWEEN effective_date_from AND effective_date_to ORDER BY sequence_number; ";
+			+ " value_text, value_numeric, value_date, record_deleted, effective_from, effective_to, "
+			+ " created_by, created_date, modified_by, modified_date FROM core_parameter_master "
+			+ " WHERE param_code = ? AND CURRENT_DATE() BETWEEN effective_from AND effective_to ORDER BY sequence_number; ";
 
 	static final String GET_COUNTRY_LIST = "SELECT country_code, country_name, country_description"
 			+ " FROM core_country_master ccm ";
@@ -24,4 +24,9 @@ public interface OptionsSqlTemplate extends SqlTemplate {
 
 	static final String GET_CITY_LIST = "SELECT city_code,city_name, city_description, state_code "
 			+ " FROM core_city_master ccm ";
+
+	static final String GET_STATUS_CODES_BASED_ON_PARAMETER = "SELECT csm.status_code, csm.status_name, csm.status_description"
+			+ " FROM core_parameter_master cpm, core_status_master csm"
+			+ " WHERE param_code = ? AND csm.status_code = cpm.value_text"
+			+ " AND CURRENT_DATE() BETWEEN effective_from AND effective_to ORDER BY sequence_number;";
 }

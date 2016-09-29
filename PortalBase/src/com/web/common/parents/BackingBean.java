@@ -2,6 +2,7 @@ package com.web.common.parents;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.retail.modules.user.UserDVO;
+import com.web.common.dvo.systemowner.CategoryDVO;
+import com.web.common.dvo.systemowner.PropertyDVO;
 import com.web.foundation.exception.BusinessException;
 import com.web.util.CommonUtil;
 
@@ -16,6 +19,12 @@ public abstract class BackingBean extends ParentBackingBean implements Serializa
 
 	private static final long serialVersionUID = -2916890749918364191L;
 	private String propertiesLocation = CommonConstant.MessageLocation.COMMON_MESSAGES;
+
+	protected String beanName;
+
+	public List<PropertyDVO> propertiesForAutoSuggest;
+
+	public List<CategoryDVO> productCategoriesForAutoSuggest;
 
 	protected void getImageURL() {
 		String serverlUrl = CommonUtil.getServerUrl();

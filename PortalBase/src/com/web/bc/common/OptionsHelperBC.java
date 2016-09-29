@@ -8,6 +8,7 @@ import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.common.CountryDVO;
 import com.web.common.dvo.common.Parameter;
 import com.web.common.dvo.common.StateDVO;
+import com.web.common.dvo.common.StatusDVO;
 import com.web.common.dvo.opr.common.ParameterOpr;
 import com.web.common.dvo.opr.retail.LoginPanelOpr;
 import com.web.common.dvo.retail.modules.user.UserDVO;
@@ -454,6 +455,44 @@ public class OptionsHelperBC extends BackingClass {
 		}
 
 		return loginOpr;
+	}
+
+	public ArrayList<Object> getStatusCodeListBasedOnParameter(Parameter parameter) throws FrameworkException,
+			BusinessException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In Options Helper BC :: getStatusCodeListBasedOnParameter starts ");
+
+		String parameterCode = parameter.getParameterCode();
+
+		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
+		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT, OptionsSqlTemplate.GET_STATUS_CODES_BASED_ON_PARAMETER);
+
+		Object strSqlParams[][] = new Object[1][3];
+
+		strSqlParams[0][0] = "1";
+		strSqlParams[0][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[0][2] = parameterCode;
+		myLog.debug(" parameter 1 :: " + parameterCode);
+
+		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
+		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
+		myLog.debug(" getStatusCodeListBasedOnParameter :: Resultset got ::" + responseMap);
+
+		ArrayList<Object> statusCodeList = new ArrayList<Object>();
+		if (responseMap.size() > 0) {
+			for (int i = 0; i < responseMap.size(); i++) {
+				HashMap<String, Object> resultSetMap = responseMap.get(i);
+				StatusDVO statusRecord = new StatusDVO();
+
+				statusRecord.setCode((String) resultSetMap.get("status_code"));
+				statusRecord.setName((String) resultSetMap.get("status_name"));
+				statusRecord.setDescription((String) resultSetMap.get("status_description"));
+				statusCodeList.add(statusRecord);
+			}
+		}
+		return statusCodeList;
 	}
 
 }
