@@ -1,8 +1,10 @@
 package com.web.common.dvo.opr.systemowner;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.web.common.dvo.common.OperationalDataValueObject;
+import com.web.common.dvo.systemowner.ProductCategoryDVO;
 import com.web.common.dvo.systemowner.ProductDVO;
 import com.web.util.deepcopy.DeepCopy;
 
@@ -11,8 +13,9 @@ public class ProductOpr extends OperationalDataValueObject {
 	private static final long serialVersionUID = -3311426889260891951L;
 	private ProductDVO productRecord;
 	private ProductDVO quickEditProductRecord;
-	private ArrayList<ProductDVO> searchResultList;
-	private ArrayList<ProductDVO> productDVOList;
+	private List<ProductDVO> searchResultList;
+	private List<ProductDVO> productDVOList;
+	private List<ProductCategoryDVO> productCategoryList;
 
 	public ProductDVO getQuickEditProductRecord() {
 		if (quickEditProductRecord == null) {
@@ -36,26 +39,37 @@ public class ProductOpr extends OperationalDataValueObject {
 		this.productRecord = productRecord;
 	}
 
-	public ArrayList<ProductDVO> getSearchResultList() {
+	public List<ProductDVO> getSearchResultList() {
 		if (searchResultList == null) {
 			searchResultList = new ArrayList<ProductDVO>();
 		}
 		return searchResultList;
 	}
 
-	public void setSearchResultList(ArrayList<ProductDVO> searchResultList) {
+	public void setSearchResultList(List<ProductDVO> searchResultList) {
 		this.searchResultList = searchResultList;
 	}
 
-	public ArrayList<ProductDVO> getProductDVOList() {
+	public List<ProductDVO> getProductDVOList() {
 		if (productDVOList == null) {
 			productDVOList = new ArrayList<ProductDVO>();
 		}
 		return productDVOList;
 	}
 
-	public void setProductDVOList(ArrayList<ProductDVO> productDVOList) {
+	public void setProductDVOList(List<ProductDVO> productDVOList) {
 		this.productDVOList = productDVOList;
+	}
+
+	public List<ProductCategoryDVO> getProductCategoryList() {
+		if (productCategoryList == null) {
+			productCategoryList = new ArrayList<ProductCategoryDVO>();
+		}
+		return productCategoryList;
+	}
+
+	public void setProductCategoryList(List<ProductCategoryDVO> productCategoryList) {
+		this.productCategoryList = productCategoryList;
 	}
 
 }

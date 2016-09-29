@@ -1,0 +1,23 @@
+CREATE TABLE core_parameter_master (
+  parameter_id int(10) NOT NULL AUTO_INCREMENT,
+  param_code varchar(35) DEFAULT NULL,
+  sequence_number int(4) NOT NULL,
+  param_description varchar(255) DEFAULT NULL,
+  value_data_type char(1) DEFAULT NULL,
+  value_text varchar(255) DEFAULT NULL,
+  value_numeric float(14,4) DEFAULT NULL,
+  value_date date DEFAULT NULL,
+  editable tinyint(1) DEFAULT '0',
+  record_deleted tinyint(1) DEFAULT '0',
+  effective_date_from date DEFAULT NULL,
+  effective_date_to date DEFAULT NULL,
+  created_by varchar(50) DEFAULT NULL,
+  created_date datetime NOT NULL,
+  modified_by varchar(50) DEFAULT NULL,
+  modified_date datetime NOT NULL,
+  synch_id varchar(25) DEFAULT NULL,
+  cross_location_last_synch_date datetime DEFAULT NULL,
+  PRIMARY KEY (parameter_id),
+  UNIQUE KEY UK_core_parameter_master_param_code_sequence_number (param_code,sequence_number),
+  KEY index_3 (value_text)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

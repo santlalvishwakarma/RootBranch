@@ -1,0 +1,19 @@
+<ui:composition template="/pages/systemowner/template/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+		<p:tabView id="productTabView" activeIndex="#{productDefinitionBB.activeTabIndex}">
+			<p:ajax event="tabChange" listener="#{productDefinitionBB.tabChanged}"
+				update=":productTabView:productSearchListForm:productProductSearchPanel, :productTabView:productSearchListForm:productProductListPanel, :productTabView:productAddEditForm:productProductAddEditPanel,:productTabView:productPropertyDialogForm:productPropertyDialogPanel" />
+			<p:tab id="searchListProduct" title="Search/List">
+				<ui:include src="/pages/systemowner/modules/productmanagement/productDefinitionSearchList.xhtml" />
+			</p:tab>
+			<p:tab id="addEditProduct" title="Product/SKU">
+				<ui:include src="/pages/systemowner/modules/productmanagement/productDefinitionAddEdit.xhtml" />
+			</p:tab>
+		</p:tabView>
+
+		<ui:include src="/pages/retail/modules/enlargeimagepanel/enlargeImage.xhtml" />
+
+	</ui:define>
+</ui:composition>

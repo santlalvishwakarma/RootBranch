@@ -1,6 +1,7 @@
 package com.web.bb.retail.module.readmorepanel;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import javax.faces.context.ExternalContext;
@@ -148,21 +149,27 @@ public class ReadMoreBB extends BackingBean {
 			myLog.debug("split string is " + st);
 			int i = 0;
 			String productNamePlaceHolder = null;
-			while (st.hasMoreElements()) {
-				i = i + 1;
-				myLog.debug("counter is " + i);
-				if (i == 1) {
-					myLog.debug("i is " + 1);
-					productSkuDVO.getProductRecord().setId(Long.valueOf(st.nextElement().toString()));
-				} else if (i == 2) {
-					myLog.debug("i is " + 1);
-					productSkuDVO.setId(Long.valueOf(st.nextElement().toString()));
-				} else {
-					myLog.debug("productNamePlaceHolder - before - " + productNamePlaceHolder);
-					productNamePlaceHolder = st.nextElement().toString()
-							+ (productNamePlaceHolder == null ? "" : (" | " + productNamePlaceHolder));
-					myLog.debug("productNamePlaceHolder - after - " + productNamePlaceHolder);
+			try {
+				while (st.hasMoreElements()) {
+					i = i + 1;
+					myLog.debug("counter is " + i);
+					if (i == 1) {
+						myLog.debug("i is " + 1);
+						productSkuDVO.getProductRecord().setId(Long.valueOf(st.nextElement().toString()));
+					} else if (i == 2) {
+						myLog.debug("i is " + 1);
+						productSkuDVO.setId(Long.valueOf(st.nextElement().toString()));
+					} else {
+						myLog.debug("productNamePlaceHolder - before - " + productNamePlaceHolder);
+						productNamePlaceHolder = st.nextElement().toString()
+								+ (productNamePlaceHolder == null ? "" : (" | " + productNamePlaceHolder));
+						myLog.debug("productNamePlaceHolder - after - " + productNamePlaceHolder);
+					}
 				}
+			} catch (NoSuchElementException e) {
+				// TODO: handle exception
+			} catch (NumberFormatException e) {
+				// TODO: handle exception
 			}
 
 			FacesContext.getCurrentInstance().getExternalContext().getRequestMap()

@@ -1,0 +1,248 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="productSearchListForm">
+		<h:panelGroup id="productProductSearchPanel">
+			<table style="width: 100%">
+				<tr>
+					<td><p:inputText id="productCode" value="#{productDefinitionSearchListBB.productOpr.productRecord.code}" /> <p:watermark
+							for="productCode" value="Product Code" /></td>
+					<td><p:inputText id="productName" value="#{productDefinitionSearchListBB.productOpr.productRecord.name}" /> <p:watermark
+							for="productName" value="Product Name" /></td>
+					<td><p:inputText id="productDescription"
+							value="#{productDefinitionSearchListBB.productOpr.productRecord.description}" /> <p:watermark
+							for="productDescription" value="Product Description" /></td>
+					<td>Status Code</td>
+					<td><p:selectOneMenu id="statusList"
+							value="#{productDefinitionSearchListBB.productOpr.productRecord.statusRecord.code}">
+							<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+							<f:selectItems value="#{productDefinitionSearchListBB.allOptions.allOptionsValues['statusList']}"
+								var="statusRecord" itemLabel="#{statusRecord.name}" itemValue="#{statusRecord.code}" />
+						</p:selectOneMenu></td>
+				</tr>
+				<tr>
+					<td><p:inputText id="skuCode"
+							value="#{productDefinitionSearchListBB.productOpr.productRecord.productSkuRecord.code}" /> <p:watermark
+							for="skuCode" value="SKU Code" /></td>
+					<td><p:inputText id="skuDescription"
+							value="#{productDefinitionSearchListBB.productOpr.productRecord.productSkuRecord.description}" /> <p:watermark
+							for="skuDescription" value="SKU Description" /></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<!-- <tr>
+					<td><p:autoComplete id="productHierarchyAutoComplete"
+							value="#{productDefinitionSearchListBB.productOpr.productHierarchyList}" minQueryLength="2" multiple="true"
+							completeMethod="#{productDefinitionSearchListBB.getSuggestedHierarchies}" var="productHierarchyRecord"
+							itemLabel="#{productHierarchyRecord.name}" itemValue="#{productHierarchyRecord}" global="false"
+							converter="#{productDefinitionSearchListBB.baseDVOConverter}">
+							<p:column headerText="Code">#{productHierarchyRecord.code}</p:column>
+							<p:column headerText="Name">#{productHierarchyRecord.name}</p:column>
+						</p:autoComplete> <p:watermark for="productHierarchyAutoComplete" value="Product Hierarchy" /></td>
+					<td colspan="2"><label class="addRowMsgClass">Please enter the first 2 characters</label>
+					</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td><p:autoComplete id="categoryAutoComplete" effect="fade" multiple="true"
+							value="#{productDefinitionSearchListBB.productOpr.productCategoryList}" minQueryLength="2"
+							completeMethod="#{productDefinitionSearchListBB.getSuggestedCategories}" var="productCategoryRecord"
+							itemLabel="#{productCategoryRecord.name}" itemValue="#{productCategoryRecord}" global="false" maxResults="20"
+							converter="#{productDefinitionSearchListBB.productCategoryConverter}">
+							<p:column>#{productCategoryRecord.code}</p:column>
+							<p:column>#{productCategoryRecord.name}</p:column>
+						</p:autoComplete> <p:watermark for="categoryAutoComplete" value="Category Name" />
+					</td>
+					<td colspan="2"><label class="addRowMsgClass">Please enter the first 2 characters</label>
+					</td>
+					<td></td>
+					<td></td>
+				</tr> -->
+				<tr>
+					<td><p:commandLink id="productPropertiesList" value="Product Properties" process="@this"
+							oncomplete="productPropertyDialog.show()"
+							update=":productTabView:productPropertyDialogForm:productPropertyDialogPanel" /> <p:tooltip
+							for="productPropertiesList" value="Please enter combination of properties to search" /></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+			<table style="width: 30%">
+				<tr>
+					<td><p:commandButton id="btnSearch" actionListener="#{productDefinitionSearchListBB.executeSearch}"
+							value="Search" update="productProductListPanel" /> <p:tooltip for="btnSearch" value="Click to Search" /> <p:hotkey
+							bind="ctrl+shift+s" update="productProductListPanel"
+							actionListener="#{productDefinitionSearchListBB.executeSearch}" /></td>
+					<td><p:commandButton id="btnCancel" action="#{productDefinitionSearchListBB.clearPage}" value="Clear Search"
+							process="@this" /> <p:tooltip for="btnCancel" value="Click to Cancel" /></td>
+					<td><p:commandButton id="btnAddNew" process="@this" value="Add New"
+							actionListener="#{productDefinitionSearchListBB.createNewProduct}" update=":productTabView" /> <p:tooltip
+							for="btnAddNew" value="Click to Add New" /></td>
+				</tr>
+			</table>
+		</h:panelGroup>
+		<br />
+		<br />
+		<h:panelGroup id="productProductListPanel">
+			<p:panel rendered="#{!(empty productDefinitionSearchListBB.productOpr.productDVOList)}">
+				<h:commandLink id="excelLink">
+					<p:graphicImage alt="Export to Xls" value="/staticcontent/retailimages/excel.png" styleClass="imageClass" />
+					<p:dataExporter type="xls" target="productProductListTable" fileName="ProductDefinition" />
+				</h:commandLink>
+				<p:tooltip for="excelLink" value="Click to export data in the list to MS-Excel" />
+				<h:commandLink id="pdfLink">
+					<p:graphicImage alt="Export to PDF" value="/staticcontent/retailimages/pdf.png" styleClass="imageClass" />
+					<p:dataExporter type="pdf" target="productProductListTable" fileName="ProductDefinition" />
+				</h:commandLink>
+				<p:tooltip for="pdfLink" value="Click to export data in the list to PDF" />
+				<h:commandLink id="xmlLink">
+					<p:graphicImage alt="Export to XML" value="/staticcontent/retailimages/xml.png" styleClass="imageClass" />
+					<p:dataExporter type="xml" target="productProductListTable" fileName="ProductDefinition" />
+				</h:commandLink>
+				<p:tooltip for="xmlLink" value="Click to export data in the list to XML" />
+			</p:panel>
+			<p:dataTable id="productProductListTable" rows="#{productDefinitionSearchListBB.paginationNumber}"
+				var="productRecord" rowsPerPageTemplate="5,10,15" style="width: 100%;"
+				rendered="#{!(empty productDefinitionSearchListBB.productOpr.productDVOList)}"
+				value="#{productDefinitionSearchListBB.productOpr.productDVOList}" paginator="true"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page">
+				<f:facet name="header">Product</f:facet>
+				<p:column sortBy="#{productRecord.code}" filterBy="#{productRecord.code}" filterMatchMode="contains">
+					<f:facet name="header">Product Code</f:facet>
+					<p:commandLink styleClass="linkClass" action="#{productDefinitionSearchListBB.editDetails}"
+						update=":productTabView" value="#{productRecord.code}">
+						<f:setPropertyActionListener target="#{productDefinitionSearchListBB.selectedProductRecord}"
+							value="#{productRecord}" />
+					</p:commandLink>
+				</p:column>
+				<p:column sortBy="#{productRecord.name}" filterBy="#{productRecord.name}" filterMatchMode="contains">
+					<f:facet name="header">Product Name</f:facet>
+					<h:outputText value="#{productRecord.name}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{productRecord.description}" filterBy="#{productRecord.description}" filterMatchMode="contains">
+					<f:facet name="header">Product Description</f:facet>
+					<h:outputText value="#{productRecord.description}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{productRecord.productVersion}" filterBy="#{productRecord.productVersion}"
+					filterMatchMode="contains">
+					<f:facet name="header">Version</f:facet>
+					<h:outputText value="#{productRecord.productVersion}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{productRecord.statusRecord.name}" filterBy="#{productRecord.statusRecord.name}"
+					filterMatchMode="contains">
+					<f:facet name="header">Status</f:facet>
+					<h:outputText value="#{productRecord.statusRecord.name}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{productRecord.productSkuRecord.code}" filterBy="#{productRecord.productSkuRecord.code}"
+					filterMatchMode="contains">
+					<f:facet name="header">Sku Code</f:facet>
+					<p:commandLink styleClass="linkClass" action="#{productDefinitionSearchListBB.editSKUDetails}"
+						update=":productTabView" value="#{productRecord.productSkuRecord.code}">
+						<f:setPropertyActionListener target="#{productDefinitionSearchListBB.selectedProductRecord}"
+							value="#{productRecord}" />
+					</p:commandLink>
+				</p:column>
+				<p:column sortBy="#{productRecord.productSkuRecord.description}"
+					filterBy="#{productRecord.productSkuRecord.description}" filterMatchMode="contains">
+					<f:facet name="header">Sku Description</f:facet>
+					<h:outputText value="#{productRecord.productSkuRecord.description}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{productRecord.productSkuRecord.skuVersion}"
+					filterBy="#{productRecord.productSkuRecord.skuVersion}" filterMatchMode="contains">
+					<f:facet name="header">Sku Version</f:facet>
+					<h:outputText value="#{productRecord.productSkuRecord.skuVersion}" styleClass="labelClass" />
+				</p:column>
+				<p:column headerText="Image" style="text-align:center;" exportable="false">
+					<p:commandLink styleClass="linkClass" action="#{productDefinitionSearchListBB.executeEnlargeImage}"
+						update=":enlargeImageDialogPanelGroup" oncomplete="enlargeImageDialog.show()">
+						<h:graphicImage id="image1"
+							value="#{sessionScope['imageURL']}#{productRecord.defaultImageRecord.thumbnailImageURL}"
+							style="width: 25px; height: 25px;" title="Thumbnail" />
+						<f:setPropertyActionListener target="#{productDefinitionSearchListBB.selectedProductRecord}"
+							value="#{productRecord}" />
+					</p:commandLink>
+				</p:column>
+				<p:column headerText="Add Sku" style="text-align:center;" exportable="false">
+					<p:commandLink styleClass="linkClass" action="#{productDefinitionSearchListBB.createNewSKU}"
+						update=":productTabView">
+						<p:graphicImage alt="Add Row" value="/staticcontent/retailimages/add.png" />
+						<f:setPropertyActionListener target="#{productDefinitionSearchListBB.selectedProductRecord}"
+							value="#{productRecord}" />
+					</p:commandLink>
+				</p:column>
+				<f:facet name="footer">Total products : #{fn:length(productDefinitionSearchListBB.productOpr.productDVOList)}</f:facet>
+			</p:dataTable>
+		</h:panelGroup>
+	</h:form>
+	
+	<!-- <h:form id="productPropertyDialogForm">
+		<p:dialog id="productPropertyDialog" header="Property Search" widgetVar="productPropertyDialog" showEffect="explode"
+			hideEffect="explode" dynamic="true" modal="true" width="#{productDefinitionSearchListBB.modalWidth}"
+			height="#{productDefinitionSearchListBB.modalHeight}">
+			<p:ajax event="close" listener="#{productDefinitionSearchListBB.closeModalWindow}" />
+			<p:panel id="productPropertyDialogPanel">
+				<p:commandLink id="productPropertyAddRow" accesskey="a" process="productPropertyListPanel, @this"
+					actionListener="#{productDefinitionSearchListBB.executeAddRow}" styleClass="linkClass"
+					update="productPropertyListPanel">
+					<p:graphicImage alt="Add Row" value="/staticcontent/retailimages/add.png" />
+				</p:commandLink>
+				<label class="addRowMsgClass">Please click here to add a new row</label>
+				<br />
+				<br />
+				<h:panelGroup id="productPropertyListPanel" style="width: 100%;">
+					<p:dataTable id="productPropertyListTable" rows="#{productDefinitionSearchListBB.paginationNumber}"
+						var="productPropertyRecord" rowsPerPageTemplate="5,10,15"
+						rendered="#{!(empty productDefinitionSearchListBB.productOpr.productRecord.productPropertiesMappingList)}"
+						value="#{productDefinitionSearchListBB.productOpr.productRecord.productPropertiesMappingList}" paginator="true"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page">
+						<f:facet name="header">Product Properties</f:facet>
+						<p:column headerText="Property Name">
+							<p:autoComplete id="propertiesAutoComplete" value="#{productPropertyRecord.productPropertiesRecord}"
+								minQueryLength="2" completeMethod="#{productDefinitionSearchListBB.getSuggestedPropertiesBasedOnName}"
+								var="property" itemLabel="#{property.name}" itemValue="#{property}" global="false" effect="fade"
+								forceSelection="true" converter="#{productDefinitionSearchListBB.productPropertyConverter}">
+								<p:column>#{property.code}</p:column>
+								<p:column>#{property.name}</p:column>
+							</p:autoComplete>
+							<p:watermark for="propertiesAutoComplete" value="Enter first 2 chars" />
+						</p:column>
+						<p:column headerText="Condition">
+							<p:selectOneMenu id="conditionList" value="#{productPropertyRecord.propertyCondition}">
+								<f:selectItems value="#{productDefinitionSearchListBB.allOptions.allOptionsValues['conditionList']}"
+									var="parameter" itemLabel="#{parameter.parameterStringValue}" itemValue="#{parameter.parameterStringValue}" />
+								<p:ajax event="change" process="propertyValueToGroup, @this" update="propertyValueToGroup" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column headerText="Value From">
+							<p:inputText value="#{productPropertyRecord.propertyValue}" size="10" />
+						</p:column>
+						<p:column headerText="Value To">
+							<h:panelGroup id="propertyValueToGroup">
+								<p:inputText value="#{productPropertyRecord.propertyValueTo}" size="10"
+									rendered="#{productPropertyRecord.propertyCondition eq 'Between'}" />
+							</h:panelGroup>
+						</p:column>
+						<p:column headerText="Delete">
+							<p:selectBooleanCheckbox value="#{productPropertyRecord.operationalAttributes.recordDeleted}" />
+						</p:column>
+						<f:facet name="footer">Total product properties : #{fn:length(productDefinitionSearchListBB.productOpr.productRecord.productPropertiesMappingList)}</f:facet>
+					</p:dataTable>
+				</h:panelGroup>
+				<table style="margin: 0 auto;">
+					<tr>
+						<td><p:commandButton id="btnSubmitProperty" value="Submit" process="productPropertyListPanel,@this"
+								oncomplete="productPropertyDialog.hide()" /> <p:tooltip for="btnSubmitProperty"
+								value="Click to Submit and Close" /></td>
+						<td><p:commandButton id="btnClearProperty" value="Clear Property" process="@this"
+								actionListener="#{productDefinitionSearchListBB.executeClearProperties}" update="productPropertyListPanel" /> <p:tooltip
+								for="btnClearProperty" value="Click to Clear Properties" /></td>
+					</tr>
+				</table>
+			</p:panel>
+		</p:dialog>
+	</h:form> -->
+</ui:composition>

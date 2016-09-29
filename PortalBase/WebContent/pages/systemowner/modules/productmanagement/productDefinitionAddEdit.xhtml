@@ -1,0 +1,430 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="productAddEditForm">
+		<h:panelGroup id="productProductAddEditPanel">
+			<h:panelGroup id="productAddEditPanel" rendered="#{productDefinitionAddEditBB.renderForProduct}">
+				<table style="width: 100%;">
+					<tr>
+						<td><label class="labelClass boldClass">Product Code</label> <label class="mandRed">#{commonLabel.mand_star}</label>
+						</td>
+						<td><h:panelGroup>
+								<p:inputText id="productCode" value="#{productDefinitionAddEditBB.productOpr.productRecord.code}" maxlength="25"
+									disabled="#{!(productDefinitionAddEditBB.productOpr.productRecord.id eq null)}" />
+								<p:watermark for="productCode" value="Maximum 25 characters" />
+									&#160;&#160;
+								<p:commandLink id="copyProductSKULink" process="@this" value="Copy Product SKU" styleClass="linkClass"
+									update=":productCopyDialogForm:productCopyDialogPanel" oncomplete="productCopyDialog.show()"
+									disabled="#{productDefinitionAddEditBB.disableSaveButton}"
+									rendered="#{productDefinitionAddEditBB.renderPopupLinks}" />
+							</h:panelGroup></td>
+						<td><label class="labelClass boldClass">Product Name</label> <label class="mandRed">#{commonLabel.mand_star}</label>
+						</td>
+						<td><p:inputText id="productName" value="#{productDefinitionAddEditBB.productOpr.productRecord.name}"
+								maxlength="60" size="40" /> <p:watermark for="productName" value="Maximum 60 characters" /> <p:tooltip
+								for="productName" value="#{productDefinitionAddEditBB.productOpr.productRecord.name}" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Product Description</label></td>
+						<td><p:inputText id="productDescription" size="63" maxlength="255"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.description}" /> <p:watermark
+								for="productDescription" value="Maximum 255 characters" /> <p:tooltip for="productDescription"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.description}" /></td>
+						<td><label class="labelClass boldClass">Product Name for bill</label></td>
+						<td><p:inputText id="productNameForBill" size="40" maxlength="255"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.productNameForBill}" /> <p:watermark
+								for="productNameForBill" value="Maximum 255 characters" /> <p:tooltip for="productNameForBill"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.productNameForBill}" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Status</label></td>
+						<td><label class="labelClass">#{productDefinitionAddEditBB.productOpr.productRecord.statusRecord.name}</label>
+						</td>
+						<td><label class="labelClass boldClass">Product Version</label></td>
+						<td><label class="labelClass">#{productDefinitionAddEditBB.productOpr.productRecord.productVersion}</label></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Quantity UOM</label><label class="mandGreen">#{commonLabel.one_cap}</label>
+						</td>
+						<td><p:selectOneMenu id="quantityUOMList"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.uomRecord.code}">
+								<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+								<f:selectItems value="#{productDefinitionAddEditBB.allOptions.allOptionsValues['quantityUOMList']}"
+									var="uomRecord" itemLabel="#{uomRecord.name}" itemValue="#{uomRecord.code}" />
+							</p:selectOneMenu></td>
+						<td><label class="labelClass boldClass">Weight UOM</label><label class="mandGreen">#{commonLabel.one_cap}</label>
+						</td>
+						<td><p:selectOneMenu id="weightUOMList"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.weightUomRecord.code}">
+								<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+								<f:selectItems value="#{productDefinitionAddEditBB.allOptions.allOptionsValues['weightUOMList']}"
+									var="uomRecord" itemLabel="#{uomRecord.name}" itemValue="#{uomRecord.code}" />
+							</p:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Product Allocation basis</label><label class="mandRed">#{commonLabel.mand_star}</label>
+						</td>
+						<td><p:selectOneMenu id="allocationBasisList" disabled="true"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.allocationBasedOn.parameterID}">
+								<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+								<f:selectItems value="#{productDefinitionAddEditBB.allOptions.allOptionsValues['allocationBasisList']}"
+									var="parameter" itemLabel="#{parameter.parameterStringValue}" itemValue="#{parameter.parameterID}" />
+							</p:selectOneMenu></td>
+						<td><label class="labelClass boldClass">Default Pricing Model</label><label class="mandRed">#{commonLabel.mand_star}</label>
+						</td>
+						<td><p:selectOneMenu id="defaultPricingModelList"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.defaultPricingModel.parameterID}">
+								<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+								<f:selectItems value="#{productDefinitionAddEditBB.allOptions.allOptionsValues['defaultPricingModelList']}"
+									var="parameter" itemLabel="#{parameter.parameterStringValue}" itemValue="#{parameter.parameterID}" />
+							</p:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">De-activate Product</label></td>
+						<td><p:selectBooleanCheckbox id="deactivateProduct"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.active}" /></td>
+						<td><label class="labelClass boldClass">Auto Replenish?</label></td>
+						<td><p:selectBooleanCheckbox id="autoReplenishProduct"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.autoReplenish}" /></td>
+						<td><h:graphicImage id="image2"
+								value="#{sessionScope['imageURL']}#{productDefinitionAddEditBB.productOpr.productRecord.defaultImageRecord.imageURL}"
+								style="width: 65px; height: 65px;" title="Image" /></td>
+					</tr>
+				</table>
+			</h:panelGroup>
+			<h:panelGroup id="productSKUAddEditPanel" rendered="#{productDefinitionAddEditBB.renderForSKU}">
+				<table style="width: 100%;">
+					<tr>
+						<td><label class="labelClass boldClass">Product Code</label></td>
+						<td><label class="labelClass"> #{productDefinitionAddEditBB.productOpr.productRecord.code}</label></td>
+						<td><label class="labelClass boldClass">Product Name</label></td>
+						<td><label class="labelClass">#{productDefinitionAddEditBB.productOpr.productRecord.name}</label></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Product Description</label></td>
+						<td><label class="labelClass">#{productDefinitionAddEditBB.productOpr.productRecord.description}</label></td>
+						<td><label class="labelClass boldClass">Product Version</label></td>
+						<td><label class="labelClass">#{productDefinitionAddEditBB.productOpr.productRecord.productVersion}</label></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Product Status</label></td>
+						<td><label class="labelClass">#{productDefinitionAddEditBB.productOpr.productRecord.statusRecord.name}</label>
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">SKU Code</label></td>
+						<td><h:panelGroup>
+								<label class="labelClass">#{productDefinitionAddEditBB.productOpr.productRecord.productSkuRecord.code}</label>
+								&#160;&#160;
+								<p:commandLink id="copyProductSKULink1" process="@this" value="Copy Product SKU" styleClass="linkClass"
+									update=":productCopyDialogForm:productCopyDialogPanel" oncomplete="productCopyDialog.show()"
+									disabled="#{productDefinitionAddEditBB.disableSaveButton}"
+									rendered="#{productDefinitionAddEditBB.renderPopupLinks}" />
+							</h:panelGroup></td>
+						<td><label class="labelClass boldClass">SKU Name</label></td>
+						<td><p:inputText id="skuName"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.productSkuRecord.name}" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">SKU Description</label></td>
+						<td><label class="labelClass">#{productDefinitionAddEditBB.productOpr.productRecord.productSkuRecord.description}</label>
+						</td>
+						<td><label class="labelClass boldClass">SKU Version</label></td>
+						<td><label class="labelClass">#{productDefinitionAddEditBB.productOpr.productRecord.productSkuRecord.skuVersion}</label>
+						</td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">SKU Status</label></td>
+						<td><label class="labelClass">#{productDefinitionAddEditBB.productOpr.productRecord.productSkuRecord.statusRecord.name}</label>
+						</td>
+						<td><label class="labelClass boldClass">De-activate SKU</label></td>
+						<td><p:selectBooleanCheckbox id="deactivateSKU"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.productSkuRecord.active}" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Master SKU</label></td>
+						<td><p:selectBooleanCheckbox id="masterSKU"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.productSkuRecord.masterSKU}" /></td>
+						<td><label class="labelClass boldClass">Sku Comments</label></td>
+						<td><p:inputTextarea rows="3" cols="30"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.productSkuRecord.skuComments}" /></td>
+						<td><h:graphicImage id="image3"
+								value="#{sessionScope['imageURL']}#{productDefinitionAddEditBB.productOpr.productRecord.defaultImageRecord.imageURL}"
+								style="width: 65px; height: 65px;" title="Image" /></td>
+					</tr>
+					<tr>
+						<td><p:commandButton value="Back To Auto-Sku" process="@this" action="#{productDefinitionAddEditBB.redirectBackToAutoSku}"
+						rendered="#{productDefinitionAddEditBB.renderGetBackToAutoSku}">
+							</p:commandButton></td>
+					</tr>
+				</table>
+			</h:panelGroup>
+			<p:separator />
+			<p:commandLink id="mapPropertyLink2" process="productSKUAddEditPanel, @this" value="Map Properties"
+				rendered="#{!(productDefinitionAddEditBB.renderPopupLinks) and productDefinitionAddEditBB.renderForSKU}"
+				actionListener="#{productDefinitionAddEditBB.openMapPropertyDialog}" styleClass="linkClass"
+				update=":productPropertyMappingDialogForm:productPropertyMappingDialogPanel"
+				oncomplete="productPropertyMappingDialog.show()" />
+			<h:panelGroup id="popupLinksPanel" rendered="#{productDefinitionAddEditBB.renderPopupLinks}">
+				<table style="width: 100%;">
+					<tr height="30px">
+						<td><p:commandLink id="mapHierarchyLink" process="@this"
+								actionListener="#{productDefinitionAddEditBB.openMapHierarchyDialog}" style="text-decoration: none;"
+								update=":productHierarchyMappingDialogForm:productHierarchyMappingDialogPanel"
+								oncomplete="productHierarchyMappingDialog.show()">
+								<table style="width: 100%;" class="linkButton">
+									<tr>
+										<td width="90%">Product Hierarchy</td>
+										<td width="10%"><p:graphicImage alt="Checked" value="/staticcontent/retailimages/check_icon.png"
+												rendered="#{productDefinitionAddEditBB.productOpr.iconProductSKURecord.mapHierarchy}" /></td>
+									</tr>
+								</table>
+							</p:commandLink></td>
+						<td><p:commandLink id="mapPropertyLink" process="productSKUAddEditPanel, @this"
+								actionListener="#{productDefinitionAddEditBB.openMapPropertyDialog}" style="text-decoration: none;"
+								update=":productPropertyMappingDialogForm:productPropertyMappingDialogPanel">
+								<table style="width: 100%;" class="linkButton">
+									<tr>
+										<td width="90%">Product Properties</td>
+										<td width="10%"><p:graphicImage alt="Checked" value="/staticcontent/retailimages/check_icon.png"
+												rendered="#{productDefinitionAddEditBB.productOpr.iconProductSKURecord.mapProperties}" /></td>
+									</tr>
+								</table>
+							</p:commandLink></td>
+						<td><p:commandLink id="mapItemPropertyToProductLink" process="@this" style="text-decoration: none;"
+								actionListener="#{productDefinitionAddEditBB.openMapItemPropertyDialog}" styleClass="linkClass"
+								update=":productItemPropertyMappingDialogForm:productItemPropertyMappingDialogPanel"
+								oncomplete="productItemPropertyMappingDialog.show()">
+								<table style="width: 100%;" class="linkButton">
+									<tr>
+										<td width="90%">Bill of Material</td>
+										<td width="10%"><p:graphicImage alt="Checked" value="/staticcontent/retailimages/check_icon.png"
+												rendered="#{productDefinitionAddEditBB.productOpr.iconProductSKURecord.mapItem}" /></td>
+									</tr>
+								</table>
+							</p:commandLink></td>
+						<td><p:commandLink id="mapProcessVariationLink" process="@this" style="text-decoration: none;"
+								actionListener="#{productDefinitionAddEditBB.openMapProcessVariationMappingDialog}" styleClass="linkClass"
+								update=":productProcessVariationMappingDialogForm:productProcessVariationMappingDialogPanel"
+								oncomplete="productProcessVariationMappingDialog.show()">
+								<table style="width: 100%;" class="linkButton">
+									<tr>
+										<td width="90%">Labour/ Process variations</td>
+										<td width="10%"><p:graphicImage alt="Checked" value="/staticcontent/retailimages/check_icon.png"
+												rendered="#{productDefinitionAddEditBB.productOpr.iconProductSKURecord.mapProcessVariation}" /></td>
+									</tr>
+								</table>
+							</p:commandLink></td>
+					</tr>
+					<tr height="30px">
+						<td><p:commandLink id="mapPropsLink" process="@this" style="text-decoration: none;"
+								actionListener="#{productDefinitionAddEditBB.openMapPropsMappingDialog}" styleClass="linkClass"
+								update=":productPropsMappingDialogForm:productPropsMappingDialogPanel"
+								oncomplete="productPropsMappingDialog.show()">
+								<table style="width: 100%;" class="linkButton">
+									<tr>
+										<td width="90%">Props</td>
+										<td width="10%"><p:graphicImage alt="Checked" value="/staticcontent/retailimages/check_icon.png"
+												rendered="#{productDefinitionAddEditBB.productOpr.iconProductSKURecord.mapProps}" /></td>
+									</tr>
+								</table>
+							</p:commandLink></td>
+						<td><p:commandLink id="mapCatalogLink" process="@this" style="text-decoration: none;"
+								actionListener="#{productDefinitionAddEditBB.openCatalogMappingDialog}" styleClass="linkClass"
+								update=":productCatalogMappingDialogForm:productCatalogMappingDialogPanel"
+								oncomplete="productCatalogMappingDialog.show()">
+								<table style="width: 100%;" class="linkButton">
+									<tr>
+										<td width="90%">Catalogs</td>
+										<td width="10%"><p:graphicImage alt="Checked" value="/staticcontent/retailimages/check_icon.png"
+												rendered="#{productDefinitionAddEditBB.productOpr.iconProductSKURecord.mapCatalogs}" /></td>
+									</tr>
+								</table>
+							</p:commandLink></td>
+						<td><p:commandLink id="mapComplementarySKULink" process="@this" style="text-decoration: none;"
+								actionListener="#{productDefinitionAddEditBB.openMapComplementarySkuMappingDialog}" styleClass="linkClass"
+								update=":productComplementarySkuMappingDialogForm:productComplementarySkuMappingDialogPanel"
+								oncomplete="productComplementarySkuMappingDialog.show()">
+								<table style="width: 100%;" class="linkButton">
+									<tr>
+										<td width="90%">Complementary SKU</td>
+										<td width="10%"><p:graphicImage alt="Checked" value="/staticcontent/retailimages/check_icon.png"
+												rendered="#{productDefinitionAddEditBB.productOpr.iconProductSKURecord.mapComplementarySKU}" /></td>
+									</tr>
+								</table>
+							</p:commandLink></td>
+						<td><h:panelGroup rendered="#{productDefinitionAddEditBB.renderForSKU}">
+								<p:commandLink id="mapSimilarSKULink" process="@this" style="text-decoration: none;"
+									actionListener="#{productDefinitionAddEditBB.openMapSimilarSkuMappingDialog}" styleClass="linkClass"
+									update=":productSimilarSkuMappingDialogForm:productSimilarSkuMappingDialogPanel"
+									oncomplete="productSimilarSkuMappingDialog.show()">
+									<table style="width: 100%;" class="linkButton">
+										<tr>
+											<td width="90%">Map Similar SKU</td>
+											<td width="10%"><p:graphicImage alt="Checked" value="/staticcontent/retailimages/check_icon.png"
+													rendered="#{productDefinitionAddEditBB.productOpr.iconProductSKURecord.mapSimiliarSKU}" /></td>
+										</tr>
+									</table>
+								</p:commandLink>
+							</h:panelGroup></td>
+					</tr>
+					<tr>
+						<td><p:commandLink id="mapImageLink" process="@this" style="text-decoration: none;"
+								actionListener="#{productDefinitionAddEditBB.openImageMappingDialog}" styleClass="linkClass"
+								update=":productImageDialogPanelGroup" oncomplete="productImageDialog.show()">
+								<table style="width: 100%;" class="linkButton">
+									<tr>
+										<td width="90%">Product Images</td>
+										<td width="10%"><p:graphicImage alt="Checked" value="/staticcontent/retailimages/check_icon.png"
+												rendered="#{productDefinitionAddEditBB.productOpr.iconProductSKURecord.mapImages}" /></td>
+									</tr>
+								</table>
+							</p:commandLink></td>
+						<td><p:commandLink id="mapSKULink" process="@this"
+								update=":productOtherSkuMappingDialogForm:productOtherSkuMappingDialogPanel" style="text-decoration: none;"
+								actionListener="#{productDefinitionAddEditBB.openOtherSkuMappingDialog}" styleClass="linkClass"
+								oncomplete="productOtherSkuMappingDialog.show()" rendered="#{productDefinitionAddEditBB.renderForSKU}">
+								<table style="width: 100%;" class="linkButton">
+									<tr>
+										<td width="90%">SKU-Sub SKU</td>
+										<td width="10%"><p:graphicImage alt="Checked" value="/staticcontent/retailimages/check_icon.png"
+												rendered="#{productDefinitionAddEditBB.productOpr.iconProductSKURecord.mapOtherSKU}" /></td>
+									</tr>
+								</table>
+							</p:commandLink></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</table>
+			</h:panelGroup>
+			<br />
+			<table style="margin: 0 auto;">
+				<tr>
+					<td width="92%">
+						<table style="margin: 0 auto;">
+							<tr>
+								<td><p:commandButton id="btnSave" actionListener="#{productDefinitionAddEditBB.executeSave}" value="Save"
+										process="productAddEditPanel, @this" update="productProductAddEditPanel"
+										disabled="#{productDefinitionAddEditBB.disableSaveButton}"
+										rendered="#{productDefinitionAddEditBB.renderForProduct}" /></td>
+								<td><p:commandButton id="btnSaveSku" actionListener="#{productDefinitionAddEditBB.executeSaveSKU}"
+										value="Save" process="productSKUAddEditPanel, @this" update="productProductAddEditPanel"
+										disabled="#{productDefinitionAddEditBB.disableSaveButton}"
+										rendered="#{productDefinitionAddEditBB.renderPopupLinks and productDefinitionAddEditBB.renderForSKU}" /></td>
+								<td><p:commandButton id="btnApproveProductSku" value="Approve" process="productAddEditPanel, @this"
+										rendered="#{productDefinitionAddEditBB.renderPopupLinks}" update="productProductAddEditPanel"
+										actionListener="#{productDefinitionAddEditBB.executeApproveProductSku}"
+										disabled="#{productDefinitionAddEditBB.disableApproveButton}" /></td>
+								<td><p:commandButton id="btnModifyProductSku" value="Modify" process="@this"
+										rendered="#{productDefinitionAddEditBB.renderPopupLinks}"
+										disabled="#{productDefinitionAddEditBB.disableModifyButton}"
+										actionListener="#{productDefinitionAddEditBB.openModifyProductSkuDialog}"
+										oncomplete="handleOpenModifyRequest(xhr, status, args)" /></td>
+								<td><p:commandButton id="btnCancel" action="#{productDefinitionAddEditBB.clearPage}" value="Cancel"
+										process="@this" /> <p:tooltip for="btnCancel" value="Click to Cancel" /></td>
+								<td><p:commandButton id="btnAddMore" process="@this" value="Add More"
+										actionListener="#{productDefinitionAddEditBB.executeAddMore}" update="productProductAddEditPanel" /> <p:tooltip
+										for="btnAddMore" value="Click to Add More" /></td>
+								<td><p:commandButton id="btnCreateNewSku" value="Create SKU" process="@this"
+										rendered="#{productDefinitionAddEditBB.renderPopupLinks}"
+										disabled="#{(productDefinitionAddEditBB.disableModifyButton) || (productDefinitionAddEditBB.productOpr.productRecord.active)}"
+										actionListener="#{productDefinitionAddEditBB.executeCreateNewSKU}" update="productProductAddEditPanel" /> <p:tooltip
+										for="btnCreateNewSku" value="Click to Create New Sku" /></td>
+								<td><p:commandButton id="btnReport" value="View Report" process="@this"
+										actionListener="#{productDefinitionAddEditBB.openReport}" /> <p:tooltip for="btnReport"
+										value="Click to view Report" /></td>
+							</tr>
+						</table>
+					</td>
+					<td width="8%">
+						<table style="margin: 0 auto;">
+							<tr>
+								<td><p:selectBooleanButton id="productActivateButton" style="width: 100px"
+										value="#{productDefinitionAddEditBB.productOpr.productRecord.active}" onLabel="Activate"
+										offLabel="De-activate" rendered="#{productDefinitionAddEditBB.renderForProduct}"
+										disabled="#{productDefinitionAddEditBB.disableActivateButton}">
+										<p:ajax onstart="activateConfirmation.show()" />
+									</p:selectBooleanButton></td>
+								<td><p:selectBooleanButton id="productSkuActivateButton" style="width: 100px" onLabel="Activate"
+										offLabel="De-activate" value="#{productDefinitionAddEditBB.productOpr.productRecord.productSkuRecord.active}"
+										rendered="#{productDefinitionAddEditBB.renderForSKU}"
+										disabled="#{productDefinitionAddEditBB.disableActivateButton}">
+										<p:ajax listener="#{productDefinitionAddEditBB.executeDeactivateProductSku}"
+											update="deactivateSKU, productSkuActivateButton" />
+									</p:selectBooleanButton></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</h:panelGroup>
+		<script type="text/javascript">
+			function handleOpenModifyRequest(xhr, status, args) {
+				if (args.displayConfirmation) {
+					openModifyProductSkuDialog();
+					modifyConfirmationDialog.show();
+				}
+			}
+		</script>
+		<p:remoteCommand name="openModifyProductSkuDialog"
+			update=":productTabView:modifyConfirmationDialogForm:modifyConfirmationDialogPanel" />
+		<p:confirmDialog id="activateConfirmDialog"
+			message="This will also be applied to all SKUs related to this product. Do you wish to continue?"
+			header="Confirmation" severity="alert" widgetVar="activateConfirmation">
+			<table style="margin: 0 auto;">
+				<tr>
+					<td><p:commandButton id="confirm" value="Yes" onclick="activateConfirmation.hide();"
+							update="deactivateProduct, btnCreateNewSku" process="@this"
+							actionListener="#{productDefinitionAddEditBB.executeDeactivateProduct}" /></td>
+					<td><p:commandButton id="decline" value="No" oncomplete="activateConfirmation.hide()" process="@this"
+							update="productActivateButton" actionListener="#{productDefinitionAddEditBB.executeCancelDeactivateProduct}" />
+					</td>
+				</tr>
+			</table>
+		</p:confirmDialog>
+	</h:form>
+	<h:form id="modifyConfirmationDialogForm">
+		<p:dialog id="modifyConfirmationDialog" header="Modify Product" widgetVar="modifyConfirmationDialog"
+			showEffect="explode" hideEffect="explode" dynamic="true" modal="true" resizable="false"
+			width="#{productDefinitionAddEditBB.modalWidth}">
+			<p:panel id="modifyConfirmationDialogPanel">
+				<div class="labelClass">You are about to modify an approved Product-SKU. A new version of this Product - SKU
+					will be created for you to modify. If you wish to continue, please enter a reason code and then click on Yes. Click
+					on No if you do not wish to modify this product- SKU</div>
+				<table style="margin: 0 auto;">
+					<tr>
+						<td><label class="labelClass boldClass">Reason</label><label class="mandRed">#{commonLabel.mand_star}</label>
+						</td>
+						<td><p:selectOneMenu id="reasonList"
+								value="#{productDefinitionAddEditBB.productOpr.productRecord.modifyReasonRecord.code}">
+								<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+								<f:selectItems value="#{productDefinitionAddEditBB.allOptions.allOptionsValues['reasonList']}" var="reasonDVO"
+									itemLabel="#{reasonDVO.description}" itemValue="#{reasonDVO.code}" />
+							</p:selectOneMenu></td>
+						<td><label class="labelClass boldClass">Comments</label></td>
+						<td><p:inputTextarea value="#{productDefinitionAddEditBB.productOpr.productRecord.modifyDescription}"
+								cols="80" /></td>
+					</tr>
+				</table>
+				<table style="margin: 0 auto;">
+					<tr>
+						<td><p:commandButton id="btnYes" actionListener="#{productDefinitionAddEditBB.executeModifyProductSku}"
+								value="Yes" update=":productTabView:productAddEditForm:productProductAddEditPanel"
+								onclick="modifyConfirmationDialog.hide()" /></td>
+						<td><p:commandButton id="btnNo" value="No" process="@this" oncomplete="modifyConfirmationDialog.hide()" /></td>
+						<td></td>
+					</tr>
+				</table>
+			</p:panel>
+		</p:dialog>
+		<p:remoteCommand name="openProductSkuBomProcessVariationDialog" process="@this" partialSubmit="true"
+			oncomplete="productSkuBomProcessVariationDialog.show()"
+			update=":productSkuBomProcessVariationDialogForm:productSkuBomProcessVariationDialogPanel" />
+		<p:remoteCommand name="closeProductSkuBomProcessVariationDialog" process="@this" partialSubmit="true"
+			oncomplete="productSkuBomProcessVariationDialog.hide()"
+			update=":productSkuBomProcessVariationDialogForm:productSkuBomProcessVariationDialogPanel, 
+			:productItemPropertyMappingDialogForm:productItemPropertyMappingDialogPanel" />
+	</h:form>
+</ui:composition>
