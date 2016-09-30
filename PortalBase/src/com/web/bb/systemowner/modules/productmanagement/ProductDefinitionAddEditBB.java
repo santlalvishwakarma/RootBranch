@@ -654,6 +654,7 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 		try {
 
 			hierarchyListForAutoSuggest = new ProductDefinitionBD().getSuggestedHierarchies(new HierarchyDVO());
+
 			FacesContext.getCurrentInstance().getViewRoot().getViewMap()
 					.put("productHierarchyCodeAutoComplete", hierarchyListForAutoSuggest);
 			FacesContext.getCurrentInstance().getViewRoot().getViewMap()

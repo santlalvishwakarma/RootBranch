@@ -42,5 +42,4 @@ public class CoreSF extends BusinessFacade {
 			BusinessException {
 		return new HierarchyMasterBC().getSuggestedHierarchies(productHierarchyDVO);
 	}
-
 }

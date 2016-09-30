@@ -11,6 +11,7 @@ import com.web.common.dvo.opr.common.ParameterOpr;
 import com.web.common.dvo.opr.systemowner.ProductOpr;
 import com.web.common.dvo.systemowner.CategoryDVO;
 import com.web.common.dvo.systemowner.HierarchyDVO;
+import com.web.common.dvo.systemowner.ProductCategoryDVO;
 import com.web.common.dvo.systemowner.ProductDVO;
 import com.web.common.dvo.systemowner.ProductSkuDVO;
 import com.web.common.dvo.systemowner.PropertyDVO;

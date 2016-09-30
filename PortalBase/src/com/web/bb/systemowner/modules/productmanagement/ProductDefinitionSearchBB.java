@@ -441,6 +441,7 @@ public class ProductDefinitionSearchBB extends BackingBean {
 			query = query.toUpperCase();
 
 			for (CategoryDVO productCategoryRecord : productCategoriesForAutoSuggest) {
+
 				String name = productCategoryRecord.getName();
 
 				if (name.toUpperCase().startsWith(query)) {
