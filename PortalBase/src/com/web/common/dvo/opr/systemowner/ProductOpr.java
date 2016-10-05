@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.web.common.dvo.common.OperationalDataValueObject;
-<<<<<<< HEAD
 import com.web.common.dvo.systemowner.CategoryDVO;
 import com.web.common.dvo.systemowner.HierarchyDVO;
-=======
-import com.web.common.dvo.systemowner.ProductCategoryDVO;
->>>>>>> branch 'master' of https://github.com/santlalvishwakarma/RootBranch.git
 import com.web.common.dvo.systemowner.ProductDVO;
 import com.web.util.deepcopy.DeepCopy;
 
@@ -20,13 +16,9 @@ public class ProductOpr extends OperationalDataValueObject {
 	private ProductDVO quickEditProductRecord;
 	private List<ProductDVO> searchResultList;
 	private List<ProductDVO> productDVOList;
-<<<<<<< HEAD
 	private List<CategoryDVO> productCategoryList;
 	private List<HierarchyDVO> productHierarchyList;
 	private HierarchyDVO hierarchyRecord;
-=======
-	private List<ProductCategoryDVO> productCategoryList;
->>>>>>> branch 'master' of https://github.com/santlalvishwakarma/RootBranch.git
 
 	public ProductDVO getQuickEditProductRecord() {
 		if (quickEditProductRecord == null) {
