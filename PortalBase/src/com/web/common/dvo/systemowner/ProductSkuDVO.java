@@ -52,8 +52,7 @@ public class ProductSkuDVO extends BaseDVO {
 	private boolean jewelleryValuationRequired;
 	private String jewelleryValuationDisplayText;
 	private String styleClass;
-	// private ArrayList<ProductPropertiesMappingDVO>
-	// displayProductPropertyColorList;
+	private ArrayList<ProductSkuPropertyMappingDVO> productSkuPropertiesMappingList;
 	private CategoryPropertyMappingDVO categoryPropertiesMappingRecord;
 	private ProductSkuImageMappingDVO productSkuImageMappingDVO;
 	private ArrayList<ProductSkuImageMappingDVO> productSkuImageMappingList;
@@ -108,6 +107,7 @@ public class ProductSkuDVO extends BaseDVO {
 	private String skuSEODescription;
 	private ArrayList<ProductSizeMappingDVO> productSizeMappingList;
 	private StatusDVO statusRecord;
+	private ProductSkuImageMappingDVO defaultProductSkuImageMappingDVO;
 
 	public Float getPercentDiscount() {
 		if ((basePrice != null && basePrice != 0) && (discountPrice != null && discountPrice != 0)) {
@@ -625,6 +625,18 @@ public class ProductSkuDVO extends BaseDVO {
 
 	public void setStyleClass(String styleClass) {
 		this.styleClass = styleClass;
+	}
+
+	public ArrayList<ProductSkuPropertyMappingDVO> getProductSkuPropertiesMappingList() {
+		if (productSkuPropertiesMappingList == null) {
+			productSkuPropertiesMappingList = new ArrayList<ProductSkuPropertyMappingDVO>();
+		}
+		return productSkuPropertiesMappingList;
+	}
+
+	public void setProductSkuPropertiesMappingList(
+			ArrayList<ProductSkuPropertyMappingDVO> productSkuPropertiesMappingList) {
+		this.productSkuPropertiesMappingList = productSkuPropertiesMappingList;
 	}
 
 	public CategoryPropertyMappingDVO getCategoryPropertiesMappingRecord() {
@@ -1172,6 +1184,17 @@ public class ProductSkuDVO extends BaseDVO {
 
 	public void setStatusRecord(StatusDVO statusRecord) {
 		this.statusRecord = statusRecord;
+	}
+
+	public ProductSkuImageMappingDVO getDefaultProductSkuImageMappingDVO() {
+		if (defaultProductSkuImageMappingDVO == null) {
+			defaultProductSkuImageMappingDVO = new ProductSkuImageMappingDVO();
+		}
+		return defaultProductSkuImageMappingDVO;
+	}
+
+	public void setDefaultProductSkuImageMappingDVO(ProductSkuImageMappingDVO defaultProductSkuImageMappingDVO) {
+		this.defaultProductSkuImageMappingDVO = defaultProductSkuImageMappingDVO;
 	}
 
 }

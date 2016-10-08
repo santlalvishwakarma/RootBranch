@@ -11,6 +11,9 @@ public class ProductDVO extends BaseDVO {
 	private ProductSkuDVO productSkuRecord;
 
 	public StatusDVO getStatusRecord() {
+		if (statusRecord == null) {
+			statusRecord = new StatusDVO();
+		}
 		return statusRecord;
 	}
 

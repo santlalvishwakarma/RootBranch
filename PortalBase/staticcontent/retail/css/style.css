@@ -615,8 +615,8 @@ h4 {
 	font-size: 20px;
 }
 
-.container {
-	
+.ui-datatable-tablewrapper {
+   overflow: auto
 }
 
 .menuClass {

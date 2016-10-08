@@ -510,8 +510,8 @@ public class ProductDefinitionSearchBB extends BackingBean {
 				yesNoValuesMap.put(parameter.getParameterBooleanValue(), parameter.getParameterCode());
 			}
 		}
-		if (!productOpr.getProductList().isEmpty()) {
-			for (ProductDVO productRecord : productOpr.getProductList()) {
+		if (!productOpr.getProductDVOList().isEmpty()) {
+			for (ProductDVO productRecord : productOpr.getProductDVOList()) {
 				String activeDescription = yesNoValuesMap.get(productRecord.getActive());
 				productRecord.setActiveDescription(activeDescription);
 			}

@@ -90,17 +90,17 @@
 		<h:panelGroup id="productProductListPanel">
 			<p:panel rendered="#{!(empty productDefinitionSearchListBB.productOpr.productDVOList)}">
 				<h:commandLink id="excelLink">
-					<p:graphicImage alt="Export to Xls" value="/staticcontent/retailimages/excel.png" styleClass="imageClass" />
+					<p:graphicImage alt="Export to Xls" value="/staticcontent/systemowner/images/excel.png" styleClass="imageClass" />
 					<p:dataExporter type="xls" target="productProductListTable" fileName="ProductDefinition" />
 				</h:commandLink>
 				<p:tooltip for="excelLink" value="Click to export data in the list to MS-Excel" />
 				<h:commandLink id="pdfLink">
-					<p:graphicImage alt="Export to PDF" value="/staticcontent/retailimages/pdf.png" styleClass="imageClass" />
+					<p:graphicImage alt="Export to PDF" value="/staticcontent/systemowner/images/pdf.png" styleClass="imageClass" />
 					<p:dataExporter type="pdf" target="productProductListTable" fileName="ProductDefinition" />
 				</h:commandLink>
 				<p:tooltip for="pdfLink" value="Click to export data in the list to PDF" />
 				<h:commandLink id="xmlLink">
-					<p:graphicImage alt="Export to XML" value="/staticcontent/retailimages/xml.png" styleClass="imageClass" />
+					<p:graphicImage alt="Export to XML" value="/staticcontent/systemowner/images/xml.png" styleClass="imageClass" />
 					<p:dataExporter type="xml" target="productProductListTable" fileName="ProductDefinition" />
 				</h:commandLink>
 				<p:tooltip for="xmlLink" value="Click to export data in the list to XML" />
@@ -127,11 +127,6 @@
 					<f:facet name="header">Product Description</f:facet>
 					<h:outputText value="#{productRecord.description}" styleClass="labelClass" />
 				</p:column>
-				<p:column sortBy="#{productRecord.productVersion}" filterBy="#{productRecord.productVersion}"
-					filterMatchMode="contains">
-					<f:facet name="header">Version</f:facet>
-					<h:outputText value="#{productRecord.productVersion}" styleClass="labelClass" />
-				</p:column>
 				<p:column sortBy="#{productRecord.statusRecord.name}" filterBy="#{productRecord.statusRecord.name}"
 					filterMatchMode="contains">
 					<f:facet name="header">Status</f:facet>
@@ -151,16 +146,11 @@
 					<f:facet name="header">Sku Description</f:facet>
 					<h:outputText value="#{productRecord.productSkuRecord.description}" styleClass="labelClass" />
 				</p:column>
-				<p:column sortBy="#{productRecord.productSkuRecord.skuVersion}"
-					filterBy="#{productRecord.productSkuRecord.skuVersion}" filterMatchMode="contains">
-					<f:facet name="header">Sku Version</f:facet>
-					<h:outputText value="#{productRecord.productSkuRecord.skuVersion}" styleClass="labelClass" />
-				</p:column>
 				<p:column headerText="Image" style="text-align:center;" exportable="false">
 					<p:commandLink styleClass="linkClass" action="#{productDefinitionSearchListBB.executeEnlargeImage}"
 						update=":enlargeImageDialogPanelGroup" oncomplete="enlargeImageDialog.show()">
 						<h:graphicImage id="image1"
-							value="#{sessionScope['imageURL']}#{productRecord.defaultImageRecord.thumbnailImageURL}"
+							value="#{sessionScope['imageURL']}#{productRecord.productSkuRecord.imageRecord.thumbnailImageURL}"
 							style="width: 25px; height: 25px;" title="Thumbnail" />
 						<f:setPropertyActionListener target="#{productDefinitionSearchListBB.selectedProductRecord}"
 							value="#{productRecord}" />
