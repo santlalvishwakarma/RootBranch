@@ -98,5 +98,10 @@
 		<view-id value="/pages/systemowner/modules/productmanagement/productDefinition.jsf" />
 		<action onPostback="false">#{productDefinitionSearchListBB.retrieveData}</action>
 	</url-mapping>
-	
+
+	<url-mapping id="adminCategory">
+		<pattern value="/admin/category" />
+		<view-id value="/pages/systemowner/modules/categorymanagement/category.jsf" />
+	</url-mapping>
+
 </pretty-config>

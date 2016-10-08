@@ -48,4 +48,10 @@ public interface CategoryMasterSqlTemplate extends SqlTemplate {
 			+ " WHERE  a.product_id = b.product_id"
 			+ " AND c.product_hierarchy_id = b.product_hierarchy_id"
 			+ " AND c.level IN (2)" + " AND d.product_category_id = c.product_category_id ";
+
+	public static final String SEARCH_CATEGORY = " SELECT cm.category_id, cm.category_code, cm.category_name, cm.category_description, "
+			+ " cm.seo_title, cm.seo_keyword, cm.seo_description, cm.image_url, cm.is_active FROM category_master cm ";
+
+	public static final String SAVE_EDIT_CATEGORY = " CALL sp_save_edit_category(?, ?, ?, ?, ?, ?, ?, ?, ?, @p_error_code, @p_error_message); ";
+
 }

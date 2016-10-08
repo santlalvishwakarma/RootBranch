@@ -1,0 +1,24 @@
+<ui:composition template="/pages/systemowner/template/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<ui:define name="content">
+		<h:form>
+			<p:remoteCommand name="editSelectedCategoryRecord" process="@this" partialSubmit="true" update=":categoryTabView"
+				action="#{addCategoryBB.setCategoryForEdit}" />
+		</h:form>
+		<p:tabView id="categoryTabView" activeIndex="#{addCategoryBB.activeTabIndex}">
+			<p:ajax event="tabChange" listener="#{addCategoryBB.tabChanged}" />
+			<p:tab id="searchListCategory" title="Search/List">
+				<div style="overflow-x: auto; overflow-y: auto;">
+					<ui:include src="searchcategory.xhtml" />
+				</div>
+			</p:tab>
+			<p:tab id="addeditCategory" title="Add/Edit Category">
+				<div style="overflow-x: auto; overflow-y: auto;">
+					<ui:include src="addeditcategory.xhtml" />
+				</div>
+			</p:tab>
+		</p:tabView>
+	</ui:define>
+</ui:composition>

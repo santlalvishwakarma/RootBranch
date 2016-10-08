@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="categoryAddEditForm">
+		<h:panelGroup id="addEditCategoryField">
+			<table style="width: 100%;">
+				<tr>
+					<td><label class="labelClass boldClass">Category Name</label></td>
+					<td><p:inputText value="#{addCategoryBB.addEditCategoryOpr.categoryRecord.name}" /></td>
+					<td><label class="labelClass boldClass">Category Code</label></td>
+					<td><p:inputText value="#{addCategoryBB.addEditCategoryOpr.categoryRecord.code}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Category Description</label></td>
+					<td><p:inputText value="#{addCategoryBB.addEditCategoryOpr.categoryRecord.description}" /></td>
+					<td><label class="labelClass boldClass">SEO Title</label></td>
+					<td><p:inputText value="#{addCategoryBB.addEditCategoryOpr.categoryRecord.seoTitle}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">SEO Description</label></td>
+					<td><p:inputText value="#{addCategoryBB.addEditCategoryOpr.categoryRecord.seoDescription}" /></td>
+					<td><label class="labelClass boldClass">SEO Keyword</label></td>
+					<td><p:inputText value="#{addCategoryBB.addEditCategoryOpr.categoryRecord.seoKeyword}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Is Active</label></td>
+					<td><p:selectBooleanCheckbox value="#{addCategoryBB.addEditCategoryOpr.categoryRecord.active}" /></td>
+					<td><label class="labelClass boldClass">Image</label></td>
+					<td><p:fileUpload id="categoryImageFIleUpload" update="categoryImageFIleUpload" process="@this"
+							fileUploadListener="#{addCategoryBB.handleFileUploadForCategoryImage}" sizeLimit="2097152" multiple="true"
+							label="Select" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" description="Images" /> <h:panelGroup
+							id="categoryImageContainer" layout="block">
+							<img src="#{addCategoryBB.addEditCategoryOpr.categoryRecord.imageUrl}"
+								alt="#{addCategoryBB.addEditCategoryOpr.categoryRecord.imageUrl}"
+								title="#{addCategoryBB.addEditCategoryOpr.categoryRecord.imageUrl}" />
+						</h:panelGroup></td>
+				</tr>
+			</table>
+			<table style="width: 40%">
+				<tr>
+					<td><p:commandButton id="btnSearch" update="addEditCategoryField" process="@this, addEditCategoryField"
+							actionListener="#{addCategoryBB.executeSave}" value="Search" /> <p:tooltip for="btnSearch"
+							value="Click to Search" /> <p:hotkey bind="ctrl+shift+s" /></td>
+					<td><p:commandButton id="btnCancel" action="#{addCategoryBB.resetPage}" value="Reset" process="@this"
+							update="addEditCategoryField" /> <p:tooltip for="btnCancel" value="Click to Reset" /></td>
+				</tr>
+			</table>
+		</h:panelGroup>
+	</h:form>
+</ui:composition>
