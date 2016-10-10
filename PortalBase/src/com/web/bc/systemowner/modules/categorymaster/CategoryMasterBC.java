@@ -129,7 +129,7 @@ public class CategoryMasterBC extends BackingClass {
 		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
 		queryDetailsMap.put(IDAOConstant.SQL_TEXT, CategoryMasterSqlTemplate.SAVE_EDIT_CATEGORY);
 
-		Object strSqlParams[][] = new Object[9][3];
+		Object strSqlParams[][] = new Object[10][3];
 
 		strSqlParams[0][0] = "1";
 		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;

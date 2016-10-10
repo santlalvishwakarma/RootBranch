@@ -1,7 +1,7 @@
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS sp_product_save_categories $$
-CREATE PROCEDURE sp_product_save_categories(
+DROP PROCEDURE IF EXISTS sp_save_edit_category $$
+CREATE PROCEDURE sp_save_edit_category(
 IN p_product_category_id INT(10), 
 IN p_product_category_code VARCHAR(25),
 IN p_product_category_name VARCHAR(60),
@@ -53,3 +53,5 @@ BEGIN
 	SELECT v_last_inserted_id AS category_id;
 
 DELIMITER ;
+
+

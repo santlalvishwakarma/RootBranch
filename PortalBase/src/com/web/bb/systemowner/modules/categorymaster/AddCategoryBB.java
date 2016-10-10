@@ -26,7 +26,7 @@ public class AddCategoryBB extends BackingBean {
 
 	private static final long serialVersionUID = -207056909000545895L;
 
-	private String propertiesLocation = "/com/web/bb/systemowner/modules/categorymanagement/category";
+	private String propertiesLocation = "/com/web/bb/systemowner/modules/categorymaster/category";
 	private int activeTabIndex;
 
 	CategoryOpr addEditCategoryOpr;
