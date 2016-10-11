@@ -34,7 +34,7 @@ BEGIN
 				image_url = p_image_url,
 				is_active = p_is_active,
 				modified_by = p_user_login,
-				modified_date = NOW(),
+				modified_date = NOW()
 		WHERE	category_id = p_product_category_id;
 
 		SET v_last_inserted_id = p_product_category_id;
@@ -48,10 +48,11 @@ BEGIN
 		
 		SELECT LAST_INSERT_ID() INTO v_last_inserted_id;
 
-	END IF
+	END IF;
 
 	SELECT v_last_inserted_id AS category_id;
+END $$
 
-DELIMITER ;
+DELIMITER;
 
 
