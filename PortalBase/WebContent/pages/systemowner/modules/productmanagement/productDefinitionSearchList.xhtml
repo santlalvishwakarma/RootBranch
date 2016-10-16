@@ -150,7 +150,7 @@
 					<p:commandLink styleClass="linkClass" action="#{productDefinitionSearchListBB.executeEnlargeImage}"
 						update=":enlargeImageDialogPanelGroup" oncomplete="enlargeImageDialog.show()">
 						<h:graphicImage id="image1"
-							value="#{sessionScope['imageURL']}#{productRecord.productSkuRecord.imageRecord.thumbnailImageURL}"
+							value="#{sessionScope['imageURL']}#{productRecord.productSkuRecord.defaultProductSkuImageMappingDVO.imageRecord.thumbnailImageURL}"
 							style="width: 25px; height: 25px;" title="Thumbnail" />
 						<f:setPropertyActionListener target="#{productDefinitionSearchListBB.selectedProductRecord}"
 							value="#{productRecord}" />

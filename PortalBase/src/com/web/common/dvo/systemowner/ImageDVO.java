@@ -15,14 +15,12 @@ public class ImageDVO extends BaseDVO {
 	private String displayThumbnailImageURL;
 
 	public ImageDVO(String code, String description, String imageURL) {
-		super();
 		this.code = code;
 		this.description = description;
 		this.imageURL = imageURL;
 	}
 
 	public ImageDVO(String code, String description, String imageURL, String thumbnailImageURL, String zoomImageURL) {
-		super();
 		this.code = code;
 		this.description = description;
 		this.imageURL = imageURL;
@@ -32,6 +30,10 @@ public class ImageDVO extends BaseDVO {
 
 	public ImageDVO() {
 		// TODO Auto-generated constructor stub
+	}
+
+	public ImageDVO(String imageURL) {
+		this.imageURL = imageURL;
 	}
 
 	public String getImageURL() {

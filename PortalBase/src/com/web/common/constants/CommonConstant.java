@@ -1,5 +1,6 @@
 package com.web.common.constants;
 
+
 /*
  * Created CommonConstant as interface.
  * In this, nest all related constants into an sub-interface
@@ -111,6 +112,8 @@ public interface CommonConstant {
 	public static final String SYSTEM_OWNER = "SYSTEM_OWNER";
 
 	public static final String ADMINISTRATOR = "ADMINISTRATOR";
+
+	public static final String IMAGE_DVO_LIST = "IMAGE_DVO_LIST";
 
 	public interface MessageLocation {
 

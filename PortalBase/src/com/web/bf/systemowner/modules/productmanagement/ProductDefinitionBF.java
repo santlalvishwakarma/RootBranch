@@ -220,37 +220,8 @@ public class ProductDefinitionBF extends BusinessFacade {
 
 		ParameterOpr parameterOpr = new ParameterOpr();
 
-		Parameter parameter = new Parameter();
-		parameter.setParameterCode(CommonConstant.ParameterCode.ALLOCATION_BASIS);
-		parameterOpr.getParameterList().add(parameter);
-
-		Parameter parameter2 = new Parameter();
-		parameter2.setParameterCode(CommonConstant.ParameterCode.DEFAULT_PRICING_MODEL);
-		parameterOpr.getParameterList().add(parameter2);
-
 		parameterOpr = optionsHelperBC.getOptionsOnParameterCode(parameterOpr);
-		allOptionsValues.put("allocationBasisList",
-				parameterOpr.getParameterOptionsMap().get(CommonConstant.ParameterCode.ALLOCATION_BASIS));
-		allOptionsValues.put("defaultPricingModelList",
-				parameterOpr.getParameterOptionsMap().get(CommonConstant.ParameterCode.DEFAULT_PRICING_MODEL));
 
-		UomDVO uomDVO = new UomDVO();
-		uomDVO.getUomType().setSequenceNumber(CommonConstant.ParameterSequenceNumber.ONE);
-		ArrayList<Object> uomCodeList = optionsHelperBC.getUomCodeList(uomDVO);
-		allOptionsValues.put("quantityUOMList", uomCodeList);
-
-		uomDVO.getUomType().setSequenceNumber(CommonConstant.ParameterSequenceNumber.TWO);
-		ArrayList<Object> weightUOMList = optionsHelperBC.getUomCodeList(uomDVO);
-		allOptionsValues.put("weightUOMList", weightUOMList);
-
-		ItemCategoryDVO itemCategoryDVO = new ItemCategoryDVO();
-		ArrayList<Object> itemCategoryList = getSuggestedItemCategoryList(itemCategoryDVO);
-		allOptionsValues.put("itemCategoryList", itemCategoryList);
-
-		ProcessDVO processDVO = new ProcessDVO();
-		processDVO.setCode("%");
-		ArrayList<Object> processList = getSuggestedProcessList(processDVO);
-		allOptionsValues.put("processListDropDown", processList);
 		return allOptionsValues;
 	}
 

@@ -52,28 +52,12 @@ public class ProductDefinitionBB extends BackingBean {
 	}
 
 	@Override
-	public void clearPage(ActionEvent event) {
-	}
-
-	@Override
-	public void resetPage(ActionEvent event) {
-	}
-
-	@Override
 	public void executeSave(ActionEvent event) {
 	}
 
 	@Override
 	public boolean validateSave() {
 		return false;
-	}
-
-	@Override
-	public void addEditTabClicked(ActionEvent event) {
-	}
-
-	@Override
-	public void searchTabClicked(ActionEvent event) {
 	}
 
 	@Override

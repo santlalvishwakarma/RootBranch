@@ -177,15 +177,15 @@ public class ProductDefinitionBC extends BackingClass {
 							myLog.debug(" imageDetailsArray :: " + imageDetailsArray);
 							// 1~product/Product_Niraj2_1_r.jpg~product/Product_Niraj2_1_t.jpg
 
-							Integer sequenceNumber = 1;
+							Long sequenceNumber = 1L;
 							if (imageDetailsArray[0] != null)
-								sequenceNumber = Integer.valueOf(imageDetailsArray[0]);
+								sequenceNumber = Long.valueOf(imageDetailsArray[0]);
 
 							ProductSkuImageMappingDVO productImageMappingDVO = new ProductSkuImageMappingDVO();
 
-							productImageMappingDVO.setSequenceNumber(sequenceNumber);
+							productImageMappingDVO.getImageRecord().setSequenceNumber(sequenceNumber);
 							productImageMappingDVO.getImageRecord().setImageURL(imageDetailsArray[1]);
-							productImageMappingDVO.setThumbnailImageURL(imageDetailsArray[2]);
+							productImageMappingDVO.getImageRecord().setThumbnailImageURL(imageDetailsArray[2]);
 
 							productDVO.getProductSkuRecord().getProductSkuImageMappingList()
 									.add(productImageMappingDVO);
@@ -490,8 +490,6 @@ public class ProductDefinitionBC extends BackingClass {
 				HashMap<String, Object> resultSetMap = headerResponseMap.get(i);
 
 				ProductDVO productDVO = new ProductDVO();
-				CopyProductSKUDVO iconProductSKURecord = new CopyProductSKUDVO();
-				ModifyProductSKUDVO modifyProductSKURecord = new ModifyProductSKUDVO();
 
 				if (resultSetMap.get("product_id") != null)
 					productDVO.setId(Long.valueOf(resultSetMap.get("product_id").toString()));
@@ -499,23 +497,10 @@ public class ProductDefinitionBC extends BackingClass {
 				productDVO.setCode((String) resultSetMap.get("product_code"));
 				productDVO.setName((String) resultSetMap.get("product_name"));
 				productDVO.setDescription((String) resultSetMap.get("product_description"));
-				if (resultSetMap.get("product_version") != null)
-					productDVO.setProductVersion(Integer.valueOf(resultSetMap.get("product_version").toString()));
-				productDVO.getUomRecord().setCode((String) resultSetMap.get("uom_code"));
-				productDVO.getWeightUomRecord().setCode((String) resultSetMap.get("weight_uom_code"));
-				if (resultSetMap.get("allocation_based_on") != null)
-					productDVO.getAllocationBasedOn().setParameterID(
-							Integer.valueOf(resultSetMap.get("allocation_based_on").toString()));
-				if (resultSetMap.get("pricing_model") != null)
-					productDVO.getDefaultPricingModel().setParameterID(
-							Integer.valueOf(resultSetMap.get("pricing_model").toString()));
 				if (resultSetMap.get("is_active") != null)
 					productDVO.setActive(!((Boolean) resultSetMap.get("is_active")));
-				if (resultSetMap.get("is_auto_replenish") != null)
-					productDVO.setAutoReplenish((Boolean) resultSetMap.get("is_auto_replenish"));
 				productDVO.getStatusRecord().setCode((String) resultSetMap.get("status_code"));
 				productDVO.getStatusRecord().setName((String) resultSetMap.get("status_name"));
-				productDVO.setProductNameForBill((String) resultSetMap.get("product_name_for_bill"));
 
 				// sku data
 				if (resultSetMap.get("product_sku_id") != null)
@@ -523,62 +508,13 @@ public class ProductDefinitionBC extends BackingClass {
 				productDVO.getProductSkuRecord().setCode((String) resultSetMap.get("sku_code"));
 				productDVO.getProductSkuRecord().setName((String) resultSetMap.get("sku_name"));
 				productDVO.getProductSkuRecord().setDescription((String) resultSetMap.get("sku_description"));
-				productDVO.getProductSkuRecord().setSkuComments((String) resultSetMap.get("sku_comments"));
 
-				if (resultSetMap.get("sku_version") != null)
-					productDVO.getProductSkuRecord().setSkuVersion(
-							Integer.valueOf(resultSetMap.get("sku_version").toString()));
-				if (resultSetMap.get("is_master") != null)
-					productDVO.getProductSkuRecord().setMasterSKU((Boolean) resultSetMap.get("is_master"));
 				productDVO.getProductSkuRecord().getStatusRecord()
 						.setCode((String) resultSetMap.get("sku_status_code"));
 				productDVO.getProductSkuRecord().getStatusRecord()
 						.setName((String) resultSetMap.get("sku_status_name"));
 				if (resultSetMap.get("sku_is_active") != null)
 					productDVO.getProductSkuRecord().setActive(!((Boolean) resultSetMap.get("sku_is_active")));
-
-				// links data flags
-				if (resultSetMap.get("hierarchy") != null)
-					iconProductSKURecord.setMapHierarchy((Boolean) resultSetMap.get("hierarchy"));
-				if (resultSetMap.get("properties") != null)
-					iconProductSKURecord.setMapProperties((Boolean) resultSetMap.get("properties"));
-				if (resultSetMap.get("rm") != null)
-					iconProductSKURecord.setMapRawMaterials((Boolean) resultSetMap.get("rm"));
-				if (resultSetMap.get("process_variation") != null)
-					iconProductSKURecord.setMapProcessVariation((Boolean) resultSetMap.get("process_variation"));
-				if (resultSetMap.get("complementary_sku") != null)
-					iconProductSKURecord.setMapComplementarySKU((Boolean) resultSetMap.get("complementary_sku"));
-				if (resultSetMap.get("props") != null)
-					iconProductSKURecord.setMapProps((Boolean) resultSetMap.get("props"));
-				if (resultSetMap.get("catalog") != null)
-					iconProductSKURecord.setMapCatalogs((Boolean) resultSetMap.get("catalog"));
-				if (resultSetMap.get("simila_sku") != null)
-					iconProductSKURecord.setMapSimiliarSKU((Boolean) resultSetMap.get("simila_sku"));
-				if (resultSetMap.get("images") != null)
-					iconProductSKURecord.setMapImages((Boolean) resultSetMap.get("images"));
-				if (resultSetMap.get("items") != null)
-					iconProductSKURecord.setMapItem((Boolean) resultSetMap.get("items"));
-
-				// modify data flags
-				if (resultSetMap.get("is_modify_hierarchy") != null)
-					modifyProductSKURecord.setModifyHierarchy((Boolean) resultSetMap.get("is_modify_hierarchy"));
-				if (resultSetMap.get("is_modify_catalogs") != null)
-					modifyProductSKURecord.setModifyCatalogs((Boolean) resultSetMap.get("is_modify_catalogs"));
-				if (resultSetMap.get("is_modify_complementary") != null)
-					modifyProductSKURecord.setModifyComplementarySKU((Boolean) resultSetMap
-							.get("is_modify_complementary"));
-				if (resultSetMap.get("is_modify_pv") != null)
-					modifyProductSKURecord.setModifyProcessVariation((Boolean) resultSetMap.get("is_modify_pv"));
-				if (resultSetMap.get("is_modify_props") != null)
-					modifyProductSKURecord.setModifyProps((Boolean) resultSetMap.get("is_modify_props"));
-				if (resultSetMap.get("is_modify_rm") != null)
-					modifyProductSKURecord.setModifyRawMaterials((Boolean) resultSetMap.get("is_modify_rm"));
-				if (resultSetMap.get("is_modify_similar") != null)
-					modifyProductSKURecord.setModifySimiliarSKU((Boolean) resultSetMap.get("is_modify_similar"));
-				if (resultSetMap.get("is_load_images") != null)
-					modifyProductSKURecord.setModifyImages((Boolean) resultSetMap.get("is_load_images"));
-				if (resultSetMap.get("is_modify_item") != null)
-					modifyProductSKURecord.setModifyItem((Boolean) resultSetMap.get("is_modify_item"));
 
 				String imageUrlString = (String) resultSetMap.get("image_url");
 				myLog.debug(" imageUrlString :: " + imageUrlString);
@@ -596,16 +532,18 @@ public class ProductDefinitionBC extends BackingClass {
 							if (imageDetailsArray[0] != null)
 								sequenceNumber = Long.valueOf(imageDetailsArray[0]);
 
-							ProductImageMappingDVO productImageMappingDVO = new ProductImageMappingDVO();
+							ProductSkuImageMappingDVO productImageMappingDVO = new ProductSkuImageMappingDVO();
 
-							productImageMappingDVO.setSequenceNumber(sequenceNumber);
-							productImageMappingDVO.setImageURL(imageDetailsArray[1]);
-							productImageMappingDVO.setThumbnailImageURL(imageDetailsArray[2]);
+							productImageMappingDVO.getImageRecord().setSequenceNumber(sequenceNumber);
+							productImageMappingDVO.getImageRecord().setImageURL(imageDetailsArray[1]);
+							productImageMappingDVO.getImageRecord().setThumbnailImageURL(imageDetailsArray[2]);
 
-							productDVO.setDefaultImageRecord(productImageMappingDVO);
+							productDVO.getProductSkuRecord().getProductSkuImageMappingList()
+									.add(productImageMappingDVO);
 
 							if (sequenceNumber.equals(0L)) {
-								productDVO.setDefaultImageRecord(productImageMappingDVO);
+								productDVO.getProductSkuRecord().setDefaultProductSkuImageMappingDVO(
+										productImageMappingDVO);
 							}
 						}
 					}
@@ -614,22 +552,6 @@ public class ProductDefinitionBC extends BackingClass {
 				setAuditAttributes(productDVO, resultSetMap);
 				productOprRet.setProductRecord(productDVO);
 
-				productOprRet.setIconProductSKURecord(iconProductSKURecord);
-				productOprRet.getProductRecord().setModifyProductSKURecord(modifyProductSKURecord);
-
-			}
-		}
-
-		if (detailResponseMap != null && detailResponseMap.size() > 0) {
-			int size = detailResponseMap.size();
-			for (int i = 0; i < size; i++) {
-
-				HashMap<String, Object> resultSetMap = detailResponseMap.get(i);
-				UomDVO uomRecord = new UomDVO();
-
-				uomRecord.setCode((String) resultSetMap.get("uom_code"));
-				uomRecord.setName((String) resultSetMap.get("uom_name"));
-				productOprRet.getProductRecord().getUomList().add(uomRecord);
 			}
 		}
 

@@ -94,7 +94,7 @@
 	</url-mapping>
 	
 	<url-mapping id="productManagement">
-		<pattern value="/productmanagement/productdefinition/" />
+		<pattern value="/admin/productmanagement/productdefinition/" />
 		<view-id value="/pages/systemowner/modules/productmanagement/productDefinition.jsf" />
 		<action onPostback="false">#{productDefinitionSearchListBB.retrieveData}</action>
 	</url-mapping>

@@ -7,8 +7,6 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import org.primefaces.context.RequestContext;
-
 import com.web.bf.systemowner.modules.productmanagement.ProductDefinitionBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.common.Parameter;
@@ -18,6 +16,7 @@ import com.web.common.dvo.systemowner.CategoryDVO;
 import com.web.common.dvo.systemowner.HierarchyDVO;
 import com.web.common.dvo.systemowner.ImageDVO;
 import com.web.common.dvo.systemowner.ProductDVO;
+import com.web.common.dvo.systemowner.ProductSkuImageMappingDVO;
 import com.web.common.dvo.systemowner.PropertyDVO;
 import com.web.common.dvo.util.OptionsDVO;
 import com.web.common.jsf.converters.BaseDVOConverter;
@@ -197,28 +196,12 @@ public class ProductDefinitionSearchBB extends BackingBean {
 	}
 
 	@Override
-	public void clearPage(ActionEvent event) {
-	}
-
-	@Override
-	public void resetPage(ActionEvent event) {
-	}
-
-	@Override
 	public void executeSave(ActionEvent event) {
 	}
 
 	@Override
 	public boolean validateSave() {
 		return false;
-	}
-
-	@Override
-	public void addEditTabClicked(ActionEvent event) {
-	}
-
-	@Override
-	public void searchTabClicked(ActionEvent event) {
 	}
 
 	@Override
@@ -231,8 +214,14 @@ public class ProductDefinitionSearchBB extends BackingBean {
 
 		ProductOpr productOprSent = new ProductOpr();
 		productOprSent.getProductRecord().setId(selectedProductRecord.getId());
-		productOprSent.getProductRecord().getProductSkuRecord().getImageRecord()
-				.setThumbnailImageURL(selectedProductRecord.getProductSkuRecord().getImageRecord().getImageURL());
+		productOprSent
+				.getProductRecord()
+				.getProductSkuRecord()
+				.getDefaultProductSkuImageMappingDVO()
+				.getImageRecord()
+				.setThumbnailImageURL(
+						selectedProductRecord.getProductSkuRecord().getDefaultProductSkuImageMappingDVO()
+								.getImageRecord().getImageURL());
 
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
@@ -381,7 +370,6 @@ public class ProductDefinitionSearchBB extends BackingBean {
 
 	@Override
 	public void executeAddRow(ActionEvent event) {
-		productOpr.getProductRecord().getProductPropertiesMappingList().add(new ProductPropertiesMappingDVO());
 	}
 
 	@Override
@@ -415,25 +403,6 @@ public class ProductDefinitionSearchBB extends BackingBean {
 		return productHierarchyObjectList;
 	}
 
-	public List<ProductPropertiesDVO> getSuggestedPropertiesBasedOnName(String query) {
-		List<ProductPropertiesDVO> productPropertiesList = new ArrayList<ProductPropertiesDVO>();
-		if (query != null) {
-			query = query.toUpperCase();
-			for (ProductPropertiesDVO productPropertiesRecord : propertiesForAutoSuggest) {
-				String name = productPropertiesRecord.getName();
-
-				if (name.toUpperCase().startsWith(query)) {
-					productPropertiesList.add(productPropertiesRecord);
-				}
-			}
-		}
-		return productPropertiesList;
-	}
-
-	public void executeClearProperties(ActionEvent event) {
-		productOpr.getProductRecord().setProductPropertiesMappingList(new ArrayList<ProductPropertiesMappingDVO>());
-	}
-
 	public List<CategoryDVO> getSuggestedCategories(String query) {
 
 		List<CategoryDVO> productCategoryList = new ArrayList<CategoryDVO>();
@@ -458,46 +427,17 @@ public class ProductDefinitionSearchBB extends BackingBean {
 
 		ArrayList<ImageDVO> imageList = new ArrayList<ImageDVO>();
 
-		if (!selectedProductRecord.getProductImageMappingList().isEmpty()) {
-			for (ProductImageMappingDVO productImageMappingDVO : selectedProductRecord.getProductImageMappingList()) {
+		if (!selectedProductRecord.getProductSkuRecord().getProductSkuImageMappingList().isEmpty()) {
+			for (ProductSkuImageMappingDVO productImageMappingDVO : selectedProductRecord.getProductSkuRecord()
+					.getProductSkuImageMappingList()) {
 
-				ImageDVO imageRecord = new ImageDVO(productImageMappingDVO.getImageURL());
+				ImageDVO imageRecord = new ImageDVO(productImageMappingDVO.getImageRecord().getImageURL());
 				imageList.add(imageRecord);
 
 			}
 		}
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 				.put(CommonConstant.IMAGE_DVO_LIST, imageList);
-	}
-
-	public String productMappingForSingleProduct() {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("inside productMappingForSingleProduct():::");
-
-		productOpr.getSelectedProductRecord().getOperationalAttributes().setRecordSelected(true);
-
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.ParameterCode.SELECTED_PRODUCT_RECORD, productOpr.getSelectedProductRecord());
-
-		RequestContext.getCurrentInstance().execute("productMappingToAddEditList();");
-		return null;
-	}
-
-	public void productMappingForMultipleProduct(ActionEvent event) {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("inside productMappingForMultipleProduct():::");
-
-		for (int i = 0; i < productOpr.getProductList().size(); i++) {
-			productOpr.getProductList().get(i).getOperationalAttributes().setRecordSelected(true);
-		}
-
-		myLog.debug("before productOpr.getProductList().size()" + productOpr.getProductList().size());
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.ParameterCode.ALL_SEARCHED_PRODUCT_RECORDS, productOpr.getProductList());
-		// productOpr.getProductList().removeAll(productOpr.getProductList());
-		myLog.debug("after productOpr.getProductList().size()" + productOpr.getProductList().size());
-
-		RequestContext.getCurrentInstance().execute("productMappingToAddEditList();");
 	}
 
 	private void populateData() throws FrameworkException, BusinessException {

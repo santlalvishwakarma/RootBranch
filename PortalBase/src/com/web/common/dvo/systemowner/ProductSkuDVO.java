@@ -21,7 +21,7 @@ public class ProductSkuDVO extends BaseDVO {
 
 	private static final long serialVersionUID = 5144307489164534722L;
 	private boolean defaultVariant;
-	private ImageDVO imageRecord;
+	private ImageDVO defaultImageRecord;
 	private boolean productRetired;
 	private HierarchyCategoryMappingDVO hierarchyCategoryMappingRecord;
 	private Float basePrice;
@@ -486,15 +486,15 @@ public class ProductSkuDVO extends BaseDVO {
 		this.complementaryProductList = complementaryProductList;
 	}
 
-	public ImageDVO getImageRecord() {
-		if (imageRecord == null) {
-			imageRecord = new ImageDVO();
+	public ImageDVO getDefaultImageRecord() {
+		if (defaultImageRecord == null) {
+			defaultImageRecord = new ImageDVO();
 		}
-		return imageRecord;
+		return defaultImageRecord;
 	}
 
-	public void setImageRecord(ImageDVO imageRecord) {
-		this.imageRecord = imageRecord;
+	public void setDefaultImageRecord(ImageDVO defaultImageRecord) {
+		this.defaultImageRecord = defaultImageRecord;
 	}
 
 	public Float getMinPrice() {
