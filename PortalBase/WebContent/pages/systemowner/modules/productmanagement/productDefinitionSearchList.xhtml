@@ -20,17 +20,6 @@
 								var="statusRecord" itemLabel="#{statusRecord.name}" itemValue="#{statusRecord.code}" />
 						</p:selectOneMenu></td>
 				</tr>
-				<tr>
-					<td><p:inputText id="skuCode"
-							value="#{productDefinitionSearchListBB.productOpr.productRecord.productSkuRecord.code}" /> <p:watermark
-							for="skuCode" value="SKU Code" /></td>
-					<td><p:inputText id="skuDescription"
-							value="#{productDefinitionSearchListBB.productOpr.productRecord.productSkuRecord.description}" /> <p:watermark
-							for="skuDescription" value="SKU Description" /></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
 			</table>
 			<table>
 				<tr>
@@ -135,11 +124,7 @@
 				<p:column sortBy="#{productRecord.productSkuRecord.code}" filterBy="#{productRecord.productSkuRecord.code}"
 					filterMatchMode="contains">
 					<f:facet name="header">Sku Code</f:facet>
-					<p:commandLink styleClass="linkClass" action="#{productDefinitionSearchListBB.editSKUDetails}"
-						update=":productTabView" value="#{productRecord.productSkuRecord.code}">
-						<f:setPropertyActionListener target="#{productDefinitionSearchListBB.selectedProductRecord}"
-							value="#{productRecord}" />
-					</p:commandLink>
+					<h:outputText value="#{productRecord.productSkuRecord.code}" styleClass="labelClass" />
 				</p:column>
 				<p:column sortBy="#{productRecord.productSkuRecord.description}"
 					filterBy="#{productRecord.productSkuRecord.description}" filterMatchMode="contains">
@@ -150,7 +135,7 @@
 					<p:commandLink styleClass="linkClass" action="#{productDefinitionSearchListBB.executeEnlargeImage}"
 						update=":enlargeImageDialogPanelGroup" oncomplete="enlargeImageDialog.show()">
 						<h:graphicImage id="image1"
-							value="#{sessionScope['imageURL']}#{productRecord.productSkuRecord.defaultProductSkuImageMappingDVO.imageRecord.thumbnailImageURL}"
+							value="#{sessionScope['imageURL']}#{productRecord.productSkuRecord.defaultImageRecord.thumbnailImageURL}"
 							style="width: 25px; height: 25px;" title="Thumbnail" />
 						<f:setPropertyActionListener target="#{productDefinitionSearchListBB.selectedProductRecord}"
 							value="#{productRecord}" />

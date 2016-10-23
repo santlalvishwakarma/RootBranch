@@ -25,7 +25,6 @@ public class ProductSkuDVO extends BaseDVO {
 	private boolean productRetired;
 	private HierarchyCategoryMappingDVO hierarchyCategoryMappingRecord;
 	private Float basePrice;
-	private Float discountPrice;
 	private Float finalBasePrice;
 	private CurrencyDVO currencyRecord;
 	private ArrayList<CategoryPropertyMappingDVO> categoryPropertiesList;
@@ -109,12 +108,7 @@ public class ProductSkuDVO extends BaseDVO {
 	private StatusDVO statusRecord;
 	private ProductSkuImageMappingDVO defaultProductSkuImageMappingDVO;
 
-	public Float getPercentDiscount() {
-		if ((basePrice != null && basePrice != 0) && (discountPrice != null && discountPrice != 0)) {
-			percentDiscount = ((basePrice - discountPrice) * 100) / basePrice;
-		}
-		return percentDiscount;
-	}
+	private Boolean defaultSku;
 
 	public void setPercentDiscount(Float percentDiscount) {
 		this.percentDiscount = percentDiscount;
@@ -153,10 +147,10 @@ public class ProductSkuDVO extends BaseDVO {
 	}
 
 	public Float getPriceForComparison() {
-		if (getDiscountPrice() == null || getDiscountPrice().equals(Float.valueOf(0))) {
+		if (getFinalBasePrice() == null || getFinalBasePrice().equals(Float.valueOf(0))) {
 			return getBasePrice();
 		} else {
-			return getDiscountPrice();
+			return getFinalBasePrice();
 		}
 	}
 
@@ -530,37 +524,6 @@ public class ProductSkuDVO extends BaseDVO {
 		}
 	}
 
-	public Float getDiscountPrice() {
-		// ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		// myLog.debug("===discount price===" + discountPrice);
-		if (discountPrice != null && discountPrice != 0.0) {
-			if (discountPrice > 0.0) {
-				strikeStyle = "strike_style";
-			} else {
-				strikeStyle = "";
-			}
-		}
-		return discountPrice;
-	}
-
-	public void setDiscountPrice(Float discountPrice) {
-		this.discountPrice = discountPrice;
-	}
-
-	public Integer getDiscountPriceIntValue() {
-		Integer discountPriceIntValue = null;
-		if (discountPrice != null) {
-			discountPriceIntValue = Integer.valueOf(discountPrice.intValue());
-		}
-		return discountPriceIntValue;
-	}
-
-	public void setDiscountPriceIntValue(Integer discountPriceIntValue) {
-		if (discountPriceIntValue != null) {
-			discountPrice = Float.valueOf(discountPriceIntValue.floatValue());
-		}
-	}
-
 	public Float getFinalBasePrice() {
 		return finalBasePrice;
 	}
@@ -583,21 +546,6 @@ public class ProductSkuDVO extends BaseDVO {
 
 	public void setStrikeStyle(String strikeStyle) {
 		this.strikeStyle = strikeStyle;
-	}
-
-	public Float getSavePrice() {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		// myLog.debug("===discount price===" + getDiscountPriceIntValue());
-		// myLog.debug("===base price===" + getBasePriceIntValue());
-		savePrice = (getBasePriceIntValue() == null ? Float.valueOf("0.0") : getBasePriceIntValue())
-				- (getDiscountPriceIntValue() == null ? Float.valueOf("0.0") : getDiscountPriceIntValue());
-		// myLog.debug("===savePrice price===" + savePrice);
-
-		return savePrice;
-	}
-
-	public void setSavePrice(Float savePrice) {
-		this.savePrice = savePrice;
 	}
 
 	public Integer getSavePriceIntValue() {
@@ -1195,6 +1143,14 @@ public class ProductSkuDVO extends BaseDVO {
 
 	public void setDefaultProductSkuImageMappingDVO(ProductSkuImageMappingDVO defaultProductSkuImageMappingDVO) {
 		this.defaultProductSkuImageMappingDVO = defaultProductSkuImageMappingDVO;
+	}
+
+	public Boolean getDefaultSku() {
+		return defaultSku;
+	}
+
+	public void setDefaultSku(Boolean defaultSku) {
+		this.defaultSku = defaultSku;
 	}
 
 }

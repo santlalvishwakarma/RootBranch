@@ -49,7 +49,7 @@ public class ProductDefinitionBF extends BusinessFacade {
 	}
 
 	public ProductOpr executeSaveProductSKUDetails(ProductOpr productOpr) throws FrameworkException, BusinessException {
-		return new ProductDefinitionBC().executeSaveProductSKUDetails(productOpr);
+		return new ProductDefinitionBC().executeSaveProductDetails(productOpr);
 	}
 
 	public ProductOpr getProductDetails(ProductOpr productOpr) throws FrameworkException, BusinessException {

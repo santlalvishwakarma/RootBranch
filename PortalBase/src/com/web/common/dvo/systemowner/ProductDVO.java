@@ -1,5 +1,8 @@
 package com.web.common.dvo.systemowner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.web.common.dvo.common.BaseDVO;
 import com.web.common.dvo.common.StatusDVO;
 
@@ -9,6 +12,7 @@ public class ProductDVO extends BaseDVO {
 	private StatusDVO statusRecord;
 	private HierarchyDVO hierarchyRecord;
 	private ProductSkuDVO productSkuRecord;
+	private List<ProductSkuDVO> productSkuList;
 
 	public StatusDVO getStatusRecord() {
 		if (statusRecord == null) {
@@ -41,6 +45,17 @@ public class ProductDVO extends BaseDVO {
 
 	public void setHierarchyRecord(HierarchyDVO hierarchyRecord) {
 		this.hierarchyRecord = hierarchyRecord;
+	}
+
+	public List<ProductSkuDVO> getProductSkuList() {
+		if (productSkuList == null) {
+			productSkuList = new ArrayList<ProductSkuDVO>();
+		}
+		return productSkuList;
+	}
+
+	public void setProductSkuList(List<ProductSkuDVO> productSkuList) {
+		this.productSkuList = productSkuList;
 	}
 
 }

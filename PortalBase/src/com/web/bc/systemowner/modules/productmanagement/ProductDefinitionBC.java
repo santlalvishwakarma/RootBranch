@@ -12,7 +12,6 @@ import com.web.common.dvo.systemowner.CategoryDVO;
 import com.web.common.dvo.systemowner.HierarchyDVO;
 import com.web.common.dvo.systemowner.ProductDVO;
 import com.web.common.dvo.systemowner.ProductSkuDVO;
-import com.web.common.dvo.systemowner.ProductSkuImageMappingDVO;
 import com.web.common.dvo.systemowner.UomDVO;
 import com.web.common.parents.BackingClass;
 import com.web.foundation.dao.DAOResult;
@@ -165,40 +164,10 @@ public class ProductDefinitionBC extends BackingClass {
 					productDVO.getProductSkuRecord().setId(Long.valueOf(resultSetMap.get("product_sku_id").toString()));
 				productDVO.getProductSkuRecord().setCode((String) resultSetMap.get("sku_code"));
 				productDVO.getProductSkuRecord().setDescription((String) resultSetMap.get("sku_description"));
-
-				String imageUrlString = (String) resultSetMap.get("image_url");
-				myLog.debug(" imageUrlString :: " + imageUrlString);
-				if (imageUrlString != null) {
-					String[] imageUrlArray = imageUrlString.split(";;");
-					for (String value : imageUrlArray) {
-						if (value != null && value.trim().length() > 0) {
-
-							String[] imageDetailsArray = value.split("~");
-							myLog.debug(" imageDetailsArray :: " + imageDetailsArray);
-							// 1~product/Product_Niraj2_1_r.jpg~product/Product_Niraj2_1_t.jpg
-
-							Long sequenceNumber = 1L;
-							if (imageDetailsArray[0] != null)
-								sequenceNumber = Long.valueOf(imageDetailsArray[0]);
-
-							ProductSkuImageMappingDVO productImageMappingDVO = new ProductSkuImageMappingDVO();
-
-							productImageMappingDVO.getImageRecord().setSequenceNumber(sequenceNumber);
-							productImageMappingDVO.getImageRecord().setImageURL(imageDetailsArray[1]);
-							productImageMappingDVO.getImageRecord().setThumbnailImageURL(imageDetailsArray[2]);
-
-							productDVO.getProductSkuRecord().getProductSkuImageMappingList()
-									.add(productImageMappingDVO);
-
-							if (sequenceNumber.equals(0L)) {
-								productDVO.getProductSkuRecord().setDefaultProductSkuImageMappingDVO(
-										productImageMappingDVO);
-							}
-						}
-					}
-				}
-				myLog.debug(" images size :: "
-						+ productDVO.getProductSkuRecord().getProductSkuImageMappingList().size());
+				productDVO.getProductSkuRecord().getDefaultImageRecord()
+						.setThumbnailImageURL((String) resultSetMap.get("thumbnail_image_url"));
+				productDVO.getProductSkuRecord().getDefaultImageRecord()
+						.setZoomImageURL((String) resultSetMap.get("zoom_image_url"));
 
 				setAuditAttributes(productDVO, resultSetMap);
 				productOprRet.getProductDVOList().add(productDVO);
@@ -228,7 +197,7 @@ public class ProductDefinitionBC extends BackingClass {
 		return getProductDetails(productOpr);
 	}
 
-	public Long executeSaveProductDetails(ProductOpr productOpr) throws FrameworkException, BusinessException {
+	public ProductOpr executeSaveProductDetails(ProductOpr productOpr) throws FrameworkException, BusinessException {
 
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("In Product Definition BC :: executeSaveProductDetails starts ");
@@ -238,115 +207,55 @@ public class ProductDefinitionBC extends BackingClass {
 		String productCode = productRecord.getCode();
 		String productName = productRecord.getName();
 		String productDesc = productRecord.getDescription();
-		String uomCode = productRecord.getUomRecord().getCode();
-		String uomCategoryCode = null;
-		Integer allocationBasedOn = productRecord.getAllocationBasedOn().getParameterID();
 		Boolean active = false;
 		if (productRecord.getActive() != null)
 			active = !(productRecord.getActive());
-		Boolean autoReplenish = productRecord.getAutoReplenish();
-		Integer defaultPricingModel = productRecord.getDefaultPricingModel().getParameterID();
-		StringBuffer parseProductUOMListString = new StringBuffer();
 		String userLogin = productRecord.getUserLogin();
 		String lastModifiedDate = null;
 		if (productRecord.getAuditAttributes().getLastModifiedDate() != null)
 			lastModifiedDate = productRecord.getAuditAttributes().getLastModifiedDate().toString();
-		String weightUomCode = productRecord.getWeightUomRecord().getCode();
-
-		for (UomDVO uomDVO : productRecord.getUomList()) {
-			parseProductUOMListString.append(uomDVO.getCode());
-			parseProductUOMListString.append("~");
-		}
-		if (parseProductUOMListString != null && parseProductUOMListString.length() > 1) {
-			// this is to remove the last ~ sign
-			parseProductUOMListString.deleteCharAt(parseProductUOMListString.length() - 1);
-		}
-		String productNameForBill = productRecord.getProductNameForBill();
 
 		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
 		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
 		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
 		queryDetailsMap.put(IDAOConstant.SQL_TEXT, ProductDefinitionSqlTemplate.SAVE_PRODUCT_DETAILS);
 
-		Object strSqlParams[][] = new Object[15][3];
+		Object strSqlParams[][] = new Object[7][3];
 
 		strSqlParams[0][0] = "1";
 		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
 		strSqlParams[0][2] = productId;
-		myLog.debug(" parameter 1 :: " + productId);
+		myLog.debug(" parameter 1 productId:: " + productId);
 
 		strSqlParams[1][0] = "2";
 		strSqlParams[1][1] = IDAOConstant.STRING_DATATYPE;
 		strSqlParams[1][2] = productCode;
-		myLog.debug(" parameter 2 :: " + productCode);
+		myLog.debug(" parameter 2 productCode:: " + productCode);
 
 		strSqlParams[2][0] = "3";
 		strSqlParams[2][1] = IDAOConstant.STRING_DATATYPE;
 		strSqlParams[2][2] = productName;
-		myLog.debug(" parameter 3 :: " + productName);
+		myLog.debug(" parameter 3 productName:: " + productName);
 
 		strSqlParams[3][0] = "4";
 		strSqlParams[3][1] = IDAOConstant.STRING_DATATYPE;
 		strSqlParams[3][2] = productDesc;
-		myLog.debug(" parameter 4 :: " + productDesc);
+		myLog.debug(" parameter 4 productDesc:: " + productDesc);
 
 		strSqlParams[4][0] = "5";
-		strSqlParams[4][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[4][2] = uomCode;
-		myLog.debug(" parameter 5 :: " + uomCode);
+		strSqlParams[4][1] = IDAOConstant.BOOLEAN_DATATYPE;
+		strSqlParams[4][2] = active;
+		myLog.debug(" parameter 5 active:: " + active);
 
 		strSqlParams[5][0] = "6";
 		strSqlParams[5][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[5][2] = uomCategoryCode;
-		myLog.debug(" parameter 6 :: " + uomCategoryCode);
+		strSqlParams[5][2] = userLogin;
+		myLog.debug(" parameter 6 userLogin:: " + userLogin);
 
 		strSqlParams[6][0] = "7";
-		strSqlParams[6][1] = IDAOConstant.INT_DATATYPE;
-		strSqlParams[6][2] = allocationBasedOn;
-		myLog.debug(" parameter 7 :: " + allocationBasedOn);
-
-		strSqlParams[7][0] = "8";
-		strSqlParams[7][1] = IDAOConstant.BOOLEAN_DATATYPE;
-		strSqlParams[7][2] = active;
-		myLog.debug(" parameter 8 :: " + active);
-
-		strSqlParams[8][0] = "9";
-		strSqlParams[8][1] = IDAOConstant.BOOLEAN_DATATYPE;
-		strSqlParams[8][2] = autoReplenish;
-		myLog.debug(" parameter 9 :: " + autoReplenish);
-
-		strSqlParams[9][0] = "10";
-		strSqlParams[9][1] = IDAOConstant.INT_DATATYPE;
-		strSqlParams[9][2] = defaultPricingModel;
-		myLog.debug(" parameter 10 :: " + defaultPricingModel);
-
-		strSqlParams[10][0] = "11";
-		strSqlParams[10][1] = IDAOConstant.STRING_DATATYPE;
-		if (parseProductUOMListString.length() > 0)
-			strSqlParams[10][2] = parseProductUOMListString.toString();
-		else
-			strSqlParams[10][2] = null;
-		myLog.debug(" parameter 11 :: " + strSqlParams[10][2]);
-
-		strSqlParams[11][0] = "12";
-		strSqlParams[11][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[11][2] = userLogin;
-		myLog.debug(" parameter 12 :: " + userLogin);
-
-		strSqlParams[12][0] = "13";
-		strSqlParams[12][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[12][2] = lastModifiedDate;
-		myLog.debug(" parameter 13 :: " + lastModifiedDate);
-
-		strSqlParams[13][0] = "14";
-		strSqlParams[13][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[13][2] = weightUomCode;
-		myLog.debug(" parameter 14 :: " + weightUomCode);
-
-		strSqlParams[14][0] = "15";
-		strSqlParams[14][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[14][2] = productNameForBill;
-		myLog.debug(" parameter 15 :: " + productNameForBill);
+		strSqlParams[6][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[6][2] = lastModifiedDate;
+		myLog.debug(" parameter 7 lastModifiedDate:: " + lastModifiedDate);
 
 		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
 		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
@@ -359,10 +268,11 @@ public class ProductDefinitionBC extends BackingClass {
 				handleAndThrowException(resultSetMap);
 				if (resultSetMap.get("product_id") != null)
 					productId = Long.valueOf(resultSetMap.get("product_id").toString());
+				productOpr.getProductRecord().setId(productId);
 
 			}
 		}
-		return productId;
+		return getProductDetails(productOpr);
 	}
 
 	public Long executeSaveSKUDetails(ProductOpr productOpr) throws FrameworkException, BusinessException {
@@ -479,7 +389,7 @@ public class ProductDefinitionBC extends BackingClass {
 		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
 
 		HashMap<Integer, HashMap<String, Object>> headerResponseMap = daoResult.getMultipleResultSet().get("HDR");
-		HashMap<Integer, HashMap<String, Object>> detailResponseMap = daoResult.getMultipleResultSet().get("UOM");
+		HashMap<Integer, HashMap<String, Object>> detailResponseMap = daoResult.getMultipleResultSet().get("DTL");
 		myLog.debug(" Product Definition getProductDetails :: Resultset got header ::" + headerResponseMap);
 		myLog.debug(" Product Definition getProductDetails :: Resultset got uom :: " + detailResponseMap);
 
@@ -499,8 +409,10 @@ public class ProductDefinitionBC extends BackingClass {
 				productDVO.setDescription((String) resultSetMap.get("product_description"));
 				if (resultSetMap.get("is_active") != null)
 					productDVO.setActive(!((Boolean) resultSetMap.get("is_active")));
-				productDVO.getStatusRecord().setCode((String) resultSetMap.get("status_code"));
-				productDVO.getStatusRecord().setName((String) resultSetMap.get("status_name"));
+				// productDVO.getStatusRecord().setCode((String)
+				// resultSetMap.get("status_code"));
+				// productDVO.getStatusRecord().setName((String)
+				// resultSetMap.get("status_name"));
 
 				// sku data
 				if (resultSetMap.get("product_sku_id") != null)
@@ -519,38 +431,53 @@ public class ProductDefinitionBC extends BackingClass {
 				String imageUrlString = (String) resultSetMap.get("image_url");
 				myLog.debug(" imageUrlString :: " + imageUrlString);
 
-				if (imageUrlString != null) {
-					String[] imageUrlArray = imageUrlString.split(";;");
-					for (String value : imageUrlArray) {
-						if (value != null && value.trim().length() > 0) {
-
-							String[] imageDetailsArray = value.split("~");
-							myLog.debug(" imageDetailsArray :: " + imageDetailsArray);
-							// 1~product/Product_Niraj2_1_r.jpg~product/Product_Niraj2_1_t.jpg
-
-							Long sequenceNumber = 1L;
-							if (imageDetailsArray[0] != null)
-								sequenceNumber = Long.valueOf(imageDetailsArray[0]);
-
-							ProductSkuImageMappingDVO productImageMappingDVO = new ProductSkuImageMappingDVO();
-
-							productImageMappingDVO.getImageRecord().setSequenceNumber(sequenceNumber);
-							productImageMappingDVO.getImageRecord().setImageURL(imageDetailsArray[1]);
-							productImageMappingDVO.getImageRecord().setThumbnailImageURL(imageDetailsArray[2]);
-
-							productDVO.getProductSkuRecord().getProductSkuImageMappingList()
-									.add(productImageMappingDVO);
-
-							if (sequenceNumber.equals(0L)) {
-								productDVO.getProductSkuRecord().setDefaultProductSkuImageMappingDVO(
-										productImageMappingDVO);
-							}
-						}
-					}
-				}
-
 				setAuditAttributes(productDVO, resultSetMap);
 				productOprRet.setProductRecord(productDVO);
+
+			}
+		}
+
+		if (detailResponseMap != null && detailResponseMap.size() > 0) {
+			int size = detailResponseMap.size();
+			for (int i = 0; i < size; i++) {
+
+				HashMap<String, Object> resultSetMap = detailResponseMap.get(i);
+
+				ProductSkuDVO productSkuRecord = new ProductSkuDVO();
+
+				if (resultSetMap.get("product_sku_id") != null)
+					productSkuRecord.setId(Long.valueOf(resultSetMap.get("product_sku_id").toString()));
+				productSkuRecord.setCode((String) resultSetMap.get("sku_code"));
+				productSkuRecord.setName((String) resultSetMap.get("sku_name"));
+				productSkuRecord.setDescription((String) resultSetMap.get("sku_description"));
+				productSkuRecord.setSkuPropertyText((String) resultSetMap.get("sku_property_text"));
+				productSkuRecord.setSkuSEOTitle((String) resultSetMap.get("seo_title"));
+				productSkuRecord.setSkuSEOKeyword((String) resultSetMap.get("seo_keyword"));
+				productSkuRecord.setSkuSEODescription((String) resultSetMap.get("seo_description"));
+				productSkuRecord.getDefaultImageRecord().setThumbnailImageURL(
+						(String) resultSetMap.get("default_thumbnail_image_url"));
+				productSkuRecord.getDefaultImageRecord().setZoomImageURL(
+						(String) resultSetMap.get("default_zoom_image_url"));
+				if (resultSetMap.get("base_price") != null)
+					productSkuRecord.setBasePrice(Float.valueOf(resultSetMap.get("base_price").toString()));
+				if (resultSetMap.get("discount_amount") != null)
+					productSkuRecord.setDiscountAmount(Float.valueOf(resultSetMap.get("discount_amount").toString()));
+				if (resultSetMap.get("discount_percent") != null)
+					productSkuRecord.setDiscountPercent(Float.valueOf(resultSetMap.get("discount_percent").toString()));
+				if (resultSetMap.get("final_base_price") != null)
+					productSkuRecord.setFinalBasePrice(Float.valueOf(resultSetMap.get("final_base_price").toString()));
+
+				// productSkuRecord.getStatusRecord().setCode((String)
+				// resultSetMap.get("sku_status_code"));
+				// productSkuRecord.getStatusRecord().setName((String)
+				// resultSetMap.get("sku_status_name"));
+				if (resultSetMap.get("sku_is_active") != null)
+					productSkuRecord.setActive(!((Boolean) resultSetMap.get("sku_is_active")));
+
+				if (resultSetMap.get("default_sku") != null)
+					productSkuRecord.setDefaultSku(!((Boolean) resultSetMap.get("default_sku")));
+
+				productOprRet.getProductRecord().getProductSkuList().add(productSkuRecord);
 
 			}
 		}

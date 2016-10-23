@@ -25,14 +25,13 @@
 							value="#{productDefinitionAddEditBB.productOpr.productRecord.description}" /> <p:watermark
 							for="productDescription" value="Maximum 255 characters" /> <p:tooltip for="productDescription"
 							value="#{productDefinitionAddEditBB.productOpr.productRecord.description}" /></td>
-					<td><label class="labelClass boldClass">Product Name for bill</label></td>
+					<td></td>
 					<td></td>
 				</tr>
 				<tr>
-					<td><label class="labelClass boldClass">Status</label></td>
-					<td><label class="labelClass">#{productDefinitionAddEditBB.productOpr.productRecord.statusRecord.name}</label>
-					</td>
-					<td><label class="labelClass boldClass">Product Version</label></td>
+					<td></td>
+					<td></td>
+					<td></td>
 					<td></td>
 				</tr>
 				<tr>
@@ -41,12 +40,84 @@
 							value="#{productDefinitionAddEditBB.productOpr.productRecord.active}" /></td>
 					<td><label class="labelClass boldClass">Auto Replenish?</label></td>
 					<td></td>
-					<td><h:graphicImage id="image2"
+					<td>
+						<!-- <h:graphicImage id="image2"
 							value="#{sessionScope['imageURL']}#{productDefinitionAddEditBB.productOpr.productRecord.productSkuRecord.defaultProductSkuImageMappingDVO.imageRecord.imageURL}"
-							style="width: 65px; height: 65px;" title="Image" /></td>
+							style="width: 65px; height: 65px;" title="Image" /> -->
+					</td>
 				</tr>
 			</table>
-			<p:separator />
+		</h:panelGroup>
+		<br />
+		<table style="margin: 0 auto;">
+			<tr>
+				<td><p:commandButton id="btnSave" actionListener="#{productDefinitionAddEditBB.executeSave}" value="Save"
+						process="productProductAddEditPanel, productSkuListPanelGroup, @this"
+						update="productProductAddEditPanel, productSkuListPanelGroup" /></td>
+				<td><p:commandButton id="btnAddSku" actionListener="#{productDefinitionAddEditBB.executeSaveSKU}"
+						value="Add Sku" process="productProductAddEditPanel, productSkuListPanelGroup, @this"
+						update="productProductAddEditPanel" /></td>
+				<td><p:commandButton id="btnCancel" action="#{productDefinitionAddEditBB.clearPage}" value="Cancel"
+						process="@this" /> <p:tooltip for="btnCancel" value="Click to Cancel" /></td>
+				<td><p:commandButton id="btnAddMore" process="@this" value="Add More"
+						actionListener="#{productDefinitionAddEditBB.executeAddMore}" update="productProductAddEditPanel" /> <p:tooltip
+						for="btnAddMore" value="Click to Add More" /></td>
+			</tr>
+		</table>
+		<p:separator />
+		<h:panelGroup id="productSkuListPanelGroup">
+			<p:panel rendered="#{!(empty productDefinitionAddEditBB.productOpr.productRecord.productSkuList)}">
+				<h:commandLink id="excelLink">
+					<p:graphicImage alt="Export to Xls" value="/staticcontent/systemowner/images/excel.png" styleClass="imageClass" />
+					<p:dataExporter type="xls" target="productProductListTable" fileName="ProductDefinition" />
+				</h:commandLink>
+				<p:tooltip for="excelLink" value="Click to export data in the list to MS-Excel" />
+				<h:commandLink id="pdfLink">
+					<p:graphicImage alt="Export to PDF" value="/staticcontent/systemowner/images/pdf.png" styleClass="imageClass" />
+					<p:dataExporter type="pdf" target="productProductListTable" fileName="ProductDefinition" />
+				</h:commandLink>
+				<p:tooltip for="pdfLink" value="Click to export data in the list to PDF" />
+				<h:commandLink id="xmlLink">
+					<p:graphicImage alt="Export to XML" value="/staticcontent/systemowner/images/xml.png" styleClass="imageClass" />
+					<p:dataExporter type="xml" target="productProductListTable" fileName="ProductDefinition" />
+				</h:commandLink>
+				<p:tooltip for="xmlLink" value="Click to export data in the list to XML" />
+			</p:panel>
+			<p:dataTable id="productSkuListTable" rows="#{productDefinitionAddEditBB.paginationNumber}" var="productSkuRecord"
+				rowsPerPageTemplate="5,10,15" style="width: 100%;"
+				rendered="#{!(empty productDefinitionAddEditBB.productOpr.productRecord.productSkuList)}"
+				value="#{productDefinitionAddEditBB.productOpr.productRecord.productSkuList}" paginator="true"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page">
+				<f:facet name="header">Sku</f:facet>
+				<p:column headerText="Image" style="text-align:center;" exportable="false">
+					<p:commandLink styleClass="linkClass" action="#{productDefinitionAddEditBB.executeEnlargeImage}"
+						update=":enlargeImageDialogPanelGroup" oncomplete="enlargeImageDialog.show()">
+						<h:graphicImage id="image1"
+							value="#{sessionScope['imageURL']}#{productSkuRecord.defaultImageRecord.thumbnailImageURL}"
+							style="width: 25px; height: 25px;" title="Thumbnail" />
+					</p:commandLink>
+				</p:column>
+				<p:column sortBy="#{productSkuRecord.code}" filterBy="#{productSkuRecord.code}" filterMatchMode="contains">
+					<f:facet name="header">Sku Code</f:facet>
+					<h:outputText value="#{productSkuRecord.code}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{productSkuRecord.name}" filterBy="#{productSkuRecord.name}" filterMatchMode="contains">
+					<f:facet name="header">Sku Name</f:facet>
+					<h:outputText value="#{productSkuRecord.name}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{productSkuRecord.description}" filterBy="#{productSkuRecord.description}"
+					filterMatchMode="contains">
+					<f:facet name="header">Sku Description</f:facet>
+					<h:outputText value="#{productSkuRecord.description}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{productSkuRecord.statusRecord.name}" filterBy="#{productSkuRecord.statusRecord.name}"
+					filterMatchMode="contains">
+					<f:facet name="header">Status</f:facet>
+					<h:outputText value="#{productSkuRecord.statusRecord.name}" styleClass="labelClass" />
+				</p:column>
+				<f:facet name="footer">Total products : #{fn:length(productDefinitionAddEditBB.productOpr.productRecord.productSkuList)}</f:facet>
+			</p:dataTable>
+
 		</h:panelGroup>
 
 	</h:form>

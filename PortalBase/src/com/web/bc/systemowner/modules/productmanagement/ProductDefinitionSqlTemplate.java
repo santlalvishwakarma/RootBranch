@@ -52,7 +52,7 @@ public interface ProductDefinitionSqlTemplate extends SqlTemplate {
 
 	static final String COPY_PRODUCT_SKU = "CALL sp_product_copy_all_records_for_selected_product_sku(?,?,?,?,?,?,?,?,?,?,?,?,?,?, @p_error_code, @p_error_message);";
 
-	static final String SAVE_PRODUCT_DETAILS = "CALL sp_product_save_product_details(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, @p_last_inserted_id, @p_error_code, @p_error_message);";
+	static final String SAVE_PRODUCT_DETAILS = "CALL sp_product_save_product_details(?,?,?,?,?,?,?, @p_last_inserted_id, @p_error_code, @p_error_message);";
 
 	static final String SAVE_SKU_DETAILS = "CALL sp_product_save_sku_details(?,?,?,?,?,?,?,?, @p_last_inserted_id, @p_error_code, @p_error_message);";
 

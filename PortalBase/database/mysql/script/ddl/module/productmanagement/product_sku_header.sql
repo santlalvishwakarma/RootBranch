@@ -16,7 +16,7 @@ CREATE TABLE product_sku_header(
     discount_amount FLOAT(15,3),
     discount_percent FLOAT(15,3),
 	final_base_price FLOAT(15,3),
-	
+	default_sku TINYINT(1),
     is_active TINYINT(1) NOT NULL DEFAULT 0,
 	created_by VARCHAR(50) NOT NULL,
 	created_date DATETIME NOT NULL,

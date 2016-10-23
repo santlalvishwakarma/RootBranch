@@ -281,7 +281,6 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 			try {
 				String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
 				productOpr.getProductRecord().setUserLogin(userLogin);
-				productOpr.getApplicationFlags().getApplicationFlagMap().put("SAVE_FLAG", "SAVE_PRODUCT");
 
 				productOpr = new ProductDefinitionBF().executeSaveProductSKUDetails(productOpr);
 

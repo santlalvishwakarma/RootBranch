@@ -9,8 +9,6 @@ CREATE TABLE product_sku_header_detail_mapping (
   created_date datetime NOT NULL,
   modified_by varchar(50) DEFAULT NULL,
   modified_date datetime NOT NULL,
-  synch_id varchar(25) DEFAULT NULL,
-  cross_location_last_synch_date datetime DEFAULT NULL,
   PRIMARY KEY (product_sku_header_detail_mapping_id),
   KEY FK_product_sku_header_detail_mapping_1 (product_id),
   KEY FK_product_sku_header_detail_mapping_2 (product_sku_id),

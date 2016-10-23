@@ -10,19 +10,19 @@ IF p_product_id IS NOT NULL AND p_product_sku_id IS NULL THEN
 		
 	SELECT 	GROUP_CONCAT(pim.sequence_no,'~',pim.zoom_image_url,'~',pim.thumbnail_image_url ORDER BY pim.sequence_no SEPARATOR ';;') INTO output_text
 	FROM 	product_sku_image_mapping pim,
-			product_sku_header_detail_mapping pshdm
-	WHERE 	pshdm.product_id = p_product_id
-  	AND     pshdm.product_sku_id = pim.product_sku_id
-  	AND 	pshdm.default_sku = 1;
+			product_sku_header psh
+	WHERE 	pim.product_id = p_product_id
+  	AND     psh.product_sku_id = pim.product_sku_id
+  	AND 	psh.product_id = pim.product_id;
 
   
 ELSEIF p_product_sku_id IS NOT NULL THEN
 		
 	SELECT 	GROUP_CONCAT(psim.sequence_no,'~',psim.zoom_image_url,'~',psim.thumbnail_image_url ORDER BY psim.sequence_no  SEPARATOR ';;') INTO output_text
 	FROM 	product_sku_image_mapping psim,
-			product_sku_header_detail_mapping pshdm
-	WHERE 	pshdm.product_sku_id = p_product_sku_id
-  	AND     pshdm.product_sku_id = psim.product_sku_id;
+			product_sku_header psh
+	WHERE 	psh.product_sku_id = p_product_sku_id
+  	AND     psh.product_sku_id = psim.product_sku_id;
   	
   
 END IF;

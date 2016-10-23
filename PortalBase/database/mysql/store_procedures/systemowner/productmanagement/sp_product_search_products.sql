@@ -211,27 +211,15 @@ CREATE TEMPORARY TABLE temp_categories
           PREPARE stmnt3 FROM  @v_sql_statement;
           EXECUTE stmnt3;                
           
-      ELSEIF p_sku_code IS NOT NULL OR p_sku_description IS NOT NULL THEN
-          
-        SET @v_sql_statement = CONCAT(
-        " SELECT  ph.product_id, ph.product_code,ph.product_name, ph.product_description, psh.product_sku_id, psh.sku_code, psh.sku_description, ph.status_code, ph.is_active, fn_core_get_status_name(ph.status_code) AS status_name,
-				  fn_product_get_product_sku_image(ph.product_id,psh.product_sku_id) AS image_url
-          FROM    product_header ph,
-                  product_sku_header psh
-          WHERE   ph.product_id = psh.product_id ", v_string_sku_code, v_string_sku_description, v_string_product_code, v_string_product_name, v_string_product_description, v_string_status_code);
-          
-          PREPARE stmnt3 FROM  @v_sql_statement;
-          EXECUTE stmnt3;    
-          
       ELSE
       
       	SET @v_sql_statement = CONCAT(
         "SELECT ph.product_id, ph.product_code,ph.product_name, ph.product_description, psh.product_sku_id, psh.sku_code, psh.sku_description, ph.status_code, ph.is_active, fn_core_get_status_name(ph.status_code) AS status_name,
-				fn_product_get_product_sku_image(ph.product_id,psh.product_sku_id) AS image_url
-        FROM   	product_header ph
-				LEFT JOIN product_sku_header psh
-				ON (ph.product_id = psh.product_id)		
-        WHERE   1 = 1 ", v_string_product_code, v_string_product_name, v_string_product_description, v_string_status_code);
+				psh.default_thumbnail_image_url AS thumbnail_image_url, psh.default_zoom_image_url AS zoom_image_url 
+        FROM   	product_header ph,
+				product_sku_header psh
+        WHERE   psh.product_id = ph.product_id
+		AND		psh.default_sku = 1 ", v_string_product_code, v_string_product_name, v_string_product_description, v_string_status_code);
           
         PREPARE stmnt3 FROM  @v_sql_statement;
         EXECUTE stmnt3;
