@@ -98,5 +98,21 @@
 		<managed-bean-class>com.web.bb.systemowner.modules.categorymaster.SearchCategoryBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>skuDefinitionBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.skumanagement.SkuDefinitionBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>skuDefinitionSearchBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.skumanagement.SkuDefinitionSearchBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>skuDefinitionAddEditBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.skumanagement.SkuDefinitionAddEditBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

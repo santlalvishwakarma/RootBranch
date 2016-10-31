@@ -103,5 +103,11 @@
 		<pattern value="/admin/category" />
 		<view-id value="/pages/systemowner/modules/categorymanagement/category.jsf" />
 	</url-mapping>
+	
+	<url-mapping id="skuManagement">
+		<pattern value="/admin/skumanagement/skudefinition/" />
+		<view-id value="/pages/systemowner/modules/skumanagement/skuDefinition.jsf" />
+		<action onPostback="false">#{skuDefinitionSearchBB.retrieveData}</action>
+	</url-mapping>
 
 </pretty-config>
