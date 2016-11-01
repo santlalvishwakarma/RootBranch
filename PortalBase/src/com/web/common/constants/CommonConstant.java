@@ -1,6 +1,5 @@
 package com.web.common.constants;
 
-
 /*
  * Created CommonConstant as interface.
  * In this, nest all related constants into an sub-interface
@@ -144,6 +143,8 @@ public interface CommonConstant {
 		public static final String GENDER_TYPE = "GENDER_TYPE";
 		public static final String PRODUCT_PROPERTIES_CONDITIONS = "PRODUCT_PROPERTIES_CONDITIONS";
 		public static final String PRODUCT_STATUS = "PRODUCT_STATUS";
+
+		public static final String ACTIVE_INACTIVE_STATUS = "ACTIVE_INACTIVE_STATUS";
 	}
 
 	public interface ParamDatatype {

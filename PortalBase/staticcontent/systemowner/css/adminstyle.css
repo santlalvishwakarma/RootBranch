@@ -10,3 +10,23 @@ body {
 	margin-right: auto;
 	text-align: center;
 }
+
+.ui-panel .ui-panel-title {
+	color: #000000 !important;
+}
+
+.mandRed {
+	color: red;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.mandGreen {
+	color: green;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.ui-datatable-tablewrapper {
+   overflow: auto
+}

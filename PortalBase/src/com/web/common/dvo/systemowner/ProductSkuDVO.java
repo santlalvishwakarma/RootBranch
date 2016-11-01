@@ -109,6 +109,7 @@ public class ProductSkuDVO extends BaseDVO {
 	private ProductSkuImageMappingDVO defaultProductSkuImageMappingDVO;
 
 	private Boolean defaultSku;
+	private String defaultSkuDescription;
 
 	public void setPercentDiscount(Float percentDiscount) {
 		this.percentDiscount = percentDiscount;
@@ -1151,6 +1152,14 @@ public class ProductSkuDVO extends BaseDVO {
 
 	public void setDefaultSku(Boolean defaultSku) {
 		this.defaultSku = defaultSku;
+	}
+
+	public String getDefaultSkuDescription() {
+		return defaultSkuDescription;
+	}
+
+	public void setDefaultSkuDescription(String defaultSkuDescription) {
+		this.defaultSkuDescription = defaultSkuDescription;
 	}
 
 }

@@ -12,7 +12,7 @@ public interface ProductDefinitionSqlTemplate extends SqlTemplate {
 
 	static final String GET_PRODUCTS_DETAILS = "CALL sp_product_get_product_sku_details(?,?);";
 
-	static final String GET_SUGGESTED_PRODUCTS_LIST = "SELECT ph.product_id, ph.product_code,ph.product_name, ph.product_description, ph.product_version,  ph.uom_code"
+	static final String GET_SUGGESTED_PRODUCTS_LIST = "SELECT ph.product_id, ph.product_code,ph.product_name, ph.product_description "
 			+ " FROM product_header ph ";
 
 	static final String GET_SUGGESTED_SKU_LIST = "SELECT psh.product_sku_id, psh.product_id, psh.sku_code, psh.sku_name, psh.sku_description, psh.sku_version, psh.status_code, psh.is_active"
@@ -65,8 +65,6 @@ public interface ProductDefinitionSqlTemplate extends SqlTemplate {
 	static final String GET_PRODUCTS_SKU_DETAILS_REPORT = " CALL sp_product_report_product_details(); ";
 
 	static final String GET_IMAGE_MAPPING_LIST = "CALL sp_product_get_product_sku_image_mapping(?,?);";
-
-	static final String SAVE_IMAGE_MAPPING_LIST = "CALL sp_product_save_product_sku_image_mapping(?,?,?,?,?,?, @p_error_code, @p_error_message);";
 
 	static final String GET_SUGGESTED_VENDOR_STYLE_NUMBER = "SELECT DISTINCT psvm.vendor_style_number FROM product_sku_vendor_mapping psvm"
 			+ " WHERE psvm.is_active = 1 AND psvm.vendor_code = ? AND psvm.vendor_style_number LIKE ?;";

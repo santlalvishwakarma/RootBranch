@@ -3,9 +3,105 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<h:form id="skuSearchListForm">
 		<h:panelGroup id="skuSearchPanel">
-		search list
+			<table style="width: 100%">
+				<tr>
+					<td><p:inputText id="skuCode" value="#{skuDefinitionSearchBB.skuOpr.productSkuRecord.code}" /> <p:watermark
+							for="skuCode" value="Sku Code" /></td>
+					<td><p:inputText id="skuName" value="#{skuDefinitionSearchBB.skuOpr.productSkuRecord.name}" /> <p:watermark
+							for="skuName" value="Sku Name" /></td>
+					<td><p:inputText id="skuDescription" value="#{skuDefinitionSearchBB.skuOpr.productSkuRecord.description}" />
+						<p:watermark for="skuDescription" value="Sku Description" /></td>
+				</tr>
+				<tr>
+					<td><p:inputText id="productCode" value="#{skuDefinitionSearchBB.skuOpr.productSkuRecord.productRecord.code}" />
+						<p:watermark for="productCode" value="Product Code" /></td>
+					<td>Status Code</td>
+					<td><p:selectOneMenu id="statusList"
+							value="#{skuDefinitionSearchBB.skuOpr.productSkuRecord.statusRecord.code}">
+							<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+							<f:selectItems value="#{skuDefinitionSearchBB.allOptions.allOptionsValues['statusList']}" var="statusRecord"
+								itemLabel="#{statusRecord.name}" itemValue="#{statusRecord.code}" />
+						</p:selectOneMenu></td>
+				</tr>
+			</table>
+			<div align="center">
+				<p:commandButton id="btnSearch" actionListener="#{skuDefinitionSearchBB.executeSearch}" value="Search"
+					update="skuListPanel" />
+				<p:tooltip for="btnSearch" value="Click to Search" />
+				<p:hotkey bind="ctrl+shift+s" update="skuListPanel" actionListener="#{skuDefinitionSearchBB.executeSearch}" />
+				&#160;&#160;
+				<p:commandButton id="btnCancel" action="#{skuDefinitionSearchBB.clearPage}" value="Clear Search" process="@this" />
+				<p:tooltip for="btnCancel" value="Click to Cancel" />
+				&#160;&#160;
+				<p:commandButton id="btnAddNew" process="@this" value="Add New"
+					actionListener="#{skuDefinitionSearchBB.createNewSKU}" update=":skuTabView" />
+				<p:tooltip for="btnAddNew" value="Click to Add New" />
+			</div>
 		</h:panelGroup>
 		<h:panelGroup id="skuListPanel">
+			<p:panel rendered="#{!(empty skuDefinitionSearchBB.skuOpr.productSkuList)}">
+				<h:commandLink id="excelLink">
+					<p:graphicImage alt="Export to Xls" value="/staticcontent/systemowner/images/excel.png" styleClass="imageClass" />
+					<p:dataExporter type="xls" target="skuListTable" fileName="ProductDefinition" />
+				</h:commandLink>
+				<p:tooltip for="excelLink" value="Click to export data in the list to MS-Excel" />
+				<h:commandLink id="pdfLink">
+					<p:graphicImage alt="Export to PDF" value="/staticcontent/systemowner/images/pdf.png" styleClass="imageClass" />
+					<p:dataExporter type="pdf" target="skuListTable" fileName="ProductDefinition" />
+				</h:commandLink>
+				<p:tooltip for="pdfLink" value="Click to export data in the list to PDF" />
+				<h:commandLink id="xmlLink">
+					<p:graphicImage alt="Export to XML" value="/staticcontent/systemowner/images/xml.png" styleClass="imageClass" />
+					<p:dataExporter type="xml" target="skuListTable" fileName="ProductDefinition" />
+				</h:commandLink>
+				<p:tooltip for="xmlLink" value="Click to export data in the list to XML" />
+			</p:panel>
+			<p:dataTable id="skuListTable" rows="#{skuDefinitionSearchBB.paginationNumber}" var="skuRecord"
+				rowsPerPageTemplate="5,10,15" style="width: 100%;"
+				rendered="#{!(empty skuDefinitionSearchBB.skuOpr.productSkuList)}"
+				value="#{skuDefinitionSearchBB.skuOpr.productSkuList}" paginator="true"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page">
+				<f:facet name="header">Sku</f:facet>
+				<p:column headerText="Image" style="text-align:center;" exportable="false">
+					<p:commandLink styleClass="linkClass" action="#{skuDefinitionSearchBB.executeEnlargeImage}"
+						update=":enlargeImageDialogPanelGroup" oncomplete="enlargeImageDialog.show()">
+						<h:graphicImage id="image" value="#{sessionScope['imageURL']}#{skuRecord.defaultImageRecord.thumbnailImageURL}"
+							style="width: 25px; height: 25px;" title="Thumbnail" />
+						<f:setPropertyActionListener target="#{skuDefinitionSearchBB.selectedSkuRecord}" value="#{skuRecord}" />
+					</p:commandLink>
+				</p:column>
+				<p:column sortBy="#{skuRecord.code}" filterBy="#{skuRecord.code}" filterMatchMode="contains">
+					<f:facet name="header">Sku Code</f:facet>
+					<p:commandLink styleClass="linkClass" action="#{skuDefinitionSearchBB.editDetails}" update=":skuTabView"
+						value="#{skuRecord.code}">
+						<f:setPropertyActionListener target="#{skuDefinitionSearchBB.selectedSkuRecord}" value="#{skuRecord}" />
+					</p:commandLink>
+				</p:column>
+				<p:column sortBy="#{skuRecord.name}" filterBy="#{skuRecord.name}" filterMatchMode="contains">
+					<f:facet name="header">Sku Name</f:facet>
+					<h:outputText value="#{skuRecord.name}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{skuRecord.productRecord.code}" filterBy="#{skuRecord.productRecord.code}"
+					filterMatchMode="contains">
+					<f:facet name="header">Product Code</f:facet>
+					<h:outputText value="#{skuRecord.productRecord.code}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{skuRecord.activeDescription}" filterBy="#{skuRecord.activeDescription}"
+					filterMatchMode="contains">
+					<f:facet name="header">Active</f:facet>
+					<h:outputText value="#{skuRecord.activeDescription}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{skuRecord.defaultSkuDescription}" filterBy="#{skuRecord.defaultSkuDescription}"
+					filterMatchMode="contains">
+					<f:facet name="header">Is Default Sku</f:facet>
+					<h:outputText value="#{skuRecord.defaultSkuDescription}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{skuRecord.finalBasePrice}" filterBy="#{skuRecord.finalBasePrice}" filterMatchMode="contains">
+					<f:facet name="header">Price</f:facet>
+					<h:outputText value="#{skuRecord.finalBasePrice}" styleClass="labelClass" />
+				</p:column>
+				<f:facet name="footer">Total skus : #{fn:length(skuDefinitionSearchBB.skuOpr.productSkuList)}</f:facet>
+			</p:dataTable>
 		</h:panelGroup>
 	</h:form>
 

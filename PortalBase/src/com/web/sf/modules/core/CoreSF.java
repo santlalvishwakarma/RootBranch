@@ -6,12 +6,14 @@ import java.util.List;
 import com.web.bc.systemowner.modules.categorymaster.CategoryMasterBC;
 import com.web.bc.systemowner.modules.hierarchymaster.HierarchyMasterBC;
 import com.web.bc.systemowner.modules.productskuproperty.ProductSkuPropertyBC;
+import com.web.bf.systemowner.modules.productmanagement.ProductDefinitionBF;
 import com.web.bf.systemowner.modules.websitemaster.WebsiteMasterBF;
 import com.web.bf.systemowner.rolemanagement.RoleManagementBF;
 import com.web.common.dvo.opr.systemowner.RoleManagementOpr;
 import com.web.common.dvo.opr.systemowner.WebsiteOpr;
 import com.web.common.dvo.systemowner.CategoryDVO;
 import com.web.common.dvo.systemowner.HierarchyDVO;
+import com.web.common.dvo.systemowner.ProductDVO;
 import com.web.common.dvo.systemowner.PropertyDVO;
 import com.web.common.parents.BusinessFacade;
 import com.web.foundation.exception.BusinessException;
@@ -41,5 +43,10 @@ public class CoreSF extends BusinessFacade {
 	public ArrayList<Object> getSuggestedHierarchies(HierarchyDVO productHierarchyDVO) throws FrameworkException,
 			BusinessException {
 		return new HierarchyMasterBC().getSuggestedHierarchies(productHierarchyDVO);
+	}
+
+	public ArrayList<Object> getSuggestedProductsList(ProductDVO productDVO) throws FrameworkException,
+			BusinessException {
+		return new ProductDefinitionBF().getSuggestedProductsList(productDVO);
 	}
 }

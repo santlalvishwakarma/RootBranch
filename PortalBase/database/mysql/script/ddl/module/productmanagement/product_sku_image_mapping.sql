@@ -3,8 +3,9 @@ CREATE TABLE product_sku_image_mapping(
 	product_sku_id INT(10) UNSIGNED NOT NULL,
 	image_type INT(10) DEFAULT NULL, /* Values: Default, Alternate (parameter_id) */
     thumbnail_image_url VARCHAR(4000),
+    image_url VARCHAR(4000),
     zoom_image_url VARCHAR(4000),
-    sequence_no INT(10) DEFAULT NULL,
+    sequence_number INT(10) DEFAULT NULL,
 	is_active TINYINT(1) NOT NULL DEFAULT 0,
 	created_by VARCHAR(50) NOT NULL,
 	created_date DATETIME NOT NULL,

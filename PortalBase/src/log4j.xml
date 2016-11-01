@@ -11,7 +11,7 @@
 		</layout>
 	</appender>
 	<appender name="dao_log" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="${catalina.home}/logs/svastrino-dao.log" />
+		<param name="file" value="${catalina.home}/logs/portal-dao.log" />
 		<param name="datePattern" value="'.'yyyy-MM" />
 		<param name="append" value="false" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -19,7 +19,7 @@
 		</layout>
 	</appender>
 	<appender name="log" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="${catalina.home}/logs/svastrino-general.log" />
+		<param name="file" value="${catalina.home}/logs/portal-general.log" />
 		<param name="datePattern" value="'.'yyyy-MM" />
 		<param name="append" value="false" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -27,7 +27,7 @@
 		</layout>
 	</appender>
 	<appender name="faces_log" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="${catalina.home}/logs/svastrino-faces.log" />
+		<param name="file" value="${catalina.home}/logs/portal-faces.log" />
 		<param name="datePattern" value="'.'yyyy-MM" />
 		<param name="append" value="false" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -35,7 +35,7 @@
 		</layout>
 	</appender>
 	<appender name="primefaces_log" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="${catalina.home}/logs/svastrino-primefaces.log" />
+		<param name="file" value="${catalina.home}/logs/portal-primefaces.log" />
 		<param name="datePattern" value="'.'yyyy-MM" />
 		<param name="append" value="false" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -43,7 +43,7 @@
 		</layout>
 	</appender>
 	<appender name="prettyfaces_log" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="${catalina.home}/logs/svastrino-prettyfaces.log" />
+		<param name="file" value="${catalina.home}/logs/portal-prettyfaces.log" />
 		<param name="datePattern" value="'.'yyyy-MM" />
 		<param name="append" value="false" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -51,7 +51,7 @@
 		</layout>
 	</appender>
 	<appender name="mail_log" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="${catalina.home}/logs/svastrino-mail.log" />
+		<param name="file" value="${catalina.home}/logs/portal-mail.log" />
 		<param name="datePattern" value="'.'yyyy-MM" />
 		<param name="append" value="false" />
 		<layout class="org.apache.log4j.PatternLayout">

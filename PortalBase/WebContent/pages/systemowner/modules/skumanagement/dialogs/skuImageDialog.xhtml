@@ -1,0 +1,70 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<p:dialog id="skuImageDialogId" header="File Upload" widgetVar="skuImageDialog" showEffect="explode"
+		hideEffect="explode" modal="true" height="#{skuDefinitionAddEditBB.modalHeight}" dynamic="true" resizable="false">
+		<p:ajax event="close" listener="#{skuDefinitionAddEditBB.closeModalWindow}" />
+		<h:panelGroup id="skuImageDialogPanelGroup">
+			<p:panel id="skuImageDialogPanel">
+				<table style="text-align: left;">
+					<tr>
+						<td><label class="labelClass boldClass">Image (Height X Width) = 1132 X 1280 </label></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">If your image is not reflected in the panel, please delete
+								existing images and re-upload</label></td>
+					</tr>
+				</table>
+				<p:panel id="skuImageDialogPanel1" header="Default Image">
+					<h:form id="skuImageDialogForm">
+						<p:fileUpload id="defaultImageFileupload" update=":skuImageTableDialogForm:skuImageListPanel"
+							process="skuImageDialogPanel1, @this"
+							fileUploadListener="#{skuDefinitionAddEditBB.handleFileUploadForDefaultImage}" sizeLimit="2097152"
+							multiple="false" label="Select" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" description="Images" />
+					</h:form>
+				</p:panel>
+				<p:panel id="skuImageDialogPanel2" header="Alternate Image">
+					<h:form id="skuImageDialogForm2">
+						<p:fileUpload id="alternateImageFileupload" update=":skuImageTableDialogForm:skuImageListPanel"
+							fileUploadListener="#{skuDefinitionAddEditBB.handleFileUploadForAlternateImage}" sizeLimit="2097152"
+							multiple="true" label="Select" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" description="Images" />
+					</h:form>
+				</p:panel>
+				<p:separator />
+				<h:form id="skuImageTableDialogForm">
+					<p:outputPanel id="skuImageListPanel">
+						<p:dataTable id="skuImageListTable" rows="#{skuDefinitionAddEditBB.paginationNumber}" var="productImageRecord"
+							rowsPerPageTemplate="5,10,15" style="width: 100%;"
+							rendered="#{!(empty skuDefinitionAddEditBB.skuOpr.productSkuRecord.productSkuImageMappingList)}"
+							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.productSkuImageMappingList}" paginator="true"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page">
+							<p:column style="text-align:center;">
+								<h:outputText value="D" rendered="#{productImageRecord.sequenceNumber eq 0}" />
+								<h:outputText value="A" rendered="#{!(productImageRecord.sequenceNumber eq 0)}" />
+							</p:column>
+							<p:column headerText="Image" style="text-align:center;">
+								<h:graphicImage value="#{sessionScope['imageURL']}#{productImageRecord.imageRecord.thumbnailImageURL}"
+									style="width: 25px; height: 25px;" title="Thumbnail" />
+							</p:column>
+							<p:column headerText="Delete" style="text-align:center;">
+								<p:selectBooleanCheckbox value="#{productImageRecord.operationalAttributes.recordDeleted}" />
+							</p:column>
+						</p:dataTable>
+					</p:outputPanel>
+					<table style="margin: 0 auto;">
+						<tr>
+							<td><p:commandButton id="btnSaveImageMapping"
+									actionListener="#{skuDefinitionAddEditBB.executeSaveImageMapping}" value="Save"
+									process="skuImageListPanel, @this" update="skuImageListPanel, :skuTabView:skuAddEditForm:mapImageLink" /> <p:tooltip
+									for="btnSaveImageMapping" value="Click to Save" /></td>
+							<td><p:commandButton id="btnCloseImageMapping" value="Close" process="@this"
+									actionListener="#{skuDefinitionAddEditBB.closeModalWindow}" oncomplete="PF('skuImageDialog').hide()" /> <p:tooltip
+									for="btnCloseImageMapping" value="Click to Close" /></td>
+						</tr>
+					</table>
+				</h:form>
+				<p:messages autoUpdate="true" showDetail="false" showSummary="true" />
+			</p:panel>
+		</h:panelGroup>
+	</p:dialog>
+</ui:composition>

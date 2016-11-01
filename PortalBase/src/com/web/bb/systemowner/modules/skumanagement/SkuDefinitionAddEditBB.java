@@ -1,6 +1,5 @@
 package com.web.bb.systemowner.modules.skumanagement;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,16 +14,18 @@ import javax.faces.event.AjaxBehaviorEvent;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 
-import com.web.bf.systemowner.modules.productmanagement.ProductDefinitionBF;
+import com.web.bf.systemowner.modules.skumanagement.SkuDefinitionBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.common.BaseDVO;
 import com.web.common.dvo.common.Parameter;
 import com.web.common.dvo.opr.common.ParameterOpr;
 import com.web.common.dvo.opr.systemowner.ProductOpr;
-import com.web.common.dvo.systemowner.HierarchyDVO;
+import com.web.common.dvo.opr.systemowner.SkuOpr;
 import com.web.common.dvo.systemowner.ImageDVO;
 import com.web.common.dvo.systemowner.ProductDVO;
 import com.web.common.dvo.systemowner.ProductSkuDVO;
+import com.web.common.dvo.systemowner.ProductSkuImageMappingDVO;
+import com.web.common.dvo.util.File;
 import com.web.common.dvo.util.OptionsDVO;
 import com.web.common.jsf.converters.BaseDVOConverter;
 import com.web.common.parents.BackingBean;
@@ -33,6 +34,7 @@ import com.web.foundation.exception.FrameworkException;
 import com.web.foundation.logger.ITSDLogger;
 import com.web.foundation.logger.TSDLogger;
 import com.web.foundation.validation.FoundationValidator;
+import com.web.sf.modules.core.CoreSF;
 import com.web.util.BaseDVOComparator;
 import com.web.util.MessageFormatter;
 import com.web.util.PropertiesReader;
@@ -46,7 +48,8 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 
 	private static final long serialVersionUID = 2279688254567743485L;
 	private String propertiesLocation = "com/web/bb/systemowner/modules/skumanagement/skudefinition";
-	private ProductOpr productOpr;
+	private SkuOpr skuOpr;
+
 	private transient BaseDVOConverter baseDVOConverter;
 	private OptionsDVO allOptions;
 	private boolean renderForProduct;
@@ -68,11 +71,11 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 	private boolean validateForApprove;
 	private boolean renderGetBackToAutoSku = false;
 
-	public ProductOpr getProductOpr() {
+	public SkuOpr getSkuOpr() {
 		if (FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 				.containsKey(CommonConstant.ACTIVE_TAB_OPR)) {
 
-			productOpr = (ProductOpr) FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+			skuOpr = (SkuOpr) FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 					.get(CommonConstant.ACTIVE_TAB_OPR);
 			FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 					.remove(CommonConstant.ACTIVE_TAB_OPR);
@@ -81,24 +84,24 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 			retrieveData();
 		} else if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.containsKey(CommonConstant.ACTIVE_TAB_OPR)) {
-			if (productOpr == null) {
-				productOpr = (ProductOpr) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+			if (skuOpr == null) {
+				skuOpr = (SkuOpr) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 						.get(CommonConstant.ACTIVE_TAB_OPR);
-				renderGetBackToAutoSku = true;
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 						.remove(CommonConstant.ACTIVE_TAB_OPR);
 			}
 			// retrive initial data
 			retrieveData();
 		}
-		if (productOpr == null) {
-			productOpr = new ProductOpr();
+
+		if (skuOpr == null) {
+			skuOpr = new SkuOpr();
 		}
-		return productOpr;
+		return skuOpr;
 	}
 
-	public void setProductOpr(ProductOpr productOpr) {
-		this.productOpr = productOpr;
+	public void setSkuOpr(SkuOpr skuOpr) {
+		this.skuOpr = skuOpr;
 	}
 
 	public BaseDVOConverter getBaseDVOConverter() {
@@ -280,19 +283,35 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 
 			try {
 				String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
-				productOpr.getProductRecord().setUserLogin(userLogin);
+				skuOpr.getProductSkuRecord().setUserLogin(userLogin);
 
-				productOpr = new ProductDefinitionBF().executeSaveProductSKUDetails(productOpr);
+				populatePriceForSku(skuOpr);
+
+				skuOpr = new SkuDefinitionBF().executeSaveSkuDetails(skuOpr);
 
 				PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 				setSuccessMsg(propertiesReader.getValueOfKey("product_save_success"));
-				populateEnableDisableButtons();
 
 			} catch (FrameworkException e) {
 				handleException(e, propertiesLocation);
 			} catch (BusinessException e) {
 				handleException(e, propertiesLocation);
 			}
+		}
+	}
+
+	private void populatePriceForSku(SkuOpr skuOpr) {
+		Float discountAmount = skuOpr.getProductSkuRecord().getDiscountAmount();
+		Float discountPercent = skuOpr.getProductSkuRecord().getDiscountPercent();
+		Float basePrice = skuOpr.getProductSkuRecord().getBasePrice();
+
+		if (discountAmount != null && discountAmount > 0) {
+			skuOpr.getProductSkuRecord().setFinalBasePrice(basePrice - discountAmount);
+		} else if (discountPercent != null && discountPercent > 0) {
+			Float percentAmount = (basePrice * discountPercent) / 100;
+			skuOpr.getProductSkuRecord().setFinalBasePrice(basePrice - percentAmount);
+		} else {
+			skuOpr.getProductSkuRecord().setFinalBasePrice(basePrice);
 		}
 	}
 
@@ -305,20 +324,38 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 		setErrorList(new ArrayList<String>());
 
 		// product validations
-		ProductDVO productRecord = productOpr.getProductRecord();
-		String productCode = productRecord.getCode();
-		String productName = productRecord.getName();
-		// String defaultUomCode = productRecord.getUomRecord().getCode();
+		ProductSkuDVO productSkuRecord = skuOpr.getProductSkuRecord();
+		String skuCode = productSkuRecord.getCode();
+		String skuName = productSkuRecord.getName();
+		Float basePrice = productSkuRecord.getBasePrice();
+		Float discountAmount = productSkuRecord.getDiscountAmount();
+		Float discountPercent = productSkuRecord.getDiscountPercent();
+		Long productId = productSkuRecord.getProductRecord().getId();
 
-		if (!validator.validateNull(productCode)) {
+		if (!validator.validateNull(skuCode)) {
 			addToErrorList(propertiesReader.getValueOfKey("product_code_null"));
 		}
-		if (productCode != null && !validator.validateCharsWithoutSpecialChars(productCode)) {
+		if (skuCode != null && !validator.validateCharsWithoutSpecialChars(skuCode)) {
 			addToErrorList(propertiesReader.getValueOfKey("product_code_invalid"));
 		}
 
-		if (!validator.validateNull(productName)) {
+		if (!validator.validateNull(skuName)) {
 			addToErrorList(propertiesReader.getValueOfKey("product_name_null"));
+		}
+
+		if (basePrice == null || basePrice <= 0) {
+			addToErrorList(propertiesReader.getValueOfKey("base_price_null"));
+		}
+
+		if ((discountAmount != null && discountAmount > 0) || (discountPercent != null && discountPercent > 0)) {
+
+			if (discountAmount != null && discountPercent != null) {
+				addToErrorList(propertiesReader.getValueOfKey("discount_amount_percent_both_entered"));
+			}
+		}
+
+		if (productId == null) {
+			addToErrorList(propertiesReader.getValueOfKey("product_id_null"));
 		}
 
 		if (getErrorList().size() > 0) {
@@ -329,28 +366,6 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 		return validateFlag;
 	}
 
-	public void executeSaveSKU(ActionEvent event) {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Add Edit BB :: executeSaveSKU starts ");
-
-		try {
-			String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
-			productOpr.getProductRecord().setUserLogin(userLogin);
-
-			productOpr.getApplicationFlags().getApplicationFlagMap().put("SAVE_FLAG", "SAVE_SKU");
-			productOpr = new ProductDefinitionBD().executeSaveProductSKUDetails(productOpr);
-
-			PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
-			setSuccessMsg(propertiesReader.getValueOfKey("sku_save_success"));
-			populateEnableDisableButtons();
-
-		} catch (FrameworkException e) {
-			handleException(e, propertiesLocation);
-		} catch (BusinessException e) {
-			handleException(e, propertiesLocation);
-		}
-	}
-
 	@Override
 	public void editDetails() {
 	}
@@ -359,43 +374,14 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 	public void retrieveData() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("In Product Definition Add Edit BB :: retrieveData starts ");
-		// try {
-		// UomDVO uomDVO = new UomDVO();
-		// uomListForAutoSuggest = new
-		// ProductDefinitionBD().getSuggestedUOMList(uomDVO);
-		// FacesContext.getCurrentInstance().getViewRoot().getViewMap()
-		// .put("productUOMAutoComplete", uomListForAutoSuggest);
-		//
-		// } catch (FrameworkException e) {
-		// handleException(e, propertiesLocation);
-		//
-		// } catch (BusinessException e) {
-		// handleException(e, propertiesLocation);
-		// }
 
 		// get all options values
 		allOptions = new OptionsDVO();
 
-		// if (allOptions.getAllOptionsValues().isEmpty()) {
-		try {
-
-			allOptions.setAllOptionsValues(new ProductDefinitionBF().getAllOptionsValuesForProduct());
-			FacesContext.getCurrentInstance().getViewRoot().getViewMap()
-					.put("itemCategoryDropDown", allOptions.getAllOptionsValues().get("itemCategoryList"));
-
-		} catch (FrameworkException e) {
-			handleException(e, propertiesLocation);
-
-		} catch (BusinessException e) {
-			handleException(e, propertiesLocation);
-		}
-		// }
-
 		// get product or sku details
-		if (productOpr.getProductRecord().getId() != null
-				|| productOpr.getProductRecord().getProductSkuRecord().getId() != null) {
+		if (skuOpr.getProductSkuRecord().getId() != null) {
 			try {
-				productOpr = new ProductDefinitionBF().getProductDetails(productOpr);
+				skuOpr = new SkuDefinitionBF().getSkuDetails(skuOpr);
 
 			} catch (FrameworkException e) {
 				handleException(e, propertiesLocation);
@@ -405,75 +391,47 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 			}
 		}
 
-		String editDetails = (String) FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.get("EDIT_DETAILS");
-		if (editDetails == null) {
-			editDetails = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-					.get("EDIT_DETAILS");
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("EDIT_DETAILS");
-		}
-		renderForSKU = false;
-		renderForProduct = false;
-
-		if (editDetails != null && editDetails.trim().equals("SKU")) {
-			renderForSKU = true;
-		} else {
-			renderForProduct = true;
-		}
-		populateEnableDisableButtons();
+		List<Object> productList = new ArrayList<Object>();
+		productList.add(skuOpr.getProductSkuRecord().getProductRecord());
+		FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("productCodeAutoComplete", productList);
 
 		myLog.debug("In Product Definition Add Edit BB :: retrieveData ends ");
 	}
 
-	private void populateEnableDisableButtons() {
+	public List<Object> getSuggestedProductsList(String query) {
+		try {
+			ProductDVO productDVO = new ProductDVO();
+			productDVO.setName(query);
+			productDVO.setActive(true);
+			ArrayList<Object> productList = new CoreSF().getSuggestedProductsList(productDVO);
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("productCodeAutoComplete", productList);
+			return productList;
 
-		disableSaveButton = true;
-		disableApproveButton = false;
-		renderPopupLinks = false;
-		disableModifyButton = false;
-		disableFields = false;
-		disableActivateButton = false;
+		} catch (FrameworkException e) {
+			handleException(e, propertiesLocation);
 
-		String productStatusCode = productOpr.getProductRecord().getStatusRecord().getCode();
-		String skuStatusCode = productOpr.getProductRecord().getProductSkuRecord().getStatusRecord().getCode();
+		} catch (BusinessException e) {
+			handleException(e, propertiesLocation);
+		}
+		return null;
+	}
 
-		if (renderForProduct) {
+	public void openImageMappingDialog(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In Product Definition Add Edit BB :: openImageMappingDialog starts ");
 
-			if (productStatusCode == null || CommonConstant.StatusCodes.NEW.equals(productStatusCode)) {
-				disableSaveButton = false;
-				disableModifyButton = true;
+		try {
+			skuOpr.getProductSkuRecord().setProductSkuImageMappingList(null);
+			SkuOpr skuOprRecd = new SkuDefinitionBF().getImageMappingList(skuOpr);
 
-			} else if (CommonConstant.StatusCodes.APPROVED.equals(productStatusCode)) {
-				disableApproveButton = true;
+			skuOpr.getProductSkuRecord().setProductSkuImageMappingList(
+					skuOprRecd.getProductSkuRecord().getProductSkuImageMappingList());
 
-			} else if (CommonConstant.StatusCodes.INACTIVE.equals(productStatusCode)) {
-				disableModifyButton = true;
-				disableApproveButton = true;
-				disableActivateButton = true;
-			}
+		} catch (FrameworkException e) {
+			handleException(e, propertiesLocation);
 
-			if (productOpr.getProductRecord().getId() != null) {
-				renderPopupLinks = true;
-			}
-
-		} else if (renderForSKU) {
-
-			if (skuStatusCode == null || CommonConstant.StatusCodes.NEW.equals(skuStatusCode)) {
-				disableSaveButton = false;
-				disableModifyButton = true;
-
-			} else if (CommonConstant.StatusCodes.APPROVED.equals(skuStatusCode)) {
-				disableApproveButton = true;
-
-			} else if (CommonConstant.StatusCodes.INACTIVE.equals(skuStatusCode)) {
-				disableModifyButton = true;
-				disableApproveButton = true;
-				disableActivateButton = true;
-			}
-
-			if (productOpr.getProductRecord().getProductSkuRecord().getId() != null) {
-				renderPopupLinks = true;
-			}
+		} catch (BusinessException e) {
+			handleException(e, propertiesLocation);
 		}
 
 	}
@@ -492,332 +450,6 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 
 	@Override
 	public void setAllOptions(OptionsDVO allOptions) {
-	}
-
-	public List<Object> getSuggestedUOMList(String query) {
-		List<Object> uomList = new ArrayList<Object>();
-		if (query != null) {
-			query = query.toUpperCase();
-			// for (Object object : uomListForAutoSuggest) {
-			// UomDVO uomDVO = (UomDVO) object;
-			// String name = uomDVO.getName();
-			//
-			// if (name.toUpperCase().startsWith(query)) {
-			// uomList.add(uomDVO);
-			// }
-			// }
-		}
-		return uomList;
-	}
-
-	public void openMapHierarchyDialog(ActionEvent event) {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Add Edit BB :: openMapHierarchyLink starts ");
-
-		try {
-
-			hierarchyListForAutoSuggest = new ProductDefinitionBF().getSuggestedHierarchies(new HierarchyDVO());
-
-			FacesContext.getCurrentInstance().getViewRoot().getViewMap()
-					.put("productHierarchyCodeAutoComplete", hierarchyListForAutoSuggest);
-			FacesContext.getCurrentInstance().getViewRoot().getViewMap()
-					.put("productHierarchyNameAutoComplete", hierarchyListForAutoSuggest);
-			FacesContext.getCurrentInstance().getViewRoot().getViewMap()
-					.put("productHierarchyDescriptionAutoComplete", hierarchyListForAutoSuggest);
-
-		} catch (FrameworkException e) {
-			handleException(e, propertiesLocation);
-
-		} catch (BusinessException e) {
-			handleException(e, propertiesLocation);
-		}
-
-		try {
-			copyOfDataMap = new HashMap<Long, BaseDVO>();
-			productOpr.getProductRecord().setProductHierarchyMappingList(null);
-			ProductOpr productOprRecd = new ProductDefinitionBD().getHierarchiesMappingList(productOpr);
-			productOpr.getProductRecord().setProductHierarchyMappingList(
-					productOprRecd.getProductRecord().getProductHierarchyMappingList());
-
-			for (ProductHierarchyMappingDVO productHierarchyRecord : productOpr.getProductRecord()
-					.getProductHierarchyMappingList()) {
-				if (!productHierarchyRecord.getOperationalAttributes().getRecordDeleted()) {
-					copyOfDataMap.put(productHierarchyRecord.getId(),
-							(ProductHierarchyMappingDVO) DeepCopy.copy(productHierarchyRecord));
-				}
-			}
-
-		} catch (FrameworkException e) {
-			handleException(e, propertiesLocation);
-
-		} catch (BusinessException e) {
-			handleException(e, propertiesLocation);
-		}
-		populateDefaultHierarchy();
-
-		if (productOpr.getProductRecord().getProductSkuRecord().getProductSkuHierarchyMappingList().isEmpty())
-			productOpr.getProductRecord().getProductHierarchyMappingList().add(new ProductHierarchyMappingDVO());
-	}
-
-	public List<Object> getSuggestedHierarchiesForCode(String query) {
-		ArrayList<Object> productHierarchyList = new ArrayList<Object>();
-		if (query != null) {
-			query = query.toUpperCase();
-			for (Object object : hierarchyListForAutoSuggest) {
-				HierarchyDVO productHierarchyRecord = (HierarchyDVO) object;
-				String code = productHierarchyRecord.getCode();
-
-				if (code.toUpperCase().startsWith(query)) {
-					productHierarchyList.add(productHierarchyRecord);
-				}
-			}
-		}
-		return productHierarchyList;
-	}
-
-	public List<Object> getSuggestedHierarchiesForName(String query) {
-		ArrayList<Object> productHierarchyList = new ArrayList<Object>();
-		if (query != null) {
-			query = query.toUpperCase();
-			for (Object object : hierarchyListForAutoSuggest) {
-				HierarchyDVO productHierarchyRecord = (HierarchyDVO) object;
-				String name = productHierarchyRecord.getName();
-
-				if (name.toUpperCase().startsWith(query)) {
-					productHierarchyList.add(productHierarchyRecord);
-				}
-			}
-		}
-		return productHierarchyList;
-	}
-
-	public void validateSaveProductHierarchyMapping(ActionEvent event) {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Add Edit BB :: validateSaveProductHierarchyMapping starts ");
-		if (this.productHierarchyRecord == null)
-			this.productHierarchyRecord = new ProductHierarchyMappingDVO();
-		Long hierarchyMappingIdFromDB = this.productHierarchyRecord.getId();
-		Long hierarchyIdFromDB = this.productHierarchyRecord.getProductHierarchyRecord().getId();
-		myLog.debug(" hierarchy id db ---> " + hierarchyIdFromDB);
-		setErrorList(new ArrayList<String>());
-
-		Boolean displayConfirmation = false;
-		if (hierarchyMappingIdFromDB != null && hierarchyIdFromDB != null) {
-			for (ProductHierarchyMappingDVO productHierarchyRecord : productOpr.getProductRecord()
-					.getProductHierarchyMappingList()) {
-
-				if (productHierarchyRecord.getId() != null
-						&& productHierarchyRecord.getId().equals(hierarchyMappingIdFromDB)) {
-
-					Boolean fetchProperties = productHierarchyRecord.getFetchProperties();
-					Long hierarchyId = productHierarchyRecord.getProductHierarchyRecord().getId();
-
-					if (!fetchProperties || productHierarchyRecord.getOperationalAttributes().getRecordDeleted())
-						displayConfirmation = true;
-					else if (hierarchyId != null && !hierarchyId.equals(hierarchyIdFromDB))
-						displayConfirmation = true;
-
-					if (disableFields && displayConfirmation) {
-						PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
-						addToErrorList(propertiesReader.getValueOfKey("hierarchy_cannot_be_modified"));
-						displayConfirmation = false;
-					}
-					break;
-				}
-			}
-		}
-		RequestContext.getCurrentInstance().addCallbackParam("displayConfirmation", displayConfirmation);
-	}
-
-	public void executeSaveHierarchyMapping(ActionEvent event) {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Add Edit BB :: executeSaveHierarchyMapping starts ");
-
-		if (getErrorList().size() > 0) {
-			String errorMsg = getErrorList().get(0);
-			setErrorList(new ArrayList<String>());
-			addToErrorList(errorMsg);
-
-		} else if (validateSaveProductHierarchyMapping()
-				&& !productOpr.getProductRecord().getProductHierarchyMappingList().isEmpty()) {
-			try {
-				String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
-				productOpr.getProductRecord().setUserLogin(userLogin);
-
-				// if the flag is false, then check if data is changed on screen
-				// or no
-				if (productOpr.getProductRecord().getModifyProductSKURecord().getModifyHierarchy() == null
-						|| !productOpr.getProductRecord().getModifyProductSKURecord().getModifyHierarchy()) {
-					if (filterSaveProductHierarchyMapping())
-						productOpr.getProductRecord().getModifyProductSKURecord().setModifyHierarchy(true);
-				}
-
-				ProductOpr productOprRecd = new ProductDefinitionBD().saveHierarchiesMappingList(productOpr);
-				// get product or sku details
-				getProductSkuHeaderDetails();
-
-				productOpr.getProductRecord().setProductHierarchyMappingList(
-						productOprRecd.getProductRecord().getProductHierarchyMappingList());
-				productOpr.getProductRecord()
-						.setAuditAttributes(productOprRecd.getProductRecord().getAuditAttributes());
-				populateDefaultHierarchy();
-
-				PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
-				setSuccessMsg(propertiesReader.getValueOfKey("hierarchy_save_success"));
-
-				if (!productOprRecd.getProductRecord().getProductHierarchyMappingList().isEmpty())
-					productOpr.getIconProductSKURecord().setMapHierarchy(true);
-				else
-					productOpr.getIconProductSKURecord().setMapHierarchy(false);
-
-				productOpr.getIconProductSKURecord().setMapProperties(
-						productOprRecd.getIconProductSKURecord().getMapProperties());
-
-				copyOfDataMap = new HashMap<Long, BaseDVO>();
-				for (ProductHierarchyMappingDVO productHierarchyRecord : productOpr.getProductRecord()
-						.getProductHierarchyMappingList()) {
-					if (!productHierarchyRecord.getOperationalAttributes().getRecordDeleted()) {
-						copyOfDataMap.put(productHierarchyRecord.getId(),
-								(ProductHierarchyMappingDVO) DeepCopy.copy(productHierarchyRecord));
-					}
-				}
-
-			} catch (FrameworkException e) {
-				handleException(e, propertiesLocation);
-
-			} catch (BusinessException e) {
-				handleException(e, propertiesLocation);
-			}
-		}
-	}
-
-	public boolean validateSaveProductHierarchyMapping() {
-		FoundationValidator validator = new FoundationValidator();
-		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
-		boolean validateFlag = true;
-		setErrorList(new ArrayList<String>());
-
-		int size = productOpr.getProductRecord().getProductHierarchyMappingList().size();
-		int defaultSelectedCount = 0;
-
-		if (size > 0) {
-			HashMap<Long, Long> uniqueValuesMap = new HashMap<Long, Long>();
-			for (int i = 0; i < size; i++) {
-				ProductHierarchyMappingDVO productHierarchyRecord = productOpr.getProductRecord()
-						.getProductHierarchyMappingList().get(i);
-
-				if (!productHierarchyRecord.getOperationalAttributes().getRecordDeleted()) {
-
-					Long hierarchyId = productHierarchyRecord.getProductHierarchyRecord().getId();
-					Boolean fetchProperties = productHierarchyRecord.getFetchProperties();
-
-					if (!validator.validateLongObjectNull(hierarchyId)) {
-						addToErrorList(propertiesReader.getValueOfKey("hierarchy_null") + (i + 1));
-					}
-					if (fetchProperties != null && fetchProperties)
-						defaultSelectedCount++;
-
-					// unique property value validations
-					if (hierarchyId != null) {
-						if (uniqueValuesMap.containsKey(hierarchyId)) {
-							addToErrorList(propertiesReader.getValueOfKey("hierarchy_duplicate") + (i + 1));
-
-						} else {
-							uniqueValuesMap.put(hierarchyId, hierarchyId);
-						}
-					}
-				}
-			}
-		}
-		if (defaultSelectedCount != 1) {
-			addToErrorList(propertiesReader.getValueOfKey("select_one_for_properties_mapping"));
-		}
-
-		if (getErrorList().size() > 0) {
-			validateFlag = false;
-		} else {
-			validateFlag = true;
-		}
-		return validateFlag;
-	}
-
-	public boolean filterSaveProductHierarchyMapping() {
-		boolean validateFlag = false;
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-
-		for (ProductHierarchyMappingDVO productHierarchyRecord : productOpr.getProductRecord()
-				.getProductHierarchyMappingList()) {
-			if (!productHierarchyRecord.getOperationalAttributes().getRecordDeleted()) {
-				if (copyOfDataMap.containsKey(productHierarchyRecord.getId())) {
-					ProductHierarchyMappingDVO productHierarchyMappingDVO = (ProductHierarchyMappingDVO) copyOfDataMap
-							.get(productHierarchyRecord.getId());
-
-					Long hierarchyIdFromScreen = productHierarchyRecord.getProductHierarchyRecord().getId();
-					Long hierarchyIdFromDB = productHierarchyMappingDVO.getProductHierarchyRecord().getId();
-					Boolean recordDeletedFromScreen = productHierarchyRecord.getOperationalAttributes()
-							.getRecordDeleted();
-					Boolean recordDeletedFromDB = productHierarchyRecord.getOperationalAttributes().getRecordDeleted();
-
-					myLog.debug(" hierarchy id ---> " + hierarchyIdFromScreen);
-					myLog.debug(" hierarchy id from db ---> " + hierarchyIdFromDB);
-					if (validateForValueChange(hierarchyIdFromScreen, hierarchyIdFromDB)
-							|| validateForValueChange(recordDeletedFromScreen, recordDeletedFromDB)) {
-						validateFlag = true;
-						break;
-					}
-				} else {
-					validateFlag = true;
-					break;
-				}
-			}
-		}
-		return validateFlag;
-	}
-
-	public String openEditHierarchyDialog() {
-
-		if (levelNameMap == null || levelNameMap.isEmpty()) {
-			try {
-
-				List<Object> levelList = new ProductDefinitionBD().getAllLevelsNames();
-				levelNameMap = new HashMap<Integer, ProductCategoryLevelDVO>();
-
-				for (Object object : levelList) {
-					ProductCategoryLevelDVO productCategoryLevelRecord = (ProductCategoryLevelDVO) object;
-					levelNameMap.put(productCategoryLevelRecord.getLevel(), productCategoryLevelRecord);
-				}
-
-			} catch (FrameworkException e) {
-				handleException(e, propertiesLocation);
-
-			} catch (BusinessException e) {
-				handleException(e, propertiesLocation);
-			}
-		}
-
-		Long productHierarchyId = selectedProductHierarchyRecord.getId();
-		try {
-
-			selectedProductHierarchyRecord.setProductHierarchyCategoryMappingList(null);
-			ProductHierarchyOpr productHierarchyOprRet = new ProductDefinitionBD()
-					.getProductHierarchyLevelList(productHierarchyId);
-
-			selectedProductHierarchyRecord.setProductHierarchyCategoryMappingList(productHierarchyOprRet
-					.getProductHierarchyRecord().getProductHierarchyCategoryMappingList());
-
-			for (ProductHierarchyCategoryMappingDVO productHierarchyCategoryMappingDVO : selectedProductHierarchyRecord
-					.getProductHierarchyCategoryMappingList()) {
-				Integer level = productHierarchyCategoryMappingDVO.getProductCategoryLevelRecord().getLevel();
-				productHierarchyCategoryMappingDVO.setProductCategoryLevelRecord(levelNameMap.get(level));
-			}
-
-		} catch (FrameworkException e) {
-			handleException(e, propertiesLocation);
-
-		} catch (BusinessException e) {
-			handleException(e, propertiesLocation);
-		}
-		return null;
 	}
 
 	public void openMapPropertyDialog(ActionEvent event) {
@@ -2228,23 +1860,6 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 		return validateFlag;
 	}
 
-	public List<Object> getSuggestedProductsList(String query) {
-		try {
-			ProductDVO productDVO = new ProductDVO();
-			productDVO.setName(query);
-			ArrayList<Object> productList = new ProductDefinitionBD().getSuggestedProductsList(productDVO);
-			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("productCodeAutoComplete", productList);
-			return productList;
-
-		} catch (FrameworkException e) {
-			handleException(e, propertiesLocation);
-
-		} catch (BusinessException e) {
-			handleException(e, propertiesLocation);
-		}
-		return null;
-	}
-
 	public void executeCopyProductSKU(ActionEvent event) {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("In Product Definition Add Edit BB :: executeCopyProductSKU starts ");
@@ -2516,27 +2131,9 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 		}
 	}
 
-	private void populateDefaultImage() {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		// load the default image
-		if (!productOpr.getProductRecord().getProductImageMappingList().isEmpty()) {
-			for (ProductImageMappingDVO productImageMappingDVO : productOpr.getProductRecord()
-					.getProductImageMappingList()) {
-				myLog.debug("In method :: seq no ---> " + productImageMappingDVO.getSequenceNumber());
-				if (productImageMappingDVO.getSequenceNumber() != null
-						&& productImageMappingDVO.getSequenceNumber().equals(0L)) {
-					myLog.debug(" default selected " + productImageMappingDVO.getThumbnailImageURL());
-					productOpr.getProductRecord().setDefaultImageRecord(productImageMappingDVO);
-				}
-				copyOfDataMap.put(productImageMappingDVO.getId(),
-						(ProductImageMappingDVO) DeepCopy.copy(productImageMappingDVO));
-			}
-		}
-	}
-
 	public void handleFileUploadForDefaultImage(FileUploadEvent event) {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-
+		myLog.debug("In SkuDefinitionAddEditBB :: handleFileUploadForDefaultImage starts ");
 		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 		boolean uploadFlag = false;
 		String zoomFileName, regularFileName, thumbFileName, reportFileName, code;
@@ -2544,27 +2141,20 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 
 		String fileName = event.getFile().getFileName();
 		myLog.debug("fileName " + fileName);
-		String contextPath = "product/";
+		String contextPath = "sku/";
 
-		ProductImageMappingDVO defaultImageRecord = productOpr.getProductRecord().getDefaultImageRecord();
+		ProductSkuImageMappingDVO imageMappingRecord = new ProductSkuImageMappingDVO();
 
 		File uploadFile = extractUploadedFileData(event);
 
-		if (renderForProduct) {
-			code = productOpr.getProductRecord().getCode();
-			version = productOpr.getProductRecord().getProductVersion();
-		} else {
-			code = productOpr.getProductRecord().getProductSkuRecord().getCode();
-			version = productOpr.getProductRecord().getProductSkuRecord().getSkuVersion();
-		}
-		code = code + "_" + version;
+		code = skuOpr.getProductSkuRecord().getCode();
 		code = code.replace(" ", "_");
 
 		// call upload for zoom image
 		zoomFileName = code + "_0_z." + uploadFile.getExtension();
 		String zoomFileUrl = contextPath + zoomFileName;
 		myLog.debug("zoomFileUrl " + zoomFileUrl);
-		defaultImageRecord.setZoomImageURL(zoomFileUrl);
+		imageMappingRecord.getImageRecord().setZoomImageURL(zoomFileUrl);
 		uploadFile.setName(zoomFileName);
 		myLog.debug("zoom fileName " + uploadFile.getName());
 		uploadFlag = uploadImage(uploadFile, CommonConstant.ImageAttributes.ZOOM_IMAGE_WIDTH,
@@ -2577,7 +2167,7 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 			regularFileName = code + "_0_r." + uploadFile.getExtension();
 			String regularFileUrl = contextPath + regularFileName;
 			myLog.debug("regularFileUrl " + regularFileUrl);
-			defaultImageRecord.setImageURL(regularFileUrl);
+			imageMappingRecord.getImageRecord().setImageURL(regularFileUrl);
 			uploadFile.setName(regularFileName);
 			uploadFlag = uploadImage(uploadFile, CommonConstant.ImageAttributes.IMAGE_WIDTH,
 					CommonConstant.ImageAttributes.IMAGE_HEIGHT, contextPath);
@@ -2589,7 +2179,7 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 				thumbFileName = code + "_0_t." + uploadFile.getExtension();
 				String thumbFileUrl = contextPath + thumbFileName;
 				myLog.debug("thumbFileUrl " + thumbFileUrl);
-				defaultImageRecord.setThumbnailImageURL(thumbFileUrl);
+				imageMappingRecord.getImageRecord().setThumbnailImageURL(thumbFileUrl);
 				uploadFile.setName(thumbFileName);
 				uploadFlag = uploadImage(uploadFile, CommonConstant.ImageAttributes.THUMB_IMAGE_WIDTH,
 						CommonConstant.ImageAttributes.THUMB_IMAGE_HEIGHT, contextPath);
@@ -2597,58 +2187,39 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 				// end call upload for thumbnail image
 
 				if (uploadFlag) {
-					// call upload for report image
-					reportFileName = code + "_0_rpt." + uploadFile.getExtension();
-					String reportFileUrl = contextPath + reportFileName;
-					myLog.debug("reportFileUrl " + reportFileUrl);
-					defaultImageRecord.setReportImageURL(reportFileUrl);
-					uploadFile.setName(reportFileName);
-					uploadFlag = uploadImage(uploadFile, CommonConstant.ImageAttributes.REPORT_IMAGE_WIDTH,
-							CommonConstant.ImageAttributes.REPORT_IMAGE_HEIGHT, contextPath);
-					myLog.debug("uploadFlag report :: " + uploadFlag);
-					// end call upload for report image
+					myLog.debug("All files uploaded successfully :::::::::: ");
+					setSuccessMsg(propertiesReader.getValueOfKey("upload_successful"));
 
-					if (uploadFlag) {
-						myLog.debug("All files uploaded successfully :::::::::: ");
-						setSuccessMsg(propertiesReader.getValueOfKey("upload_successful"));
+					imageMappingRecord.setSequenceNumber(0L);
+					imageMappingRecord.getOperationalAttributes().setRecordDeleted(false);
+					boolean recordAdded = false;
+					if (!skuOpr.getProductSkuRecord().getProductSkuImageMappingList().isEmpty()) {
+						int size = skuOpr.getProductSkuRecord().getProductSkuImageMappingList().size();
+						myLog.debug(" size :: " + size);
+						for (int i = 0; i < size; i++) {
+							ProductSkuImageMappingDVO productImageMappingDVO = skuOpr.getProductSkuRecord()
+									.getProductSkuImageMappingList().get(i);
+							myLog.debug(" seq no :: " + productImageMappingDVO.getSequenceNumber());
 
-						defaultImageRecord.setSequenceNumber(0L);
-						defaultImageRecord.getOperationalAttributes().setRecordDeleted(false);
-						boolean recordAdded = false;
-						if (!productOpr.getProductRecord().getProductImageMappingList().isEmpty()) {
-							int size = productOpr.getProductRecord().getProductImageMappingList().size();
-							myLog.debug(" size 11 :: " + size);
-							for (int i = 0; i < size; i++) {
-								ProductImageMappingDVO productImageMappingDVO = productOpr.getProductRecord()
-										.getProductImageMappingList().get(i);
-								myLog.debug(" seq no :: " + productImageMappingDVO.getSequenceNumber());
-
-								if (productImageMappingDVO.getSequenceNumber() != null
-										&& productImageMappingDVO.getSequenceNumber().equals(0L)) {
-									productOpr.getProductRecord().getProductImageMappingList()
-											.set(i, defaultImageRecord);
-									recordAdded = true;
-									myLog.debug(" size 22 :: "
-											+ productOpr.getProductRecord().getProductImageMappingList().size());
-									break;
-								}
+							if (productImageMappingDVO.getSequenceNumber() != null
+									&& productImageMappingDVO.getSequenceNumber().equals(0L)) {
+								skuOpr.getProductSkuRecord().getProductSkuImageMappingList().set(i, imageMappingRecord);
+								recordAdded = true;
+								myLog.debug(" size 22 :: "
+										+ skuOpr.getProductSkuRecord().getProductSkuImageMappingList().size());
+								break;
 							}
 						}
-
-						if (!recordAdded) {
-							productOpr.getProductRecord().getProductImageMappingList().add(0, defaultImageRecord);
-						}
-						productOpr.getProductRecord().getModifyProductSKURecord().setModifyImages(true);
-
-						productOpr.getProductRecord().setDefaultImageRecord(
-								(ProductImageMappingDVO) DeepCopy.copy(defaultImageRecord));
-						myLog.debug("All files uploaded successfully :::::::::: size :: "
-								+ productOpr.getProductRecord().getProductImageMappingList().size());
-
-					} else {
-						myLog.debug("ERROR uploading thumbnail :::::::::: ");
-						addToErrorList(propertiesReader.getValueOfKey("upload_error"));
 					}
+
+					if (!recordAdded) {
+						skuOpr.getProductSkuRecord().getProductSkuImageMappingList().add(0, imageMappingRecord);
+					}
+					skuOpr.getProductSkuRecord().setDefaultImageRecord(
+							(ImageDVO) DeepCopy.copy(imageMappingRecord.getImageRecord()));
+					myLog.debug("All files uploaded successfully :::::::::: size :: "
+							+ skuOpr.getProductSkuRecord().getProductSkuImageMappingList().size());
+
 				} else {
 					myLog.debug("ERROR uploading thumbnail :::::::::: ");
 					addToErrorList(propertiesReader.getValueOfKey("upload_error"));
@@ -2663,38 +2234,30 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 
 	public void handleFileUploadForAlternateImage(FileUploadEvent event) {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Add Edit BB :: executeSaveImageMapping starts ");
+		myLog.debug("In SkuDefinitionAddEditBB :: handleFileUploadForAlternateImage starts ");
 
 		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 		boolean uploadFlag = false;
 		String zoomFileName, regularFileName, thumbFileName, reportFileName, code;
-		Integer version;
 
 		String fileName = event.getFile().getFileName();
 		myLog.debug("fileName " + fileName);
-		String contextPath = "product/";
-		ProductImageMappingDVO defaultImageRecord = new ProductImageMappingDVO();
+		String contextPath = "sku/";
+		ProductSkuImageMappingDVO imageRecord = new ProductSkuImageMappingDVO();
 
 		File uploadFile = extractUploadedFileData(event);
 
-		if (renderForProduct) {
-			code = productOpr.getProductRecord().getCode();
-			version = productOpr.getProductRecord().getProductVersion();
-		} else {
-			code = productOpr.getProductRecord().getProductSkuRecord().getCode();
-			version = productOpr.getProductRecord().getProductSkuRecord().getSkuVersion();
-		}
-		code = code + "_" + version;
+		code = skuOpr.getProductSkuRecord().getCode();
 		code = code.replace(" ", "_");
 
 		Long seqNo = 1L;
-		if (!productOpr.getProductRecord().getProductImageMappingList().isEmpty()) {
-			int size = productOpr.getProductRecord().getProductImageMappingList().size();
+		if (!skuOpr.getProductSkuRecord().getProductSkuImageMappingList().isEmpty()) {
+			int size = skuOpr.getProductSkuRecord().getProductSkuImageMappingList().size();
 			myLog.debug("size " + size);
 
-			ProductImageMappingDVO productImageMappingDVO = productOpr.getProductRecord().getProductImageMappingList()
-					.get(size - 1);
-			Long sequenceNumber = productImageMappingDVO.getSequenceNumber();
+			ProductSkuImageMappingDVO productSkuImageMappingDVO = skuOpr.getProductSkuRecord()
+					.getProductSkuImageMappingList().get(size - 1);
+			Long sequenceNumber = productSkuImageMappingDVO.getSequenceNumber();
 			myLog.debug("sequenceNumber " + sequenceNumber);
 			if (sequenceNumber != null)
 				seqNo = sequenceNumber + 1;
@@ -2705,7 +2268,7 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 		zoomFileName = code + "_" + seqNo + "_z." + uploadFile.getExtension();
 		String zoomFileUrl = contextPath + zoomFileName;
 		myLog.debug("zoomFileUrl " + zoomFileUrl);
-		defaultImageRecord.setZoomImageURL(zoomFileUrl);
+		imageRecord.getImageRecord().setZoomImageURL(zoomFileUrl);
 		uploadFile.setName(zoomFileName);
 		myLog.debug("zoom fileName " + uploadFile.getName());
 		uploadFlag = uploadImage(uploadFile, CommonConstant.ImageAttributes.ZOOM_IMAGE_WIDTH,
@@ -2718,7 +2281,7 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 			regularFileName = code + "_" + seqNo + "_r." + uploadFile.getExtension();
 			String regularFileUrl = contextPath + regularFileName;
 			myLog.debug("regularFileUrl " + regularFileUrl);
-			defaultImageRecord.setImageURL(regularFileUrl);
+			imageRecord.getImageRecord().setImageURL(regularFileUrl);
 			uploadFile.setName(regularFileName);
 			uploadFlag = uploadImage(uploadFile, CommonConstant.ImageAttributes.IMAGE_WIDTH,
 					CommonConstant.ImageAttributes.IMAGE_HEIGHT, contextPath);
@@ -2730,42 +2293,23 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 				thumbFileName = code + "_" + seqNo + "_t." + uploadFile.getExtension();
 				String thumbFileUrl = contextPath + thumbFileName;
 				myLog.debug("thumbFileUrl " + thumbFileUrl);
-				defaultImageRecord.setThumbnailImageURL(thumbFileUrl);
+				imageRecord.getImageRecord().setThumbnailImageURL(thumbFileUrl);
 				uploadFile.setName(thumbFileName);
 				uploadFlag = uploadImage(uploadFile, CommonConstant.ImageAttributes.THUMB_IMAGE_WIDTH,
 						CommonConstant.ImageAttributes.THUMB_IMAGE_HEIGHT, contextPath);
 				myLog.debug("uploadFlag thumbnail :: " + uploadFlag);
 				// end call upload for thumbnail image
+
 				if (uploadFlag) {
-					// call upload for report image
-					reportFileName = code + "_0_rpt." + uploadFile.getExtension();
-					String reportFileUrl = contextPath + reportFileName;
-					myLog.debug("reportFileUrl " + reportFileUrl);
-					defaultImageRecord.setReportImageURL(reportFileUrl);
-					uploadFile.setName(reportFileName);
-					uploadFlag = uploadImage(uploadFile, CommonConstant.ImageAttributes.REPORT_IMAGE_WIDTH,
-							CommonConstant.ImageAttributes.REPORT_IMAGE_HEIGHT, contextPath);
-					myLog.debug("uploadFlag report :: " + uploadFlag);
-					// end call upload for report image
+					myLog.debug("All files uploaded successfully :::::::::: ");
+					setSuccessMsg(propertiesReader.getValueOfKey("upload_successful"));
 
-					if (uploadFlag) {
-						myLog.debug("All files uploaded successfully :::::::::: ");
-						setSuccessMsg(propertiesReader.getValueOfKey("upload_successful"));
+					// defaultImageRecord.setSequenceNumber(seqNo);
+					skuOpr.getProductSkuRecord().getProductSkuImageMappingList()
+							.add((ProductSkuImageMappingDVO) DeepCopy.copy(imageRecord));
 
-						defaultImageRecord.setSequenceNumber(seqNo);
-						productOpr.getProductRecord().getProductImageMappingList()
-								.add((ProductImageMappingDVO) DeepCopy.copy(defaultImageRecord));
-						productOpr.getProductRecord().getModifyProductSKURecord().setModifyImages(true);
-
-						myLog.debug("All files uploaded successfully :::::::::: size :: "
-								+ productOpr.getProductRecord().getProductImageMappingList().size());
-					} else {
-						myLog.debug("ERROR uploading report :::::::::: ");
-						addToErrorList(propertiesReader.getValueOfKey("upload_error"));
-					}
-				} else {
-					myLog.debug("ERROR uploading thumbnail :::::::::: ");
-					addToErrorList(propertiesReader.getValueOfKey("upload_error"));
+					myLog.debug("All files uploaded successfully :::::::::: size :: "
+							+ skuOpr.getProductSkuRecord().getProductSkuImageMappingList().size());
 				}
 			} else {
 				myLog.debug("ERROR uploading regular image :::::::::: ");
@@ -2775,6 +2319,54 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 
 	}
 
+	public void executeSaveImageMapping(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In SkuDefinitionAddEditBB :: executeSaveImageMapping starts ");
+
+		if (!skuOpr.getProductSkuRecord().getProductSkuImageMappingList().isEmpty()) {
+			try {
+				String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
+				skuOpr.getProductSkuRecord().setUserLogin(userLogin);
+
+				// if the flag is false, then check if data is changed on screen
+				// or no
+				// if
+				// (productOpr.getProductRecord().getModifyProductSKURecord().getModifyImages()
+				// == null
+				// ||
+				// !productOpr.getProductRecord().getModifyProductSKURecord().getModifyImages())
+				// {
+				// if (filterSaveImageMapping())
+				// productOpr.getProductRecord().getModifyProductSKURecord().setModifyImages(true);
+				// }
+
+				SkuOpr skuOprRecd = new SkuDefinitionBF().saveImageMappingList(skuOpr);
+				skuOpr.getProductSkuRecord().setProductSkuImageMappingList(
+						skuOprRecd.getProductSkuRecord().getProductSkuImageMappingList());
+				skuOpr.getProductSkuRecord().setAuditAttributes(skuOprRecd.getProductSkuRecord().getAuditAttributes());
+
+				PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+				setSuccessMsg(propertiesReader.getValueOfKey("image_save_success"));
+
+				if (!skuOprRecd.getProductSkuRecord().getProductSkuImageMappingList().isEmpty()) {
+					for (ProductSkuImageMappingDVO imageMappingDVO : skuOprRecd.getProductSkuRecord()
+							.getProductSkuImageMappingList()) {
+						if (imageMappingDVO.getSequenceNumber() != null
+								&& imageMappingDVO.getSequenceNumber().equals(0L)) {
+							skuOpr.getProductSkuRecord().setDefaultImageRecord(imageMappingDVO.getImageRecord());
+						}
+					}
+				}
+
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+	}
+
 	public void executeAddMore(ActionEvent event) {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("In Product Definition Add Edit BB :: add more starts ");
@@ -2782,12 +2374,12 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 		setErrorList(new ArrayList<String>());
 		setSuccessMsg("");
 
-		ProductOpr productOprSent = new ProductOpr();
+		SkuOpr skuOprSent = new SkuOpr();
 
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.ACTIVE_TAB_OPR, productOprSent);
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("EDIT_DETAILS", "PRODUCT");
+				.put(CommonConstant.ACTIVE_TAB_OPR, skuOprSent);
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("EDIT_DETAILS", "SKU");
 
 	}
 

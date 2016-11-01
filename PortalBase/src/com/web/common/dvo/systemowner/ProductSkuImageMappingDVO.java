@@ -10,6 +10,7 @@ public class ProductSkuImageMappingDVO extends BaseDVO {
 
 	private ImageDVO imageRecord;
 	private Parameter imageTypeRecord;
+	private Long sequenceNumber;
 
 	public ProductSkuDVO getProductSkuRecord() {
 		if (productSkuRecord == null) {
@@ -42,6 +43,14 @@ public class ProductSkuImageMappingDVO extends BaseDVO {
 
 	public void setImageRecord(ImageDVO imageRecord) {
 		this.imageRecord = imageRecord;
+	}
+
+	public Long getSequenceNumber() {
+		return sequenceNumber;
+	}
+
+	public void setSequenceNumber(Long sequenceNumber) {
+		this.sequenceNumber = sequenceNumber;
 	}
 
 }

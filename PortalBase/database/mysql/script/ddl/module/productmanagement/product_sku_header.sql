@@ -10,6 +10,7 @@ CREATE TABLE product_sku_header(
     seo_description TEXT,
     
     default_thumbnail_image_url VARCHAR(4000),
+    default_image_url VARCHAR(4000),
     default_zoom_image_url VARCHAR(4000),
     
     base_price FLOAT(15,3),

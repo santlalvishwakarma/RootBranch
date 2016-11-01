@@ -3,8 +3,105 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<h:form id="skuAddEditForm">
 		<h:panelGroup id="skuAddEditPanel">
-		
-		sku add edit
+			<table style="width: 100%;">
+				<tr>
+					<td><label class="labelClass boldClass">Sku Code</label> <label class="mandRed">#{commonLabel.mand_star}</label>
+					</td>
+					<td><h:panelGroup>
+							<p:inputText id="skuCode" value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.code}" maxlength="25"
+								disabled="#{!(skuDefinitionAddEditBB.skuOpr.productSkuRecord.id eq null)}" />
+							<p:watermark for="skuCode" value="Maximum 25 characters" />
+									&#160;&#160;
+						</h:panelGroup></td>
+					<td><label class="labelClass boldClass">Sku Name</label> <label class="mandRed">#{commonLabel.mand_star}</label>
+					</td>
+					<td><p:inputText id="skuName" value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.name}" maxlength="60" />
+						<p:watermark for="skuName" value="Maximum 60 characters" /> <p:tooltip for="skuName"
+							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.name}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Sku Description</label></td>
+					<td><p:inputText id="skuDescription" maxlength="255"
+							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.description}" /> <p:watermark for="skuDescription"
+							value="Maximum 255 characters" /> <p:tooltip for="skuDescription"
+							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.description}" /></td>
+					<td><label class="labelClass boldClass">Active</label></td>
+					<td><p:selectBooleanCheckbox id="deactivateSku"
+							disabled="#{(skuDefinitionAddEditBB.skuOpr.productSkuRecord.defaultSku)}"
+							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.active}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Make Default</label></td>
+					<td><p:selectBooleanCheckbox value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.defaultSku}"
+							disabled="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.defaultSku}" /></td>
+					<td><label class="labelClass boldClass">Base Price</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+					<td><p:inputText id="basePrice" value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.basePrice}"
+							maxlength="60" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Discount Amount</label><label class="mandGreen">#{commonLabel.one_cap}</label></td>
+					<td><p:inputText id="discountAmount" value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.discountAmount}"
+							maxlength="60" /></td>
+					<td><label class="labelClass boldClass">Discount Percent</label><label class="mandGreen">#{commonLabel.one_cap}</label></td>
+					<td><p:inputText id="discountPercent"
+							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.discountPercent}" maxlength="60" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Final Price</label></td>
+					<td><p:inputText id="finalBasePrice" disabled="true"
+							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.finalBasePrice}" maxlength="60" /></td>
+					<td><label class="labelClass boldClass">Seo Title</label></td>
+					<td><p:inputText id="seoTitle" value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.skuSEOTitle}"
+							maxlength="60" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Product</label> <label class="mandRed">#{commonLabel.mand_star}</label>
+					</td>
+					<td><p:autoComplete id="productCodeAutoComplete"
+							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.productRecord}"
+							converter="#{skuDefinitionAddEditBB.baseDVOConverter}"
+							completeMethod="#{skuDefinitionAddEditBB.getSuggestedProductsList}" minQueryLength="2"
+							itemLabel="#{productRecord.name}" var="productRecord" itemValue="#{productRecord}" effect="fade" multiple="false"
+							maxResults="20">
+							<p:column headerText="Code">#{productRecord.code}</p:column>
+							<p:column headerText="Name">#{productRecord.name}</p:column>
+						</p:autoComplete></td>
+					<td><label class="labelClass boldClass">Seo Keyword</label></td>
+					<td><p:inputText id="seoKeyword" value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.skuSEOKeyword}"
+							maxlength="60" /></td>
+				</tr>
+				<tr>
+					<td><p:commandLink id="mapImageLink" process="@this" style="text-decoration: none;"
+							actionListener="#{skuDefinitionAddEditBB.openImageMappingDialog}" styleClass="linkClass"
+							update=":skuImageDialogPanelGroup" oncomplete="PF('skuImageDialog').show()">
+							<table style="width: 100%;" class="linkButton">
+								<tr>
+									<td width="90%">Map Sku Images</td>
+									<td width="10%"><p:graphicImage alt="Checked" value="/staticcontent/systemowner/images/check_icon.jpg"
+											rendered="#{!(skuDefinitionAddEditBB.skuOpr.productSkuRecord.defaultImageRecord.thumbnailImageURL eq null)}" /></td>
+								</tr>
+							</table>
+						</p:commandLink></td>
+					<td><p:commandLink value="Map Properties" /></td>
+					<td><label class="labelClass boldClass">Seo Description</label></td>
+					<td><p:inputText id="seoDescription" value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.skuSEODescription}"
+							maxlength="60" /></td>
+				</tr>
+			</table>
+			<br />
+			<div align="center">
+				<p:commandButton id="btnSave" actionListener="#{skuDefinitionAddEditBB.executeSave}" value="Save"
+					update="skuAddEditForm" />
+				<p:tooltip for="btnSave" value="Click to Save" />
+				<p:hotkey bind="ctrl+shift+s" update="skuAddEditForm" actionListener="#{skuDefinitionAddEditBB.executeSave}" />
+				&#160;&#160;
+				<p:commandButton id="btnCancel" action="#{skuDefinitionAddEditBB.clearPage}" value="Cancel" process="@this" />
+				<p:tooltip for="btnCancel" value="Click to Cancel" />
+				&#160;&#160;
+				<p:commandButton id="btnAddNew" process="@this" value="Add New"
+					actionListener="#{skuDefinitionAddEditBB.executeAddMore}" update="skuAddEditPanel" />
+				<p:tooltip for="btnAddNew" value="Click to Add New" />
+			</div>
 		</h:panelGroup>
 
 	</h:form>

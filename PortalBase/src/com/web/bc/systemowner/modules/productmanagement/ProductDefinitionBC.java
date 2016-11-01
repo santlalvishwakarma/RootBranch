@@ -493,14 +493,16 @@ public class ProductDefinitionBC extends BackingClass {
 		String code = productDVO.getCode();
 		String name = productDVO.getName();
 		Boolean isActive = productDVO.getActive();
-		String statusCode = (String) productDVO.getApplicationFlags().getApplicationFlagMap()
-				.get("STATUS_NEW_APPROVED");
-		String approved = (String) productDVO.getApplicationFlags().getApplicationFlagMap().get("STATUS_APPROVED");
+		// String statusCode = (String)
+		// productDVO.getApplicationFlags().getApplicationFlagMap()
+		// .get("STATUS_NEW_APPROVED");
+		// String approved = (String)
+		// productDVO.getApplicationFlags().getApplicationFlagMap().get("STATUS_APPROVED");
 		myLog.debug(" parameter 1 :: " + code);
 		myLog.debug(" parameter 2 :: " + name);
 		myLog.debug(" parameter 3 :: " + isActive);
-		myLog.debug(" parameter 4 :: " + statusCode);
-		myLog.debug(" parameter 5 :: " + approved);
+		// myLog.debug(" parameter 4 :: " + statusCode);
+		// myLog.debug(" parameter 5 :: " + approved);
 
 		StringBuffer dynamicWhere = new StringBuffer();
 
@@ -531,25 +533,29 @@ public class ProductDefinitionBC extends BackingClass {
 			parameterCount += 1;
 		}
 
-		if (statusCode != null && statusCode.equals("STATUS_NEW_APPROVED")) {
-			if (parameterCount > 0) {
-				dynamicWhere.append(" AND ph.status_code IN ('" + CommonConstant.StatusCodes.NEW + "','"
-						+ CommonConstant.StatusCodes.APPROVED + "')");
-			} else {
-				dynamicWhere.append(" ph.status_code IN ('" + CommonConstant.StatusCodes.NEW + "','"
-						+ CommonConstant.StatusCodes.APPROVED + "')");
-			}
-			parameterCount++;
-		}
-
-		if (approved != null && approved.equals("STATUS_APPROVED")) {
-			if (parameterCount > 0) {
-				dynamicWhere.append(" AND ph.status_code IN ('" + CommonConstant.StatusCodes.APPROVED + "')");
-			} else {
-				dynamicWhere.append(" ph.status_code IN ('" + CommonConstant.StatusCodes.APPROVED + "')");
-			}
-			parameterCount++;
-		}
+		// if (statusCode != null && statusCode.equals("STATUS_NEW_APPROVED")) {
+		// if (parameterCount > 0) {
+		// dynamicWhere.append(" AND ph.status_code IN ('" +
+		// CommonConstant.StatusCodes.NEW + "','"
+		// + CommonConstant.StatusCodes.APPROVED + "')");
+		// } else {
+		// dynamicWhere.append(" ph.status_code IN ('" +
+		// CommonConstant.StatusCodes.NEW + "','"
+		// + CommonConstant.StatusCodes.APPROVED + "')");
+		// }
+		// parameterCount++;
+		// }
+		//
+		// if (approved != null && approved.equals("STATUS_APPROVED")) {
+		// if (parameterCount > 0) {
+		// dynamicWhere.append(" AND ph.status_code IN ('" +
+		// CommonConstant.StatusCodes.APPROVED + "')");
+		// } else {
+		// dynamicWhere.append(" ph.status_code IN ('" +
+		// CommonConstant.StatusCodes.APPROVED + "')");
+		// }
+		// parameterCount++;
+		// }
 
 		// to get all data
 		if (parameterCount == 0) {
@@ -580,9 +586,6 @@ public class ProductDefinitionBC extends BackingClass {
 				productRecord.setCode((String) resultSetMap.get("product_code"));
 				productRecord.setName((String) resultSetMap.get("product_name"));
 				productRecord.setDescription((String) resultSetMap.get("product_description"));
-				if (resultSetMap.get("product_version") != null)
-					productRecord.setProductVersion(Integer.valueOf(resultSetMap.get("product_version").toString()));
-				productRecord.getUomRecord().setCode((String) resultSetMap.get("uom_code"));
 				productList.add(productRecord);
 			}
 		}
@@ -3014,203 +3017,6 @@ public class ProductDefinitionBC extends BackingClass {
 		productDefinitionOpr.getApplicationFlags().getApplicationFlagMap().put("DETAILS", mainList);
 		productDefinitionOpr.getApplicationFlags().getApplicationFlagMap().put("CSV", reportList);
 		return productDefinitionOpr;
-	}
-
-	public ProductOpr getImageMappingList(ProductOpr productOpr) throws FrameworkException, BusinessException {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition BC :: getImageMappingList starts ");
-		ProductOpr productOprRet = new ProductOpr();
-
-		Long productId = productOpr.getProductRecord().getId();
-		Long skuId = productOpr.getProductRecord().getProductSkuRecord().getId();
-
-		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
-		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
-		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
-		queryDetailsMap.put(IDAOConstant.SQL_TEXT, ProductDefinitionSqlTemplate.GET_IMAGE_MAPPING_LIST);
-
-		Object strSqlParams[][] = new Object[2][3];
-
-		strSqlParams[0][0] = "1";
-		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
-		strSqlParams[0][2] = productId;
-		myLog.debug(" parameter 1 :: " + productId);
-
-		strSqlParams[1][0] = "2";
-		strSqlParams[1][1] = IDAOConstant.LONG_DATATYPE;
-		strSqlParams[1][2] = skuId;
-		myLog.debug(" parameter 2 :: " + skuId);
-
-		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
-		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
-		myLog.debug(" Product Definition getImageMappingList :: Resultset got ::" + responseMap);
-
-		if (responseMap.size() > 0) {
-			for (int i = 0; i < responseMap.size(); i++) {
-
-				HashMap<String, Object> resultSetMap = responseMap.get(i);
-
-				ProductImageMappingDVO productImageMappingRecord = new ProductImageMappingDVO();
-
-				if (resultSetMap.get("product_image_mapping_id") != null)
-					productImageMappingRecord.setId(Long.valueOf(resultSetMap.get("product_image_mapping_id")
-							.toString()));
-
-				productImageMappingRecord.setImageURL((String) resultSetMap.get("image_url"));
-				productImageMappingRecord.setThumbnailImageURL((String) resultSetMap.get("thumbnail_url"));
-				productImageMappingRecord.setZoomImageURL((String) resultSetMap.get("zoom_url"));
-				productImageMappingRecord.setReportImageURL((String) resultSetMap.get("report_url"));
-				if (resultSetMap.get("sequence_number") != null)
-					productImageMappingRecord.setSequenceNumber(Long.valueOf(resultSetMap.get("sequence_number")
-							.toString()));
-
-				productOprRet.getProductRecord().getProductImageMappingList().add(productImageMappingRecord);
-			}
-		}
-		return productOprRet;
-	}
-
-	public ProductOpr saveImageMappingList(ProductOpr productOpr) throws FrameworkException, BusinessException {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition BC :: saveImageMappingList starts ");
-		ProductOpr productOprRet = new ProductOpr();
-
-		ProductDVO productRecord = productOpr.getProductRecord();
-		Long productId = productRecord.getId();
-		Long skuId = productRecord.getProductSkuRecord().getId();
-		StringBuffer parseImageDetailsString = new StringBuffer();
-		Boolean modifyImages = productOpr.getProductRecord().getModifyProductSKURecord().getModifyImages();
-		String userLogin = productRecord.getUserLogin();
-		String lastModifiedDate = null;
-		if (productRecord.getAuditAttributes().getLastModifiedDate() != null)
-			lastModifiedDate = productRecord.getAuditAttributes().getLastModifiedDate().toString();
-
-		if (!productOpr.getProductRecord().getProductImageMappingList().isEmpty()) {
-			for (ProductImageMappingDVO productImageMappingDVO : productOpr.getProductRecord()
-					.getProductImageMappingList()) {
-
-				Long imageMappingId = productImageMappingDVO.getId();
-				String imageURL = productImageMappingDVO.getImageURL();
-				String thumbnailImageURL = productImageMappingDVO.getThumbnailImageURL();
-				String zoomImageURL = productImageMappingDVO.getZoomImageURL();
-				String reportImageURL = productImageMappingDVO.getReportImageURL();
-				Long sequenceNumber = productImageMappingDVO.getSequenceNumber();
-				Boolean recordDeleted = productImageMappingDVO.getOperationalAttributes().getRecordDeleted();
-
-				if (recordDeleted != null)
-					if ((imageMappingId != null && recordDeleted) || (imageMappingId == null && !recordDeleted)
-							|| (imageMappingId != null && !recordDeleted)) {
-
-						if (imageMappingId != null)
-							parseImageDetailsString.append(imageMappingId);
-						else
-							parseImageDetailsString.append("");
-						parseImageDetailsString.append("~");
-
-						if (imageURL != null)
-							parseImageDetailsString.append(imageURL);
-						else
-							parseImageDetailsString.append("");
-						parseImageDetailsString.append("~");
-
-						if (thumbnailImageURL != null)
-							parseImageDetailsString.append(thumbnailImageURL);
-						else
-							parseImageDetailsString.append("");
-						parseImageDetailsString.append("~");
-
-						if (zoomImageURL != null)
-							parseImageDetailsString.append(zoomImageURL);
-						else
-							parseImageDetailsString.append("");
-						parseImageDetailsString.append("~");
-
-						if (reportImageURL != null)
-							parseImageDetailsString.append(reportImageURL);
-						else
-							parseImageDetailsString.append("");
-						parseImageDetailsString.append("~");
-
-						if (sequenceNumber != null)
-							parseImageDetailsString.append(sequenceNumber);
-						else
-							parseImageDetailsString.append("");
-						parseImageDetailsString.append("~");
-
-						if (recordDeleted)
-							parseImageDetailsString.append("1");
-						else
-							parseImageDetailsString.append("0");
-						parseImageDetailsString.append(";");
-
-					}
-			}
-		}
-
-		if (parseImageDetailsString != null && parseImageDetailsString.length() > 1) {
-			// this is to remove the last ; sign
-			parseImageDetailsString.deleteCharAt(parseImageDetailsString.length() - 1);
-		}
-
-		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
-		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
-		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
-		queryDetailsMap.put(IDAOConstant.SQL_TEXT, ProductDefinitionSqlTemplate.SAVE_IMAGE_MAPPING_LIST);
-
-		Object strSqlParams[][] = new Object[6][3];
-
-		strSqlParams[0][0] = "1";
-		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
-		strSqlParams[0][2] = productId;
-		myLog.debug(" parameter 1 :: " + productId);
-
-		strSqlParams[1][0] = "2";
-		strSqlParams[1][1] = IDAOConstant.LONG_DATATYPE;
-		strSqlParams[1][2] = skuId;
-		myLog.debug(" parameter 2 :: " + skuId);
-
-		strSqlParams[2][0] = "3";
-		strSqlParams[2][1] = IDAOConstant.STRING_DATATYPE;
-
-		if (parseImageDetailsString.length() > 0)
-			strSqlParams[2][2] = parseImageDetailsString.toString();
-		else
-			strSqlParams[2][2] = null;
-		myLog.debug(" parameter 3 :: " + strSqlParams[2][2]);
-
-		strSqlParams[3][0] = "4";
-		strSqlParams[3][1] = IDAOConstant.BOOLEAN_DATATYPE;
-		strSqlParams[3][2] = modifyImages;
-		myLog.debug(" parameter 4 :: " + modifyImages);
-
-		strSqlParams[4][0] = "5";
-		strSqlParams[4][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[4][2] = userLogin;
-		myLog.debug(" parameter 5 :: " + userLogin);
-
-		strSqlParams[5][0] = "6";
-		strSqlParams[5][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[5][2] = lastModifiedDate;
-		myLog.debug(" parameter 6 :: " + lastModifiedDate);
-
-		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
-		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
-		myLog.debug(" Product Definition saveImageMappingList :: Resultset got ::" + responseMap);
-
-		if (responseMap.size() > 0) {
-			for (int i = 0; i < responseMap.size(); i++) {
-
-				HashMap<String, Object> resultSetMap = responseMap.get(i);
-				handleAndThrowException(resultSetMap);
-
-				setAuditAttributes(productOprRet.getProductRecord(), resultSetMap);
-			}
-		}
-		productOpr = getImageMappingList(productOpr);
-		productOprRet.getProductRecord().setProductImageMappingList(
-				productOpr.getProductRecord().getProductImageMappingList());
-
-		return productOprRet;
 	}
 
 	public List<Object> getSuggestedVendorStyleNumberBasedOnVendor(ProductVendorMappingDVO productVendorMappingRecord)

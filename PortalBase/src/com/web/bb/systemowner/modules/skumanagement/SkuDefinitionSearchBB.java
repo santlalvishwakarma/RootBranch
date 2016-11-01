@@ -2,22 +2,16 @@ package com.web.bb.systemowner.modules.skumanagement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import com.web.bf.systemowner.modules.productmanagement.ProductDefinitionBF;
+import com.web.bf.systemowner.modules.skumanagement.SkuDefinitionBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.common.Parameter;
-import com.web.common.dvo.opr.common.ParameterOpr;
-import com.web.common.dvo.opr.systemowner.ProductOpr;
-import com.web.common.dvo.systemowner.CategoryDVO;
-import com.web.common.dvo.systemowner.HierarchyDVO;
+import com.web.common.dvo.opr.systemowner.SkuOpr;
 import com.web.common.dvo.systemowner.ImageDVO;
-import com.web.common.dvo.systemowner.ProductDVO;
-import com.web.common.dvo.systemowner.ProductSkuImageMappingDVO;
-import com.web.common.dvo.systemowner.PropertyDVO;
+import com.web.common.dvo.systemowner.ProductSkuDVO;
 import com.web.common.dvo.util.OptionsDVO;
 import com.web.common.jsf.converters.BaseDVOConverter;
 import com.web.common.jsf.converters.ProductCategoryConverter;
@@ -38,40 +32,40 @@ public class SkuDefinitionSearchBB extends BackingBean {
 	private static final long serialVersionUID = 3115234382157049259L;
 
 	private String propertiesLocation = "com/web/bb/systemowner/modules/skumanagement/skudefinition";
-	private ProductOpr productOpr;
+	private SkuOpr skuOpr;
 	private OptionsDVO allOptions;
-	private ProductDVO selectedProductRecord;
+	private ProductSkuDVO selectedSkuRecord;
 	private transient BaseDVOConverter baseDVOConverter;
-	private ArrayList<Object> productHierarchyList;
 	private transient ProductCategoryConverter productCategoryConverter;
 
-	public ProductOpr getProductOpr() {
-
-		if (productOpr == null) {
-			productOpr = new ProductOpr();
+	public SkuOpr getSkuOpr() {
+		if (skuOpr == null) {
+			skuOpr = new SkuOpr();
 		}
+
 		if (FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 				.containsKey(CommonConstant.RE_INITIALIZE_OPR)) {
-			productOpr.setProductDVOList(new ArrayList<ProductDVO>());
+			skuOpr.setProductSkuList(new ArrayList<ProductSkuDVO>());
 			FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 					.remove(CommonConstant.RE_INITIALIZE_OPR);
 		}
-		return productOpr;
+
+		return skuOpr;
 	}
 
-	public void setProductOpr(ProductOpr productOpr) {
-		this.productOpr = productOpr;
+	public void setSkuOpr(SkuOpr skuOpr) {
+		this.skuOpr = skuOpr;
 	}
 
-	public ProductDVO getSelectedProductRecord() {
-		if (selectedProductRecord == null) {
-			selectedProductRecord = new ProductDVO();
+	public ProductSkuDVO getSelectedSkuRecord() {
+		if (selectedSkuRecord == null) {
+			selectedSkuRecord = new ProductSkuDVO();
 		}
-		return selectedProductRecord;
+		return selectedSkuRecord;
 	}
 
-	public void setSelectedProductRecord(ProductDVO selectedProductRecord) {
-		this.selectedProductRecord = selectedProductRecord;
+	public void setSelectedSkuRecord(ProductSkuDVO selectedSkuRecord) {
+		this.selectedSkuRecord = selectedSkuRecord;
 	}
 
 	public BaseDVOConverter getBaseDVOConverter() {
@@ -83,17 +77,6 @@ public class SkuDefinitionSearchBB extends BackingBean {
 
 	public void setBaseDVOConverter(BaseDVOConverter baseDVOConverter) {
 		this.baseDVOConverter = baseDVOConverter;
-	}
-
-	public ArrayList<Object> getProductHierarchyList() {
-		if (productHierarchyList == null) {
-			productHierarchyList = new ArrayList<Object>();
-		}
-		return productHierarchyList;
-	}
-
-	public void setProductHierarchyList(ArrayList<Object> productHierarchyList) {
-		this.productHierarchyList = productHierarchyList;
 	}
 
 	public ProductCategoryConverter getProductCategoryConverter() {
@@ -117,9 +100,10 @@ public class SkuDefinitionSearchBB extends BackingBean {
 		if (validateSearch()) {
 
 			try {
-				productOpr.setProductDVOList(null);
-				ProductOpr productOprRet = (new ProductDefinitionBF()).executeSearch(productOpr);
-				productOpr.setProductDVOList(productOprRet.getProductDVOList());
+				skuOpr.setProductSkuList(null);
+
+				SkuOpr skuOprRet = (new SkuDefinitionBF()).executeSearch(skuOpr);
+				skuOpr.setProductSkuList(skuOprRet.getProductSkuList());
 				populateData();
 
 			} catch (FrameworkException e) {
@@ -137,53 +121,15 @@ public class SkuDefinitionSearchBB extends BackingBean {
 	public boolean validateSearch() {
 		FoundationValidator validator = new FoundationValidator();
 		PropertiesReader propertiesReader = new PropertiesReader(CommonConstant.MessageLocation.COMMON_MESSAGES);
-		PropertiesReader propertiesReader2 = new PropertiesReader(propertiesLocation);
 		boolean validateFlag = true;
 		setErrorList(new ArrayList<String>());
 
-		ProductDVO productRecord = productOpr.getProductRecord();
-		if (!(validator.validateNull(productRecord.getCode()) || validator.validateNull(productRecord.getName())
-				|| validator.validateNull(productRecord.getDescription())
-				|| validator.validateNull(productRecord.getProductSkuRecord().getCode())
-				|| validator.validateNull(productRecord.getProductSkuRecord().getDescription()) || validator
-					.validateNull(productRecord.getStatusRecord().getCode()))) {
-
-			if (productOpr.getProductCategoryList().isEmpty()) {
-				validateFlag = false;
-			}
-		}
-
-		int propertySelected = 0;
-		// if (!productRecord.getProductPropertiesMappingList().isEmpty()) {
-		// for (ProductPropertiesMappingDVO productPropertiesMappingDVO :
-		// productRecord
-		// .getProductPropertiesMappingList()) {
-		// if
-		// (!productPropertiesMappingDVO.getOperationalAttributes().getRecordDeleted())
-		// {
-		// Long propertyId =
-		// productPropertiesMappingDVO.getProductPropertiesRecord().getId();
-		// if (propertyId == null)
-		// productPropertiesMappingDVO.getOperationalAttributes().setRecordDeleted(true);
-		// }
-		// if
-		// (!productPropertiesMappingDVO.getOperationalAttributes().getRecordDeleted())
-		// propertySelected++;
-		// ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		// myLog.debug(" condition " +
-		// productPropertiesMappingDVO.getPropertyCondition());
-		// myLog.debug(" condition " +
-		// allOptions.getAllOptionsValues().get("conditionList"));
-		// }
-		// }
-
-		if (!validateFlag && propertySelected == 0) {
+		ProductSkuDVO productSkuRecord = skuOpr.getProductSkuRecord();
+		if (!(validator.validateNull(productSkuRecord.getCode()) || validator.validateNull(productSkuRecord.getName())
+				|| validator.validateNull(productSkuRecord.getDescription())
+				|| validator.validateNull(productSkuRecord.getProductRecord().getCode()) || validator
+					.validateNull(productSkuRecord.getStatusRecord().getCode()))) {
 			addToErrorList(propertiesReader.getValueOfKey("all_fields_null"));
-			validateFlag = false;
-		}
-
-		if (!productOpr.getProductCategoryList().isEmpty()) {
-			addToErrorList(propertiesReader2.getValueOfKey("enter_either_hierarchy_or_category"));
 		}
 
 		if (getErrorList().size() > 0) {
@@ -212,141 +158,44 @@ public class SkuDefinitionSearchBB extends BackingBean {
 		setErrorList(new ArrayList<String>());
 		setSuccessMsg("");
 
-		ProductOpr productOprSent = new ProductOpr();
-		productOprSent.getProductRecord().setId(selectedProductRecord.getId());
-		productOprSent
-				.getProductRecord()
-				.getProductSkuRecord()
-				.getDefaultProductSkuImageMappingDVO()
-				.getImageRecord()
-				.setThumbnailImageURL(
-						selectedProductRecord.getProductSkuRecord().getDefaultProductSkuImageMappingDVO()
-								.getImageRecord().getImageURL());
+		SkuOpr skuOprSent = new SkuOpr();
+		skuOprSent.getProductSkuRecord().setId(selectedSkuRecord.getId());
+		skuOprSent.getProductSkuRecord().getDefaultImageRecord()
+				.setThumbnailImageURL(selectedSkuRecord.getDefaultImageRecord().getThumbnailImageURL());
 
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.ACTIVE_TAB_OPR, productOprSent);
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("EDIT_DETAILS", "PRODUCT");
-
-	}
-
-	public void editSKUDetails() {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Search BB :: editSKUDetails starts ");
-
-		setErrorList(new ArrayList<String>());
-		setSuccessMsg("");
-
-		ProductOpr productOprSent = new ProductOpr();
-		productOprSent.getProductRecord().setId(selectedProductRecord.getId());
-		productOprSent.getProductRecord().getProductSkuRecord()
-				.setId(selectedProductRecord.getProductSkuRecord().getId());
-
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.ACTIVE_TAB_OPR, productOprSent);
+				.put(CommonConstant.ACTIVE_TAB_OPR, skuOprSent);
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("EDIT_DETAILS", "SKU");
-	}
-
-	public void createNewProduct() {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Search BB :: createNewProduct starts ");
-
-		setErrorList(new ArrayList<String>());
-		setSuccessMsg("");
-
-		ProductOpr productOprSent = new ProductOpr();
-
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.ACTIVE_TAB_OPR, productOprSent);
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("EDIT_DETAILS", "PRODUCT");
 
 	}
 
 	public void createNewSKU() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Search BB :: createNewSKU starts ");
+		myLog.debug("In SkuDefinitionSearchBB :: createNewSKU starts ");
 
-		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 		setErrorList(new ArrayList<String>());
 		setSuccessMsg("");
 
-		String productStatusCode = selectedProductRecord.getStatusRecord().getCode();
-		Boolean active = selectedProductRecord.getActive();
-		if (!CommonConstant.StatusCodes.APPROVED.equals(productStatusCode)) {
-			addToErrorList(propertiesReader.getValueOfKey("product_code_not_approved"));
-		}
-		if (active != null && !active) {
-			addToErrorList(propertiesReader.getValueOfKey("product_code_not_active"));
-		}
+		SkuOpr skuOprSent = new SkuOpr();
 
-		if (getErrorList().size() == 0) {
-			ProductOpr productOprSent = new ProductOpr();
-			productOprSent.getProductRecord().setId(selectedProductRecord.getId());
-
-			FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
-			FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-					.put(CommonConstant.ACTIVE_TAB_OPR, productOprSent);
-			FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("EDIT_DETAILS", "SKU");
-		}
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+				.put(CommonConstant.ACTIVE_TAB_OPR, skuOprSent);
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("EDIT_DETAILS", "SKU");
 	}
 
 	@Override
 	public void retrieveData() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Search BB :: retrieveData starts ");
+		myLog.debug("In SkuDefinitionSearchBB :: retrieveData starts ");
 		beanName = "productDefinitionSearchListBB";
-		try {
-
-			propertiesForAutoSuggest = new ArrayList<PropertyDVO>();
-			propertiesForAutoSuggest = new ProductDefinitionBF().getSuggestedPropertiesBasedOnName("%");
-			myLog.debug(" propertiesForAutoSuggest size ---> " + propertiesForAutoSuggest.size());
-
-		} catch (FrameworkException e) {
-			handleException(e, propertiesLocation);
-
-		} catch (BusinessException e) {
-			handleException(e, propertiesLocation);
-		}
-
-		try {
-			productHierarchyList = new ProductDefinitionBF().getSuggestedHierarchies(new HierarchyDVO());
-			FacesContext.getCurrentInstance().getViewRoot().getViewMap()
-					.put("productHierarchyAutoComplete", productHierarchyList);
-
-		} catch (FrameworkException e) {
-			handleException(e, propertiesLocation);
-
-		} catch (BusinessException e) {
-			handleException(e, propertiesLocation);
-		}
 
 		allOptions = new OptionsDVO();
 
 		if (allOptions.getAllOptionsValues().isEmpty()) {
 			try {
-
-				String parameterCode = CommonConstant.ParameterCode.PRODUCT_PROPERTIES_CONDITIONS;
-				Parameter parameter = new Parameter();
-				parameter.setParameterCode(parameterCode);
-
-				ParameterOpr parameterOpr = new ParameterOpr();
-				parameterOpr.getParameterList().add(parameter);
-
-				parameterOpr = new ProductDefinitionBF().getOptionsOnParameterCode(parameterOpr);
-
-				allOptions.getAllOptionsValues().put("conditionList",
-						parameterOpr.getParameterOptionsMap().get(parameterCode));
-
-			} catch (FrameworkException e) {
-				handleException(e, propertiesLocation);
-
-			} catch (BusinessException e) {
-				handleException(e, propertiesLocation);
-			}
-			try {
-				allOptions.getAllOptionsValues().put("statusList", new ProductDefinitionBF().getStatusCodeList());
+				allOptions.getAllOptionsValues().put("statusList", new SkuDefinitionBF().getStatusCodeList());
 			} catch (FrameworkException e) {
 				handleException(e, propertiesLocation);
 
@@ -355,17 +204,7 @@ public class SkuDefinitionSearchBB extends BackingBean {
 			}
 		}
 
-		try {
-			productCategoriesForAutoSuggest = new ProductDefinitionBF().getAllCategories();
-
-		} catch (FrameworkException e) {
-			handleException(e, propertiesLocation);
-
-		} catch (BusinessException e) {
-			handleException(e, propertiesLocation);
-		}
-
-		myLog.debug("In Product Category BB :: retrieveData ends ");
+		myLog.debug("In SkuDefinitionSearchBB :: retrieveData ends ");
 	}
 
 	@Override
@@ -384,65 +223,22 @@ public class SkuDefinitionSearchBB extends BackingBean {
 	public void setAllOptions(OptionsDVO allOptions) {
 	}
 
-	public List<Object> getSuggestedHierarchies(String query) {
-		List<Object> productHierarchyObjectList = new ArrayList<Object>();
-		if (query != null) {
-
-			if (productHierarchyList != null && !productHierarchyList.isEmpty()) {
-				query = query.toUpperCase();
-				for (Object object : productHierarchyList) {
-					HierarchyDVO productHierarchyRecord = (HierarchyDVO) object;
-					String name = productHierarchyRecord.getName();
-
-					if (name != null && name.toUpperCase().startsWith(query)) {
-						productHierarchyObjectList.add(productHierarchyRecord);
-					}
-				}
-			}
-		}
-		return productHierarchyObjectList;
-	}
-
-	public List<CategoryDVO> getSuggestedCategories(String query) {
-
-		List<CategoryDVO> productCategoryList = new ArrayList<CategoryDVO>();
-		if (query != null) {
-			query = query.toUpperCase();
-
-			for (CategoryDVO productCategoryRecord : productCategoriesForAutoSuggest) {
-
-				String name = productCategoryRecord.getName();
-
-				if (name.toUpperCase().startsWith(query)) {
-					productCategoryList.add(productCategoryRecord);
-				}
-			}
-		}
-		return productCategoryList;
-	}
-
 	public void executeEnlargeImage() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("In Product Definition Search BB :: executeEnlargeImage starts ");
 
 		ArrayList<ImageDVO> imageList = new ArrayList<ImageDVO>();
 
-		if (!selectedProductRecord.getProductSkuRecord().getProductSkuImageMappingList().isEmpty()) {
-			for (ProductSkuImageMappingDVO productImageMappingDVO : selectedProductRecord.getProductSkuRecord()
-					.getProductSkuImageMappingList()) {
+		ImageDVO imageRecord = new ImageDVO(selectedSkuRecord.getDefaultImageRecord().getZoomImageURL());
+		imageList.add(imageRecord);
 
-				ImageDVO imageRecord = new ImageDVO(productImageMappingDVO.getImageRecord().getImageURL());
-				imageList.add(imageRecord);
-
-			}
-		}
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 				.put(CommonConstant.IMAGE_DVO_LIST, imageList);
 	}
 
 	private void populateData() throws FrameworkException, BusinessException {
 		HashMap<Boolean, String> yesNoValuesMap = new HashMap<Boolean, String>();
-		ArrayList<Object> yesNoList = new ProductDefinitionBF().getAllOptionsValuesForSearch().get("yesNoList");
+		ArrayList<Object> yesNoList = new SkuDefinitionBF().getAllOptionsValuesForSearch().get("yesNoList");
 
 		if (yesNoList != null) {
 			for (Object propertyValueType : yesNoList) {
@@ -450,16 +246,20 @@ public class SkuDefinitionSearchBB extends BackingBean {
 				yesNoValuesMap.put(parameter.getParameterBooleanValue(), parameter.getParameterCode());
 			}
 		}
-		if (!productOpr.getProductDVOList().isEmpty()) {
-			for (ProductDVO productRecord : productOpr.getProductDVOList()) {
-				String activeDescription = yesNoValuesMap.get(productRecord.getActive());
-				productRecord.setActiveDescription(activeDescription);
+		if (!skuOpr.getProductSkuList().isEmpty()) {
+			for (ProductSkuDVO productSkuRecord : skuOpr.getProductSkuList()) {
+				String activeDescription = yesNoValuesMap.get(productSkuRecord.getActive());
+				productSkuRecord.setActiveDescription(activeDescription);
+				if (productSkuRecord.getDefaultSku() == null) {
+					productSkuRecord.setDefaultSku(false);
+				}
+				productSkuRecord.setDefaultSkuDescription(yesNoValuesMap.get(productSkuRecord.getDefaultSku()));
 			}
 		}
 	}
 
 	public void clearPopUpPage(ActionEvent event) {
-		productOpr = new ProductOpr();
+		skuOpr = new SkuOpr();
 	}
 
 }

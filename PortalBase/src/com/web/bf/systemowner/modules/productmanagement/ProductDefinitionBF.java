@@ -204,14 +204,6 @@ public class ProductDefinitionBF extends BusinessFacade {
 		return new ProductSF().getAllLevelsNames();
 	}
 
-	public ProductOpr getImageMappingList(ProductOpr productOpr) throws FrameworkException, BusinessException {
-		return new ProductDefinitionBC().getImageMappingList(productOpr);
-	}
-
-	public ProductOpr saveImageMappingList(ProductOpr productOpr) throws FrameworkException, BusinessException {
-		return new ProductDefinitionBC().saveImageMappingList(productOpr);
-	}
-
 	public HashMap<String, ArrayList<Object>> getAllOptionsValuesForProduct() throws FrameworkException,
 			BusinessException {
 

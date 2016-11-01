@@ -264,34 +264,6 @@ public class ProductDefinitionSearchBB extends BackingBean {
 
 	}
 
-	public void createNewSKU() {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Search BB :: createNewSKU starts ");
-
-		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
-		setErrorList(new ArrayList<String>());
-		setSuccessMsg("");
-
-		String productStatusCode = selectedProductRecord.getStatusRecord().getCode();
-		Boolean active = selectedProductRecord.getActive();
-		if (!CommonConstant.StatusCodes.APPROVED.equals(productStatusCode)) {
-			addToErrorList(propertiesReader.getValueOfKey("product_code_not_approved"));
-		}
-		if (active != null && !active) {
-			addToErrorList(propertiesReader.getValueOfKey("product_code_not_active"));
-		}
-
-		if (getErrorList().size() == 0) {
-			ProductOpr productOprSent = new ProductOpr();
-			productOprSent.getProductRecord().setId(selectedProductRecord.getId());
-
-			FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
-			FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-					.put(CommonConstant.ACTIVE_TAB_OPR, productOprSent);
-			FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("EDIT_DETAILS", "SKU");
-		}
-	}
-
 	@Override
 	public void retrieveData() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
