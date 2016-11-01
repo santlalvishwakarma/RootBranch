@@ -89,13 +89,29 @@
 	<!-- Admin entry ends here -->
 
 	<managed-bean>
-		<managed-bean-name>addCategoryBB</managed-bean-name>
-		<managed-bean-class>com.web.bb.systemowner.modules.categorymaster.AddCategoryBB</managed-bean-class>
+		<managed-bean-name>addEditCategoryBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.categorymaster.AddEditCategoryBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>searchCategoryBB</managed-bean-name>
 		<managed-bean-class>com.web.bb.systemowner.modules.categorymaster.SearchCategoryBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>skuDefinitionBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.skumanagement.SkuDefinitionBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>skuDefinitionSearchBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.skumanagement.SkuDefinitionSearchBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>skuDefinitionAddEditBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.skumanagement.SkuDefinitionAddEditBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 

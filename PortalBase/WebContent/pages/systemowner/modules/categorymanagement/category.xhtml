@@ -5,10 +5,10 @@
 	<ui:define name="content">
 		<h:form>
 			<p:remoteCommand name="editSelectedCategoryRecord" process="@this" partialSubmit="true" update=":categoryTabView"
-				action="#{addCategoryBB.setCategoryForEdit}" />
+				action="#{addEditCategoryBB.setCategoryForEdit}" />
 		</h:form>
-		<p:tabView id="categoryTabView" activeIndex="#{addCategoryBB.activeTabIndex}">
-			<p:ajax event="tabChange" listener="#{addCategoryBB.tabChanged}" />
+		<p:tabView id="categoryTabView" activeIndex="#{addEditCategoryBB.activeTabIndex}">
+			<p:ajax event="tabChange" listener="#{addEditCategoryBB.tabChanged}" process="@this" update=":categoryTabView" />
 			<p:tab id="searchListCategory" title="Search/List">
 				<div style="overflow-x: auto; overflow-y: auto;">
 					<ui:include src="searchcategory.xhtml" />

@@ -15,6 +15,7 @@ import com.web.foundation.logger.ITSDLogger;
 import com.web.foundation.logger.TSDLogger;
 
 public class CategoryMasterBC extends BackingClass {
+
 	public List<CategoryDVO> getAllCategories() throws FrameworkException, BusinessException {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("In Product Category BC :: getAllCategories starts ");

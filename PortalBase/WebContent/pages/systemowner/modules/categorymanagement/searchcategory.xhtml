@@ -16,7 +16,7 @@
 					<td><p:commandButton id="btnSearch" update="searchResultPanelGroup" process="@this, searchCategoryField"
 							actionListener="#{searchCategoryBB.executeSearch}" value="Search" /> <p:tooltip for="btnSearch"
 							value="Click to Search" /> <p:hotkey bind="ctrl+shift+s" /></td>
-					<td><p:commandButton id="btnCancel" action="#{customerPurchaseBillSearchBB.clearFields}" value="Clear Search"
+					<td><p:commandButton id="btnCancel" action="#{searchCategoryBB.clearFields}" value="Clear Search"
 							process="@this" update="searchCategoryField, searchResultPanelGroup" /> <p:tooltip for="btnCancel"
 							value="Click to Clear" /></td>
 				</tr>
@@ -51,7 +51,7 @@
 					<f:facet name="header">Name</f:facet>
 					<p:commandLink styleClass="linkClass" process="@this" update=":categoryTabView" value="#{categoryRecord.name}"
 						action="#{searchCategoryBB.editDetails}">
-						<f:setPropertyActionListener target="#{searchCategoryBB.searchCategoryOpr.categoryRecord}"
+						<f:setPropertyActionListener target="#{searchCategoryBB.searchCategoryOpr.selectedCategoryRecord}"
 							value="#{categoryRecord}" />
 					</p:commandLink>
 				</p:column>

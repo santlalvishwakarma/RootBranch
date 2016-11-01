@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import org.primefaces.component.tabview.Tab;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.TabChangeEvent;
 
 import com.web.bf.systemowner.modules.categorymaster.CategoryMasterBF;
 import com.web.common.constants.CommonConstant;
@@ -26,42 +24,8 @@ public class SearchCategoryBB extends BackingBean {
 	private static final long serialVersionUID = -4709634562840005770L;
 
 	private String propertiesLocation = "/com/web/bb/systemowner/modules/categorymaster/category";
-	private int activeTabIndex;
 
 	private CategoryOpr searchCategoryOpr;
-
-	public int getActiveTabIndex() {
-		if (FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get(CommonConstant.ACTIVE_TAB) != null) {
-			activeTabIndex = (Integer) FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-					.get(CommonConstant.ACTIVE_TAB);
-			FacesContext.getCurrentInstance().getExternalContext().getRequestMap().remove(CommonConstant.ACTIVE_TAB);
-		}
-		return activeTabIndex;
-	}
-
-	public void setActiveTabIndex(int activeTabIndex) {
-		this.activeTabIndex = activeTabIndex;
-	}
-
-	public void tabChanged(TabChangeEvent event) {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug(" In tabChanged : activeTabIndex : " + activeTabIndex);
-
-		Tab activeTab = event.getTab();
-		String tabId = activeTab.getId();
-		myLog.debug(" tabChanged : tab id : " + tabId);
-
-		if (tabId.equals("searchListCategory")) {
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-					.put(CommonConstant.RE_INITIALIZE_OPR, new CategoryOpr());
-			// RequestContext.getCurrentInstance().execute("searchCustomerPurchaseBill();");
-
-		} else if (tabId.equals("addeditCategory")) {
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-					.put(CommonConstant.ACTIVE_TAB_OPR, new CategoryOpr());
-			// RequestContext.getCurrentInstance().execute("addEditCustomerPurchaseBill();");
-		}
-	}
 
 	public CategoryOpr getSearchCategoryOpr() {
 		if (searchCategoryOpr == null) {
@@ -83,7 +47,7 @@ public class SearchCategoryBB extends BackingBean {
 
 		if (validate) {
 			try {
-				searchCategoryOpr.setCategoryList(null);
+				searchCategoryOpr.getCategoryList().clear();
 				new CategoryMasterBF().executeSearch(searchCategoryOpr);
 			} catch (FrameworkException e) {
 				handleException(e, propertiesLocation);
@@ -139,10 +103,8 @@ public class SearchCategoryBB extends BackingBean {
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 				.put(CommonConstant.ACTIVE_TAB_OPR, searchCategoryOpr);
 
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(CommonConstant.ACTIVE_TAB,
-		// 1);
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.put(CommonConstant.ACTIVE_TAB_OPR, searchCategoryOpr);
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("MY_NAME", "Deepak Naithani");
+
 		myLog.debug(" Category Id: " + searchCategoryOpr.getCategoryRecord().getId());
 		myLog.debug(" Category Code: " + searchCategoryOpr.getCategoryRecord().getCode());
 		myLog.debug(" Category Name: " + searchCategoryOpr.getCategoryRecord().getName());
@@ -172,5 +134,6 @@ public class SearchCategoryBB extends BackingBean {
 
 		searchCategoryOpr.getCategoryRecord().setName("");
 		searchCategoryOpr.getCategoryRecord().setCode("");
+		searchCategoryOpr.getCategoryList().clear();
 	}
 }

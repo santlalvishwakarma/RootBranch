@@ -11,6 +11,7 @@ public class CategoryOpr extends OperationalDataValueObject {
 	private static final long serialVersionUID = -4500345020599911808L;
 
 	private CategoryDVO categoryRecord;
+	private CategoryDVO selectedCategoryRecord;
 	private List<CategoryDVO> categoryList;
 
 	public CategoryDVO getCategoryRecord() {
@@ -22,6 +23,17 @@ public class CategoryOpr extends OperationalDataValueObject {
 
 	public void setCategoryRecord(CategoryDVO categoryRecord) {
 		this.categoryRecord = categoryRecord;
+	}
+
+	public CategoryDVO getSelectedCategoryRecord() {
+		if (selectedCategoryRecord == null) {
+			selectedCategoryRecord = new CategoryDVO();
+		}
+		return selectedCategoryRecord;
+	}
+
+	public void setSelectedCategoryRecord(CategoryDVO selectedCategoryRecord) {
+		this.selectedCategoryRecord = selectedCategoryRecord;
 	}
 
 	public List<CategoryDVO> getCategoryList() {
