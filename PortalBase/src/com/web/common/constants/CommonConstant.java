@@ -173,7 +173,7 @@ public interface CommonConstant {
 
 	public interface Urls {
 		public static final String CONTEXT_NAME = "/p";
-		public static final String WEBDAV_CONTEXT_NAME = "/webdav/images/";
+		public static final String WEBDAV_CONTEXT_NAME = "/retailwebdav/images/";
 		public static final String BARCODE_URL_PARAM = "&barcode_url=";
 		public static final String BARCODE_URL = "/barcode4j/genbc";
 		public static final String LOGIN = "/login/";

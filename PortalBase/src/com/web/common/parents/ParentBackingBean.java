@@ -471,6 +471,8 @@ public abstract class ParentBackingBean implements Serializable {
 			// Don't use a cached copy.
 			urlConnection.setUseCaches(false);
 			urlConnection.setRequestProperty("Content-type", fileToUpload.getContentType());
+
+			myLog.debug("Content-type::" + fileToUpload.getContentType());
 			urlConnection.setRequestMethod("PUT");
 			urlConnection.setRequestProperty("Content-Length", String.valueOf(fileToUpload.getLength()));
 			myLog.debug("urlConnection data length " + fileToUpload.getLength());

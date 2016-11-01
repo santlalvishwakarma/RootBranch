@@ -18,9 +18,9 @@
 				<p:panel id="skuImageDialogPanel1" header="Default Image">
 					<h:form id="skuImageDialogForm">
 						<p:fileUpload id="defaultImageFileupload" update=":skuImageTableDialogForm:skuImageListPanel"
-							process="skuImageDialogPanel1, @this"
-							fileUploadListener="#{skuDefinitionAddEditBB.handleFileUploadForDefaultImage}" sizeLimit="2097152"
-							multiple="false" label="Select" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" description="Images" />
+							process=":skuImageDialogPanel1, @this"
+							fileUploadListener="#{skuDefinitionAddEditBB.handleFileUploadForDefaultImage}" sizeLimit="2097152" label="Select"
+							allowTypes="/(\.|\/)(gif|jpe?g|png)$/" description="Images" />
 					</h:form>
 				</p:panel>
 				<p:panel id="skuImageDialogPanel2" header="Alternate Image">

@@ -60,10 +60,16 @@
 		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
 		<param-value>.xhtml</param-value>
 	</context-param>
+	<context-param>
+		<param-name>primefaces.UPLOADER</param-name>
+		<param-value>commons</param-value>
+	</context-param>
 
 	<listener>
 		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
 	</listener>
+
+
 
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -87,6 +93,7 @@
 	<filter-mapping>
 		<filter-name>PrimeFaces FileUpload Filter</filter-name>
 		<servlet-name>Faces Servlet</servlet-name>
+		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
 
@@ -125,19 +132,33 @@
 		<url-pattern>/RetailStartupServlet</url-pattern>
 	</servlet-mapping>
 
-	<!-- <filter>
-		<description>Authorization Filter used for restricting common user from admin module access.
-		url containing such pattern (/pages/systemowner/) will only be passed through this filter
-		</description>
-		<filter-name>authorizationFilter</filter-name>
-		<filter-class>com.web.systemowner.filters.PortalAdminFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>authorizationFilter</filter-name>
-		<url-pattern>/pages/systemowner/*</url-pattern>
-		<dispatcher>FORWARD</dispatcher>
-		<dispatcher>REQUEST</dispatcher>
-		<dispatcher>ERROR</dispatcher>
-	</filter-mapping> -->
+	<servlet>
+		<servlet-name>webdav</servlet-name>
+		<servlet-class>org.apache.catalina.servlets.WebdavServlet</servlet-class>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>0</param-value>
+		</init-param>
+		<init-param>
+			<param-name>listings</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>readonly</param-name>
+			<param-value>false</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>webdav</servlet-name>
+		<url-pattern>/retailwebdav/images/*</url-pattern>
+	</servlet-mapping>
+
+
+
+	<!-- <filter> <description>Authorization Filter used for restricting common user from admin module access. url containing 
+		such pattern (/pages/systemowner/) will only be passed through this filter </description> <filter-name>authorizationFilter</filter-name> 
+		<filter-class>com.web.systemowner.filters.PortalAdminFilter</filter-class> </filter> <filter-mapping> <filter-name>authorizationFilter</filter-name> 
+		<url-pattern>/pages/systemowner/*</url-pattern> <dispatcher>FORWARD</dispatcher> <dispatcher>REQUEST</dispatcher> <dispatcher>ERROR</dispatcher> 
+		</filter-mapping> -->
 
 </web-app>
