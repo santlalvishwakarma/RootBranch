@@ -1,6 +1,7 @@
 package com.web.bb.systemowner.modules.categorymaster;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -22,7 +23,7 @@ import com.web.foundation.logger.TSDLogger;
 import com.web.foundation.validation.FoundationValidator;
 import com.web.util.PropertiesReader;
 
-public class AddCategoryBB extends BackingBean {
+public class AddEditCategoryBB extends BackingBean {
 
 	private static final long serialVersionUID = -207056909000545895L;
 
@@ -39,13 +40,6 @@ public class AddCategoryBB extends BackingBean {
 					.get(CommonConstant.ACTIVE_TAB);
 			FacesContext.getCurrentInstance().getExternalContext().getRequestMap().remove(CommonConstant.ACTIVE_TAB);
 		}
-
-		CategoryOpr editCategoryOpr = (CategoryOpr) FacesContext.getCurrentInstance().getExternalContext()
-				.getRequestMap().get(CommonConstant.ACTIVE_TAB_OPR);
-		if (addEditCategoryOpr != null && editCategoryOpr != null) {
-			addEditCategoryOpr.setCategoryRecord(editCategoryOpr.getCategoryRecord());
-		}
-
 		return activeTabIndex;
 	}
 
@@ -161,6 +155,10 @@ public class AddCategoryBB extends BackingBean {
 		// editCategoryOpr.getCategoryRecord().getCode());
 		// myLog.debug(" Category Name: " +
 		// editCategoryOpr.getCategoryRecord().getName());
+
+		myLog.debug("My name is "
+				+ FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get("MY_NAME"));
+
 		return null;
 	}
 
@@ -171,6 +169,16 @@ public class AddCategoryBB extends BackingBean {
 	}
 
 	public CategoryOpr getAddEditCategoryOpr() {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside getAddEditCategoryOpr: ");
+		if (FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+				.containsKey(CommonConstant.ACTIVE_TAB_OPR)) {
+			CategoryOpr selectedAddEditCategoryOpr = (CategoryOpr) FacesContext.getCurrentInstance()
+					.getExternalContext().getRequestMap().get(CommonConstant.ACTIVE_TAB_OPR);
+			FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+					.remove(CommonConstant.ACTIVE_TAB_OPR);
+			addEditCategoryOpr.setCategoryRecord(selectedAddEditCategoryOpr.getSelectedCategoryRecord());
+		}
 		if (addEditCategoryOpr == null) {
 			addEditCategoryOpr = new CategoryOpr();
 		}
@@ -265,14 +273,20 @@ public class AddCategoryBB extends BackingBean {
 		myLog.debug(" tabChanged : tab id : " + tabId);
 
 		if (tabId.equals("searchListCategory")) {
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+			FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 					.put(CommonConstant.RE_INITIALIZE_OPR, new CategoryOpr());
+			FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 0);
 			// RequestContext.getCurrentInstance().execute("searchCustomerPurchaseBill();");
 
 		} else if (tabId.equals("addeditCategory")) {
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+			FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 					.put(CommonConstant.ACTIVE_TAB_OPR, new CategoryOpr());
+			FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
 			// RequestContext.getCurrentInstance().execute("addEditCustomerPurchaseBill();");
 		}
+	}
+
+	public List<String> getSuggestedCategoryLevel(String query) {
+		return null;
 	}
 }
