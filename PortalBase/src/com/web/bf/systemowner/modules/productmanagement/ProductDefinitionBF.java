@@ -189,7 +189,7 @@ public class ProductDefinitionBF extends BusinessFacade {
 
 	public ArrayList<Object> getStatusCodeList() throws FrameworkException, BusinessException {
 		return new OptionsHelperBC().getStatusCodeListBasedOnParameter(new Parameter(
-				CommonConstant.ParameterCode.PRODUCT_STATUS, null));
+				CommonConstant.ParameterCode.ACTIVE_INACTIVE_STATUS, null));
 	}
 
 	public List<ProductCategoryDVO> getAllCategoriesWithLevels() throws FrameworkException, BusinessException {

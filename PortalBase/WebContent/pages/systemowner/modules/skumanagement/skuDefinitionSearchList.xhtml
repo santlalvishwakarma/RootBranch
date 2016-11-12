@@ -64,7 +64,7 @@
 				<f:facet name="header">Sku</f:facet>
 				<p:column headerText="Image" style="text-align:center;" exportable="false">
 					<p:commandLink styleClass="linkClass" action="#{skuDefinitionSearchBB.executeEnlargeImage}"
-						update=":enlargeImageDialogPanelGroup" oncomplete="enlargeImageDialog.show()">
+						process="skuListTable, @this" update=":enlargeImageDialogPanelGroup" oncomplete="PF('enlargeImageDialog').show()">
 						<h:graphicImage id="image" value="#{sessionScope['imageURL']}#{skuRecord.defaultImageRecord.thumbnailImageURL}"
 							style="width: 25px; height: 25px;" title="Thumbnail" />
 						<f:setPropertyActionListener target="#{skuDefinitionSearchBB.selectedSkuRecord}" value="#{skuRecord}" />

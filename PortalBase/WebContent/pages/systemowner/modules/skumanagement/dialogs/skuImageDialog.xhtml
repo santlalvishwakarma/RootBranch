@@ -43,8 +43,16 @@
 								<h:outputText value="A" rendered="#{!(productImageRecord.sequenceNumber eq 0)}" />
 							</p:column>
 							<p:column headerText="Image" style="text-align:center;">
-								<h:graphicImage value="#{sessionScope['imageURL']}#{productImageRecord.imageRecord.thumbnailImageURL}"
-									style="width: 25px; height: 25px;" title="Thumbnail" />
+								<p:commandLink styleClass="linkClass" action="#{skuDefinitionAddEditBB.executeEnlargeImage}"
+									process="skuImageListTable, @this" update=":enlargeImageDialogPanelGroup"
+									oncomplete="PF('enlargeImageDialog').show()">
+									<h:graphicImage id="image"
+										value="#{sessionScope['imageURL']}#{productImageRecord.imageRecord.thumbnailImageURL}"
+										style="width: 25px; height: 25px;" title="Thumbnail" />
+									<f:setPropertyActionListener target="#{skuDefinitionAddEditBB.productSkuImageMappingRecord}"
+										value="#{productImageRecord}" />
+								</p:commandLink>
+
 							</p:column>
 							<p:column headerText="Delete" style="text-align:center;">
 								<p:selectBooleanCheckbox value="#{productImageRecord.operationalAttributes.recordDeleted}" />

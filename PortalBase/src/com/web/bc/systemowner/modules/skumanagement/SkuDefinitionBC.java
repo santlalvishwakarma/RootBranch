@@ -175,7 +175,7 @@ public class SkuDefinitionBC extends BackingClass {
 				skuOpr.getProductSkuRecord().setSkuSEODescription((String) resultSetMap.get("seo_description"));
 
 				skuOpr.getProductSkuRecord().getDefaultImageRecord()
-						.setThumbnailImageURL((String) resultSetMap.get("thumbnail_image_url"));
+						.setThumbnailImageURL((String) resultSetMap.get("default_thumbnail_image_url"));
 				skuOpr.getProductSkuRecord().getDefaultImageRecord()
 						.setImageURL((String) resultSetMap.get("default_image_url"));
 				skuOpr.getProductSkuRecord().getDefaultImageRecord()
@@ -352,7 +352,7 @@ public class SkuDefinitionBC extends BackingClass {
 		myLog.debug(" parameter 3 userLogin:: " + userLogin);
 
 		strSqlParams[3][0] = "4";
-		strSqlParams[3][1] = IDAOConstant.BOOLEAN_DATATYPE;
+		strSqlParams[3][1] = IDAOConstant.STRING_DATATYPE;
 		strSqlParams[3][2] = lastModifiedDate;
 		myLog.debug(" parameter 4 lastModifiedDate:: " + lastModifiedDate);
 

@@ -134,9 +134,11 @@ public class ProductDefinitionBC extends BackingClass {
 		myLog.debug(" parameter 8 :: " + strSqlParams[7][2]);
 
 		strSqlParams[8][0] = "9";
-		strSqlParams[8][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[8][2] = statusCode;
-		myLog.debug(" parameter 9 :: " + statusCode);
+		strSqlParams[8][1] = IDAOConstant.BOOLEAN_DATATYPE;
+		if (statusCode != null && statusCode.equalsIgnoreCase("active"))
+			strSqlParams[8][2] = true;
+		else if (statusCode != null && statusCode.equalsIgnoreCase("inactive"))
+			strSqlParams[8][2] = false;
 
 		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
 		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
@@ -425,8 +427,6 @@ public class ProductDefinitionBC extends BackingClass {
 						.setCode((String) resultSetMap.get("sku_status_code"));
 				productDVO.getProductSkuRecord().getStatusRecord()
 						.setName((String) resultSetMap.get("sku_status_name"));
-				if (resultSetMap.get("sku_is_active") != null)
-					productDVO.getProductSkuRecord().setActive(!((Boolean) resultSetMap.get("sku_is_active")));
 
 				String imageUrlString = (String) resultSetMap.get("image_url");
 				myLog.debug(" imageUrlString :: " + imageUrlString);
@@ -471,8 +471,8 @@ public class ProductDefinitionBC extends BackingClass {
 				// resultSetMap.get("sku_status_code"));
 				// productSkuRecord.getStatusRecord().setName((String)
 				// resultSetMap.get("sku_status_name"));
-				if (resultSetMap.get("sku_is_active") != null)
-					productSkuRecord.setActive(!((Boolean) resultSetMap.get("sku_is_active")));
+				if (resultSetMap.get("is_active") != null)
+					productSkuRecord.setActive(!((Boolean) resultSetMap.get("is_active")));
 
 				if (resultSetMap.get("default_sku") != null)
 					productSkuRecord.setDefaultSku(!((Boolean) resultSetMap.get("default_sku")));

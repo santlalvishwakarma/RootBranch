@@ -225,15 +225,14 @@ public class SkuDefinitionSearchBB extends BackingBean {
 
 	public void executeEnlargeImage() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Search BB :: executeEnlargeImage starts ");
+		myLog.debug("In Sku Definition Search BB :: executeEnlargeImage starts ");
 
-		ArrayList<ImageDVO> imageList = new ArrayList<ImageDVO>();
-
-		ImageDVO imageRecord = new ImageDVO(selectedSkuRecord.getDefaultImageRecord().getZoomImageURL());
-		imageList.add(imageRecord);
+		ImageDVO imageRecord = new ImageDVO(getSelectedSkuRecord().getDefaultImageRecord().getZoomImageURL());
+		myLog.debug("In Sku Definition Search BB :: zoom image url::"
+				+ getSelectedSkuRecord().getDefaultImageRecord().getZoomImageURL());
 
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.IMAGE_DVO_LIST, imageList);
+				.put(CommonConstant.IMAGE_DVO, imageRecord);
 	}
 
 	private void populateData() throws FrameworkException, BusinessException {

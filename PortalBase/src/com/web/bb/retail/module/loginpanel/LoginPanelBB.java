@@ -25,6 +25,7 @@ import com.web.foundation.exception.FrameworkException;
 import com.web.foundation.logger.ITSDLogger;
 import com.web.foundation.logger.TSDLogger;
 import com.web.foundation.validation.FoundationValidator;
+import com.web.util.CommonUtil;
 import com.web.util.PropertiesReader;
 
 public class LoginPanelBB extends BackingBean {
@@ -219,8 +220,15 @@ public class LoginPanelBB extends BackingBean {
 									navigationFlag = true;
 									adminValidationFlag = true;
 									String userLogin = loginPanelOpr.getUserDetails().getUserLogin();
+
+									String serverlUrl = CommonUtil.getServerUrl();
 									// putting user login into session
 									externalContext.getSessionMap().put(CommonConstant.LOGGED_USER_KEY, userLogin);
+
+									externalContext
+											.getSessionMap()
+											.put("imageURL",
+													(CommonConstant.HttpSchemes.HTTP + serverlUrl + CommonConstant.Urls.WEBDAV_CONTEXT_NAME));
 
 									putObjectInCache(CommonConstant.LOGGED_USER_ROLES, userRoleMappingDVO
 											.getRoleRecord().getCode());

@@ -70,6 +70,7 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 
 	private boolean validateForApprove;
 	private boolean renderGetBackToAutoSku = false;
+	private ProductSkuImageMappingDVO productSkuImageMappingRecord;
 
 	public SkuOpr getSkuOpr() {
 		if (FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
@@ -262,6 +263,17 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 
 	public void setRenderGetBackToAutoSku(boolean renderGetBackToAutoSku) {
 		this.renderGetBackToAutoSku = renderGetBackToAutoSku;
+	}
+
+	public ProductSkuImageMappingDVO getProductSkuImageMappingRecord() {
+		if (productSkuImageMappingRecord == null) {
+			productSkuImageMappingRecord = new ProductSkuImageMappingDVO();
+		}
+		return productSkuImageMappingRecord;
+	}
+
+	public void setProductSkuImageMappingRecord(ProductSkuImageMappingDVO productSkuImageMappingRecord) {
+		this.productSkuImageMappingRecord = productSkuImageMappingRecord;
 	}
 
 	@Override
@@ -2521,110 +2533,15 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 		return skuListForAutoSuggest;
 	}
 
-	public void executeSaveOtherSkuMapping(ActionEvent ae) {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In getSuggestedSkuDetailsForCode starts ");
-		if (validateExecuteSaveOtherSkuMapping()) {
-			try {
-				String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
-				productOpr.getProductRecord().getProductOtherSkuMappingDVO().setUserLogin(userLogin);
-				productOpr = new ProductDefinitionBD().executeSaveOtherSkuMapping(productOpr);
-				PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
-				openOtherSkuMappingDialog(ae);
-				setSuccessMsg(propertiesReader.getValueOfKey("sku_save_success"));
-			} catch (FrameworkException e) {
-				handleException(e, propertiesLocation);
-			} catch (BusinessException e) {
-				handleException(e, propertiesLocation);
-			}
-		}
-	}
-
-	public boolean validateExecuteSaveOtherSkuMapping() {
-		boolean valSaveFlag = false;
-		setErrorList(new ArrayList<String>());
-		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
-
-		if (productOpr.getProductRecord().getProductOtherSkuMappingList() != null
-				&& productOpr.getProductRecord().getProductOtherSkuMappingList().size() > 0) {
-			HashMap<Object, String> mappingMap = new HashMap<Object, String>();
-			for (ProductOtherSKUMappingDVO listDVO : productOpr.getProductRecord().getProductOtherSkuMappingList()) {
-
-				if (listDVO.getSubProductSkuRecord().getId() != null) {
-					if (mappingMap != null && mappingMap.containsKey(listDVO.getSubProductSkuRecord().getId())) {
-						mappingMap.put(listDVO.getSubProductSkuRecord().getId(), "DOUBLE");
-					} else {
-						mappingMap.put(listDVO.getSubProductSkuRecord().getId(), "SINGLE");
-					}
-				}
-			}
-
-			for (int i = 0; i < productOpr.getProductRecord().getProductOtherSkuMappingList().size(); i++) {
-
-				ProductOtherSKUMappingDVO listDVO = productOpr.getProductRecord().getProductOtherSkuMappingList()
-						.get(i);
-				if (listDVO.getSubProductSkuRecord().getId() == null) {
-					String errorMsg = propertiesReader.getValueOfKey("product_sku_null");
-					addToErrorList(errorMsg + (i + 1));
-
-					if (listDVO.getSkuQuantity() == null) {
-						String errorMsg1 = propertiesReader.getValueOfKey("product_sku_qty_null");
-						addToErrorList(errorMsg1 + (i + 1));
-					} else if (listDVO.getSkuQuantity() != null && listDVO.getSkuQuantity() == 0) {
-						String errorMsg2 = propertiesReader.getValueOfKey("product_sku_qty_more_than_zero");
-						addToErrorList(errorMsg2 + (i + 1));
-					}
-					if (listDVO.getSkuQuantityUOM().getUomCode().getCode() == null) {
-						String errorMsg3 = propertiesReader.getValueOfKey("product_sku_qty_uom_null");
-						addToErrorList(errorMsg3 + (i + 1));
-					}
-				} else if (mappingMap != null && mappingMap.containsKey(listDVO.getSubProductSkuRecord().getId())) {
-					String skuStatus = mappingMap.get(listDVO.getSubProductSkuRecord().getId());
-					if (skuStatus != null && skuStatus.equalsIgnoreCase("DOUBLE")) {
-						String errorMsg = propertiesReader.getValueOfKey("product_sku_cannot_be_double");
-						addToErrorList(errorMsg + (i + 1));
-					} else {
-						if (listDVO.getSkuQuantity() == null) {
-							String errorMsg = propertiesReader.getValueOfKey("product_sku_qty_null");
-							addToErrorList(errorMsg + (i + 1));
-						} else if (listDVO.getSkuQuantity() != null && listDVO.getSkuQuantity() == 0) {
-							String errorMsg = propertiesReader.getValueOfKey("product_sku_qty_more_than_zero");
-							addToErrorList(errorMsg + (i + 1));
-						}
-						if (listDVO.getSkuQuantityUOM().getUomCode().getCode() == null) {
-							String errorMsg = propertiesReader.getValueOfKey("product_sku_qty_uom_null");
-							addToErrorList(errorMsg + (i + 1));
-						}
-					}
-				}
-			}
-		} else {
-			addToErrorList(propertiesReader.getValueOfKey("add_sku_to_map"));
-		}
-
-		if (getErrorList().size() > 0) {
-			valSaveFlag = false;
-		} else {
-			valSaveFlag = true;
-		}
-
-		return valSaveFlag;
-	}
-
 	public void executeEnlargeImage() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Search BB :: executeEnlargeImage starts ");
+		myLog.debug("In Sku Definition add edit BB :: executeEnlargeImage starts ");
 
-		ArrayList<ImageDVO> imageList = new ArrayList<ImageDVO>();
+		ImageDVO imageRecord = new ImageDVO(getProductSkuImageMappingRecord().getImageRecord().getZoomImageURL());
+		myLog.debug("In Sku Definition add edit BB :: zoom image url::"
+				+ getProductSkuImageMappingRecord().getImageRecord().getZoomImageURL());
 
-		if (productOpr.getProductRecord().getProductSkuRecord().getDefaultProductSkuImageMappingDVO().getImageRecord()
-				.getImageURL() != null) {
-			ImageDVO imageRecord = new ImageDVO(productOpr.getProductRecord().getProductSkuRecord()
-					.getDefaultProductSkuImageMappingDVO().getImageRecord().getImageURL());
-			imageList.add(imageRecord);
-
-		}
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.IMAGE_DVO_LIST, imageList);
+				.put(CommonConstant.IMAGE_DVO, imageRecord);
 	}
 }

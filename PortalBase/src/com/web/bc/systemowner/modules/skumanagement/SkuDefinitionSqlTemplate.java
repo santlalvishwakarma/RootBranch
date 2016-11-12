@@ -11,7 +11,7 @@ public interface SkuDefinitionSqlTemplate extends SqlTemplate {
 			+ " WHERE psim.product_sku_id = ? AND psim.product_sku_id = psh.product_sku_id "
 			+ " ORDER BY psim.sequence_number;";
 
-	static final String SAVE_IMAGE_MAPPING_LIST = "CALL sp_product_save_product_sku_image_mapping(?,?,?,?,?,?, @p_error_code, @p_error_message);";
+	static final String SAVE_IMAGE_MAPPING_LIST = "CALL sp_product_save_product_sku_image_mapping(?,?,?,?, @p_error_code, @p_error_message);";
 
 	static final String SAVE_SKU_DETAILS = "CALL sp_product_save_sku_details(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, @p_last_inserted_id, @p_error_code, @p_error_message);";
 
