@@ -10,7 +10,7 @@ IN p_sku_code VARCHAR(25),
 IN p_sku_description VARCHAR(255),
 IN p_product_hierarchies_id VARCHAR(500),
 IN p_product_properties TEXT,
-IN p_status_code VARCHAR(25),
+IN p_status_code tinyint(1),
 OUT p_error_code VARCHAR(50),
 OUT p_error_message VARCHAR(500)
 )
@@ -74,7 +74,7 @@ CREATE TEMPORARY TABLE temp_categories
 	  
       IF p_status_code IS NOT NULL THEN
           
-          SET v_string_status_code = " AND ph.status_code = '";
+          SET v_string_status_code = " AND ph.is_active = '";
           SET v_string_status_code = CONCAT(v_string_status_code, p_status_code,"'");
       END IF;
       

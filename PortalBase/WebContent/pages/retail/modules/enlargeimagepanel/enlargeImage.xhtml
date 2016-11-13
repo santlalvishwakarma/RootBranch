@@ -7,7 +7,7 @@
 		<h:panelGroup id="enlargeImageDialogPanelGroup">
 			<h:form id="enlargeImageDialogForm">
 				<p:panel id="imagePanel">
-					<h:graphicImage value="#{enlargeImageBB.imageRecord.imageURL}" id="enlargedImage"
+					<h:graphicImage value="#{sessionScope['imageURL']}#{enlargeImageBB.imageRecord.imageURL}" id="enlargedImage"
 						style="border:0;width:354px; height:311px" />
 				</p:panel>
 				<br />

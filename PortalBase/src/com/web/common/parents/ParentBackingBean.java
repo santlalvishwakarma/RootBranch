@@ -450,9 +450,9 @@ public abstract class ParentBackingBean implements Serializable {
 				urlConnection.disconnect();
 
 				if (responseCode == 204) {
-					myLog.debug(urlString + "successfully deleted existing file from file system :::: ");
+					myLog.debug(urlString + "::successfully deleted existing file from file system :::: ");
 				} else {
-					myLog.debug(urlString + "could not be successfully delete existing file from file system :::: ");
+					myLog.debug(urlString + "::could not be successfully delete existing file from file system :::: ");
 				}
 			}
 			// END CHECK IF FILE EXISTS, IF YES DELETE

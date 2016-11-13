@@ -177,8 +177,8 @@ IF p_error_code IS NULL AND p_image_parse_string IS NOT NULL THEN
 		                  			UPDATE 	product_sku_image_mapping
 									SET 	product_sku_id = p_product_sku_id,
 											image_url = v_image_url,
-											thumbnail_url = v_thumbnail_url,
-											zoom_url = v_zoom_url, 
+											thumbnail_image_url = v_thumbnail_url,
+											zoom_image_url = v_zoom_url, 
 											sequence_number = v_sequence_number,
 			                            	modified_by = p_user_login,
 			                            	modified_date = NOW()		                            
@@ -201,9 +201,10 @@ IF p_error_code IS NULL AND p_image_parse_string IS NOT NULL THEN
 		                      	INSERT INTO product_sku_image_mapping
 		                        (	product_sku_id, 
 		                        	image_url, 
-		                        	thumbnail_url, 
-		                        	zoom_url, 
+		                        	thumbnail_image_url, 
+		                        	zoom_image_url, 
 		                        	sequence_number, 
+		                        	is_active,
 		                        	created_by, 
 		                        	created_date, 
 		                        	modified_by, 
@@ -215,6 +216,7 @@ IF p_error_code IS NULL AND p_image_parse_string IS NOT NULL THEN
 		                        	v_thumbnail_url, 
 		                        	v_zoom_url, 
 		                        	v_sequence_number,
+		                        	1,
 		                           	p_user_login,
 		                            NOW(),
 		                            p_user_login,

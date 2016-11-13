@@ -67,6 +67,7 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 
 	private boolean validateForApprove;
 	private boolean renderGetBackToAutoSku = false;
+	private ProductSkuDVO productSkuRecord;
 
 	public ProductOpr getProductOpr() {
 		if (FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
@@ -261,6 +262,17 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 		this.renderGetBackToAutoSku = renderGetBackToAutoSku;
 	}
 
+	public ProductSkuDVO getProductSkuRecord() {
+		if (productSkuRecord == null) {
+			productSkuRecord = new ProductSkuDVO();
+		}
+		return productSkuRecord;
+	}
+
+	public void setProductSkuRecord(ProductSkuDVO productSkuRecord) {
+		this.productSkuRecord = productSkuRecord;
+	}
+
 	@Override
 	public void executeSearch(ActionEvent event) {
 	}
@@ -396,6 +408,7 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 				|| productOpr.getProductRecord().getProductSkuRecord().getId() != null) {
 			try {
 				productOpr = new ProductDefinitionBF().getProductDetails(productOpr);
+				populateData();
 
 			} catch (FrameworkException e) {
 				handleException(e, propertiesLocation);
@@ -423,6 +436,28 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 		populateEnableDisableButtons();
 
 		myLog.debug("In Product Definition Add Edit BB :: retrieveData ends ");
+	}
+
+	private void populateData() throws FrameworkException, BusinessException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In Product Definition Add Edit BB :: populateData starts ");
+		HashMap<Boolean, String> yesNoValuesMap = new HashMap<Boolean, String>();
+		ArrayList<Object> yesNoList = new ProductDefinitionBF().getAllOptionsValuesForSearch().get("yesNoList");
+
+		myLog.debug("yes no list::" + yesNoList.size());
+
+		if (yesNoList != null) {
+			for (Object propertyValueType : yesNoList) {
+				Parameter parameter = (Parameter) propertyValueType;
+				yesNoValuesMap.put(parameter.getParameterBooleanValue(), parameter.getParameterCode());
+			}
+		}
+		if (!productOpr.getProductRecord().getProductSkuList().isEmpty()) {
+			for (ProductSkuDVO productSkuRecord : productOpr.getProductRecord().getProductSkuList()) {
+				String activeDescription = yesNoValuesMap.get(productSkuRecord.getActive());
+				productSkuRecord.setActiveDescription(activeDescription);
+			}
+		}
 	}
 
 	private void populateEnableDisableButtons() {
@@ -3023,16 +3058,11 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("In Product Definition Search BB :: executeEnlargeImage starts ");
 
-		ArrayList<ImageDVO> imageList = new ArrayList<ImageDVO>();
+		ImageDVO imageRecord = new ImageDVO(getProductSkuRecord().getDefaultImageRecord().getZoomImageURL());
+		myLog.debug("In Sku Definition Search BB :: zoom image url::"
+				+ getProductSkuRecord().getDefaultImageRecord().getZoomImageURL());
 
-		if (productOpr.getProductRecord().getProductSkuRecord().getDefaultProductSkuImageMappingDVO().getImageRecord()
-				.getImageURL() != null) {
-			ImageDVO imageRecord = new ImageDVO(productOpr.getProductRecord().getProductSkuRecord()
-					.getDefaultProductSkuImageMappingDVO().getImageRecord().getImageURL());
-			imageList.add(imageRecord);
-
-		}
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.IMAGE_DVO_LIST, imageList);
+				.put(CommonConstant.IMAGE_DVO, imageRecord);
 	}
 }

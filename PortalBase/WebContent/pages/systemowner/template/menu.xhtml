@@ -8,7 +8,6 @@
 					<p:submenu style="display: none;">
 						<p:menuitem value="Product Management" action="pretty:productManagement" process="@this" />
 						<p:menuitem value="Sku Master" action="pretty:skuManagement" process="@this" />
-						<p:menuitem value="Product Sku Mapping" process="@this" />
 					</p:submenu>
 				</p:column>
 			</p:submenu>
@@ -20,15 +19,13 @@
 					</p:submenu>
 				</p:column>
 			</p:submenu>
-			<p:submenu label="Relationship Menu">
+			<p:submenu label="Masters">
 				<p:column>
 					<p:submenu style="display: none;">
-						<p:menuitem value="Product Sku Mapping" process="@this" />
-						<p:menuitem value="Category Product Mapping" process="@this" />
+						<p:menuitem value="Size Master" process="@this" />
 					</p:submenu>
 				</p:column>
 			</p:submenu>
-			
 		</p:megaMenu>
 	</h:form>
 </ui:composition>
