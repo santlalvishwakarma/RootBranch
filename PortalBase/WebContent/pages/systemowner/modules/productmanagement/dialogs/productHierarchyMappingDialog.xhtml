@@ -1,0 +1,128 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="productHierarchyMappingDialogForm">
+		<p:dialog id="productHierarchyMappingDialog" header="Hierarchy Definition" widgetVar="productHierarchyMappingDialog"
+			showEffect="explode" hideEffect="explode" dynamic="true" modal="true"
+			height="#{productDefinitionAddEditBB.modalHeight}">
+			<p:ajax event="close" listener="#{productDefinitionAddEditBB.closeModalWindow}" />
+			<p:panel id="productHierarchyMappingDialogPanel">
+				<p:commandLink id="productHierarchyMappingAddRow" process="productHierarchyMappingListPanel, @this"
+					styleClass="linkClass" actionListener="#{productDefinitionAddEditBB.executeHierarchyMappingAddRow}"
+					update="productHierarchyMappingListPanel">
+					<p:graphicImage alt="Add Row" value="/staticcontent/retailimages/add.png" />
+				</p:commandLink>
+				<label class="addRowMsgClass">Please click here to add a new row</label>
+				<br />
+				<br />
+				<h:panelGroup id="productHierarchyMappingListPanel">
+					<p:dataTable id="productHierarchyMappingListTable" rows="#{productDefinitionAddEditBB.paginationNumber}"
+						var="hierarchyMappingRecord" paginator="true" rowsPerPageTemplate="5,10,15"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page"
+						rendered="#{!(empty productDefinitionAddEditBB.productOpr.productRecord.productHierarchyMappingList)}"
+						value="#{productDefinitionAddEditBB.productOpr.productRecord.productHierarchyMappingList}">
+						<f:facet name="header">Map Hierarchy</f:facet>
+						<p:column headerText="Code">
+							<p:autoComplete id="productHierarchyCodeAutoComplete" maxResults="20"
+								value="#{hierarchyMappingRecord.productHierarchyRecord}" minQueryLength="2" effect="fade" forceSelection="true"
+								completeMethod="#{productDefinitionAddEditBB.getSuggestedHierarchiesForCode}" var="productHierarchyRecord"
+								itemLabel="#{productHierarchyRecord.code}" itemValue="#{productHierarchyRecord}" global="false"
+								converter="#{productDefinitionAddEditBB.baseDVOConverter}">
+								<p:ajax event="itemSelect" process="@this"
+									update="productHierarchyCodeAutoComplete, productHierarchyNameAutoComplete, productHierarchyDescriptionAutoComplete" />
+								<p:column headerText="Code">#{productHierarchyRecord.code}</p:column>
+								<p:column headerText="Name">#{productHierarchyRecord.name}</p:column>
+							</p:autoComplete>
+							<p:watermark for="productHierarchyCodeAutoComplete" value="Enter first 2 chars" />
+						</p:column>
+						<p:column headerText="Name">
+							<p:autoComplete id="productHierarchyNameAutoComplete" maxResults="20"
+								value="#{hierarchyMappingRecord.productHierarchyRecord}" minQueryLength="2" effect="fade" forceSelection="true"
+								completeMethod="#{productDefinitionAddEditBB.getSuggestedHierarchiesForName}" var="productHierarchyRecord"
+								itemLabel="#{productHierarchyRecord.name}" itemValue="#{productHierarchyRecord}" global="false"
+								converter="#{productDefinitionAddEditBB.baseDVOConverter}">
+								<p:ajax event="itemSelect" process="@this"
+									update="productHierarchyCodeAutoComplete, productHierarchyNameAutoComplete, productHierarchyDescriptionAutoComplete" />
+								<p:column headerText="Code">#{productHierarchyRecord.code}</p:column>
+								<p:column headerText="Name">#{productHierarchyRecord.name}</p:column>
+							</p:autoComplete>
+							<p:watermark for="productHierarchyNameAutoComplete" value="Enter first 2 chars" />
+						</p:column>
+						<p:column headerText="Description">
+							<p:autoComplete id="productHierarchyDescriptionAutoComplete" maxResults="20"
+								value="#{hierarchyMappingRecord.productHierarchyRecord}" minQueryLength="2" effect="fade" forceSelection="true"
+								completeMethod="#{productDefinitionAddEditBB.getSuggestedHierarchiesForDescription}"
+								var="productHierarchyRecord" itemLabel="#{productHierarchyRecord.description}"
+								itemValue="#{productHierarchyRecord}" global="false" converter="#{productDefinitionAddEditBB.baseDVOConverter}">
+								<p:ajax event="itemSelect" process="@this"
+									update="productHierarchyCodeAutoComplete, productHierarchyNameAutoComplete, productHierarchyDescriptionAutoComplete" />
+								<p:column headerText="Code">#{productHierarchyRecord.code}</p:column>
+								<p:column headerText="Name">#{productHierarchyRecord.name}</p:column>
+							</p:autoComplete>
+							<p:watermark for="productHierarchyDescriptionAutoComplete" value="Enter first 2 chars" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText id="datatableSelect" value="Default" />
+								<p:tooltip for="datatableSelect" value="Select for properties mapping" />
+							</f:facet>
+							<p:selectBooleanCheckbox value="#{hierarchyMappingRecord.fetchProperties}"
+								disabled="#{productDefinitionAddEditBB.disableFields}" />
+						</p:column>
+						<p:column headerText="Delete">
+							<p:selectBooleanCheckbox value="#{hierarchyMappingRecord.operationalAttributes.recordDeleted}" />
+						</p:column>
+						<p:column id="editData" headerText="View Levels">
+							<p:commandLink oncomplete="hierarchyLevelsDialog.show()" styleClass="linkClass"
+								action="#{productDefinitionAddEditBB.openEditHierarchyDialog}" value="View Levels"
+								update=":hierarchyLevelsDialogForm:hierarchyLevelsDialogPanel">
+								<f:setPropertyActionListener target="#{productDefinitionAddEditBB.selectedProductHierarchyRecord}"
+									value="#{hierarchyMappingRecord.productHierarchyRecord}" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</h:panelGroup>
+				<br />
+				<table style="margin: 0 auto;">
+					<tr>
+						<td><p:commandButton id="btnSaveHierarchy"
+								disabled="#{productDefinitionAddEditBB.disableSaveButton||productDefinitionAddEditBB.renderForSKU}"
+								actionListener="#{productDefinitionAddEditBB.validateSaveProductHierarchyMapping}" value="Save"
+								process="productHierarchyMappingDialogPanel, @this" update="productHierarchyMappingDialogPanel"
+								oncomplete="handleSaveHierarchyRequest(xhr, status, args)" /> <p:tooltip for="btnSaveHierarchy"
+								value="Click to Save" /></td>
+						<td><p:commandButton id="btnCloseHierarchy" actionListener="#{productDefinitionAddEditBB.closeModalWindow}"
+								value="Close" process="@this" oncomplete="productHierarchyMappingDialog.hide()" /> <p:tooltip
+								for="btnCloseHierarchy" value="Click to Close" /></td>
+					</tr>
+				</table>
+				<ui:include src="/pages/template/errormessage.xhtml" />
+				<p:messages autoUpdate="true" showDetail="false" showSummary="true" />
+			</p:panel>
+		</p:dialog>
+		<p:confirmDialog id="confirmDialog" message="The properties will be deleted. Do you want to continue?"
+			header="Confirmation" severity="alert" widgetVar="confirmation">
+			<table style="margin: 0 auto;">
+				<tr>
+					<td><p:commandButton id="confirm" value="Yes" onclick="confirmation.hide();"
+							process="productHierarchyMappingDialogPanel,@this"
+							update="productHierarchyMappingDialogPanel, :productTabView:productAddEditForm:popupLinksPanel, :productTabView:productAddEditForm:productAddEditPanel"
+							actionListener="#{productDefinitionAddEditBB.executeSaveHierarchyMapping}" /></td>
+					<td><p:commandButton id="decline" value="No" onclick="confirmation.hide()" type="button" /></td>
+				</tr>
+			</table>
+		</p:confirmDialog>
+		<script type="text/javascript">
+			function handleSaveHierarchyRequest(xhr, status, args) {
+				if (args.validationFailed || args.displayConfirmation) {
+					confirmation.show();
+				} else {
+					saveHierarchyMapping();
+				}
+			}
+		</script>
+		<p:remoteCommand name="saveHierarchyMapping" process="productHierarchyMappingDialogPanel,@this"
+			update="productHierarchyMappingDialogPanel, :productTabView:productAddEditForm:popupLinksPanel, :productTabView:productAddEditForm:productAddEditPanel"
+			actionListener="#{productDefinitionAddEditBB.executeSaveHierarchyMapping}" />
+	</h:form>
+</ui:composition>

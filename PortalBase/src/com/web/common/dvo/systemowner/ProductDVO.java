@@ -13,6 +13,7 @@ public class ProductDVO extends BaseDVO {
 	private HierarchyDVO hierarchyRecord;
 	private ProductSkuDVO productSkuRecord;
 	private List<ProductSkuDVO> productSkuList;
+	private List<ProductHierarchyCategoryMappingDVO> productHierarchyCategoryMappingList;
 
 	public StatusDVO getStatusRecord() {
 		if (statusRecord == null) {
@@ -56,6 +57,18 @@ public class ProductDVO extends BaseDVO {
 
 	public void setProductSkuList(List<ProductSkuDVO> productSkuList) {
 		this.productSkuList = productSkuList;
+	}
+
+	public List<ProductHierarchyCategoryMappingDVO> getProductHierarchyCategoryMappingList() {
+		if (productHierarchyCategoryMappingList == null) {
+			productHierarchyCategoryMappingList = new ArrayList<ProductHierarchyCategoryMappingDVO>();
+		}
+		return productHierarchyCategoryMappingList;
+	}
+
+	public void setProductHierarchyCategoryMappingList(
+			List<ProductHierarchyCategoryMappingDVO> productHierarchyCategoryMappingList) {
+		this.productHierarchyCategoryMappingList = productHierarchyCategoryMappingList;
 	}
 
 }

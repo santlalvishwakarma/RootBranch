@@ -345,14 +345,14 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 		Long productId = productSkuRecord.getProductRecord().getId();
 
 		if (!validator.validateNull(skuCode)) {
-			addToErrorList(propertiesReader.getValueOfKey("product_code_null"));
+			addToErrorList(propertiesReader.getValueOfKey("sku_code_null"));
 		}
 		if (skuCode != null && !validator.validateCharsWithoutSpecialChars(skuCode)) {
-			addToErrorList(propertiesReader.getValueOfKey("product_code_invalid"));
+			addToErrorList(propertiesReader.getValueOfKey("sku_code_invalid"));
 		}
 
 		if (!validator.validateNull(skuName)) {
-			addToErrorList(propertiesReader.getValueOfKey("product_name_null"));
+			addToErrorList(propertiesReader.getValueOfKey("sku_name_null"));
 		}
 
 		if (basePrice == null || basePrice <= 0) {
@@ -361,7 +361,7 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 
 		if ((discountAmount != null && discountAmount > 0) || (discountPercent != null && discountPercent > 0)) {
 
-			if (discountAmount != null && discountPercent != null) {
+			if ((discountAmount != null && discountPercent != null) && (discountAmount > 0 && discountPercent > 0)) {
 				addToErrorList(propertiesReader.getValueOfKey("discount_amount_percent_both_entered"));
 			}
 		}

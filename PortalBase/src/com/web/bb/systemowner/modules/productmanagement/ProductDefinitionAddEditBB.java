@@ -21,9 +21,11 @@ import com.web.common.dvo.common.BaseDVO;
 import com.web.common.dvo.common.Parameter;
 import com.web.common.dvo.opr.common.ParameterOpr;
 import com.web.common.dvo.opr.systemowner.ProductOpr;
+import com.web.common.dvo.systemowner.CategoryDVO;
 import com.web.common.dvo.systemowner.HierarchyDVO;
 import com.web.common.dvo.systemowner.ImageDVO;
 import com.web.common.dvo.systemowner.ProductDVO;
+import com.web.common.dvo.systemowner.ProductHierarchyCategoryMappingDVO;
 import com.web.common.dvo.systemowner.ProductSkuDVO;
 import com.web.common.dvo.util.OptionsDVO;
 import com.web.common.jsf.converters.BaseDVOConverter;
@@ -68,6 +70,7 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 	private boolean validateForApprove;
 	private boolean renderGetBackToAutoSku = false;
 	private ProductSkuDVO productSkuRecord;
+	private List<CategoryDVO> categoryListForAutoSuggest;
 
 	public ProductOpr getProductOpr() {
 		if (FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
@@ -273,6 +276,17 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 		this.productSkuRecord = productSkuRecord;
 	}
 
+	public List<CategoryDVO> getCategoryListForAutoSuggest() {
+		if (categoryListForAutoSuggest == null) {
+			categoryListForAutoSuggest = new ArrayList<CategoryDVO>();
+		}
+		return categoryListForAutoSuggest;
+	}
+
+	public void setCategoryListForAutoSuggest(List<CategoryDVO> categoryListForAutoSuggest) {
+		this.categoryListForAutoSuggest = categoryListForAutoSuggest;
+	}
+
 	@Override
 	public void executeSearch(ActionEvent event) {
 	}
@@ -339,28 +353,6 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 			validateFlag = true;
 		}
 		return validateFlag;
-	}
-
-	public void executeSaveSKU(ActionEvent event) {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Add Edit BB :: executeSaveSKU starts ");
-
-		try {
-			String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
-			productOpr.getProductRecord().setUserLogin(userLogin);
-
-			productOpr.getApplicationFlags().getApplicationFlagMap().put("SAVE_FLAG", "SAVE_SKU");
-			productOpr = new ProductDefinitionBD().executeSaveProductSKUDetails(productOpr);
-
-			PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
-			setSuccessMsg(propertiesReader.getValueOfKey("sku_save_success"));
-			populateEnableDisableButtons();
-
-		} catch (FrameworkException e) {
-			handleException(e, propertiesLocation);
-		} catch (BusinessException e) {
-			handleException(e, propertiesLocation);
-		}
 	}
 
 	@Override
@@ -553,6 +545,8 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 
 			hierarchyListForAutoSuggest = new ProductDefinitionBF().getSuggestedHierarchies(new HierarchyDVO());
 
+			categoryListForAutoSuggest = new ProductDefinitionBF().getAllCategories();
+
 			FacesContext.getCurrentInstance().getViewRoot().getViewMap()
 					.put("productHierarchyCodeAutoComplete", hierarchyListForAutoSuggest);
 			FacesContext.getCurrentInstance().getViewRoot().getViewMap()
@@ -566,32 +560,6 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 		} catch (BusinessException e) {
 			handleException(e, propertiesLocation);
 		}
-
-		try {
-			copyOfDataMap = new HashMap<Long, BaseDVO>();
-			productOpr.getProductRecord().setProductHierarchyMappingList(null);
-			ProductOpr productOprRecd = new ProductDefinitionBD().getHierarchiesMappingList(productOpr);
-			productOpr.getProductRecord().setProductHierarchyMappingList(
-					productOprRecd.getProductRecord().getProductHierarchyMappingList());
-
-			for (ProductHierarchyMappingDVO productHierarchyRecord : productOpr.getProductRecord()
-					.getProductHierarchyMappingList()) {
-				if (!productHierarchyRecord.getOperationalAttributes().getRecordDeleted()) {
-					copyOfDataMap.put(productHierarchyRecord.getId(),
-							(ProductHierarchyMappingDVO) DeepCopy.copy(productHierarchyRecord));
-				}
-			}
-
-		} catch (FrameworkException e) {
-			handleException(e, propertiesLocation);
-
-		} catch (BusinessException e) {
-			handleException(e, propertiesLocation);
-		}
-		populateDefaultHierarchy();
-
-		if (productOpr.getProductRecord().getProductSkuRecord().getProductSkuHierarchyMappingList().isEmpty())
-			productOpr.getProductRecord().getProductHierarchyMappingList().add(new ProductHierarchyMappingDVO());
 	}
 
 	public List<Object> getSuggestedHierarchiesForCode(String query) {
@@ -624,6 +592,41 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 			}
 		}
 		return productHierarchyList;
+	}
+
+	public List<Object> getSuggestedCategoryForCode(String query) {
+		ArrayList<Object> productCategoryList = new ArrayList<Object>();
+		if (query != null) {
+			query = query.toUpperCase();
+			for (CategoryDVO categoryDVO : categoryListForAutoSuggest) {
+				String code = categoryDVO.getCode();
+
+				if (code.toUpperCase().startsWith(query)) {
+					productCategoryList.add(categoryDVO);
+				}
+			}
+		}
+		return productCategoryList;
+	}
+
+	public List<Object> getSuggestedCategoryForName(String query) {
+		ArrayList<Object> productCategoryList = new ArrayList<Object>();
+		if (query != null) {
+			query = query.toUpperCase();
+			for (CategoryDVO categoryDVO : categoryListForAutoSuggest) {
+				String code = categoryDVO.getName();
+
+				if (code.toUpperCase().startsWith(query)) {
+					productCategoryList.add(categoryDVO);
+				}
+			}
+		}
+		return productCategoryList;
+	}
+
+	public void executeHierarchyMappingAddRow(ActionEvent event) {
+		productOpr.getProductRecord().getProductHierarchyCategoryMappingList()
+				.add(new ProductHierarchyCategoryMappingDVO());
 	}
 
 	public void validateSaveProductHierarchyMapping(ActionEvent event) {
