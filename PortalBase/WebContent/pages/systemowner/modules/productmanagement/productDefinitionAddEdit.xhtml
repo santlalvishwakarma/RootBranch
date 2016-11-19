@@ -5,16 +5,14 @@
 		<h:panelGroup id="productProductAddEditPanel">
 			<table style="width: 100%;">
 				<tr>
-					<td><label class="labelClass boldClass">Product Code</label> <label class="mandRed">#{commonLabel.mand_star}</label>
-					</td>
+					<td><label class="labelClass boldClass">Product Code</label> <label class="mandRed">#{commonLabel.mand_star}</label></td>
 					<td><h:panelGroup>
 							<p:inputText id="productCode" value="#{productDefinitionAddEditBB.productOpr.productRecord.code}" maxlength="25"
 								disabled="#{!(productDefinitionAddEditBB.productOpr.productRecord.id eq null)}" />
 							<p:watermark for="productCode" value="Maximum 25 characters" />
 									&#160;&#160;
-						</h:panelGroup></td>
-					<td><label class="labelClass boldClass">Product Name</label> <label class="mandRed">#{commonLabel.mand_star}</label>
-					</td>
+						</h:panelGroup></td> 
+					<td><label class="labelClass boldClass">Product Name</label> <label class="mandRed">#{commonLabel.mand_star}</label></td>
 					<td><p:inputText id="productName" value="#{productDefinitionAddEditBB.productOpr.productRecord.name}"
 							maxlength="60" /> <p:watermark for="productName" value="Maximum 60 characters" /> <p:tooltip for="productName"
 							value="#{productDefinitionAddEditBB.productOpr.productRecord.name}" /></td>
@@ -38,15 +36,12 @@
 					<td><label class="labelClass boldClass">De-activate Product</label></td>
 					<td><p:selectBooleanCheckbox id="deactivateProduct"
 							value="#{productDefinitionAddEditBB.productOpr.productRecord.active}" /></td>
-					<td>
-						<!-- <h:graphicImage id="image2"
-							value="#{sessionScope['imageURL']}#{productDefinitionAddEditBB.productOpr.productRecord.productSkuRecord.defaultProductSkuImageMappingDVO.imageRecord.imageURL}"
-							style="width: 65px; height: 65px;" title="Image" /> -->
-					</td>
 				</tr>
 			</table>
-			<div>
-				<p:commandLink value="Map Category Hierarchy" />
+			<br />
+			<div align="left">
+				<p:commandLink value="Map Category Hierarchy" actionListener="#{productDefinitionAddEditBB.openMapHierarchyDialog}"
+					oncomplete="PF('').show()" />
 			</div>
 		</h:panelGroup>
 		<br />
