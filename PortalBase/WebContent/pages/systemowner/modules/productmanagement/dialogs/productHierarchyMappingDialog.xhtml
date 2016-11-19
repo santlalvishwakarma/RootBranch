@@ -10,119 +10,110 @@
 				<p:commandLink id="productHierarchyMappingAddRow" process="productHierarchyMappingListPanel, @this"
 					styleClass="linkClass" actionListener="#{productDefinitionAddEditBB.executeHierarchyMappingAddRow}"
 					update="productHierarchyMappingListPanel">
-					<p:graphicImage alt="Add Row" value="/staticcontent/retailimages/add.png" />
+					<p:graphicImage alt="Add Row" value="/staticcontent/systemowner/images/add.png" />
 				</p:commandLink>
-				<label class="addRowMsgClass">Please click here to add a new row</label> 
+				<label class="addRowMsgClass">Please click here to add a new row</label>
 				<br />
 				<br />
 				<h:panelGroup id="productHierarchyMappingListPanel">
 					<p:dataTable id="productHierarchyMappingListTable" rows="#{productDefinitionAddEditBB.paginationNumber}"
 						var="hierarchyMappingRecord" paginator="true" rowsPerPageTemplate="5,10,15"
 						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page"
-						rendered="#{!(empty productDefinitionAddEditBB.productOpr.productRecord.productHierarchyMappingList)}"
-						value="#{productDefinitionAddEditBB.productOpr.productRecord.productHierarchyMappingList}">
+						rendered="#{!(empty productDefinitionAddEditBB.productOpr.productRecord.productHierarchyCategoryMappingList)}"
+						value="#{productDefinitionAddEditBB.productOpr.productRecord.productHierarchyCategoryMappingList}">
 						<f:facet name="header">Map Hierarchy</f:facet>
-						<p:column headerText="Code">
+						<p:column headerText="Hierarchy">
 							<p:autoComplete id="productHierarchyCodeAutoComplete" maxResults="20"
-								value="#{hierarchyMappingRecord.productHierarchyRecord}" minQueryLength="2" effect="fade" forceSelection="true"
+								value="#{hierarchyMappingRecord.hierarchyRecord}" minQueryLength="2" effect="fade" forceSelection="true"
 								completeMethod="#{productDefinitionAddEditBB.getSuggestedHierarchiesForCode}" var="productHierarchyRecord"
 								itemLabel="#{productHierarchyRecord.code}" itemValue="#{productHierarchyRecord}" global="false"
 								converter="#{productDefinitionAddEditBB.baseDVOConverter}">
 								<p:ajax event="itemSelect" process="@this"
-									update="productHierarchyCodeAutoComplete, productHierarchyNameAutoComplete, productHierarchyDescriptionAutoComplete" />
+									update="productCategoryLevel1AutoComplete, productCategoryLevel2AutoComplete, productCategoryLevel3AutoComplete, productCategoryLevel4AutoComplete" />
 								<p:column headerText="Code">#{productHierarchyRecord.code}</p:column>
 								<p:column headerText="Name">#{productHierarchyRecord.name}</p:column>
 							</p:autoComplete>
 							<p:watermark for="productHierarchyCodeAutoComplete" value="Enter first 2 chars" />
 						</p:column>
-						<p:column headerText="Name">
-							<p:autoComplete id="productHierarchyNameAutoComplete" maxResults="20"
-								value="#{hierarchyMappingRecord.productHierarchyRecord}" minQueryLength="2" effect="fade" forceSelection="true"
-								completeMethod="#{productDefinitionAddEditBB.getSuggestedHierarchiesForName}" var="productHierarchyRecord"
-								itemLabel="#{productHierarchyRecord.name}" itemValue="#{productHierarchyRecord}" global="false"
-								converter="#{productDefinitionAddEditBB.baseDVOConverter}">
+						<p:column headerText="Category Level one">
+							<p:autoComplete id="productCategoryLevel1AutoComplete" maxResults="10"
+								value="#{hierarchyMappingRecord.hierarchyCategoryMappingRecord.categoryLevelOneRecord}" minQueryLength="2"
+								effect="fade" forceSelection="true"
+								completeMethod="#{productDefinitionAddEditBB.getSuggestedCategoryLevel1BasedOnHierarchy}"
+								var="categoryLevel1Record" itemLabel="#{categoryLevel1Record.name}" itemValue="#{categoryLevel1Record}"
+								global="false" converter="#{productDefinitionAddEditBB.baseDVOConverter}">
+								<f:attribute name="hierarchyId" value="#{hierarchyMappingRecord.hierarchyRecord.id}" />
 								<p:ajax event="itemSelect" process="@this"
-									update="productHierarchyCodeAutoComplete, productHierarchyNameAutoComplete, productHierarchyDescriptionAutoComplete" />
-								<p:column headerText="Code">#{productHierarchyRecord.code}</p:column>
-								<p:column headerText="Name">#{productHierarchyRecord.name}</p:column>
+									update="productCategoryLevel2AutoComplete, productCategoryLevel3AutoComplete, productCategoryLevel4AutoComplete" />
+								<p:column headerText="Code">#{categoryLevel1Record.code}</p:column>
+								<p:column headerText="Name">#{categoryLevel1Record.name}</p:column>
 							</p:autoComplete>
-							<p:watermark for="productHierarchyNameAutoComplete" value="Enter first 2 chars" />
+							<p:watermark for="productCategoryLevel1AutoComplete" value="Enter first 2 chars" />
 						</p:column>
-						<p:column headerText="Description">
-							<p:autoComplete id="productHierarchyDescriptionAutoComplete" maxResults="20"
-								value="#{hierarchyMappingRecord.productHierarchyRecord}" minQueryLength="2" effect="fade" forceSelection="true"
-								completeMethod="#{productDefinitionAddEditBB.getSuggestedHierarchiesForDescription}"
-								var="productHierarchyRecord" itemLabel="#{productHierarchyRecord.description}"
-								itemValue="#{productHierarchyRecord}" global="false" converter="#{productDefinitionAddEditBB.baseDVOConverter}">
+						<p:column headerText="Category Level Two">
+							<p:autoComplete id="productCategoryLevel2AutoComplete" maxResults="20"
+								value="#{hierarchyMappingRecord.hierarchyCategoryMappingRecord.categoryLevelTwoRecord}" minQueryLength="2"
+								effect="fade" forceSelection="true"
+								completeMethod="#{productDefinitionAddEditBB.getSuggestedCategoryLevel2BasedOnHierarchy}"
+								var="categoryLevel2Record" itemLabel="#{categoryLevel2Record.name}" itemValue="#{categoryLevel2Record}"
+								global="false" converter="#{productDefinitionAddEditBB.baseDVOConverter}">
+								<f:attribute name="hierarchyId" value="#{hierarchyMappingRecord.hierarchyRecord.id}" />
+								<f:attribute name="category1Id"
+									value="#{hierarchyMappingRecord.hierarchyCategoryMappingRecord.categoryLevelOneRecord.id}" />
 								<p:ajax event="itemSelect" process="@this"
-									update="productHierarchyCodeAutoComplete, productHierarchyNameAutoComplete, productHierarchyDescriptionAutoComplete" />
-								<p:column headerText="Code">#{productHierarchyRecord.code}</p:column>
-								<p:column headerText="Name">#{productHierarchyRecord.name}</p:column>
+									update="productCategoryLevel3AutoComplete, productCategoryLevel4AutoComplete" />
+								<p:column headerText="Code">#{categoryLevel2Record.code}</p:column>
+								<p:column headerText="Name">#{categoryLevel2Record.name}</p:column>
 							</p:autoComplete>
-							<p:watermark for="productHierarchyDescriptionAutoComplete" value="Enter first 2 chars" />
+							<p:watermark for="productCategoryLevel2AutoComplete" value="Enter first 2 chars" />
 						</p:column>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText id="datatableSelect" value="Default" />
-								<p:tooltip for="datatableSelect" value="Select for properties mapping" />
-							</f:facet>
-							<p:selectBooleanCheckbox value="#{hierarchyMappingRecord.fetchProperties}"
-								disabled="#{productDefinitionAddEditBB.disableFields}" />
+						<p:column headerText="Category Level Three">
+							<p:autoComplete id="productCategoryLevel3AutoComplete" maxResults="20"
+								value="#{hierarchyMappingRecord.hierarchyCategoryMappingRecord.categoryLevelThreeRecord}" minQueryLength="2"
+								effect="fade" forceSelection="true"
+								completeMethod="#{productDefinitionAddEditBB.getSuggestedCategoryLevel3BasedOnHierarchy}"
+								var="categoryLevel3Record" itemLabel="#{categoryLevel3Record.name}" itemValue="#{categoryLevel3Record}"
+								global="false" converter="#{productDefinitionAddEditBB.baseDVOConverter}">
+								<f:attribute name="hierarchyId" value="#{hierarchyMappingRecord.hierarchyRecord.id}" />
+								<f:attribute name="category1Id"
+									value="#{hierarchyMappingRecord.hierarchyCategoryMappingRecord.categoryLevelOneRecord.id}" />
+								<f:attribute name="category2Id"
+									value="#{hierarchyMappingRecord.hierarchyCategoryMappingRecord.categoryLevelTwoRecord.id}" />
+								<p:ajax event="itemSelect" process="@this" update="productCategoryLevel4AutoComplete" />
+								<p:column headerText="Code">#{categoryLevel3Record.code}</p:column>
+								<p:column headerText="Name">#{categoryLevel3Record.name}</p:column>
+							</p:autoComplete>
+							<p:watermark for="productCategoryLevel3AutoComplete" value="Enter first 2 chars" />
 						</p:column>
+						<p:column headerText="Category Level Four">
+							<p:autoComplete id="productCategoryLevel4AutoComplete" maxResults="20"
+								value="#{hierarchyMappingRecord.hierarchyCategoryMappingRecord.categoryLevelFourRecord}" minQueryLength="2"
+								effect="fade" forceSelection="true"
+								completeMethod="#{productDefinitionAddEditBB.getSuggestedCategoryLevel4BasedOnHierarchy}"
+								var="categoryLevel4Record" itemLabel="#{categoryLevel4Record.name}" itemValue="#{categoryLevel4Record}"
+								global="false" converter="#{productDefinitionAddEditBB.baseDVOConverter}">
+								<f:attribute name="hierarchyId" value="#{hierarchyMappingRecord.hierarchyRecord.id}" />
+								<f:attribute name="category1Id"
+									value="#{hierarchyMappingRecord.hierarchyCategoryMappingRecord.categoryLevelOneRecord.id}" />
+								<f:attribute name="category2Id"
+									value="#{hierarchyMappingRecord.hierarchyCategoryMappingRecord.categoryLevelTwoRecord.id}" />
+								<f:attribute name="category3Id"
+									value="#{hierarchyMappingRecord.hierarchyCategoryMappingRecord.categoryLevelThreeRecord.id}" />
+								<p:column headerText="Code">#{categoryLevel4Record.code}</p:column>
+								<p:column headerText="Name">#{categoryLevel4Record.name}</p:column>
+							</p:autoComplete>
+							<p:watermark for="productCategoryLevel4AutoComplete" value="Enter first 2 chars" />
+						</p:column>
+
 						<p:column headerText="Delete">
 							<p:selectBooleanCheckbox value="#{hierarchyMappingRecord.operationalAttributes.recordDeleted}" />
 						</p:column>
-						<p:column id="editData" headerText="View Levels">
-							<p:commandLink oncomplete="hierarchyLevelsDialog.show()" styleClass="linkClass"
-								action="#{productDefinitionAddEditBB.openEditHierarchyDialog}" value="View Levels"
-								update=":hierarchyLevelsDialogForm:hierarchyLevelsDialogPanel">
-								<f:setPropertyActionListener target="#{productDefinitionAddEditBB.selectedProductHierarchyRecord}"
-									value="#{hierarchyMappingRecord.productHierarchyRecord}" />
-							</p:commandLink>
-						</p:column>
+
 					</p:dataTable>
 				</h:panelGroup>
-				<br />
-				<table style="margin: 0 auto;">
-					<tr>
-						<td><p:commandButton id="btnSaveHierarchy"
-								disabled="#{productDefinitionAddEditBB.disableSaveButton||productDefinitionAddEditBB.renderForSKU}"
-								actionListener="#{productDefinitionAddEditBB.validateSaveProductHierarchyMapping}" value="Save"
-								process="productHierarchyMappingDialogPanel, @this" update="productHierarchyMappingDialogPanel"
-								oncomplete="handleSaveHierarchyRequest(xhr, status, args)" /> <p:tooltip for="btnSaveHierarchy"
-								value="Click to Save" /></td>
-						<td><p:commandButton id="btnCloseHierarchy" actionListener="#{productDefinitionAddEditBB.closeModalWindow}"
-								value="Close" process="@this" oncomplete="productHierarchyMappingDialog.hide()" /> <p:tooltip
-								for="btnCloseHierarchy" value="Click to Close" /></td>
-					</tr>
-				</table>
-				<ui:include src="/pages/template/errormessage.xhtml" />
 				<p:messages autoUpdate="true" showDetail="false" showSummary="true" />
 			</p:panel>
 		</p:dialog>
-		<p:confirmDialog id="confirmDialog" message="The properties will be deleted. Do you want to continue?"
-			header="Confirmation" severity="alert" widgetVar="confirmation">
-			<table style="margin: 0 auto;">
-				<tr>
-					<td><p:commandButton id="confirm" value="Yes" onclick="confirmation.hide();"
-							process="productHierarchyMappingDialogPanel,@this"
-							update="productHierarchyMappingDialogPanel, :productTabView:productAddEditForm:popupLinksPanel, :productTabView:productAddEditForm:productAddEditPanel"
-							actionListener="#{productDefinitionAddEditBB.executeSaveHierarchyMapping}" /></td>
-					<td><p:commandButton id="decline" value="No" onclick="confirmation.hide()" type="button" /></td>
-				</tr>
-			</table>
-		</p:confirmDialog>
-		<script type="text/javascript">
-			function handleSaveHierarchyRequest(xhr, status, args) {
-				if (args.validationFailed || args.displayConfirmation) {
-					confirmation.show();
-				} else {
-					saveHierarchyMapping();
-				}
-			}
-		</script>
-		<p:remoteCommand name="saveHierarchyMapping" process="productHierarchyMappingDialogPanel,@this"
-			update="productHierarchyMappingDialogPanel, :productTabView:productAddEditForm:popupLinksPanel, :productTabView:productAddEditForm:productAddEditPanel"
-			actionListener="#{productDefinitionAddEditBB.executeSaveHierarchyMapping}" />
+
 	</h:form>
 </ui:composition>
