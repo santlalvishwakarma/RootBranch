@@ -16,4 +16,9 @@ public class CategoryMasterBF extends BusinessFacade {
 		return new CategoryMasterBC().executeSave(addEditCategoryOpr);
 	}
 
+	public CategoryOpr getMappedCategoryLevel(CategoryOpr addEditCategoryOpr) throws FrameworkException,
+			BusinessException {
+		return new CategoryMasterBC().getMappedCategoryLevel(addEditCategoryOpr);
+	}
+
 }
