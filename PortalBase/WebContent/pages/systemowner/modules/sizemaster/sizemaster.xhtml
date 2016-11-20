@@ -1,0 +1,20 @@
+<ui:composition template="/pages/systemowner/template/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<ui:define name="content">
+		<p:tabView id="sizeTabView" activeIndex="#{sizeMasterBB.activeTabIndex}">
+			<p:ajax event="tabChange" listener="#{sizeMasterBB.tabChanged}" process="@this" update=":sizeTabView" />
+			<p:tab id="searchListSize" title="Search/List">
+				<div style="overflow-x: auto; overflow-y: auto;">
+					<ui:include src="searchsize.xhtml" />
+				</div>
+			</p:tab>
+			<p:tab id="addeditSize" title="Add/Edit Size">
+				<div style="overflow-x: auto; overflow-y: auto;">
+					<ui:include src="addeditsize.xhtml" />
+				</div>
+			</p:tab>
+		</p:tabView>
+	</ui:define>
+</ui:composition>
