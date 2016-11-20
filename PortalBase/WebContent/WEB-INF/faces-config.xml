@@ -126,4 +126,21 @@
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 
+	<managed-bean>
+		<managed-bean-name>addEditSizeBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.sizemaster.SizeMasterAddEditBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>searchSizeBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.sizemaster.SearchSizeBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>sizeMasterBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.sizemaster.SizeMasterBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
 </faces-config>
