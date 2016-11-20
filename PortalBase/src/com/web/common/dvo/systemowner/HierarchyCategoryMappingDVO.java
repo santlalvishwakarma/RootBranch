@@ -11,6 +11,8 @@ public class HierarchyCategoryMappingDVO extends BaseDVO {
 	private CategoryDVO categoryLevelThreeRecord;
 	private CategoryDVO categoryLevelFourRecord;
 	private CategoryDVO categoryLevelFiveRecord;
+	private Integer categoryLevel;
+	private CategoryDVO categoryRecord;
 
 	public HierarchyDVO getHierarchyRecord() {
 		if (hierarchyRecord == null) {
@@ -76,6 +78,25 @@ public class HierarchyCategoryMappingDVO extends BaseDVO {
 
 	public void setCategoryLevelFiveRecord(CategoryDVO categoryLevelFiveRecord) {
 		this.categoryLevelFiveRecord = categoryLevelFiveRecord;
+	}
+
+	public Integer getCategoryLevel() {
+		return categoryLevel;
+	}
+
+	public void setCategoryLevel(Integer categoryLevel) {
+		this.categoryLevel = categoryLevel;
+	}
+
+	public CategoryDVO getCategoryRecord() {
+		if (categoryRecord == null) {
+			categoryRecord = new CategoryDVO();
+		}
+		return categoryRecord;
+	}
+
+	public void setCategoryRecord(CategoryDVO categoryRecord) {
+		this.categoryRecord = categoryRecord;
 	}
 
 }

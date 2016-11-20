@@ -20,7 +20,7 @@ public interface ProductDefinitionSqlTemplate extends SqlTemplate {
 
 	static final String GET_HIERARCHIES_MAPPING_LIST = "CALL sp_product_get_hierarchies_mapping(?);";
 
-	static final String SAVE_HIERARCHY_MAPPING_LIST = "CALL sp_product_save_product_hierarchies_mapping(?,?,?,?,?, @p_error_code, @p_error_message);";
+	static final String SAVE_HIERARCHY_MAPPING_LIST = "CALL sp_product_save_product_hierarchies_mapping(?,?,?,?, @p_error_code, @p_error_message);";
 
 	static final String GET_PROPERTIES_MAPPING_LIST = "CALL sp_product_get_properties_mapping(?,?,?);";
 
@@ -115,5 +115,15 @@ public interface ProductDefinitionSqlTemplate extends SqlTemplate {
 	static final String GET_PRODUCT_SKU_PROPERTY_SPECIFIC_DETAILS = "CALL sp_product_get_product_sku_property_specific_details(?,?); ";
 
 	static final String GET_PRODUCTS_IN_CATALOG_WITH_EXCLUSIVITY_FILTER = "CALL sp_core_get_products_in_catalog_with_exclusivity_filter(?,?,?,?,?);";
+
+	static final String GET_CATEGORY_LIST_BASED_ON_HIERARCHY_AND_LEVEL = "select DISTINCT cm.category_id, cm.category_code, cm.category_name from category_master cm,hierarchy_category_mapping hcm ";
+
+	static final String GET_PRODUCT_HIERARCHY_MAPPING_LIST = "SELECT product_id, product_hierarchy_category_mapping_id, hierarchy_id, fn_get_hierarchy_name_based_on_id(hierarchy_id) AS hierarchy_name, "
+			+ " fn_get_hierarchy_code_based_on_id(hierarchy_id) AS hierarchy_code, category_level_1, fn_get_category_name_based_on_id(category_level_1) AS category_level_1_name,"
+			+ " fn_get_category_code_based_on_id(category_level_1) AS category_level_1_code, category_level_2, fn_get_category_name_based_on_id(category_level_2) AS category_level_2_name, "
+			+ " fn_get_category_code_based_on_id(category_level_2) AS category_level_2_code, category_level_3, fn_get_category_name_based_on_id(category_level_3) AS category_level_3_name, "
+			+ " fn_get_category_code_based_on_id(category_level_3) AS category_level_3_code, category_level_4, fn_get_category_name_based_on_id(category_level_4) AS category_level_4_name, "
+			+ " fn_get_category_code_based_on_id(category_level_4) AS category_level_4_code, is_active, modified_by,modified_date FROM product_hierarchy_category_mapping "
+			+ " WHERE product_id = ? ";
 
 }

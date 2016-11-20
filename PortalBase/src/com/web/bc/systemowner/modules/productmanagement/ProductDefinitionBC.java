@@ -9,8 +9,10 @@ import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.common.CatalogDVO;
 import com.web.common.dvo.opr.systemowner.ProductOpr;
 import com.web.common.dvo.systemowner.CategoryDVO;
+import com.web.common.dvo.systemowner.HierarchyCategoryMappingDVO;
 import com.web.common.dvo.systemowner.HierarchyDVO;
 import com.web.common.dvo.systemowner.ProductDVO;
+import com.web.common.dvo.systemowner.ProductHierarchyCategoryMappingDVO;
 import com.web.common.dvo.systemowner.ProductSkuDVO;
 import com.web.common.dvo.systemowner.UomDVO;
 import com.web.common.parents.BackingClass;
@@ -392,8 +394,12 @@ public class ProductDefinitionBC extends BackingClass {
 
 		HashMap<Integer, HashMap<String, Object>> headerResponseMap = daoResult.getMultipleResultSet().get("HDR");
 		HashMap<Integer, HashMap<String, Object>> detailResponseMap = daoResult.getMultipleResultSet().get("DTL");
-		myLog.debug(" Product Definition getProductDetails :: Resultset got header ::" + headerResponseMap);
-		myLog.debug(" Product Definition getProductDetails :: Resultset got uom :: " + detailResponseMap);
+		HashMap<Integer, HashMap<String, Object>> hierarchyResponseMap = daoResult.getMultipleResultSet().get("HIE");
+		myLog.debug(" Product Definition getProductDetails :: Resultset got header headerResponseMap::"
+				+ headerResponseMap);
+		myLog.debug(" Product Definition getProductDetails :: Resultset got detailResponseMap :: " + detailResponseMap);
+		myLog.debug(" Product Definition getProductDetails :: Resultset got hierarchyResponseMap :: "
+				+ hierarchyResponseMap);
 
 		if (headerResponseMap != null && headerResponseMap.size() > 0) {
 			int size = headerResponseMap.size();
@@ -480,6 +486,23 @@ public class ProductDefinitionBC extends BackingClass {
 				productOprRet.getProductRecord().getProductSkuList().add(productSkuRecord);
 
 			}
+		}
+
+		if (hierarchyResponseMap != null && hierarchyResponseMap.size() > 0) {
+			int size = hierarchyResponseMap.size();
+			for (int i = 0; i < size; i++) {
+
+				HashMap<String, Object> resultSetMap = hierarchyResponseMap.get(i);
+
+				ProductHierarchyCategoryMappingDVO productHierarchyCategoryMappingDVO = new ProductHierarchyCategoryMappingDVO();
+				if (resultSetMap.get("product_hierarchy_category_mapping_id") != null)
+					productHierarchyCategoryMappingDVO.setId(Long.valueOf(resultSetMap.get(
+							"product_hierarchy_category_mapping_id").toString()));
+
+				productOprRet.getProductRecord().getProductHierarchyCategoryMappingList()
+						.add(productHierarchyCategoryMappingDVO);
+			}
+
 		}
 
 		return productOprRet;
@@ -807,25 +830,31 @@ public class ProductDefinitionBC extends BackingClass {
 		ProductDVO productRecord = productOpr.getProductRecord();
 		Long productId = productRecord.getId();
 		StringBuffer parseProductHierarchyString = new StringBuffer();
-		Boolean modifyHierarchy = productOpr.getProductRecord().getModifyProductSKURecord().getModifyHierarchy();
 		String userLogin = productRecord.getUserLogin();
 		String lastModifiedDate = null;
 		if (productRecord.getAuditAttributes().getLastModifiedDate() != null)
 			lastModifiedDate = productRecord.getAuditAttributes().getLastModifiedDate().toString();
 
-		if (!productOpr.getProductRecord().getProductHierarchyMappingList().isEmpty()) {
-			for (ProductHierarchyMappingDVO productHierarchyRecord : productOpr.getProductRecord()
-					.getProductHierarchyMappingList()) {
-				Long productHierarchyMappingId = productHierarchyRecord.getId();
-				Boolean recordDeleted = productHierarchyRecord.getOperationalAttributes().getRecordDeleted();
+		if (!productOpr.getProductRecord().getProductHierarchyCategoryMappingList().isEmpty()) {
+			for (ProductHierarchyCategoryMappingDVO productHierarchyCategoryRecord : productOpr.getProductRecord()
+					.getProductHierarchyCategoryMappingList()) {
+				Long productHierarchyMappingId = productHierarchyCategoryRecord.getId();
+				Boolean recordDeleted = productHierarchyCategoryRecord.getOperationalAttributes().getRecordDeleted();
+				Long categoryLevel1Id = productHierarchyCategoryRecord.getHierarchyCategoryMappingRecord()
+						.getCategoryLevelOneRecord().getId();
+				Long categoryLevel2Id = productHierarchyCategoryRecord.getHierarchyCategoryMappingRecord()
+						.getCategoryLevelTwoRecord().getId();
+				Long categoryLevel3Id = productHierarchyCategoryRecord.getHierarchyCategoryMappingRecord()
+						.getCategoryLevelThreeRecord().getId();
+				Long categoryLevel4Id = productHierarchyCategoryRecord.getHierarchyCategoryMappingRecord()
+						.getCategoryLevelFourRecord().getId();
 
 				if (recordDeleted != null)
 					if ((productHierarchyMappingId != null && recordDeleted)
 							|| (productHierarchyMappingId != null && !recordDeleted)
 							|| (productHierarchyMappingId == null && !recordDeleted)) {
 
-						Long hierarchyId = productHierarchyRecord.getProductHierarchyRecord().getId();
-						Boolean fetchProperties = productHierarchyRecord.getFetchProperties();
+						Long hierarchyId = productHierarchyCategoryRecord.getHierarchyRecord().getId();
 
 						if (productHierarchyMappingId != null)
 							parseProductHierarchyString.append(productHierarchyMappingId);
@@ -839,10 +868,28 @@ public class ProductDefinitionBC extends BackingClass {
 							parseProductHierarchyString.append("");
 						parseProductHierarchyString.append("~");
 
-						if (fetchProperties != null && fetchProperties)
-							parseProductHierarchyString.append("1");
+						if (categoryLevel1Id != null)
+							parseProductHierarchyString.append(categoryLevel1Id);
 						else
-							parseProductHierarchyString.append("0");
+							parseProductHierarchyString.append("");
+						parseProductHierarchyString.append("~");
+
+						if (categoryLevel2Id != null)
+							parseProductHierarchyString.append(categoryLevel2Id);
+						else
+							parseProductHierarchyString.append("");
+						parseProductHierarchyString.append("~");
+
+						if (categoryLevel3Id != null)
+							parseProductHierarchyString.append(categoryLevel3Id);
+						else
+							parseProductHierarchyString.append("");
+						parseProductHierarchyString.append("~");
+
+						if (categoryLevel4Id != null)
+							parseProductHierarchyString.append(categoryLevel4Id);
+						else
+							parseProductHierarchyString.append("");
 						parseProductHierarchyString.append("~");
 
 						if (recordDeleted)
@@ -863,12 +910,12 @@ public class ProductDefinitionBC extends BackingClass {
 		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
 		queryDetailsMap.put(IDAOConstant.SQL_TEXT, ProductDefinitionSqlTemplate.SAVE_HIERARCHY_MAPPING_LIST);
 
-		Object strSqlParams[][] = new Object[5][3];
+		Object strSqlParams[][] = new Object[4][3];
 
 		strSqlParams[0][0] = "1";
 		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
 		strSqlParams[0][2] = productId;
-		myLog.debug(" parameter 1 :: " + productId);
+		myLog.debug(" parameter 1 productId:: " + productId);
 
 		strSqlParams[1][0] = "2";
 		strSqlParams[1][1] = IDAOConstant.STRING_DATATYPE;
@@ -877,22 +924,17 @@ public class ProductDefinitionBC extends BackingClass {
 			strSqlParams[1][2] = parseProductHierarchyString.toString();
 		else
 			strSqlParams[1][2] = null;
-		myLog.debug(" parameter 2 :: " + strSqlParams[1][2]);
+		myLog.debug(" parameter 2 strSqlParams[1][2]:: " + strSqlParams[1][2]);
 
 		strSqlParams[2][0] = "3";
-		strSqlParams[2][1] = IDAOConstant.BOOLEAN_DATATYPE;
-		strSqlParams[2][2] = modifyHierarchy;
-		myLog.debug(" parameter 3 :: " + modifyHierarchy);
+		strSqlParams[2][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[2][2] = userLogin;
+		myLog.debug(" parameter 3 userLogin:: " + userLogin);
 
 		strSqlParams[3][0] = "4";
 		strSqlParams[3][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[3][2] = userLogin;
-		myLog.debug(" parameter 4 :: " + userLogin);
-
-		strSqlParams[4][0] = "5";
-		strSqlParams[4][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[4][2] = lastModifiedDate;
-		myLog.debug(" parameter 5 :: " + lastModifiedDate);
+		strSqlParams[3][2] = lastModifiedDate;
+		myLog.debug(" parameter 4 lastModifiedDate:: " + lastModifiedDate);
 
 		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
 		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
@@ -908,11 +950,9 @@ public class ProductDefinitionBC extends BackingClass {
 
 			}
 		}
-		productOpr = getHierarchiesMappingList(productOpr);
-		productOprRet.getProductRecord().setProductHierarchyMappingList(
-				productOpr.getProductRecord().getProductHierarchyMappingList());
-		productOprRet.getIconProductSKURecord().setMapProperties(
-				productOpr.getIconProductSKURecord().getMapProperties());
+		productOpr = getProductHierarchyCategoryMappingList(productOpr);
+		productOprRet.getProductRecord().setProductHierarchyCategoryMappingList(
+				productOpr.getProductRecord().getProductHierarchyCategoryMappingList());
 
 		return productOprRet;
 	}
@@ -4823,5 +4863,220 @@ public class ProductDefinitionBC extends BackingClass {
 		}
 		myLog.debug("outside ProductBC :: getProductsInCatalog()");
 		return searchResultsProductOpr;
+	}
+
+	public List<Object> getSuggestedCategoriesBasedOnCategoryAndLevel(
+			HierarchyCategoryMappingDVO hierarchyCategoryMappingDVO) throws FrameworkException, BusinessException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In Product Definition BC :: getSuggestedProductsList starts ");
+
+		Long hierarchyId = hierarchyCategoryMappingDVO.getHierarchyRecord().getId();
+		String code = hierarchyCategoryMappingDVO.getCategoryRecord().getCode();
+		Integer level = hierarchyCategoryMappingDVO.getCategoryLevel();
+		Long category1Id = hierarchyCategoryMappingDVO.getCategoryLevelOneRecord().getId();
+		Long category2Id = hierarchyCategoryMappingDVO.getCategoryLevelTwoRecord().getId();
+		Long category3Id = hierarchyCategoryMappingDVO.getCategoryLevelThreeRecord().getId();
+
+		myLog.debug(" parameter 1 hierarchyId:: " + hierarchyId);
+		myLog.debug(" parameter 2 code:: " + code);
+		myLog.debug(" parameter 3 level:: " + level);
+		myLog.debug(" parameter 4 category1Id:: " + category1Id);
+		myLog.debug(" parameter 5 category2Id:: " + category2Id);
+		myLog.debug(" parameter 6 category3Id:: " + category3Id);
+
+		StringBuffer dynamicWhere = new StringBuffer();
+
+		int parameterCount = 0;
+		// setup the dynamic where clause to include all entered params
+		if (code != null && code.trim().length() > 0) {
+			code = code.trim().concat("%");
+			dynamicWhere.append(" cm.category_code LIKE '" + code + "'");
+			parameterCount++;
+		}
+
+		if (hierarchyId != null) {
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND hcm.hierarchy_id = " + hierarchyId + "");
+			} else {
+				dynamicWhere.append(" hcm.hierarchy_id = " + hierarchyId + "");
+			}
+			parameterCount++;
+		}
+
+		if (level != null && level.equals(CommonConstant.ParameterSequenceNumber.ONE)) {
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND cm.category_id = hcm.category_level_1");
+			} else {
+				dynamicWhere.append(" cm.category_id = hcm.category_level_1");
+			}
+			parameterCount += 1;
+		}
+
+		if (level != null && level.equals(CommonConstant.ParameterSequenceNumber.TWO) && category1Id != null) {
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND cm.category_id = hcm.category_level_2 AND hcm.category_level_1 = '"
+						+ category1Id + "'");
+			} else {
+				dynamicWhere.append(" cm.category_id = hcm.category_level_2 AND hcm.category_level_1 = '" + category1Id
+						+ "'");
+			}
+			parameterCount += 1;
+		}
+
+		if (level != null && level.equals(CommonConstant.ParameterSequenceNumber.THREE) && category2Id != null) {
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND cm.category_id = hcm.category_level_3 AND hcm.category_level_1 = '"
+						+ category1Id + "' AND category_level_2 = '" + category2Id + "'");
+			} else {
+				dynamicWhere.append(" cm.category_id = hcm.category_level_3 AND hcm.category_level_1 = '" + category1Id
+						+ "' AND category_level_2 = '" + category2Id + "'");
+			}
+			parameterCount += 1;
+		}
+
+		if (level != null && level.equals(CommonConstant.ParameterSequenceNumber.FOUR) && category3Id != null) {
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND cm.category_id = hcm.category_level_4 AND hcm.category_level_1 = '"
+						+ category1Id + "' AND category_level_2 = '" + category2Id + "' AND category_level_3 = '"
+						+ category3Id + "'");
+			} else {
+				dynamicWhere
+						.append(" cm.category_id = hcm.category_level_4 AND hcm.category_level_1 = '" + category1Id
+								+ "' AND category_level_2 = '" + category2Id + "' AND category_level_3 = '"
+								+ category3Id + "'");
+			}
+			parameterCount += 1;
+		}
+
+		// to get all data
+		if (parameterCount == 0) {
+			dynamicWhere.append(" 1 = 1 ");
+		}
+		dynamicWhere.append(" ORDER BY cm.category_code;");
+		myLog.debug("dynamicWhere ::::: " + dynamicWhere);
+
+		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
+		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT,
+				ProductDefinitionSqlTemplate.GET_CATEGORY_LIST_BASED_ON_HIERARCHY_AND_LEVEL);
+
+		Object strSqlParams[][] = new Object[0][0];
+
+		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, dynamicWhere.toString());
+		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
+		myLog.debug(" getSuggestedCategoriesBasedOnCategoryAndLevel :: Resultset got ::" + responseMap);
+
+		ArrayList<Object> categoryList = new ArrayList<Object>();
+		if (responseMap.size() > 0) {
+			for (int i = 0; i < responseMap.size(); i++) {
+				HashMap<String, Object> resultSetMap = responseMap.get(i);
+
+				CategoryDVO categoryRecord = new CategoryDVO();
+
+				if (resultSetMap.get("category_id") != null)
+					categoryRecord.setId(Long.valueOf(resultSetMap.get("category_id").toString()));
+
+				categoryRecord.setCode((String) resultSetMap.get("category_code"));
+				categoryRecord.setName((String) resultSetMap.get("category_name"));
+				categoryList.add(categoryRecord);
+			}
+		}
+		return categoryList;
+	}
+
+	public ProductOpr getProductHierarchyCategoryMappingList(ProductOpr productOpr) throws FrameworkException,
+			BusinessException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In Product Definition BC :: executeSearch starts ");
+		ProductOpr productOprRet = new ProductOpr();
+
+		ProductDVO productRecord = productOpr.getProductRecord();
+
+		Long productId = productRecord.getId();
+
+		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
+		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT, ProductDefinitionSqlTemplate.GET_PRODUCT_HIERARCHY_MAPPING_LIST);
+
+		Object strSqlParams[][] = new Object[1][3];
+
+		strSqlParams[0][0] = "1";
+		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
+		strSqlParams[0][2] = productId;
+		myLog.debug(" parameter 1:: productId :: " + productId);
+
+		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
+		HashMap<Integer, HashMap<String, Object>> headerResponseMap = daoResult.getInvocationResult();
+		myLog.debug(" getProductHierarchyCategoryMappingList :: Resultset got :: " + headerResponseMap);
+
+		if (headerResponseMap != null && headerResponseMap.size() > 0) {
+			ArrayList<ProductHierarchyCategoryMappingDVO> productHierarchyCategoryMappingList = new ArrayList<ProductHierarchyCategoryMappingDVO>();
+			int size = headerResponseMap.size();
+			for (int i = 0; i < size; i++) {
+				HashMap<String, Object> resultSetMap = headerResponseMap.get(i);
+				ProductHierarchyCategoryMappingDVO productHierarchyCategoryMappingRecord = new ProductHierarchyCategoryMappingDVO();
+				if (resultSetMap.get("product_hierarchy_category_mapping_id") != null) {
+					productHierarchyCategoryMappingRecord.setId(Long.valueOf(resultSetMap.get(
+							"product_hierarchy_category_mapping_id").toString()));
+				}
+
+				if (resultSetMap.get("hierarchy_id") != null) {
+					productHierarchyCategoryMappingRecord.getHierarchyRecord().setId(
+							Long.valueOf(resultSetMap.get("hierarchy_id").toString()));
+				}
+				productHierarchyCategoryMappingRecord.getHierarchyRecord().setCode(
+						(String) resultSetMap.get("hierarchy_code"));
+				productHierarchyCategoryMappingRecord.getHierarchyRecord().setName(
+						(String) resultSetMap.get("hierarchy_name"));
+
+				if (resultSetMap.get("category_level_1") != null) {
+					productHierarchyCategoryMappingRecord.getHierarchyCategoryMappingRecord()
+							.getCategoryLevelOneRecord()
+							.setId(Long.valueOf(resultSetMap.get("category_level_1").toString()));
+				}
+				productHierarchyCategoryMappingRecord.getHierarchyCategoryMappingRecord().getCategoryLevelOneRecord()
+						.setCode((String) resultSetMap.get("category_level_1_code"));
+				productHierarchyCategoryMappingRecord.getHierarchyCategoryMappingRecord().getCategoryLevelOneRecord()
+						.setName((String) resultSetMap.get("category_level_1_name"));
+
+				if (resultSetMap.get("category_level_2") != null) {
+					productHierarchyCategoryMappingRecord.getHierarchyCategoryMappingRecord()
+							.getCategoryLevelTwoRecord()
+							.setId(Long.valueOf(resultSetMap.get("category_level_2").toString()));
+				}
+				productHierarchyCategoryMappingRecord.getHierarchyCategoryMappingRecord().getCategoryLevelTwoRecord()
+						.setCode((String) resultSetMap.get("category_level_2_code"));
+				productHierarchyCategoryMappingRecord.getHierarchyCategoryMappingRecord().getCategoryLevelTwoRecord()
+						.setName((String) resultSetMap.get("category_level_2_name"));
+
+				if (resultSetMap.get("category_level_3") != null) {
+					productHierarchyCategoryMappingRecord.getHierarchyCategoryMappingRecord()
+							.getCategoryLevelThreeRecord()
+							.setId(Long.valueOf(resultSetMap.get("category_level_3").toString()));
+				}
+				productHierarchyCategoryMappingRecord.getHierarchyCategoryMappingRecord().getCategoryLevelThreeRecord()
+						.setCode((String) resultSetMap.get("category_level_3_code"));
+				productHierarchyCategoryMappingRecord.getHierarchyCategoryMappingRecord().getCategoryLevelThreeRecord()
+						.setName((String) resultSetMap.get("category_level_3_name"));
+
+				if (resultSetMap.get("category_level_4") != null) {
+					productHierarchyCategoryMappingRecord.getHierarchyCategoryMappingRecord()
+							.getCategoryLevelFourRecord()
+							.setId(Long.valueOf(resultSetMap.get("category_level_4").toString()));
+				}
+				productHierarchyCategoryMappingRecord.getHierarchyCategoryMappingRecord().getCategoryLevelFourRecord()
+						.setCode((String) resultSetMap.get("category_level_4_code"));
+				productHierarchyCategoryMappingRecord.getHierarchyCategoryMappingRecord().getCategoryLevelFourRecord()
+						.setName((String) resultSetMap.get("category_level_4_name"));
+
+				productHierarchyCategoryMappingList.add(productHierarchyCategoryMappingRecord);
+			}
+			productOprRet.getProductRecord()
+					.setProductHierarchyCategoryMappingList(productHierarchyCategoryMappingList);
+		}
+
+		return productOprRet;
 	}
 }
