@@ -36,6 +36,14 @@ IF p_product_id IS NOT NULL AND p_product_sku_id IS NULL THEN
 	WHERE 	ph.product_id =  p_product_id
 	AND		psh.product_id = ph.product_id;
 	
+	SELECT 	'HIE',product_hierarchy_category_mapping_id, hierarchy_id, fn_get_hierarchy_name_based_on_id(hierarchy_id) AS hierarchy_name, 
+			 fn_get_hierarchy_code_based_on_id(hierarchy_id) AS hierarchy_code, category_level_1, fn_get_category_name_based_on_id(category_level_1) AS category_level_1_name,
+			 fn_get_category_code_based_on_id(category_level_1) AS category_level_1_code, category_level_2, fn_get_category_name_based_on_id(category_level_2) AS category_level_2_name, 
+			 fn_get_category_code_based_on_id(category_level_2) AS category_level_2_code, category_level_3, fn_get_category_name_based_on_id(category_level_3) AS category_level_3_name, 
+			 fn_get_category_code_based_on_id(category_level_3) AS category_level_3_code, category_level_4, fn_get_category_name_based_on_id(category_level_4) AS category_level_4_name, 
+			 fn_get_category_code_based_on_id(category_level_4) AS category_level_4_code, is_active, modified_by,modified_date FROM product_hierarchy_category_mapping 
+			 WHERE product_id = p_product_id;
+	
 ELSEIF p_product_sku_id IS NOT NULL THEN
 	
 	SELECT 	'DTL',psh.product_id, psh.product_sku_id, psh.sku_code, psh.sku_name, psh.sku_description,

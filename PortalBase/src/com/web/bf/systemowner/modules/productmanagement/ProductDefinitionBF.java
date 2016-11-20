@@ -11,6 +11,7 @@ import com.web.common.dvo.common.Parameter;
 import com.web.common.dvo.opr.common.ParameterOpr;
 import com.web.common.dvo.opr.systemowner.ProductOpr;
 import com.web.common.dvo.systemowner.CategoryDVO;
+import com.web.common.dvo.systemowner.HierarchyCategoryMappingDVO;
 import com.web.common.dvo.systemowner.HierarchyDVO;
 import com.web.common.dvo.systemowner.ProductCategoryDVO;
 import com.web.common.dvo.systemowner.ProductDVO;
@@ -333,6 +334,16 @@ public class ProductDefinitionBF extends BusinessFacade {
 		ProductOpr returnProductOpr = new ProductOpr();
 		returnProductOpr = new ProductDefinitionBC().getProductsInCatalog(queryProductOpr);
 		return returnProductOpr;
+	}
+
+	public List<Object> getSuggestedCategoriesBasedOnCategoryAndLevel(
+			HierarchyCategoryMappingDVO hierarchyCategoryMappingDVO) throws FrameworkException, BusinessException {
+		return new ProductDefinitionBC().getSuggestedCategoriesBasedOnCategoryAndLevel(hierarchyCategoryMappingDVO);
+	}
+
+	public ProductOpr getProductHierarchyCategoryMappingList(ProductOpr productOpr) throws FrameworkException,
+			BusinessException {
+		return new ProductDefinitionBC().getProductHierarchyCategoryMappingList(productOpr);
 	}
 
 }

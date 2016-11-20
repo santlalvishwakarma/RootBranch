@@ -22,6 +22,7 @@ import com.web.common.dvo.common.Parameter;
 import com.web.common.dvo.opr.common.ParameterOpr;
 import com.web.common.dvo.opr.systemowner.ProductOpr;
 import com.web.common.dvo.systemowner.CategoryDVO;
+import com.web.common.dvo.systemowner.HierarchyCategoryMappingDVO;
 import com.web.common.dvo.systemowner.HierarchyDVO;
 import com.web.common.dvo.systemowner.ImageDVO;
 import com.web.common.dvo.systemowner.ProductDVO;
@@ -545,14 +546,64 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 
 			hierarchyListForAutoSuggest = new ProductDefinitionBF().getSuggestedHierarchies(new HierarchyDVO());
 
+			myLog.debug("In Product Definition Add Edit BB :: hierarchy list size::"
+					+ hierarchyListForAutoSuggest.size());
+
 			categoryListForAutoSuggest = new ProductDefinitionBF().getAllCategories();
 
-			FacesContext.getCurrentInstance().getViewRoot().getViewMap()
-					.put("productHierarchyCodeAutoComplete", hierarchyListForAutoSuggest);
-			FacesContext.getCurrentInstance().getViewRoot().getViewMap()
-					.put("productHierarchyNameAutoComplete", hierarchyListForAutoSuggest);
-			FacesContext.getCurrentInstance().getViewRoot().getViewMap()
-					.put("productHierarchyDescriptionAutoComplete", hierarchyListForAutoSuggest);
+			productOpr.getProductRecord().setProductHierarchyCategoryMappingList(null);
+
+			ProductOpr productOprSent = new ProductDefinitionBF().getProductHierarchyCategoryMappingList(productOpr);
+
+			productOpr.getProductRecord().setProductHierarchyCategoryMappingList(
+					productOprSent.getProductRecord().getProductHierarchyCategoryMappingList());
+
+			if (!productOpr.getProductRecord().getProductHierarchyCategoryMappingList().isEmpty()) {
+				List<Object> hierarchyList = new ArrayList<Object>();
+
+				for (ProductHierarchyCategoryMappingDVO productHierarchyCategoryMappingDVO : productOpr
+						.getProductRecord().getProductHierarchyCategoryMappingList()) {
+					hierarchyList.add(productHierarchyCategoryMappingDVO.getHierarchyRecord());
+				}
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+						.put("productHierarchyCodeAutoComplete", hierarchyList);
+
+				List<Object> categoryLevel1List = new ArrayList<Object>();
+				for (ProductHierarchyCategoryMappingDVO productHierarchyCategoryMappingDVO : productOpr
+						.getProductRecord().getProductHierarchyCategoryMappingList()) {
+					categoryLevel1List.add(productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord()
+							.getCategoryLevelOneRecord());
+				}
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+						.put("productCategoryLevel1AutoComplete", categoryLevel1List);
+
+				List<Object> categoryLevel2List = new ArrayList<Object>();
+				for (ProductHierarchyCategoryMappingDVO productHierarchyCategoryMappingDVO : productOpr
+						.getProductRecord().getProductHierarchyCategoryMappingList()) {
+					categoryLevel2List.add(productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord()
+							.getCategoryLevelTwoRecord());
+				}
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+						.put("productCategoryLevel2AutoComplete", categoryLevel2List);
+
+				List<Object> categoryLevel3List = new ArrayList<Object>();
+				for (ProductHierarchyCategoryMappingDVO productHierarchyCategoryMappingDVO : productOpr
+						.getProductRecord().getProductHierarchyCategoryMappingList()) {
+					categoryLevel3List.add(productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord()
+							.getCategoryLevelThreeRecord());
+				}
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+						.put("productCategoryLevel3AutoComplete", categoryLevel3List);
+
+				List<Object> categoryLevel4List = new ArrayList<Object>();
+				for (ProductHierarchyCategoryMappingDVO productHierarchyCategoryMappingDVO : productOpr
+						.getProductRecord().getProductHierarchyCategoryMappingList()) {
+					categoryLevel4List.add(productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord()
+							.getCategoryLevelFourRecord());
+				}
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+						.put("productCategoryLevel4AutoComplete", categoryLevel4List);
+			}
 
 		} catch (FrameworkException e) {
 			handleException(e, propertiesLocation);
@@ -563,18 +614,26 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 	}
 
 	public List<Object> getSuggestedHierarchiesForCode(String query) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In Product Definition Add Edit BB :: getSuggestedHierarchiesForCode starts ");
 		ArrayList<Object> productHierarchyList = new ArrayList<Object>();
 		if (query != null) {
 			query = query.toUpperCase();
 			for (Object object : hierarchyListForAutoSuggest) {
 				HierarchyDVO productHierarchyRecord = (HierarchyDVO) object;
 				String code = productHierarchyRecord.getCode();
+				myLog.debug("hierarchy id:: " + productHierarchyRecord.getId());
 
 				if (code.toUpperCase().startsWith(query)) {
 					productHierarchyList.add(productHierarchyRecord);
 				}
 			}
 		}
+
+		FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+				.put("productHierarchyCodeAutoComplete", hierarchyListForAutoSuggest);
+
+		myLog.debug("filter size::" + productHierarchyList.size());
 		return productHierarchyList;
 	}
 
@@ -624,101 +683,276 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 		return productCategoryList;
 	}
 
+	public List<Object> getSuggestedCategoryLevel1BasedOnHierarchy(String query) throws FrameworkException,
+			BusinessException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In Product Definition Add Edit BB :: getSuggestedCategoryLevel1BasedOnHierarchy starts ");
+		ArrayList<Object> productCategoryList = new ArrayList<Object>();
+		Object hierarchyId = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+				.get("hierarchyId");
+		myLog.debug("hierarchy id::" + hierarchyId);
+		FoundationValidator validator = new FoundationValidator();
+		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+		boolean validateFlag = true;
+		setErrorList(new ArrayList<String>());
+
+		if (hierarchyId == null) {
+			addToErrorList(propertiesReader.getValueOfKey("hierarchy_id_null"));
+		}
+
+		if (getErrorList().size() > 0) {
+			validateFlag = false;
+		} else {
+			validateFlag = true;
+		}
+
+		if (query != null && validateFlag) {
+			try {
+				HierarchyCategoryMappingDVO hierarchyCategoryMappingDVO = new HierarchyCategoryMappingDVO();
+				hierarchyCategoryMappingDVO.getCategoryRecord().setCode(query);
+				hierarchyCategoryMappingDVO.getHierarchyRecord().setId((Long) hierarchyId);
+				hierarchyCategoryMappingDVO.setCategoryLevel(1);
+
+				List<Object> categoryLevel1List = new ProductDefinitionBF()
+						.getSuggestedCategoriesBasedOnCategoryAndLevel(hierarchyCategoryMappingDVO);
+
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+						.put("productCategoryLevel1AutoComplete", categoryListForAutoSuggest);
+				if (categoryLevel1List == null || categoryLevel1List.isEmpty()) {
+					addToErrorList(propertiesReader.getValueOfKey("category_level_1_no_records"));
+				}
+				return categoryLevel1List;
+
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+
+		return null;
+	}
+
+	public List<Object> getSuggestedCategoryLevel2BasedOnHierarchy(String query) throws FrameworkException,
+			BusinessException {
+		ArrayList<Object> productCategoryList = new ArrayList<Object>();
+		Object hierarchyId = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+				.get("hierarchyId");
+		Object category1Id = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+				.get("category1Id");
+
+		FoundationValidator validator = new FoundationValidator();
+		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+		boolean validateFlag = true;
+		setErrorList(new ArrayList<String>());
+
+		if (category1Id == null) {
+			addToErrorList(propertiesReader.getValueOfKey("category_level_1_id_null"));
+		}
+
+		if (getErrorList().size() > 0) {
+			validateFlag = false;
+		} else {
+			validateFlag = true;
+		}
+
+		if (query != null && validateFlag) {
+			try {
+				HierarchyCategoryMappingDVO hierarchyCategoryMappingDVO = new HierarchyCategoryMappingDVO();
+				hierarchyCategoryMappingDVO.getCategoryRecord().setCode(query);
+				hierarchyCategoryMappingDVO.getHierarchyRecord().setId((Long) hierarchyId);
+				hierarchyCategoryMappingDVO.setCategoryLevel(2);
+				if (category1Id != null)
+					hierarchyCategoryMappingDVO.getCategoryLevelOneRecord().setId((Long) category1Id);
+
+				List<Object> categoryLevel2List = new ProductDefinitionBF()
+						.getSuggestedCategoriesBasedOnCategoryAndLevel(hierarchyCategoryMappingDVO);
+
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+						.put("productCategoryLevel2AutoComplete", categoryListForAutoSuggest);
+				if (categoryLevel2List == null || categoryLevel2List.isEmpty()) {
+					addToErrorList(propertiesReader.getValueOfKey("category_level_2_no_records"));
+				}
+
+				return categoryLevel2List;
+
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+		return null;
+	}
+
+	public List<Object> getSuggestedCategoryLevel3BasedOnHierarchy(String query) throws FrameworkException,
+			BusinessException {
+		ArrayList<Object> productCategoryList = new ArrayList<Object>();
+		Object hierarchyId = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+				.get("hierarchyId");
+		Object category1Id = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+				.get("category1Id");
+		Object category2Id = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+				.get("category2Id");
+
+		FoundationValidator validator = new FoundationValidator();
+		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+		boolean validateFlag = true;
+		setErrorList(new ArrayList<String>());
+
+		if (category2Id == null) {
+			addToErrorList(propertiesReader.getValueOfKey("category_level_2_id_null"));
+		}
+
+		if (getErrorList().size() > 0) {
+			validateFlag = false;
+		} else {
+			validateFlag = true;
+		}
+
+		if (query != null && validateFlag) {
+			try {
+				HierarchyCategoryMappingDVO hierarchyCategoryMappingDVO = new HierarchyCategoryMappingDVO();
+				hierarchyCategoryMappingDVO.getCategoryRecord().setCode(query);
+				hierarchyCategoryMappingDVO.getHierarchyRecord().setId((Long) hierarchyId);
+				hierarchyCategoryMappingDVO.setCategoryLevel(3);
+				if (category1Id != null)
+					hierarchyCategoryMappingDVO.getCategoryLevelOneRecord().setId((Long) category1Id);
+				if (category2Id != null)
+					hierarchyCategoryMappingDVO.getCategoryLevelTwoRecord().setId((Long) category2Id);
+
+				List<Object> categoryLevel3List = new ProductDefinitionBF()
+						.getSuggestedCategoriesBasedOnCategoryAndLevel(hierarchyCategoryMappingDVO);
+
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+						.put("productCategoryLevel3AutoComplete", categoryListForAutoSuggest);
+
+				if (categoryLevel3List == null || categoryLevel3List.isEmpty()) {
+					addToErrorList(propertiesReader.getValueOfKey("category_level_3_no_records"));
+				}
+				return categoryLevel3List;
+
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+
+		addToErrorList(propertiesReader.getValueOfKey("category_level_3_no_records"));
+		return null;
+	}
+
+	public List<Object> getSuggestedCategoryLevel4BasedOnHierarchy(String query) throws FrameworkException,
+			BusinessException {
+		ArrayList<Object> productCategoryList = new ArrayList<Object>();
+		Object hierarchyId = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+				.get("hierarchyId");
+		Object category1Id = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+				.get("category1Id");
+		Object category2Id = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+				.get("category2Id");
+		Object category3Id = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+				.get("category3Id");
+
+		FoundationValidator validator = new FoundationValidator();
+		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+		boolean validateFlag = true;
+		setErrorList(new ArrayList<String>());
+
+		if (category3Id == null) {
+			addToErrorList(propertiesReader.getValueOfKey("category_level_3_id_null"));
+		}
+
+		if (getErrorList().size() > 0) {
+			validateFlag = false;
+		} else {
+			validateFlag = true;
+		}
+		if (query != null && validateFlag) {
+			try {
+				HierarchyCategoryMappingDVO hierarchyCategoryMappingDVO = new HierarchyCategoryMappingDVO();
+				hierarchyCategoryMappingDVO.getCategoryRecord().setCode(query);
+				hierarchyCategoryMappingDVO.getHierarchyRecord().setId((Long) hierarchyId);
+				hierarchyCategoryMappingDVO.setCategoryLevel(4);
+				if (category1Id != null)
+					hierarchyCategoryMappingDVO.getCategoryLevelOneRecord().setId((Long) category1Id);
+				if (category2Id != null)
+					hierarchyCategoryMappingDVO.getCategoryLevelTwoRecord().setId((Long) category2Id);
+				if (category3Id != null)
+					hierarchyCategoryMappingDVO.getCategoryLevelThreeRecord().setId((Long) category3Id);
+
+				List<Object> categoryLevel4List = new ProductDefinitionBF()
+						.getSuggestedCategoriesBasedOnCategoryAndLevel(hierarchyCategoryMappingDVO);
+
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+						.put("productCategoryLevel4AutoComplete", categoryListForAutoSuggest);
+				if (categoryLevel4List == null || categoryLevel4List.isEmpty()) {
+					addToErrorList(propertiesReader.getValueOfKey("category_level_4_no_records"));
+				}
+				return categoryLevel4List;
+
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+
+		}
+		addToErrorList(propertiesReader.getValueOfKey("category_level_4_no_records"));
+		return null;
+	}
+
 	public void executeHierarchyMappingAddRow(ActionEvent event) {
 		productOpr.getProductRecord().getProductHierarchyCategoryMappingList()
 				.add(new ProductHierarchyCategoryMappingDVO());
 	}
 
-	public void validateSaveProductHierarchyMapping(ActionEvent event) {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Add Edit BB :: validateSaveProductHierarchyMapping starts ");
-		if (this.productHierarchyRecord == null)
-			this.productHierarchyRecord = new ProductHierarchyMappingDVO();
-		Long hierarchyMappingIdFromDB = this.productHierarchyRecord.getId();
-		Long hierarchyIdFromDB = this.productHierarchyRecord.getProductHierarchyRecord().getId();
-		myLog.debug(" hierarchy id db ---> " + hierarchyIdFromDB);
-		setErrorList(new ArrayList<String>());
+	public void hierarchyChanged(ProductHierarchyCategoryMappingDVO productHierarchyCategoryMappingDVO) {
+		productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord().setCategoryLevelOneRecord(null);
+		productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord().setCategoryLevelTwoRecord(null);
+		productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord().setCategoryLevelThreeRecord(null);
+		productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord().setCategoryLevelFourRecord(null);
+	}
 
-		Boolean displayConfirmation = false;
-		if (hierarchyMappingIdFromDB != null && hierarchyIdFromDB != null) {
-			for (ProductHierarchyMappingDVO productHierarchyRecord : productOpr.getProductRecord()
-					.getProductHierarchyMappingList()) {
+	public void categoryLevel1Changed(ProductHierarchyCategoryMappingDVO productHierarchyCategoryMappingDVO) {
+		productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord().setCategoryLevelTwoRecord(null);
+		productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord().setCategoryLevelThreeRecord(null);
+		productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord().setCategoryLevelFourRecord(null);
+	}
 
-				if (productHierarchyRecord.getId() != null
-						&& productHierarchyRecord.getId().equals(hierarchyMappingIdFromDB)) {
+	public void categoryLevel2Changed(ProductHierarchyCategoryMappingDVO productHierarchyCategoryMappingDVO) {
+		productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord().setCategoryLevelThreeRecord(null);
+		productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord().setCategoryLevelFourRecord(null);
+	}
 
-					Boolean fetchProperties = productHierarchyRecord.getFetchProperties();
-					Long hierarchyId = productHierarchyRecord.getProductHierarchyRecord().getId();
-
-					if (!fetchProperties || productHierarchyRecord.getOperationalAttributes().getRecordDeleted())
-						displayConfirmation = true;
-					else if (hierarchyId != null && !hierarchyId.equals(hierarchyIdFromDB))
-						displayConfirmation = true;
-
-					if (disableFields && displayConfirmation) {
-						PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
-						addToErrorList(propertiesReader.getValueOfKey("hierarchy_cannot_be_modified"));
-						displayConfirmation = false;
-					}
-					break;
-				}
-			}
-		}
-		RequestContext.getCurrentInstance().addCallbackParam("displayConfirmation", displayConfirmation);
+	public void categoryLevel3Changed(ProductHierarchyCategoryMappingDVO productHierarchyCategoryMappingDVO) {
+		productHierarchyCategoryMappingDVO.getHierarchyCategoryMappingRecord().setCategoryLevelFourRecord(null);
 	}
 
 	public void executeSaveHierarchyMapping(ActionEvent event) {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("In Product Definition Add Edit BB :: executeSaveHierarchyMapping starts ");
 
-		if (getErrorList().size() > 0) {
-			String errorMsg = getErrorList().get(0);
-			setErrorList(new ArrayList<String>());
-			addToErrorList(errorMsg);
-
-		} else if (validateSaveProductHierarchyMapping()
-				&& !productOpr.getProductRecord().getProductHierarchyMappingList().isEmpty()) {
+		if (validateSaveProductHierarchyMapping()
+				&& !productOpr.getProductRecord().getProductHierarchyCategoryMappingList().isEmpty()) {
 			try {
 				String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
 				productOpr.getProductRecord().setUserLogin(userLogin);
 
-				// if the flag is false, then check if data is changed on screen
-				// or no
-				if (productOpr.getProductRecord().getModifyProductSKURecord().getModifyHierarchy() == null
-						|| !productOpr.getProductRecord().getModifyProductSKURecord().getModifyHierarchy()) {
-					if (filterSaveProductHierarchyMapping())
-						productOpr.getProductRecord().getModifyProductSKURecord().setModifyHierarchy(true);
-				}
+				ProductOpr productOprRecd = new ProductDefinitionBF().saveHierarchiesMappingList(productOpr);
 
-				ProductOpr productOprRecd = new ProductDefinitionBD().saveHierarchiesMappingList(productOpr);
-				// get product or sku details
-				getProductSkuHeaderDetails();
-
-				productOpr.getProductRecord().setProductHierarchyMappingList(
-						productOprRecd.getProductRecord().getProductHierarchyMappingList());
+				productOpr.getProductRecord().setProductHierarchyCategoryMappingList(
+						productOprRecd.getProductRecord().getProductHierarchyCategoryMappingList());
 				productOpr.getProductRecord()
 						.setAuditAttributes(productOprRecd.getProductRecord().getAuditAttributes());
-				populateDefaultHierarchy();
 
 				PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 				setSuccessMsg(propertiesReader.getValueOfKey("hierarchy_save_success"));
-
-				if (!productOprRecd.getProductRecord().getProductHierarchyMappingList().isEmpty())
-					productOpr.getIconProductSKURecord().setMapHierarchy(true);
-				else
-					productOpr.getIconProductSKURecord().setMapHierarchy(false);
-
-				productOpr.getIconProductSKURecord().setMapProperties(
-						productOprRecd.getIconProductSKURecord().getMapProperties());
-
-				copyOfDataMap = new HashMap<Long, BaseDVO>();
-				for (ProductHierarchyMappingDVO productHierarchyRecord : productOpr.getProductRecord()
-						.getProductHierarchyMappingList()) {
-					if (!productHierarchyRecord.getOperationalAttributes().getRecordDeleted()) {
-						copyOfDataMap.put(productHierarchyRecord.getId(),
-								(ProductHierarchyMappingDVO) DeepCopy.copy(productHierarchyRecord));
-					}
-				}
 
 			} catch (FrameworkException e) {
 				handleException(e, propertiesLocation);
@@ -735,40 +969,25 @@ public class ProductDefinitionAddEditBB extends BackingBean {
 		boolean validateFlag = true;
 		setErrorList(new ArrayList<String>());
 
-		int size = productOpr.getProductRecord().getProductHierarchyMappingList().size();
-		int defaultSelectedCount = 0;
+		int size = productOpr.getProductRecord().getProductHierarchyCategoryMappingList().size();
 
 		if (size > 0) {
 			HashMap<Long, Long> uniqueValuesMap = new HashMap<Long, Long>();
 			for (int i = 0; i < size; i++) {
-				ProductHierarchyMappingDVO productHierarchyRecord = productOpr.getProductRecord()
-						.getProductHierarchyMappingList().get(i);
+				ProductHierarchyCategoryMappingDVO productHierarchyCategoryRecord = productOpr.getProductRecord()
+						.getProductHierarchyCategoryMappingList().get(i);
 
-				if (!productHierarchyRecord.getOperationalAttributes().getRecordDeleted()) {
+				if (!productHierarchyCategoryRecord.getOperationalAttributes().getRecordDeleted()) {
 
-					Long hierarchyId = productHierarchyRecord.getProductHierarchyRecord().getId();
-					Boolean fetchProperties = productHierarchyRecord.getFetchProperties();
+					Long hierarchyId = productHierarchyCategoryRecord.getHierarchyRecord().getId();
 
 					if (!validator.validateLongObjectNull(hierarchyId)) {
 						addToErrorList(propertiesReader.getValueOfKey("hierarchy_null") + (i + 1));
 					}
-					if (fetchProperties != null && fetchProperties)
-						defaultSelectedCount++;
-
-					// unique property value validations
-					if (hierarchyId != null) {
-						if (uniqueValuesMap.containsKey(hierarchyId)) {
-							addToErrorList(propertiesReader.getValueOfKey("hierarchy_duplicate") + (i + 1));
-
-						} else {
-							uniqueValuesMap.put(hierarchyId, hierarchyId);
-						}
-					}
 				}
 			}
-		}
-		if (defaultSelectedCount != 1) {
-			addToErrorList(propertiesReader.getValueOfKey("select_one_for_properties_mapping"));
+		} else {
+			addToErrorList(propertiesReader.getValueOfKey("hierarchy_list_null"));
 		}
 
 		if (getErrorList().size() > 0) {

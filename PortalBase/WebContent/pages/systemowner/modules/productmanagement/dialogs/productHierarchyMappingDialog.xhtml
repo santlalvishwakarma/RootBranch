@@ -29,10 +29,11 @@
 								itemLabel="#{productHierarchyRecord.code}" itemValue="#{productHierarchyRecord}" global="false"
 								converter="#{productDefinitionAddEditBB.baseDVOConverter}">
 								<p:ajax event="itemSelect" process="@this"
+									listener="#{productDefinitionAddEditBB.hierarchyChanged(hierarchyMappingRecord)}"
 									update="productCategoryLevel1AutoComplete, productCategoryLevel2AutoComplete, productCategoryLevel3AutoComplete, productCategoryLevel4AutoComplete" />
 								<p:column headerText="Code">#{productHierarchyRecord.code}</p:column>
 								<p:column headerText="Name">#{productHierarchyRecord.name}</p:column>
-							</p:autoComplete> 
+							</p:autoComplete>
 							<p:watermark for="productHierarchyCodeAutoComplete" value="Enter first 2 chars" />
 						</p:column>
 						<p:column headerText="Category Level one">
@@ -44,6 +45,7 @@
 								global="false" converter="#{productDefinitionAddEditBB.baseDVOConverter}">
 								<f:attribute name="hierarchyId" value="#{hierarchyMappingRecord.hierarchyRecord.id}" />
 								<p:ajax event="itemSelect" process="@this"
+									listener="#{productDefinitionAddEditBB.categoryLevel1Changed(hierarchyMappingRecord)}"
 									update="productCategoryLevel2AutoComplete, productCategoryLevel3AutoComplete, productCategoryLevel4AutoComplete" />
 								<p:column headerText="Code">#{categoryLevel1Record.code}</p:column>
 								<p:column headerText="Name">#{categoryLevel1Record.name}</p:column>
@@ -61,6 +63,7 @@
 								<f:attribute name="category1Id"
 									value="#{hierarchyMappingRecord.hierarchyCategoryMappingRecord.categoryLevelOneRecord.id}" />
 								<p:ajax event="itemSelect" process="@this"
+									listener="#{productDefinitionAddEditBB.categoryLevel2Changed(hierarchyMappingRecord)}"
 									update="productCategoryLevel3AutoComplete, productCategoryLevel4AutoComplete" />
 								<p:column headerText="Code">#{categoryLevel2Record.code}</p:column>
 								<p:column headerText="Name">#{categoryLevel2Record.name}</p:column>
@@ -79,7 +82,9 @@
 									value="#{hierarchyMappingRecord.hierarchyCategoryMappingRecord.categoryLevelOneRecord.id}" />
 								<f:attribute name="category2Id"
 									value="#{hierarchyMappingRecord.hierarchyCategoryMappingRecord.categoryLevelTwoRecord.id}" />
-								<p:ajax event="itemSelect" process="@this" update="productCategoryLevel4AutoComplete" />
+								<p:ajax event="itemSelect" process="@this"
+									listener="#{productDefinitionAddEditBB.categoryLevel3Changed(hierarchyMappingRecord)}"
+									update="productCategoryLevel4AutoComplete" />
 								<p:column headerText="Code">#{categoryLevel3Record.code}</p:column>
 								<p:column headerText="Name">#{categoryLevel3Record.name}</p:column>
 							</p:autoComplete>
@@ -108,12 +113,22 @@
 						<p:column headerText="Delete">
 							<p:selectBooleanCheckbox value="#{hierarchyMappingRecord.operationalAttributes.recordDeleted}" />
 						</p:column>
-
 					</p:dataTable>
+					<table style="margin: 0 auto;">
+						<tr>
+							<td><p:commandButton id="btnSaveHierarchy"
+									actionListener="#{productDefinitionAddEditBB.executeSaveHierarchyMapping}" value="Save"
+									process="productHierarchyMappingDialogPanel, @this"
+									update="productHierarchyMappingDialogPanel, :productTabView:productAddEditForm" /> <p:tooltip
+									for="btnSaveHierarchy" value="Click to Save" /></td>
+							<td><p:commandButton id="btnCloseHierarchy" actionListener="#{productDefinitionAddEditBB.closeModalWindow}"
+									value="Close" process="@this" oncomplete="PF('productHierarchyMappingDialog').hide()" /> <p:tooltip
+									for="btnCloseHierarchy" value="Click to Close" /></td>
+						</tr>
+					</table>
 				</h:panelGroup>
 				<p:messages autoUpdate="true" showDetail="false" showSummary="true" />
 			</p:panel>
 		</p:dialog>
-
 	</h:form>
 </ui:composition>

@@ -1,7 +1,6 @@
 CREATE TABLE product_hierarchy_category_mapping (
   product_hierarchy_category_mapping_id int(10) unsigned NOT NULL AUTO_INCREMENT,
   product_id int(10) unsigned DEFAULT NULL,
-  hierarchy_category_mapping_id int(10) unsigned NOT NULL,
   hierarchy_id int(10)  DEFAULT NULL,
   category_level_1 int(10)  DEFAULT NULL,
   category_level_2 int(10)  DEFAULT NULL,
@@ -16,9 +15,7 @@ CREATE TABLE product_hierarchy_category_mapping (
   modified_date datetime NOT NULL,
   PRIMARY KEY (product_hierarchy_category_mapping_id),
   KEY FK_product_hierarchy_category_mapping_1 (product_id),
-  KEY FK_product_hierarchy_category_mapping_2 (hierarchy_category_mapping_id),
-  CONSTRAINT FK_product_hierarchy_category_mapping_1 FOREIGN KEY (product_id) REFERENCES product_header (product_id),
-  CONSTRAINT FK_product_hierarchy_category_mapping_2 FOREIGN KEY (hierarchy_category_mapping_id) REFERENCES hierarchy_category_mapping (hierarchy_category_mapping_id)
+  CONSTRAINT FK_product_hierarchy_category_mapping_1 FOREIGN KEY (product_id) REFERENCES product_header (product_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

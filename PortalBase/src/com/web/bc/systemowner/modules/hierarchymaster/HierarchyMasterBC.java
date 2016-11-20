@@ -23,9 +23,9 @@ public class HierarchyMasterBC extends BackingClass {
 		String code = hierarchyDVO.getCode();
 		String name = hierarchyDVO.getName();
 		String description = hierarchyDVO.getDescription();
-		myLog.debug(" parameter 1 :: " + code);
-		myLog.debug(" parameter 2 :: " + name);
-		myLog.debug(" parameter 3 :: " + description);
+		myLog.debug(" parameter 1 code:: " + code);
+		myLog.debug(" parameter 2 name:: " + name);
+		myLog.debug(" parameter 3 description:: " + description);
 
 		StringBuffer dynamicWhere = new StringBuffer();
 
