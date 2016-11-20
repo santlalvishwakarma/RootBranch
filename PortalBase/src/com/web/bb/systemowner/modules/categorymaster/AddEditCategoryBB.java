@@ -13,8 +13,10 @@ import org.primefaces.event.TabChangeEvent;
 import com.web.bf.systemowner.modules.categorymaster.CategoryMasterBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.systemowner.CategoryOpr;
+import com.web.common.dvo.systemowner.CategoryLevelDVO;
 import com.web.common.dvo.util.File;
 import com.web.common.dvo.util.OptionsDVO;
+import com.web.common.jsf.converters.BaseDVOConverter;
 import com.web.common.parents.BackingBean;
 import com.web.foundation.exception.BusinessException;
 import com.web.foundation.exception.FrameworkException;
@@ -30,7 +32,8 @@ public class AddEditCategoryBB extends BackingBean {
 	private String propertiesLocation = "/com/web/bb/systemowner/modules/categorymaster/category";
 	private int activeTabIndex;
 
-	CategoryOpr addEditCategoryOpr;
+	private CategoryOpr addEditCategoryOpr;
+	private transient BaseDVOConverter baseDVOConverter;
 
 	public int getActiveTabIndex() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
@@ -286,7 +289,66 @@ public class AddEditCategoryBB extends BackingBean {
 		}
 	}
 
-	public List<String> getSuggestedCategoryLevel(String query) {
-		return null;
+	public void getMappedCategoryLevel(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" Inside getMappedCategoryLevel : ");
+
+		try {
+			addEditCategoryOpr = new CategoryMasterBF().getMappedCategoryLevel(addEditCategoryOpr);
+		} catch (FrameworkException e) {
+			handleException(e, propertiesLocation);
+		} catch (BusinessException e) {
+			handleException(e, propertiesLocation);
+		}
 	}
+
+	public List<CategoryLevelDVO> getSuggestedCategoryLevel(String query) {
+		List<CategoryLevelDVO> newCategoryLevels = new ArrayList<CategoryLevelDVO>();
+		if (query != null) {
+
+			char[] queryCharacterArray = query.toCharArray();
+			for (int i = 0; i < queryCharacterArray.length; i++) {
+				if (!Character.isDigit(queryCharacterArray[i])) {
+					return null;
+				}
+			}
+
+			Integer inputLevel = Integer.parseInt(query);
+			boolean isAlreadyMapped = false;
+			boolean levelExceed = false;
+			List<CategoryLevelDVO> categoryLevels = addEditCategoryOpr.getCategoryRecord().getCategoryLevels();
+
+			for (CategoryLevelDVO categoryLevelRecord : categoryLevels) {
+
+				Integer levelNo = categoryLevelRecord.getLevelNo();
+
+				if (levelNo != null && levelNo.equals(inputLevel)) {
+					isAlreadyMapped = true;
+				}
+			}
+			if (inputLevel > 3) {
+				levelExceed = true;
+			}
+			if (!levelExceed && !isAlreadyMapped) {
+				CategoryLevelDVO categoryLevelRecord = new CategoryLevelDVO();
+				categoryLevelRecord.setLevelNo(inputLevel);
+				categoryLevelRecord.setCategoryRecord(addEditCategoryOpr.getCategoryRecord());
+				newCategoryLevels.add(categoryLevelRecord);
+			}
+		}
+
+		return newCategoryLevels;
+	}
+
+	public BaseDVOConverter getBaseDVOConverter() {
+		if (baseDVOConverter == null) {
+			baseDVOConverter = new BaseDVOConverter();
+		}
+		return baseDVOConverter;
+	}
+
+	public void setBaseDVOConverter(BaseDVOConverter baseDVOConverter) {
+		this.baseDVOConverter = baseDVOConverter;
+	}
+
 }

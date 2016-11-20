@@ -54,4 +54,7 @@ public interface CategoryMasterSqlTemplate extends SqlTemplate {
 
 	public static final String SAVE_EDIT_CATEGORY = " CALL sp_save_edit_category(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @p_error_code, @p_error_message); ";
 
+	public static final String GET_MAPPED_CATEGORY = " SELECT clm.category_level_mapping_id, clm.category_id, clm.level_no, clm.is_active, "
+			+ " clm.created_date, clm.created_by, clm.modified_by, clm.modified_date FROM category_level_mapping clm WHERE clm.category_id = ? ";
+
 }

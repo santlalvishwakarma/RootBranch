@@ -82,17 +82,17 @@
 	</url-mapping>
 
 	<!-- Admin Entries Starts from here -->
-	
+
 	<url-mapping id="adminHome">
 		<pattern value="/admin/" />
 		<view-id value="/pages/systemowner/modules/home/home.jsf" />
 	</url-mapping>
-	
+
 	<url-mapping id="admin">
 		<pattern value="/admin" />
 		<view-id value="/pages/systemowner/modules/home/home.jsf" />
 	</url-mapping>
-	
+
 	<url-mapping id="productManagement">
 		<pattern value="/admin/productmanagement/productdefinition/" />
 		<view-id value="/pages/systemowner/modules/productmanagement/productDefinition.jsf" />
@@ -103,11 +103,16 @@
 		<pattern value="/admin/category" />
 		<view-id value="/pages/systemowner/modules/categorymanagement/category.jsf" />
 	</url-mapping>
-	
+
 	<url-mapping id="skuManagement">
 		<pattern value="/admin/skumanagement/skudefinition/" />
 		<view-id value="/pages/systemowner/modules/skumanagement/skuDefinition.jsf" />
 		<action onPostback="false">#{skuDefinitionSearchBB.retrieveData}</action>
+	</url-mapping>
+
+	<url-mapping id="adminHierarchy">
+		<pattern value="/admin/hierarchy" />
+		<view-id value="/pages/systemowner/modules/hierarchymaster/hierarchy.jsf" />
 	</url-mapping>
 
 </pretty-config>

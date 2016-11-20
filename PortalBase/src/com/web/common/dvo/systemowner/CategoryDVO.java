@@ -1,5 +1,8 @@
 package com.web.common.dvo.systemowner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.web.common.dvo.common.BaseDVO;
 
 public class CategoryDVO extends BaseDVO {
@@ -11,6 +14,8 @@ public class CategoryDVO extends BaseDVO {
 	private String imageUrl;
 	private String seoKeyword;
 	private Boolean selectedCategory;
+
+	private List<CategoryLevelDVO> categoryLevels;
 
 	public String getExtraInformation() {
 		return extraInformation;
@@ -66,6 +71,17 @@ public class CategoryDVO extends BaseDVO {
 
 	public void setSelectedCategory(Boolean selectedCategory) {
 		this.selectedCategory = selectedCategory;
+	}
+
+	public List<CategoryLevelDVO> getCategoryLevels() {
+		if (categoryLevels == null) {
+			categoryLevels = new ArrayList<CategoryLevelDVO>();
+		}
+		return categoryLevels;
+	}
+
+	public void setCategoryLevels(List<CategoryLevelDVO> categoryLevels) {
+		this.categoryLevels = categoryLevels;
 	}
 
 }

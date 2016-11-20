@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="hierarchySearchForm">
+		<h:panelGroup id="searchHierarchyField">
+			<table style="width: 100%;">
+				<tr>
+					<td><label class="labelClass boldClass">Hierarchy Name</label></td>
+					<td><p:inputText value="#{searchHierarchyMasterBB.searchHierarchyOpr.hierarchyRecord.name}" /></td>
+					<td><label class="labelClass boldClass">Hierarchy Code</label></td>
+					<td><p:inputText value="#{searchHierarchyMasterBB.searchHierarchyOpr.hierarchyRecord.code}" /></td>
+				</tr>
+			</table>
+			<table style="width: 40%">
+				<tr>
+					<td><p:commandButton id="btnSearch" update="searchResultPanelGroup" process="@this, searchHierarchyField"
+							actionListener="#{searchHierarchyMasterBB.executeSearch}" value="Search" /> <p:tooltip for="btnSearch"
+							value="Click to Search" /> <p:hotkey bind="ctrl+shift+s" /></td>
+					<td><p:commandButton id="btnCancel" action="#{searchHierarchyMasterBB.clearFields}" value="Clear Search"
+							process="@this" update="searchHierarchyField, searchResultPanelGroup" /> <p:tooltip for="btnCancel"
+							value="Click to Clear" /></td>
+				</tr>
+			</table>
+		</h:panelGroup>
+		<h:panelGroup id="searchResultPanelGroup">
+			<p:panel rendered="#{!(empty searchHierarchyMasterBB.searchHierarchyOpr.hierarchyList)}">
+				<h:commandLink id="excelLink">
+					<p:graphicImage alt="Export to Xls" value="/staticcontent/images/excel.png" styleClass="imageClass" />
+					<p:dataExporter type="xls" target="hierarchyRecord" fileName="Categories" />
+				</h:commandLink>
+				<p:tooltip for="excelLink" value="Click to export data in the list to MS-Excel" />
+				<h:commandLink id="pdfLink">
+					<p:graphicImage alt="Export to PDF" value="/staticcontent/images/pdf.png" styleClass="imageClass" />
+					<p:dataExporter type="pdf" target="hierarchyRecord" fileName="Categories" />
+				</h:commandLink>
+				<p:tooltip for="pdfLink" value="Click to export data in the list to PDF" />
+				<h:commandLink id="xmlLink">
+					<p:graphicImage alt="Export to XML" value="/staticcontent/images/xml.png" styleClass="imageClass" />
+					<p:dataExporter type="xml" target="hierarchyRecord" fileName="Categories" />
+				</h:commandLink>
+				<p:tooltip for="xmlLink" value="Click to export data in the list to XML" />
+			</p:panel>
+			<p:dataTable id="hierarchyTable" rows="#{searchHierarchyMasterBB.paginationNumber}" var="hierarchyRecord"
+				rowsPerPageTemplate="5,10,15" rendered="#{!(empty searchHierarchyMasterBB.searchHierarchyOpr.hierarchyList)}"
+				value="#{searchHierarchyMasterBB.searchHierarchyOpr.hierarchyList}" style="width: 100%;"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page"
+				paginator="true">
+				<f:facet name="header">Categories</f:facet>
+				<p:column style="text-align: center;" sortBy="#{hierarchyRecord.name}" filterBy="#{hierarchyRecord.name}"
+					filterMatchMode="contains">
+					<f:facet name="header">Name</f:facet>
+					<p:commandLink styleClass="linkClass" process="@this" update=":hierarchyTabView" value="#{hierarchyRecord.name}"
+						action="#{searchHierarchyMasterBB.editDetails}">
+						<f:setPropertyActionListener target="#{searchHierarchyMasterBB.searchHierarchyOpr.selectedhierarchyRecord}"
+							value="#{hierarchyRecord}" />
+					</p:commandLink>
+				</p:column>
+				<p:column style="text-align: center;" sortBy="#{hierarchyRecord.code}" filterBy="#{hierarchyRecord.code}"
+					filterMatchMode="contains">
+					<f:facet name="header">Code</f:facet>
+					<h:outputText value="#{hierarchyRecord.code}" styleClass="labelClass" />
+				</p:column>
+				<p:column style="text-align: center;" sortBy="#{hierarchyRecord.description}"
+					filterBy="#{hierarchyRecord.description}" filterMatchMode="contains">
+					<f:facet name="header">Description</f:facet>
+					<h:outputText value="#{hierarchyRecord.description}" styleClass="labelClass" />
+				</p:column>
+			</p:dataTable>
+		</h:panelGroup>
+	</h:form>
+</ui:composition>

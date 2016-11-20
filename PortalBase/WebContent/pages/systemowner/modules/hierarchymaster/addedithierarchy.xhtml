@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="hierarchyAddEditForm">
+		<h:panelGroup id="addEditHierarchyField">
+			<table style="width: 100%;">
+				<tr>
+					<td><label class="labelClass boldClass">Hierarchy Name</label></td>
+					<td><p:inputText value="#{addEditHierarchyMasterBB.addEditHierarchyOpr.hierarchyRecord.name}" /></td>
+					<td><label class="labelClass boldClass">Hierarchy Code</label></td>
+					<td><p:inputText value="#{addEditHierarchyMasterBB.addEditHierarchyOpr.hierarchyRecord.code}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Hierarchy Description</label></td>
+					<td><p:inputText value="#{addEditHierarchyMasterBB.addEditHierarchyOpr.hierarchyRecord.description}" /></td>
+					<td><label class="labelClass boldClass">Is Active</label></td>
+					<td><p:selectBooleanCheckbox value="#{addEditHierarchyMasterBB.addEditHierarchyOpr.hierarchyRecord.active}" /></td>
+				</tr>
+			</table>
+			<table style="width: 40%">
+				<tr>
+					<td><p:commandButton id="btnSearch" update="addEditHierarchyField" process="@this, addEditHierarchyField"
+							actionListener="#{addEditHierarchyMasterBB.executeSave}" value="Save" /> <p:tooltip for="btnSearch"
+							value="Click to Save" /> <p:hotkey bind="ctrl+shift+s" /></td>
+					<td><p:commandButton id="btnCancel" action="#{addEditHierarchyMasterBB.resetPage}" value="Reset"
+							process="@this" update="addEditHierarchyField" /> <p:tooltip for="btnCancel" value="Click to Reset" /></td>
+				</tr>
+			</table>
+		</h:panelGroup>
+	</h:form>
+</ui:composition>

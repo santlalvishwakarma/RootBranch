@@ -44,7 +44,7 @@ BEGIN
 		INSERT INTO category_master(category_code, category_name, category_description, seo_title, seo_keyword, seo_description, image_url,
 									is_active, created_by, modified_by, created_date, modified_date)
 							 VALUES(p_product_category_code, p_product_category_name, p_product_category_description, p_seo_title,
-							 		p_seo_keyword, p_seo_description, p_image_url, p_user_login, NOW(), p_user_login, NOW());
+							 		p_seo_keyword, p_seo_description, p_image_url, p_user_login, p_user_login, NOW(), NOW());
 		
 		SELECT LAST_INSERT_ID() INTO v_last_inserted_id;
 
@@ -54,5 +54,3 @@ BEGIN
 END $$
 
 DELIMITER;
-
-

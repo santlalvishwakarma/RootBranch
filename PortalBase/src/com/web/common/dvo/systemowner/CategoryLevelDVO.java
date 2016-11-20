@@ -1,74 +1,42 @@
 package com.web.common.dvo.systemowner;
 
-import java.util.ArrayList;
-
 import com.web.common.dvo.common.BaseDVO;
-import com.web.common.dvo.common.Parameter;
-
-/**
- * @author NIRAJ
- * 
- */
 
 public class CategoryLevelDVO extends BaseDVO {
 
 	private static final long serialVersionUID = 4900768993826543652L;
 
-	private String comments;
+	private CategoryDVO categoryRecord;
+	private Integer levelNo;
 
-	private ArrayList<ProductCategoryPropertiesMappingDVO> productCategoryPropertiesMappingList;
-
-	private String categoryLevels;
-
-	private Parameter allocationBasedOn;
-
-	private String billComments;
-
-	public String getComments() {
-		return comments;
-	}
-
-	public void setComments(String comments) {
-		this.comments = comments;
-	}
-
-	public ArrayList<ProductCategoryPropertiesMappingDVO> getProductCategoryPropertiesMappingList() {
-		if (productCategoryPropertiesMappingList == null) {
-			productCategoryPropertiesMappingList = new ArrayList<ProductCategoryPropertiesMappingDVO>();
+	public CategoryDVO getCategoryRecord() {
+		if (categoryRecord == null) {
+			categoryRecord = new CategoryDVO();
 		}
-		return productCategoryPropertiesMappingList;
+		return categoryRecord;
 	}
 
-	public void setProductCategoryPropertiesMappingList(
-			ArrayList<ProductCategoryPropertiesMappingDVO> productCategoryPropertiesMappingList) {
-		this.productCategoryPropertiesMappingList = productCategoryPropertiesMappingList;
+	public void setCategoryRecord(CategoryDVO categoryRecord) {
+		this.categoryRecord = categoryRecord;
 	}
 
-	public String getCategoryLevels() {
-		return categoryLevels;
+	public Integer getLevelNo() {
+		return levelNo;
 	}
 
-	public void setCategoryLevels(String categoryLevels) {
-		this.categoryLevels = categoryLevels;
+	public void setLevelNo(Integer levelNo) {
+		this.levelNo = levelNo;
 	}
 
-	public Parameter getAllocationBasedOn() {
-		if (allocationBasedOn == null) {
-			allocationBasedOn = new Parameter();
-		}
-		return allocationBasedOn;
-	}
+	// private String comments;
 
-	public void setAllocationBasedOn(Parameter allocationBasedOn) {
-		this.allocationBasedOn = allocationBasedOn;
-	}
+	// private ArrayList<ProductCategoryPropertiesMappingDVO>
+	// productCategoryPropertiesMappingList;
 
-	public String getBillComments() {
-		return billComments;
-	}
+	// private String categoryLevels;
 
-	public void setBillComments(String billComments) {
-		this.billComments = billComments;
-	}
+	// private Parameter allocationBasedOn;
+
+	// private String billComments;
 
 }

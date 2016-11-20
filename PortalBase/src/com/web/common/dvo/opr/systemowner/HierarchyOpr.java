@@ -12,6 +12,7 @@ public class HierarchyOpr extends OperationalDataValueObject {
 
 	private HierarchyDVO hierarchyRecord;
 	private List<HierarchyDVO> hierarchyList;
+	private HierarchyDVO selectedhierarchyRecord;
 
 	public HierarchyDVO getHierarchyRecord() {
 		if (hierarchyRecord == null) {
@@ -33,6 +34,17 @@ public class HierarchyOpr extends OperationalDataValueObject {
 
 	public void setHierarchyList(List<HierarchyDVO> hierarchyList) {
 		this.hierarchyList = hierarchyList;
+	}
+
+	public HierarchyDVO getSelectedhierarchyRecord() {
+		if (selectedhierarchyRecord == null) {
+			selectedhierarchyRecord = new HierarchyDVO();
+		}
+		return selectedhierarchyRecord;
+	}
+
+	public void setSelectedhierarchyRecord(HierarchyDVO selectedhierarchyRecord) {
+		this.selectedhierarchyRecord = selectedhierarchyRecord;
 	}
 
 }

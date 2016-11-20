@@ -1,0 +1,25 @@
+<ui:composition template="/pages/systemowner/template/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<ui:define name="content">
+		<h:form>
+			<p:remoteCommand name="editSelectedHierarchyRecord" process="@this" partialSubmit="true" update=":hierarchyTabView"
+				action="#{addEditHierarchyMasterBB.setHierarchyForEdit}" />
+		</h:form>
+		<p:tabView id="hierarchyTabView" activeIndex="#{addEditHierarchyMasterBB.activeTabIndex}">
+			<p:ajax event="tabChange" listener="#{addEditHierarchyMasterBB.tabChanged}" process="@this"
+				update=":hierarchyTabView" />
+			<p:tab id="searchListHierarchy" title="Search/List">
+				<div style="overflow-x: auto; overflow-y: auto;">
+					<ui:include src="searchhierarchy.xhtml" />
+				</div>
+			</p:tab>
+			<p:tab id="addeditHierarchy" title="Add/Edit Hierarchy">
+				<div style="overflow-x: auto; overflow-y: auto;">
+					<ui:include src="addedithierarchy.xhtml" />
+				</div>
+			</p:tab>
+		</p:tabView>
+	</ui:define>
+</ui:composition>

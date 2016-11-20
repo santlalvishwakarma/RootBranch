@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="categoryLevelMappingForm">
+		<h:panelGroup id="categoryLevelMappingPanelGroup" layout="block">
+			<p:dialog id="categoryLevelMappingDialog" header="Category Level Mapping" widgetVar="categoryLevelMappingDialog"
+				dynamic="true" modal="true" height="#{addCategoryBB.modalHeight}">
+				<p:panel id="categoryLeveMappingPanel">
+					<table style="width: 100%;">
+						<tr>
+							<td><label class="labelClass boldClass">Category Code</label></td>
+							<td><label>#{addCategoryBB.addEditCategoryOpr.categoryRecord.code}</label></td>
+						</tr>
+						<tr>
+							<td>Category Level</td>
+							<td><p:autoComplete id="categoryLevelMapping" effect="fade" forceSelection="true" minQueryLength="1"
+									multiple="true" value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.categoryLevels}"
+									completeMethod="#{addEditCategoryBB.getSuggestedCategoryLevel}" var="categoryLevelRecord"
+									itemLabel="#{categoryLevelRecord.level}" itemValue="#{categoryLevelRecord}" global="false" maxResults="20"
+									converter="#{addEditCategoryBB.baseDVOConverter}">
+									<p:column headerText="Level">#{categoryLevelRecord.levelNo}</p:column>
+								</p:autoComplete></td>
+						</tr>
+					</table>
+					<table style="width: 40%">
+						<tr>
+							<td><p:commandButton id="mapCategory" value="Map" process="@this" update="categoryLevelMappingPanelGroup"
+									onclick="categoryLevelMappingDialog.hide();" /></td>
+						</tr>
+					</table>
+				</p:panel>
+			</p:dialog>
+		</h:panelGroup>
+	</h:form>
+</ui:composition>
