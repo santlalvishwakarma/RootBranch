@@ -114,5 +114,10 @@
 		<pattern value="/admin/hierarchy" />
 		<view-id value="/pages/systemowner/modules/hierarchymaster/hierarchy.jsf" />
 	</url-mapping>
+	
+	<url-mapping id="sizeMaster">
+		<pattern value="/admin/sizemaster" />
+		<view-id value="/pages/systemowner/modules/sizemaster/sizemaster.jsf" />
+	</url-mapping>
 
 </pretty-config>
