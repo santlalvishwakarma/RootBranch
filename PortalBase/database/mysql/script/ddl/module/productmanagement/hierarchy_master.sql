@@ -3,7 +3,7 @@ CREATE TABLE hierarchy_master(
 	hierarchy_code VARCHAR(25),
     hierarchy_name VARCHAR(60),
     hierarchy_description Varchar(255),
-    hierarchy_sequence INT(10) NOT NULL,
+    hierarchy_sequence INT(10),
 	is_active TINYINT(1) NOT NULL DEFAULT 0,
 	created_by VARCHAR(50) NOT NULL,
 	created_date DATETIME NOT NULL,
