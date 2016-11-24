@@ -2,29 +2,38 @@
 	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<h:form id="categorySearchForm">
-		<h:panelGroup id="searchCategoryField">
+		<h:panelGroup id="searchSizeField">
 			<table style="width: 100%;">
 				<tr>
 					<td><label class="labelClass boldClass">Size Code</label></td>
-					<td><p:inputText value="#{searchSizeBB}" /></td>
+					<td><p:inputText value="#{searchSizeBB.sizeOpr.sizeRecord.code}" /></td>
 					<td><label class="labelClass boldClass">Size Name</label></td>
-					<td><p:inputText value="#{searchCategoryBB.searchCategoryOpr.categoryRecord.name}" /></td>
+					<td><p:inputText value="#{searchSizeBB.sizeOpr.sizeRecord.name}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Status</label></td>
+					<td><p:selectOneMenu id="statusList"
+							value="#{searchSizeBB.sizeOpr.sizeRecord.statusRecord.code}">
+							<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+							<f:selectItems value="#{searchSizeBB.allOptions.allOptionsValues['statusList']}"
+								var="statusRecord" itemLabel="#{statusRecord.name}" itemValue="#{statusRecord.code}" />
+						</p:selectOneMenu></td>
 				</tr>
 			</table>
 			<br />
 			<table style="width: 40%">
 				<tr>
 					<td><p:commandButton id="btnSearch" update="searchResultPanelGroup" process="@this, searchCategoryField"
-							actionListener="#{searchCategoryBB.executeSearch}" value="Search" /> <p:tooltip for="btnSearch"
+							actionListener="#{searchSizeBB.executeSearch}" value="Search" /> <p:tooltip for="btnSearch"
 							value="Click to Search" /> <p:hotkey bind="ctrl+shift+s" /></td>
-					<td><p:commandButton id="btnCancel" action="#{searchCategoryBB.clearFields}" value="Clear Search"
+					<td><p:commandButton id="btnCancel" action="#{searchSizeBB.clearFields}" value="Clear Search"
 							process="@this" update="searchCategoryField, searchResultPanelGroup" /> <p:tooltip for="btnCancel"
 							value="Click to Clear" /></td>
 				</tr>
 			</table>
 		</h:panelGroup>
 		<h:panelGroup id="searchResultPanelGroup">
-			<p:panel rendered="#{!(empty searchCategoryBB.searchCategoryOpr.categoryList)}">
+			<p:panel rendered="#{!(empty searchSizeBB.searchCategoryOpr.categoryList)}">
 				<h:commandLink id="excelLink">
 					<p:graphicImage alt="Export to Xls" value="/staticcontent/images/excel.png" styleClass="imageClass" />
 					<p:dataExporter type="xls" target="categoryRecord" fileName="Categories" />
@@ -41,9 +50,9 @@
 				</h:commandLink>
 				<p:tooltip for="xmlLink" value="Click to export data in the list to XML" />
 			</p:panel>
-			<p:dataTable id="categoryTable" rows="#{searchCategoryBB.paginationNumber}" var="categoryRecord"
-				rowsPerPageTemplate="5,10,15" rendered="#{!(empty searchCategoryBB.searchCategoryOpr.categoryList)}"
-				value="#{searchCategoryBB.searchCategoryOpr.categoryList}" style="width: 100%;"
+			<p:dataTable id="categoryTable" rows="#{searchSizeBB.paginationNumber}" var="categoryRecord"
+				rowsPerPageTemplate="5,10,15" rendered="#{!(empty searchSizeBB.searchCategoryOpr.categoryList)}"
+				value="#{searchSizeBB.searchCategoryOpr.categoryList}" style="width: 100%;"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page"
 				paginator="true">
 				<f:facet name="header">Categories</f:facet>
@@ -51,8 +60,8 @@
 					filterMatchMode="contains">
 					<f:facet name="header">Name</f:facet>
 					<p:commandLink styleClass="linkClass" process="@this" update=":categoryTabView" value="#{categoryRecord.name}"
-						action="#{searchCategoryBB.editDetails}">
-						<f:setPropertyActionListener target="#{searchCategoryBB.searchCategoryOpr.selectedCategoryRecord}"
+						action="#{searchSizeBB.editDetails}">
+						<f:setPropertyActionListener target="#{searchSizeBB.searchCategoryOpr.selectedCategoryRecord}"
 							value="#{categoryRecord}" />
 					</p:commandLink>
 				</p:column>
