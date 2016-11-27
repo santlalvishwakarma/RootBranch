@@ -114,6 +114,8 @@ public interface CommonConstant {
 
 	public static final String IMAGE_DVO_LIST = "IMAGE_DVO_LIST";
 
+	public static final String BLANK_SPACE = " ";
+
 	public interface MessageLocation {
 
 		public static final String COMMON_MESSAGES = "com/web/common/parents/messages";

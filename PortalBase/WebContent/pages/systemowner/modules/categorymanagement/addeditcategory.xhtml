@@ -36,6 +36,12 @@
 						</h:panelGroup></td>
 				</tr>
 			</table>
+			<div align="left">
+				<p:commandLink value="Publish to Fornt Page" process="addEditCategoryField, @this"
+					rendered="#{!(addEditCategoryBB.addEditCategoryOpr.categoryRecord eq null)}"
+					update=":productHierarchyMappingDialogForm" actionListener="#{addEditCategoryBB.opePublishToHomeDialog}"
+					oncomplete="PF('categoryPushlishDialog').show();" />
+			</div>
 			<table style="width: 40%">
 				<tr>
 					<td><p:commandButton id="btnSearch" update="addEditCategoryField" process="@this, addEditCategoryField"

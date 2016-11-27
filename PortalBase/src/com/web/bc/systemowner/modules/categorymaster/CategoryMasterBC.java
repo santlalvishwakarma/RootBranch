@@ -112,6 +112,7 @@ public class CategoryMasterBC extends BackingClass {
 				categoryRecord.setSeoTitle((String) resultSetMap.get("image_url"));
 
 				categoryRecord.setActive((Boolean) resultSetMap.get("is_active"));
+				setAuditAttributes(categoryRecord, resultSetMap);
 
 				categoryList.add(categoryRecord);
 			}
@@ -320,5 +321,238 @@ public class CategoryMasterBC extends BackingClass {
 		addEditCategoryOpr.getCategoryRecord().setCategoryLevels(categoryLevels);
 
 		return addEditCategoryOpr;
+	}
+
+	public CategoryOpr getPublishToHomeCategoryList() throws BusinessException, FrameworkException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" CategoryMasterBC Inside getPublishToHomeCategoryList: ");
+		CategoryOpr categoryOpr = new CategoryOpr();
+
+		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
+		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT, CategoryMasterSqlTemplate.GET_PUBLISH_TO_HOME_CATEGORY);
+
+		Object strSqlParams[][] = new Object[0][3];
+
+		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
+		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
+		myLog.debug(" CategoryMasterBC executeSearch :: Resultset got ::" + responseMap);
+
+		List<CategoryDVO> publishCategoryList = new ArrayList<CategoryDVO>();
+		int responseSize = responseMap.size();
+		if (responseSize > 0) {
+			for (int i = 0; i < responseSize; i++) {
+				HashMap<String, Object> resultSetMap = responseMap.get(i);
+
+				CategoryDVO publishedCategoryRecord = new CategoryDVO();
+				if (resultSetMap.get("category_id") != null) {
+					publishedCategoryRecord.getPublishCategoryRecord().setId(
+							Long.valueOf(resultSetMap.get("category_id").toString()));
+				}
+
+				publishedCategoryRecord.getPublishCategoryRecord().setCode((String) resultSetMap.get("category_code"));
+				publishedCategoryRecord.getPublishCategoryRecord().setName((String) resultSetMap.get("category_name"));
+
+				publishedCategoryRecord.getPublishCategoryRecord().setPublishToHome(
+						(Boolean) resultSetMap.get("publish_to_home_page"));
+
+				if (resultSetMap.get("publish_position") != null) {
+					publishedCategoryRecord.getPublishCategoryRecord().setPublishPosition(
+							Integer.valueOf(resultSetMap.get("publish_position").toString()));
+				}
+
+				publishedCategoryRecord.getPublishCategoryRecord().setImageUrl((String) resultSetMap.get("image_url"));
+
+				setAuditAttributes(publishedCategoryRecord, resultSetMap);
+
+				publishCategoryList.add(publishedCategoryRecord);
+			}
+		}
+
+		categoryOpr.setPublishToHomeCategoryList(publishCategoryList);
+
+		return categoryOpr;
+	}
+
+	public List<Object> getSuggestedCategories(CategoryDVO categoryDVO) throws BusinessException, FrameworkException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In CategoryMasterBC :: getSuggestedCategories starts ");
+
+		String code = categoryDVO.getCode();
+		String name = categoryDVO.getName();
+		Boolean isActive = categoryDVO.getActive();
+		myLog.debug(" parameter 1 code:: " + code);
+		myLog.debug(" parameter 2 name:: " + name);
+
+		StringBuffer dynamicWhere = new StringBuffer();
+
+		int parameterCount = 0;
+		// setup the dynamic where clause to include all entered params
+		if (code != null && code.trim().length() > 0) {
+			code = code.trim().concat("%");
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND category_code LIKE '" + code + "'");
+			} else {
+				dynamicWhere.append(" category_code LIKE '" + code + "'");
+			}
+			parameterCount++;
+		}
+
+		if (name != null && name.trim().length() > 0) {
+			name = name.trim().concat("%");
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND category_name LIKE '" + name + "'");
+			} else {
+				dynamicWhere.append(" category_name LIKE '" + name + "'");
+			}
+			parameterCount++;
+		}
+
+		if (isActive != null && isActive) {
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND is_active = 1 ");
+			} else {
+				dynamicWhere.append(" is_active = 1 ");
+			}
+			parameterCount++;
+		}
+
+		// to get all data
+		if (parameterCount == 0) {
+			dynamicWhere.append(" 1 = 1 ");
+		}
+		dynamicWhere.append(" ORDER BY category_name ");
+		myLog.debug("dynamicWhere ::::: " + dynamicWhere);
+
+		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
+		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT, CategoryMasterSqlTemplate.GET_SUGGESTED_CATEGORIES);
+		// AND product_category_name LIKE ?
+
+		Object strSqlParams[][] = new Object[0][3];
+
+		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, dynamicWhere.toString());
+		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
+		myLog.debug(" getSuggestedCategoriesBasedOnMainLevel :: Resultset got ::" + responseMap);
+
+		List<Object> categoryList = new ArrayList<Object>();
+		if (responseMap.size() > 0) {
+
+			for (int i = 0; i < responseMap.size(); i++) {
+
+				HashMap<String, Object> resultSetMap = responseMap.get(i);
+
+				CategoryDVO categoryRecord = new CategoryDVO();
+				if (resultSetMap.get("category_id") != null)
+					categoryRecord.setId(Long.valueOf(resultSetMap.get("category_id").toString()));
+
+				categoryRecord.setCode((String) resultSetMap.get("category_code"));
+				categoryRecord.setName((String) resultSetMap.get("category_name"));
+				categoryRecord.setDescription((String) resultSetMap.get("category_description"));
+
+				categoryList.add(categoryRecord);
+			}
+		}
+		return categoryList;
+	}
+
+	public CategoryOpr executeSavePublishCategory(CategoryOpr addEditCategoryOpr) throws BusinessException,
+			FrameworkException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In CategoryMasterBC :: executeSavePublishCategory starts ");
+		CategoryOpr categoryOprRet = new CategoryOpr();
+
+		Long categoryId = addEditCategoryOpr.getCategoryRecord().getId();
+		myLog.debug("category Id::" + categoryId);
+		StringBuffer parseCategoryParseString = new StringBuffer();
+		String userLogin = addEditCategoryOpr.getCategoryRecord().getUserLogin();
+		String lastModifiedDate = null;
+
+		if (addEditCategoryOpr.getCategoryRecord().getAuditAttributes().getLastModifiedDate() != null)
+			lastModifiedDate = addEditCategoryOpr.getCategoryRecord().getAuditAttributes().getLastModifiedDate()
+					.toString();
+
+		for (CategoryDVO categoryRecord : addEditCategoryOpr.getPublishToHomeCategoryList()) {
+			Long publishCategoryId = categoryRecord.getPublishCategoryRecord().getId();
+			myLog.debug("publishCategoryId Id::" + publishCategoryId);
+			Integer publishingPosition = categoryRecord.getPublishCategoryRecord().getPublishPosition();
+			Boolean recordDeleted = categoryRecord.getPublishCategoryRecord().getOperationalAttributes()
+					.getRecordDeleted();
+
+			if (publishCategoryId != null)
+				parseCategoryParseString.append(publishCategoryId);
+			else
+				parseCategoryParseString.append("");
+			parseCategoryParseString.append("~");
+
+			if (publishingPosition != null)
+				parseCategoryParseString.append(publishingPosition);
+			else
+				parseCategoryParseString.append("");
+			parseCategoryParseString.append("~");
+
+			if (recordDeleted)
+				parseCategoryParseString.append("1");
+			else
+				parseCategoryParseString.append("0");
+			parseCategoryParseString.append(";");
+		}
+		if (parseCategoryParseString != null && parseCategoryParseString.length() > 1) {
+			// this is to remove the last ; sign
+			parseCategoryParseString.deleteCharAt(parseCategoryParseString.length() - 1);
+		}
+
+		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
+		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT, CategoryMasterSqlTemplate.SAVE_PUBLISH_CATEGORY_LIST);
+
+		Object strSqlParams[][] = new Object[4][3];
+
+		strSqlParams[0][0] = "1";
+		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
+		strSqlParams[0][2] = categoryId;
+		myLog.debug(" parameter 1 categoryId:: " + categoryId);
+
+		strSqlParams[1][0] = "2";
+		strSqlParams[1][1] = IDAOConstant.STRING_DATATYPE;
+
+		if (parseCategoryParseString.length() > 0)
+			strSqlParams[1][2] = parseCategoryParseString.toString();
+		else
+			strSqlParams[1][2] = null;
+		myLog.debug(" parameter 2 strSqlParams[1][2]:: " + strSqlParams[1][2]);
+
+		strSqlParams[2][0] = "3";
+		strSqlParams[2][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[2][2] = userLogin;
+		myLog.debug(" parameter 3 userLogin:: " + userLogin);
+
+		strSqlParams[3][0] = "4";
+		strSqlParams[3][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[3][2] = lastModifiedDate;
+		myLog.debug(" parameter 4 lastModifiedDate:: " + lastModifiedDate);
+
+		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
+		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
+		myLog.debug(" Product Definition saveHierarchiesMappingList :: Resultset got ::" + responseMap);
+
+		if (responseMap.size() > 0) {
+			for (int i = 0; i < responseMap.size(); i++) {
+
+				HashMap<String, Object> resultSetMap = responseMap.get(i);
+				handleAndThrowException(resultSetMap);
+
+				setAuditAttributes(categoryOprRet.getCategoryRecord(), resultSetMap);
+
+			}
+		}
+		CategoryOpr categoryOprSend = getPublishToHomeCategoryList();
+
+		categoryOprRet.setPublishToHomeCategoryList(categoryOprSend.getPublishToHomeCategoryList());
+
+		return categoryOprRet;
 	}
 }

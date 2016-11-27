@@ -1,0 +1,61 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="productHierarchyMappingDialogForm">
+		<p:dialog id="categoryPushlishDialog" header="Publish To Home" widgetVar="categoryPushlishDialog" showEffect="explode"
+			hideEffect="explode" dynamic="true" modal="true" height="#{addEditCategoryBB.modalHeight}">
+			<p:ajax event="close" listener="#{addEditCategoryBB.closeModalWindow}" />
+			<p:panel id="categoryPushlishDialogPanel">
+				<p:commandLink id="categoryPushlishAddRow" process="categoryPushlishListPanel, @this" styleClass="linkClass"
+					actionListener="#{addEditCategoryBB.executeCategoryPublishAddRow}" update="categoryPushlishListPanel">
+					<p:graphicImage alt="Add Row" value="/staticcontent/systemowner/images/add.png" />
+				</p:commandLink>
+				<label class="addRowMsgClass">Please click here to add a new row</label>
+				<br />
+				<br />
+				<h:panelGroup id="categoryPushlishListPanel">
+					<p:dataTable id="productHierarchyMappingListTable" rows="#{addEditCategoryBB.paginationNumber}"
+						var="categoryPublishRecord" paginator="true" rowsPerPageTemplate="5,10,15"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page"
+						rendered="#{!(empty addEditCategoryBB.addEditCategoryOpr.publishToHomeCategoryList)}"
+						value="#{addEditCategoryBB.addEditCategoryOpr.publishToHomeCategoryList}">
+						<f:facet name="header">Publish Category</f:facet>
+						<p:column headerText="Category">
+							<p:autoComplete id="categoryNameAutoComplete" maxResults="20"
+								value="#{categoryPublishRecord.publishCategoryRecord}" minQueryLength="2" effect="fade" forceSelection="true"
+								completeMethod="#{addEditCategoryBB.getSuggestedCategoryForName}" var="categoryRecord"
+								itemLabel="#{categoryRecord.name}" itemValue="#{categoryRecord}" global="false"
+								converter="#{addEditCategoryBB.baseDVOConverter}">
+								<p:column headerText="Code">#{categoryRecord.code}</p:column>
+								<p:column headerText="Name">#{categoryRecord.name}</p:column>
+							</p:autoComplete>
+							<p:watermark for="categoryNameAutoComplete" value="Enter first 2 chars" />
+						</p:column>
+						<p:column headerText="Position">
+							<p:inputText value="#{categoryPublishRecord.publishCategoryRecord.publishPosition}"></p:inputText>
+						</p:column>
+
+						<p:column headerText="Delete">
+							<p:selectBooleanCheckbox
+								value="#{categoryPublishRecord.publishCategoryRecord.operationalAttributes.recordDeleted}" />
+						</p:column>
+					</p:dataTable>
+					<table style="margin: 0 auto;">
+						<tr>
+							<td><p:commandButton id="btnSaveHierarchy" actionListener="#{addEditCategoryBB.executeSavePublishCategory}"
+									rendered="#{!(empty addEditCategoryBB.addEditCategoryOpr.publishToHomeCategoryList)}" value="Save"
+									process="categoryPushlishDialogPanel, @this"
+									update="categoryPushlishDialogPanel, :categoryTabView:categoryAddEditForm" /> <p:tooltip
+									for="btnSaveHierarchy" value="Click to Save" /></td>
+							<td><p:commandButton id="btnCloseHierarchy" actionListener="#{addEditCategoryBB.closeModalWindow}"
+									rendered="#{!(empty addEditCategoryBB.addEditCategoryOpr.publishToHomeCategoryList)}" value="Close"
+									process="@this" oncomplete="PF('categoryPushlishDialog').hide()" /> <p:tooltip for="btnCloseHierarchy"
+									value="Click to Close" /></td>
+						</tr>
+					</table>
+				</h:panelGroup>
+				<p:messages autoUpdate="true" showDetail="false" showSummary="true" />
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</ui:composition>

@@ -50,11 +50,18 @@ public interface CategoryMasterSqlTemplate extends SqlTemplate {
 			+ " AND c.level IN (2)" + " AND d.product_category_id = c.product_category_id ";
 
 	public static final String SEARCH_CATEGORY = " SELECT cm.category_id, cm.category_code, cm.category_name, cm.category_description, "
-			+ " cm.seo_title, cm.seo_keyword, cm.seo_description, cm.image_url, cm.is_active FROM category_master cm ";
+			+ " cm.seo_title, cm.seo_keyword, cm.seo_description, cm.image_url, cm.is_active, cm.modified_by, cm.modified_date FROM category_master cm ";
 
 	public static final String SAVE_EDIT_CATEGORY = " CALL sp_save_edit_category(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @p_error_code, @p_error_message); ";
 
 	public static final String GET_MAPPED_CATEGORY = " SELECT clm.category_level_mapping_id, clm.category_id, clm.level_no, clm.is_active, "
 			+ " clm.created_date, clm.created_by, clm.modified_by, clm.modified_date FROM category_level_mapping clm WHERE clm.category_id = ? ";
+
+	public static final String GET_PUBLISH_TO_HOME_CATEGORY = "SELECT category_id, category_code, category_name, category_description, publish_to_home_page, publish_position, image_url "
+			+ " FROM category_master WHERE publish_to_home_page = 1 AND is_active = 1 ORDER BY publish_position ";
+
+	static final String GET_SUGGESTED_CATEGORIES = "SELECT category_id, category_code, category_name, category_description FROM category_master ";
+
+	static final String SAVE_PUBLISH_CATEGORY_LIST = "CALL sp_product_save_publish_category(?,?,?,?, @p_error_code, @p_error_message);";
 
 }

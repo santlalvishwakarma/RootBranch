@@ -135,11 +135,14 @@ public class ProductDefinitionSearchBB extends BackingBean {
 
 	@Override
 	public boolean validateSearch() {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		FoundationValidator validator = new FoundationValidator();
 		PropertiesReader propertiesReader = new PropertiesReader(CommonConstant.MessageLocation.COMMON_MESSAGES);
 		PropertiesReader propertiesReader2 = new PropertiesReader(propertiesLocation);
 		boolean validateFlag = true;
 		setErrorList(new ArrayList<String>());
+
+		myLog.debug("hierarchy list size::" + productOpr.getProductHierarchyList().size());
 
 		ProductDVO productRecord = productOpr.getProductRecord();
 		if (!(validator.validateNull(productRecord.getCode()) || validator.validateNull(productRecord.getName())
@@ -370,6 +373,14 @@ public class ProductDefinitionSearchBB extends BackingBean {
 						productHierarchyObjectList.add(productHierarchyRecord);
 					}
 				}
+				@SuppressWarnings("unchecked")
+				List<Object> allHierarchyList = (ArrayList<Object>) FacesContext.getCurrentInstance().getViewRoot()
+						.getViewMap().get("productHierarchyAutoComplete");
+				if (allHierarchyList == null) {
+					allHierarchyList = new ArrayList<Object>();
+				}
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+						.put("locationMultiSuggestionBox", productHierarchyList);
 			}
 		}
 		return productHierarchyObjectList;

@@ -13,6 +13,7 @@ public class CategoryOpr extends OperationalDataValueObject {
 	private CategoryDVO categoryRecord;
 	private CategoryDVO selectedCategoryRecord;
 	private List<CategoryDVO> categoryList;
+	private List<CategoryDVO> publishToHomeCategoryList;
 
 	public CategoryDVO getCategoryRecord() {
 		if (categoryRecord == null) {
@@ -45,6 +46,17 @@ public class CategoryOpr extends OperationalDataValueObject {
 
 	public void setCategoryList(List<CategoryDVO> categoryList) {
 		this.categoryList = categoryList;
+	}
+
+	public List<CategoryDVO> getPublishToHomeCategoryList() {
+		if (publishToHomeCategoryList == null) {
+			publishToHomeCategoryList = new ArrayList<CategoryDVO>();
+		}
+		return publishToHomeCategoryList;
+	}
+
+	public void setPublishToHomeCategoryList(List<CategoryDVO> publishToHomeCategoryList) {
+		this.publishToHomeCategoryList = publishToHomeCategoryList;
 	}
 
 }

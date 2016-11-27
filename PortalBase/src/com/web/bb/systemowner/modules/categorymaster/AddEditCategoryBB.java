@@ -13,6 +13,7 @@ import org.primefaces.event.TabChangeEvent;
 import com.web.bf.systemowner.modules.categorymaster.CategoryMasterBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.systemowner.CategoryOpr;
+import com.web.common.dvo.systemowner.CategoryDVO;
 import com.web.common.dvo.systemowner.CategoryLevelDVO;
 import com.web.common.dvo.util.File;
 import com.web.common.dvo.util.OptionsDVO;
@@ -172,8 +173,6 @@ public class AddEditCategoryBB extends BackingBean {
 	}
 
 	public CategoryOpr getAddEditCategoryOpr() {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug(" inside getAddEditCategoryOpr: ");
 		if (FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 				.containsKey(CommonConstant.ACTIVE_TAB_OPR)) {
 			CategoryOpr selectedAddEditCategoryOpr = (CategoryOpr) FacesContext.getCurrentInstance()
@@ -351,4 +350,125 @@ public class AddEditCategoryBB extends BackingBean {
 		this.baseDVOConverter = baseDVOConverter;
 	}
 
+	public void opePublishToHomeDialog(ActionEvent event) throws BusinessException, FrameworkException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" Inside AddEditCategoryBB  opePublishToHomeDialog start::");
+
+		CategoryOpr categoryOprRet = new CategoryMasterBF().getPublishToHomeCategoryList();
+
+		addEditCategoryOpr.setPublishToHomeCategoryList(categoryOprRet.getPublishToHomeCategoryList());
+
+		if (!addEditCategoryOpr.getPublishToHomeCategoryList().isEmpty()) {
+			List<Object> categoryList = new ArrayList<Object>();
+
+			for (CategoryDVO categoryDVO : addEditCategoryOpr.getPublishToHomeCategoryList()) {
+				categoryList.add(categoryDVO.getPublishCategoryRecord());
+			}
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("categoryNameAutoComplete", categoryList);
+
+		}
+	}
+
+	public void executeCategoryPublishAddRow(ActionEvent event) {
+		addEditCategoryOpr.getPublishToHomeCategoryList().add(new CategoryDVO());
+	}
+
+	public List<Object> getSuggestedCategoryForName(String query) throws BusinessException, FrameworkException {
+		List<Object> categoryList = new ArrayList<Object>();
+		if (query != null) {
+			query = query.toUpperCase();
+
+			CategoryDVO categoryDVO = new CategoryDVO();
+			categoryDVO.setName(query);
+			categoryDVO.setActive(true);
+
+			categoryList = new CategoryMasterBF().getSuggestedCategories(categoryDVO);
+
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("categoryNameAutoComplete", categoryList);
+
+		}
+		return categoryList;
+	}
+
+	public void executeSavePublishCategory(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In Product Definition Add Edit BB :: executeSaveHierarchyMapping starts ");
+
+		if (validateSavePublishCategory()) {
+			try {
+				String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
+				addEditCategoryOpr.getCategoryRecord().setUserLogin(userLogin);
+
+				CategoryOpr categoryOprRecd = new CategoryMasterBF().executeSavePublishCategory(addEditCategoryOpr);
+
+				addEditCategoryOpr.setPublishToHomeCategoryList(categoryOprRecd.getPublishToHomeCategoryList());
+				myLog.debug("last modified date::"
+						+ categoryOprRecd.getCategoryRecord().getAuditAttributes().getLastModifiedDate());
+				addEditCategoryOpr.getCategoryRecord().setAuditAttributes(
+						categoryOprRecd.getCategoryRecord().getAuditAttributes());
+
+				PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+				setSuccessMsg(propertiesReader.getValueOfKey("publish_category_save_success"));
+
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+	}
+
+	private boolean validateSavePublishCategory() {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("Inside validateSavePublishCategory: ");
+
+		boolean validateFlag = true;
+
+		FoundationValidator validator = new FoundationValidator();
+		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+
+		setErrorList(new ArrayList<String>());
+		int j = 1;
+		if (!addEditCategoryOpr.getPublishToHomeCategoryList().isEmpty()) {
+			for (int i = 0; i < addEditCategoryOpr.getPublishToHomeCategoryList().size(); i++) {
+				if (addEditCategoryOpr.getPublishToHomeCategoryList().get(i).getPublishCategoryRecord()
+						.getOperationalAttributes().getRecordDeleted() == null
+						|| !addEditCategoryOpr.getPublishToHomeCategoryList().get(i).getPublishCategoryRecord()
+								.getOperationalAttributes().getRecordDeleted()) {
+
+					if (!validator.validateLongObjectNull(addEditCategoryOpr.getPublishToHomeCategoryList().get(i)
+							.getPublishCategoryRecord().getId())) {
+						validateFlag = false;
+						addToErrorList(propertiesReader.getValueOfKey("category_is_missing") + (i + 1));
+					}
+
+					if (!validator.validateIntegerObjectNull(addEditCategoryOpr.getPublishToHomeCategoryList().get(i)
+							.getPublishCategoryRecord().getPublishPosition())) {
+						validateFlag = false;
+						addToErrorList(propertiesReader.getValueOfKey("sequence_is_missing") + (i + 1));
+					}
+
+					if (validateFlag
+							&& !addEditCategoryOpr.getPublishToHomeCategoryList().get(i).getPublishCategoryRecord()
+									.getPublishPosition().equals(j)) {
+						addToErrorList(propertiesReader.getValueOfKey("publish_position_missing") + (i + 1)
+								+ CommonConstant.BLANK_SPACE + ("should_be_in_sequence"));
+						break;
+					}
+					j++;
+				}
+			}
+		} else {
+			addToErrorList(propertiesReader.getValueOfKey("publish_category_empty"));
+		}
+
+		if (getErrorList().size() > 0) {
+			validateFlag = false;
+		} else {
+			validateFlag = true;
+		}
+
+		return validateFlag;
+	}
 }

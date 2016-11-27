@@ -14,6 +14,9 @@ public class CategoryDVO extends BaseDVO {
 	private String imageUrl;
 	private String seoKeyword;
 	private Boolean selectedCategory;
+	private Boolean publishToHome;
+	private Integer publishPosition;
+	private CategoryDVO publishCategoryRecord;
 
 	private List<CategoryLevelDVO> categoryLevels;
 
@@ -82,6 +85,33 @@ public class CategoryDVO extends BaseDVO {
 
 	public void setCategoryLevels(List<CategoryLevelDVO> categoryLevels) {
 		this.categoryLevels = categoryLevels;
+	}
+
+	public Boolean getPublishToHome() {
+		return publishToHome;
+	}
+
+	public void setPublishToHome(Boolean publishToHome) {
+		this.publishToHome = publishToHome;
+	}
+
+	public Integer getPublishPosition() {
+		return publishPosition;
+	}
+
+	public void setPublishPosition(Integer publishPosition) {
+		this.publishPosition = publishPosition;
+	}
+
+	public CategoryDVO getPublishCategoryRecord() {
+		if (publishCategoryRecord == null) {
+			publishCategoryRecord = new CategoryDVO();
+		}
+		return publishCategoryRecord;
+	}
+
+	public void setPublishCategoryRecord(CategoryDVO publishCategoryRecord) {
+		this.publishCategoryRecord = publishCategoryRecord;
 	}
 
 }
