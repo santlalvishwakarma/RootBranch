@@ -23,7 +23,7 @@ public interface ReadMoreSqlTemplate extends SqlTemplate {
 			+ " AND psh.product_id = ? AND psh.product_sku_id = ? AND phcm.product_id = ph.product_id; ";
 
 	public static final String GET_PRODUCT_ALTERNATIVE_IMAGES = " SELECT psim.product_sku_image_mapping_id, psim.product_sku_id, "
-			+ " psim.image_type, psim.thumbnail_image_url, psim.zoom_image_url, psim.sequence_number "
+			+ " psim.image_type, psim.thumbnail_image_url, psim.zoom_image_url, psim.sequence_number, psim.image_url "
 			+ " FROM product_sku_image_mapping psim, product_sku_header psh "
 			+ " WHERE psim.product_sku_id =  psh.product_sku_id AND psim.is_active = 1 AND psim.product_sku_id = ? ; ";
 

@@ -17,7 +17,7 @@
 			<div id="productgallery">
 				<!---prod-thumbnail Ends-->
 				<div id="mainproduct" class="productdetleft">
-					<img src="#{retailReadMoreBB.readMoreOpr.productSkuRecord.defaultImageRecord.imageURL}" class="bookdetimg" />
+					<img src="#{applicationScope['imageURL']}#{retailReadMoreBB.readMoreOpr.productSkuRecord.defaultImageRecord.imageURL}" class="bookdetimg" />
 					<div class="iconbox">
 						<ul>
 							<li>
@@ -104,7 +104,7 @@
 		<h:panelGroup id="navigationPanelGroup">
 			<p:outputPanel rendered="#{retailReadMoreBB.navigatePanel}">
 				<div class="productImage">
-					<h:graphicImage value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.defaultImageRecord.thumbnailImageURL}" />
+					<h:graphicImage value="#{applicationScope['imageURL']}#{retailReadMoreBB.readMoreOpr.productSkuRecord.defaultImageRecord.imageURL}" />
 				</div>
 				<!-- Product Info Box Starts -->
 				<div class="productContent">

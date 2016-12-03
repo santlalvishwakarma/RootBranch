@@ -1271,7 +1271,7 @@ div#breadcrumbs ul li a:hover {
 	margin: 0px auto;
 	border: 1px solid #cccccc;
 	background-color: #ffffff;
-	width: 940px;
+	/* width: 940px; */
 	height: 450px;
 	display: block;
 	margin: 0px 0px 21px 0px;
@@ -1283,10 +1283,11 @@ div#breadcrumbs ul li a:hover {
 
 .productdetleft {
 	float: left;
-	background: url("/p/staticcontent/retail/images/portalimages/book-det-bg.jpg");
+	/* background: url("/p/staticcontent/retail/images/portalimages/book-det-bg.jpg"); */
 	height: 451px;
-	width: 510px;
+	width: 623px;
 	margin: 0px auto;
+	text-align: center;
 }
 
 .iconbox {
@@ -1355,18 +1356,11 @@ productdetright {
 	width: 66px;
 }
 
-.productcontent {
-	margin: 17px 5px 0 11px;
-	text-align: justify;
-	padding: 0px 21px 0px 21px;
-	overflow: auto;
-	height: 200px;
-}
-
 .productContent {
 	float: left;
-	width: 230px;
-	margin-top: 10px;
+    width: 442px;
+    margin-top: 10px;
+    text-align: center;
 }
 
 .productContent h3 {
@@ -1417,7 +1411,7 @@ productdetright {
 }
 
 .addcart {
-	margin: 17px 0 0 537px;
+	margin: 17px 0 0 650px;
 	background-image: url("/p/staticcontent/retail/images/portalimages/addcard.png");
 	width: 117px;
 	height: 24px;
@@ -1867,6 +1861,17 @@ productdetright {
 
 .mainmenu {
 	bottom: 0px;
+}
+
+.bookdetimg{
+	width: 319px;
+    height: 304px;
+    padding: 4px 10px;
+}
+
+.productImage {
+	text-align: center;
+	margin-top: 10px;
 }
 
 /* Added for portal base end*/

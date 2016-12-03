@@ -264,22 +264,32 @@ public class ReadMoreBC extends BackingClass {
 				HashMap<String, Object> resultRow = responseMap.get(i);
 				ProductSkuImageMappingDVO productSkuImageMappingRecord = new ProductSkuImageMappingDVO();
 
-				productSkuImageMappingRecord.setId(Long.valueOf(resultRow.get("product_sku_image_mapping_id")
-						.toString()));
+				if (resultRow.get("product_sku_image_mapping_id") != null) {
+					productSkuImageMappingRecord.setId(Long.valueOf(resultRow.get("product_sku_image_mapping_id")
+							.toString()));
+				}
 
-				productSkuImageMappingRecord.getProductSkuRecord().setId(
-						Long.valueOf(resultRow.get("product_sku_id").toString()));
+				if (resultRow.get("product_sku_id") != null) {
+					productSkuImageMappingRecord.getProductSkuRecord().setId(
+							Long.valueOf(resultRow.get("product_sku_id").toString()));
+				}
 
-				productSkuImageMappingRecord.getImageTypeRecord().setParameterID(
-						Integer.valueOf(resultRow.get("image_type").toString()));
+				if (resultRow.get("image_type") != null) {
+					productSkuImageMappingRecord.getImageTypeRecord().setParameterID(
+							Integer.valueOf(resultRow.get("image_type").toString()));
+				}
 
 				productSkuImageMappingRecord.getImageRecord().setThumbnailImageURL(
 						(String) resultRow.get("thumbnail_image_url"));
 
+				productSkuImageMappingRecord.getImageRecord().setImageURL((String) resultRow.get("image_url"));
+
 				productSkuImageMappingRecord.getImageRecord().setZoomImageURL((String) resultRow.get("zoom_image_url"));
 
-				productSkuImageMappingRecord.getImageRecord().setSequenceNumber(
-						Long.valueOf(resultRow.get("sequence_no").toString()));
+				if (resultRow.get("sequence_number") != null) {
+					productSkuImageMappingRecord.getImageRecord().setSequenceNumber(
+							Long.valueOf(resultRow.get("sequence_number").toString()));
+				}
 
 				readMoreOpr.getProductSkuRecord().getProductSkuImageMappingList().add(productSkuImageMappingRecord);
 
