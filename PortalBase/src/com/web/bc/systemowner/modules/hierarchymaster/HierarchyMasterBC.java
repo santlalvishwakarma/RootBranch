@@ -105,7 +105,7 @@ public class HierarchyMasterBC extends BackingClass {
 		return hierarchyList;
 	}
 
-	public HierarchyOpr executeSave(HierarchyOpr addEditHierarchyOpr) throws FrameworkException {
+	public HierarchyOpr executeSave(HierarchyOpr addEditHierarchyOpr) throws FrameworkException, BusinessException {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug(" Inside executeSave: ");
 
@@ -164,7 +164,7 @@ public class HierarchyMasterBC extends BackingClass {
 			for (int i = 0; i < responseSize; i++) {
 
 				HashMap<String, Object> resultSetMap = responseMap.get(i);
-
+				handleAndThrowException(resultSetMap);
 				if (resultSetMap.get("hierarchy_id") != null) {
 					addEditHierarchyOpr.getHierarchyRecord().setId(
 							Long.valueOf(resultSetMap.get("hierarchy_id").toString()));

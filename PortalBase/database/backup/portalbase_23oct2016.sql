@@ -2967,7 +2967,7 @@ CREATE TABLE `hierarchy_master` (
   `hierarchy_code` varchar(25) DEFAULT NULL,
   `hierarchy_name` varchar(60) DEFAULT NULL,
   `hierarchy_description` varchar(255) DEFAULT NULL,
-  `hierarchy_sequence` int(10),
+  `hierarchy_sequence` int(10) NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT '0',
   `created_by` varchar(50) NOT NULL,
   `created_date` datetime NOT NULL,

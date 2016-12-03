@@ -1,5 +1,6 @@
 package com.web.bf.systemowner.modules.categorymaster;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.web.bc.systemowner.modules.categorymaster.CategoryMasterBC;
@@ -35,6 +36,30 @@ public class CategoryMasterBF extends BusinessFacade {
 	public CategoryOpr executeSavePublishCategory(CategoryOpr addEditCategoryOpr) throws BusinessException,
 			FrameworkException {
 		return new CategoryMasterBC().executeSavePublishCategory(addEditCategoryOpr);
+	}
+
+	public CategoryOpr mapCategoryToLevels(CategoryOpr addEditCategoryOpr) throws FrameworkException, BusinessException {
+		return new CategoryMasterBC().mapCategoryToLevels(addEditCategoryOpr);
+	}
+
+	public ArrayList<Object> getMappedCategoryLevels(CategoryOpr addEditCategoryOpr) throws FrameworkException,
+			BusinessException {
+		return new CategoryMasterBC().getMappedCategoryLevels(addEditCategoryOpr);
+	}
+
+	public ArrayList<Object> getSuggestedHierarchyMappingForCode(CategoryOpr addEditCategoryOpr, String query)
+			throws FrameworkException, BusinessException {
+		return new CategoryMasterBC().getSuggestedHierarchyMappingForCode(addEditCategoryOpr, query);
+	}
+
+	public CategoryOpr mapHierarchyToCategory(CategoryOpr addEditCategoryOpr) throws FrameworkException,
+			BusinessException {
+		return new CategoryMasterBC().mapHierarchyToCategory(addEditCategoryOpr);
+	}
+
+	public CategoryOpr getMappedHierarchyCategory(CategoryOpr addEditCategoryOpr) throws FrameworkException,
+			BusinessException {
+		return new CategoryMasterBC().getMappedHierarchyCategory(addEditCategoryOpr);
 	}
 
 }

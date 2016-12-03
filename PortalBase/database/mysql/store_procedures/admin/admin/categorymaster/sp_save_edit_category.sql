@@ -1,5 +1,4 @@
 DELIMITER $$
-
 DROP PROCEDURE IF EXISTS sp_save_edit_category $$
 CREATE PROCEDURE sp_save_edit_category(
 IN p_product_category_id INT(10), 
@@ -52,5 +51,4 @@ BEGIN
 
 	SELECT v_last_inserted_id AS category_id;
 END $$
-
-DELIMITER;
+DELIMITER ;

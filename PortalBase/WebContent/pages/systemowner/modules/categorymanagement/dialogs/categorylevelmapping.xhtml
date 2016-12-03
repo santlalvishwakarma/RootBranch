@@ -5,18 +5,18 @@
 		<h:panelGroup id="categoryLevelMappingPanelGroup" layout="block">
 			<p:dialog id="categoryLevelMappingDialog" header="Category Level Mapping" widgetVar="categoryLevelMappingDialog"
 				dynamic="true" modal="true" height="#{addCategoryBB.modalHeight}">
-				<p:panel id="categoryLeveMappingPanel">
+				<p:panel id="categoryLevelMappingPanel">
 					<table style="width: 100%;">
 						<tr>
 							<td><label class="labelClass boldClass">Category Code</label></td>
-							<td><label>#{addCategoryBB.addEditCategoryOpr.categoryRecord.code}</label></td>
+							<td><label>#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.name}</label></td>
 						</tr>
 						<tr>
 							<td>Category Level</td>
 							<td><p:autoComplete id="categoryLevelMapping" effect="fade" forceSelection="true" minQueryLength="1"
 									multiple="true" value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.categoryLevels}"
 									completeMethod="#{addEditCategoryBB.getSuggestedCategoryLevel}" var="categoryLevelRecord"
-									itemLabel="#{categoryLevelRecord.level}" itemValue="#{categoryLevelRecord}" global="false" maxResults="20"
+									itemLabel="#{categoryLevelRecord.levelNo}" itemValue="#{categoryLevelRecord}" global="false" maxResults="20"
 									converter="#{addEditCategoryBB.baseDVOConverter}">
 									<p:column headerText="Level">#{categoryLevelRecord.levelNo}</p:column>
 								</p:autoComplete></td>
@@ -24,8 +24,12 @@
 					</table>
 					<table style="width: 40%">
 						<tr>
-							<td><p:commandButton id="mapCategory" value="Map" process="@this" update="categoryLevelMappingPanelGroup"
-									onclick="categoryLevelMappingDialog.hide();" /></td>
+							<td><p:commandButton id="mapCategory" value="Map"
+									process="@this, :categoryTabView:categoryLevelMappingForm:categoryLevelMappingPanelGroup, :categoryTabView:categoryLevelMappingForm:categoryLevelMapping"
+									update=":categoryTabView:categoryLevelMappingForm:categoryLevelMappingPanelGroup"
+									actionListener="#{addEditCategoryBB.mapCategoryToLevels}" /></td>
+							<td><p:commandButton id="closePopup" process="@this" value="Close"
+									oncomplete="PF('categoryLevelMappingDialog').hide();"></p:commandButton></td>
 						</tr>
 					</table>
 				</p:panel>

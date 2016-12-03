@@ -2,7 +2,7 @@
 	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<h:form id="categoryAddEditForm">
-		<h:panelGroup id="addEditCategoryField">
+		<h:panelGroup id="addEditCategoryField" layout="block">
 			<table style="width: 100%;">
 				<tr>
 					<td><label class="labelClass boldClass">Category Name</label></td>
@@ -44,6 +44,18 @@
 			</div>
 			<table style="width: 40%">
 				<tr>
+					<td><p:commandButton id="mapCategoryToCategopryLevelButton" process="@this" value="Map Level"
+							actionListener="#{addEditCategoryBB.getMappedCategoryLevel}"
+							rendered="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.id ne null}"
+							update=":categoryTabView:categoryLevelMappingForm:categoryLevelMappingPanelGroup"
+							oncomplete="PF('categoryLevelMappingDialog').show();" /> <p:tooltip for="mapCategoryToCategopryLevelButton"
+							value="Map Category Level" /></td>
+					<td><p:commandButton id="mapHierarchyToCategoryButton" process="@this" value="Map Hierarchy"
+							actionListener="#{addEditCategoryBB.getMappedHierarchyCategory}"
+							rendered="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.id ne null}"
+							update=":categoryTabView:categoryHierarchyMappingForm:categoryHierarchyMappingPanelGroup"
+							oncomplete="PF('categoryHierarchyMappingDialog').show();" /> <p:tooltip for="mapHierarchyToCategoryButton"
+							value="Map Hierarchy Category" /></td>
 					<td><p:commandButton id="btnSearch" update="addEditCategoryField" process="@this, addEditCategoryField"
 							actionListener="#{addEditCategoryBB.executeSave}" value="Save" /> <p:tooltip for="btnSearch"
 							value="Click to Save" /> <p:hotkey bind="ctrl+shift+s" /></td>
@@ -54,4 +66,5 @@
 		</h:panelGroup>
 	</h:form>
 	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/categorylevelmapping.xhtml" />
+	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/categoryhierarchymapping.xhtml" />
 </ui:composition>

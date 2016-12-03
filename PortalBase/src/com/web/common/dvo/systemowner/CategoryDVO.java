@@ -19,6 +19,7 @@ public class CategoryDVO extends BaseDVO {
 	private CategoryDVO publishCategoryRecord;
 
 	private List<CategoryLevelDVO> categoryLevels;
+	private List<HierarchyCategoryMappingDVO> hierarchyCategoryMappingList;
 
 	public String getExtraInformation() {
 		return extraInformation;
@@ -112,6 +113,18 @@ public class CategoryDVO extends BaseDVO {
 
 	public void setPublishCategoryRecord(CategoryDVO publishCategoryRecord) {
 		this.publishCategoryRecord = publishCategoryRecord;
+	}
+
+	public List<HierarchyCategoryMappingDVO> getHierarchyCategoryMappingList() {
+		if (hierarchyCategoryMappingList == null) {
+			hierarchyCategoryMappingList = new ArrayList<HierarchyCategoryMappingDVO>();
+		}
+		return hierarchyCategoryMappingList;
+	}
+
+	public void setHierarchyCategoryMappingList(List<HierarchyCategoryMappingDVO> hierarchyCategoryMappingList) {
+		this.hierarchyCategoryMappingList = hierarchyCategoryMappingList;
+
 	}
 
 }

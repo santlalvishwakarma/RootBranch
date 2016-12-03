@@ -39,7 +39,6 @@ public class ProductDefinitionSearchBB extends BackingBean {
 
 	private String propertiesLocation = "com/web/bb/systemowner/modules/productmanagement/productdefinition";
 	private ProductOpr productOpr;
-	private OptionsDVO allOptions;
 	private ProductDVO selectedProductRecord;
 	private transient BaseDVOConverter baseDVOConverter;
 	private ArrayList<Object> productHierarchyList;

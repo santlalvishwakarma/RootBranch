@@ -2,12 +2,14 @@ package com.web.bb.systemowner.modules.categorymaster;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.primefaces.component.tabview.Tab;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TabChangeEvent;
 
 import com.web.bf.systemowner.modules.categorymaster.CategoryMasterBF;
@@ -15,6 +17,7 @@ import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.systemowner.CategoryOpr;
 import com.web.common.dvo.systemowner.CategoryDVO;
 import com.web.common.dvo.systemowner.CategoryLevelDVO;
+import com.web.common.dvo.systemowner.HierarchyCategoryMappingDVO;
 import com.web.common.dvo.util.File;
 import com.web.common.dvo.util.OptionsDVO;
 import com.web.common.jsf.converters.BaseDVOConverter;
@@ -126,7 +129,10 @@ public class AddEditCategoryBB extends BackingBean {
 
 	@Override
 	public OptionsDVO getAllOptions() {
-		return null;
+		if (allOptions == null) {
+			allOptions = new OptionsDVO();
+		}
+		return allOptions;
 	}
 
 	@Override
@@ -294,6 +300,8 @@ public class AddEditCategoryBB extends BackingBean {
 
 		try {
 			addEditCategoryOpr = new CategoryMasterBF().getMappedCategoryLevel(addEditCategoryOpr);
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+					.put("categoryLevelMapping", addEditCategoryOpr.getCategoryRecord().getCategoryLevels());
 		} catch (FrameworkException e) {
 			handleException(e, propertiesLocation);
 		} catch (BusinessException e) {
@@ -302,6 +310,9 @@ public class AddEditCategoryBB extends BackingBean {
 	}
 
 	public List<CategoryLevelDVO> getSuggestedCategoryLevel(String query) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" Inside getSuggestedCategoryLevel : ");
+
 		List<CategoryLevelDVO> newCategoryLevels = new ArrayList<CategoryLevelDVO>();
 		if (query != null) {
 
@@ -330,13 +341,155 @@ public class AddEditCategoryBB extends BackingBean {
 			}
 			if (!levelExceed && !isAlreadyMapped) {
 				CategoryLevelDVO categoryLevelRecord = new CategoryLevelDVO();
+				categoryLevelRecord.setCode(addEditCategoryOpr.getCategoryRecord().getCode() + "-" + inputLevel);
 				categoryLevelRecord.setLevelNo(inputLevel);
 				categoryLevelRecord.setCategoryRecord(addEditCategoryOpr.getCategoryRecord());
 				newCategoryLevels.add(categoryLevelRecord);
+				categoryLevels.add(categoryLevelRecord);
 			}
+			myLog.debug("size::: " + categoryLevels.size());
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("categoryLevelMapping", categoryLevels);
 		}
 
 		return newCategoryLevels;
+	}
+
+	public void mapCategoryToLevels(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" Inside mapCategoryToLevels : ");
+
+		try {
+			String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
+			addEditCategoryOpr.getCategoryRecord().setUserLogin(userLogin);
+			addEditCategoryOpr = new CategoryMasterBF().mapCategoryToLevels(addEditCategoryOpr);
+			setSuccessMsg("Category mapped to level(s)");
+		} catch (FrameworkException e) {
+			handleException(e, propertiesLocation);
+		} catch (BusinessException e) {
+			handleException(e, propertiesLocation);
+		}
+	}
+
+	public ArrayList<Object> getSuggestedHierarchyMappingForCode(String query) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside getSuggestedHierarchyMappingForCode::: ");
+
+		PropertiesReader propertiesReader = new PropertiesReader();
+		propertiesReader.setResourceBundle(propertiesLocation, Locale.getDefault());
+
+		if (query == null || query.trim().length() == 0) {
+			return null;
+		}
+
+		if (addEditCategoryOpr.getHierarchyCategoryMappingLevelNo() == null
+				|| addEditCategoryOpr.getHierarchyCategoryMappingLevelNo() == 0) {
+			addToErrorList(propertiesReader.getValueOfKey("category_level_not_selected"));
+			return null;
+		}
+
+		ArrayList<Object> hierarchyList = new ArrayList<Object>();
+
+		try {
+			hierarchyList = new CategoryMasterBF().getSuggestedHierarchyMappingForCode(addEditCategoryOpr, query);
+			myLog.debug(" hierarchyList: " + hierarchyList);
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+					.put("categoryHierarchyMappingAutoComplete", hierarchyList);
+		} catch (FrameworkException e) {
+			handleException(e, propertiesLocation);
+		} catch (BusinessException e) {
+			handleException(e, propertiesLocation);
+		}
+
+		return hierarchyList;
+	}
+
+	public void getMappedHierarchyCategory(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside getMappedHierarchyCategory::: ");
+
+		try {
+			addEditCategoryOpr = new CategoryMasterBF().getMappedCategoryLevel(addEditCategoryOpr);
+			List<CategoryLevelDVO> categoryLevels = addEditCategoryOpr.getCategoryRecord().getCategoryLevels();
+
+			ArrayList<Object> levelsMapped = new ArrayList<Object>();
+
+			int categoryLevelSize = categoryLevels != null ? categoryLevels.size() : 0;
+			myLog.debug(" categoryLevelSize::: " + categoryLevelSize);
+
+			for (int i = 0; i < categoryLevelSize; i++) {
+				levelsMapped.add(categoryLevels.get(i).getLevelNo());
+			}
+			getAllOptions().getAllOptionsValues().put("categoryMappedLevelList", levelsMapped);
+
+			addEditCategoryOpr.getCategoryRecord().getHierarchyCategoryMappingList().clear();
+			addEditCategoryOpr = new CategoryMasterBF().getMappedHierarchyCategory(addEditCategoryOpr);
+		} catch (FrameworkException e) {
+			handleException(e, propertiesLocation);
+		} catch (BusinessException e) {
+			handleException(e, propertiesLocation);
+		}
+	}
+
+	public void setHierarchyCategoryMapping(SelectEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside setHierarchyCategoryMapping::: ");
+
+		PropertiesReader propertiesReader = new PropertiesReader();
+		propertiesReader.setResourceBundle(propertiesLocation, Locale.getDefault());
+
+		if (addEditCategoryOpr.getHierarchyCategoryMappingLevelNo() == 0) {
+			addToErrorList(propertiesReader.getValueOfKey("category_level_not_selected"));
+			return;
+		}
+
+		addEditCategoryOpr.getMappedHierarchyCategoryMappingList().clear();
+
+		Integer categoryLevel = addEditCategoryOpr.getHierarchyCategoryMappingLevelNo();
+
+		HierarchyCategoryMappingDVO hierarchyCategoryMappingRecord = addEditCategoryOpr
+				.getSelectedHierarchyCategoryMappingRecord();
+		addEditCategoryOpr.getMappedHierarchyCategoryMappingList().add(hierarchyCategoryMappingRecord);
+		addEditCategoryOpr.setSelectedHierarchyCategoryMappingRecord(null);
+
+		if (categoryLevel == 1) {
+			hierarchyCategoryMappingRecord.setCategoryLevelOneRecord(addEditCategoryOpr.getCategoryRecord());
+		} else if (categoryLevel == 2) {
+			hierarchyCategoryMappingRecord.setCategoryLevelTwoRecord(addEditCategoryOpr.getCategoryRecord());
+		} else if (categoryLevel == 3) {
+			hierarchyCategoryMappingRecord.setCategoryLevelThreeRecord(addEditCategoryOpr.getCategoryRecord());
+		} else if (categoryLevel == 4) {
+			hierarchyCategoryMappingRecord.setCategoryLevelFourRecord(addEditCategoryOpr.getCategoryRecord());
+		}
+
+	}
+
+	public void mapHierarchyToCategory(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside mapHierarchyToCategory::: ");
+
+		try {
+			String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
+			addEditCategoryOpr.getCategoryRecord().setUserLogin(userLogin);
+			addEditCategoryOpr = new CategoryMasterBF().mapHierarchyToCategory(addEditCategoryOpr);
+
+			addEditCategoryOpr.getMappedHierarchyCategoryMappingList().clear();
+			addEditCategoryOpr.getCategoryRecord().getHierarchyCategoryMappingList().clear();
+			addEditCategoryOpr = new CategoryMasterBF().getMappedHierarchyCategory(addEditCategoryOpr);
+		} catch (FrameworkException e) {
+			handleException(e, propertiesLocation);
+		} catch (BusinessException e) {
+			handleException(e, propertiesLocation);
+		}
+	}
+
+	public String clearFields() {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside clearFields::: ");
+		allOptions.getAllOptionsValues().remove("categoryMappedLevelList");
+		addEditCategoryOpr.getCategoryRecord().setHierarchyCategoryMappingList(null);
+		addEditCategoryOpr.setMappedHierarchyCategoryMappingList(null);
+		addEditCategoryOpr.setHierarchyCategoryMappingLevelNo(null);
+		return null;
 	}
 
 	public BaseDVOConverter getBaseDVOConverter() {

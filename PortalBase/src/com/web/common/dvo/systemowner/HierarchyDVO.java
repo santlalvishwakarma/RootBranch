@@ -1,5 +1,8 @@
 package com.web.common.dvo.systemowner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.web.common.dvo.common.BaseDVO;
 import com.web.common.dvo.common.Parameter;
 
@@ -9,6 +12,8 @@ public class HierarchyDVO extends BaseDVO {
 	private CategoryDVO categoryRecord;
 	private Parameter categoryLevel;
 	private Long sequence;
+
+	private List<HierarchyCategoryMappingDVO> hierarchyCategoryMappingList;
 
 	public CategoryDVO getCategoryRecord() {
 		if (categoryRecord == null) {
@@ -38,6 +43,17 @@ public class HierarchyDVO extends BaseDVO {
 
 	public void setSequence(Long sequence) {
 		this.sequence = sequence;
+	}
+
+	public List<HierarchyCategoryMappingDVO> getHierarchyCategoryMappingList() {
+		if (hierarchyCategoryMappingList == null) {
+			hierarchyCategoryMappingList = new ArrayList<HierarchyCategoryMappingDVO>();
+		}
+		return hierarchyCategoryMappingList;
+	}
+
+	public void setHierarchyCategoryMappingList(List<HierarchyCategoryMappingDVO> hierarchyCategoryMappingList) {
+		this.hierarchyCategoryMappingList = hierarchyCategoryMappingList;
 	}
 
 }

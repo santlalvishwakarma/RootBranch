@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.web.common.dvo.common.OperationalDataValueObject;
 import com.web.common.dvo.systemowner.CategoryDVO;
+import com.web.common.dvo.systemowner.HierarchyCategoryMappingDVO;
 
 public class CategoryOpr extends OperationalDataValueObject {
 
@@ -14,6 +15,9 @@ public class CategoryOpr extends OperationalDataValueObject {
 	private CategoryDVO selectedCategoryRecord;
 	private List<CategoryDVO> categoryList;
 	private List<CategoryDVO> publishToHomeCategoryList;
+	private Integer hierarchyCategoryMappingLevelNo;
+	private HierarchyCategoryMappingDVO selectedHierarchyCategoryMappingRecord;
+	private List<HierarchyCategoryMappingDVO> mappedHierarchyCategoryMappingList;
 
 	public CategoryDVO getCategoryRecord() {
 		if (categoryRecord == null) {
@@ -57,6 +61,38 @@ public class CategoryOpr extends OperationalDataValueObject {
 
 	public void setPublishToHomeCategoryList(List<CategoryDVO> publishToHomeCategoryList) {
 		this.publishToHomeCategoryList = publishToHomeCategoryList;
+	}
+
+	public Integer getHierarchyCategoryMappingLevelNo() {
+		return hierarchyCategoryMappingLevelNo;
+	}
+
+	public void setHierarchyCategoryMappingLevelNo(Integer hierarchyCategoryMappingLevelNo) {
+		this.hierarchyCategoryMappingLevelNo = hierarchyCategoryMappingLevelNo;
+	}
+
+	public HierarchyCategoryMappingDVO getSelectedHierarchyCategoryMappingRecord() {
+		if (selectedHierarchyCategoryMappingRecord == null) {
+			selectedHierarchyCategoryMappingRecord = new HierarchyCategoryMappingDVO();
+		}
+		return selectedHierarchyCategoryMappingRecord;
+	}
+
+	public void setSelectedHierarchyCategoryMappingRecord(
+			HierarchyCategoryMappingDVO selectedHierarchyCategoryMappingRecord) {
+		this.selectedHierarchyCategoryMappingRecord = selectedHierarchyCategoryMappingRecord;
+	}
+
+	public List<HierarchyCategoryMappingDVO> getMappedHierarchyCategoryMappingList() {
+		if (mappedHierarchyCategoryMappingList == null) {
+			mappedHierarchyCategoryMappingList = new ArrayList<HierarchyCategoryMappingDVO>();
+		}
+		return mappedHierarchyCategoryMappingList;
+	}
+
+	public void setMappedHierarchyCategoryMappingList(
+			List<HierarchyCategoryMappingDVO> mappedHierarchyCategoryMappingList) {
+		this.mappedHierarchyCategoryMappingList = mappedHierarchyCategoryMappingList;
 	}
 
 }
