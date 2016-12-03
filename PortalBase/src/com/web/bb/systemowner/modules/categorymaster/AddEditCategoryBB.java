@@ -406,6 +406,24 @@ public class AddEditCategoryBB extends BackingBean {
 	public void getMappedHierarchyCategory(ActionEvent event) {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug(" inside getMappedHierarchyCategory::: ");
+		addEditCategoryOpr.getCategoryRecord().getHierarchyCategoryMappingList().clear();
+
+		try {
+			addEditCategoryOpr = new CategoryMasterBF().getMappedHierarchyCategory(addEditCategoryOpr);
+		} catch (FrameworkException e) {
+			handleException(e, propertiesLocation);
+		} catch (BusinessException e) {
+			handleException(e, propertiesLocation);
+		}
+	}
+
+	public void openHierarchyCategoryMappingDialogBox(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside openHierarchyCategoryMappingDialogBox::: ");
+
+		addEditCategoryOpr.getCategoryRecord().setHierarchyCategoryMappingList(null);
+		addEditCategoryOpr.setMappedHierarchyCategoryMappingList(null);
+		addEditCategoryOpr.setHierarchyCategoryMappingLevelNo(null);
 
 		try {
 			addEditCategoryOpr = new CategoryMasterBF().getMappedCategoryLevel(addEditCategoryOpr);
@@ -421,8 +439,6 @@ public class AddEditCategoryBB extends BackingBean {
 			}
 			getAllOptions().getAllOptionsValues().put("categoryMappedLevelList", levelsMapped);
 
-			addEditCategoryOpr.getCategoryRecord().getHierarchyCategoryMappingList().clear();
-			addEditCategoryOpr = new CategoryMasterBF().getMappedHierarchyCategory(addEditCategoryOpr);
 		} catch (FrameworkException e) {
 			handleException(e, propertiesLocation);
 		} catch (BusinessException e) {
@@ -486,8 +502,8 @@ public class AddEditCategoryBB extends BackingBean {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug(" inside clearFields::: ");
 		allOptions.getAllOptionsValues().remove("categoryMappedLevelList");
-		addEditCategoryOpr.getCategoryRecord().setHierarchyCategoryMappingList(null);
-		addEditCategoryOpr.setMappedHierarchyCategoryMappingList(null);
+		addEditCategoryOpr.getCategoryRecord().getHierarchyCategoryMappingList().clear();
+		addEditCategoryOpr.getMappedHierarchyCategoryMappingList().clear();
 		addEditCategoryOpr.setHierarchyCategoryMappingLevelNo(null);
 		return null;
 	}

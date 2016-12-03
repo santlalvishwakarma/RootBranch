@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="mappedHierarchyToCategoryDialogForm">
+		<p:dialog id="mappedHierarchyToCategory" header="Mapped Hierarchy-Category" widgetVar="mappedHierarchyToCategory"
+			showEffect="explode" hideEffect="explode" dynamic="true" modal="true" height="#{addEditCategoryBB.modalHeight}">
+			<p:ajax event="close" listener="#{addEditCategoryBB.closeModalWindow}" />
+			<p:panel id="mappedHierarchyToCategoryDialogPanel">
+				<h:panelGroup id="mappedHierarchyToCategoryMappingPanelGroup" layout="block">
+					<p:dataTable id="mappedHierarchyToCategoryMappingTable" rows="#{addEditCategoryBB.paginationNumber}"
+						var="mappedHierarchyToCategoryMappingRecord" paginator="true" rowsPerPageTemplate="5,10,15"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page"
+						rendered="#{!(empty addEditCategoryBB.addEditCategoryOpr.categoryRecord.hierarchyCategoryMappingList)}"
+						value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.hierarchyCategoryMappingList}">
+						<f:facet name="header">Mapped Hierarchy-Category</f:facet>
+						<p:column headerText="Hierarchy">
+							<h:outputText value="#{mappedHierarchyToCategoryMappingRecord.hierarchyRecord.name}" />
+						</p:column>
+						<p:column headerText="Category Level 1"
+							rendered="#{mappedHierarchyToCategoryMappingRecord.categoryLevelOneRecord.code ne null}">
+							<h:outputText value="#{mappedHierarchyToCategoryMappingRecord.categoryLevelOneRecord.name}"
+								rendered="#{mappedHierarchyToCategoryMappingRecord.categoryLevelOneRecord.code ne null}" />
+						</p:column>
+						<p:column headerText="Category Level 2"
+							rendered="#{mappedHierarchyToCategoryMappingRecord.categoryLevelTwoRecord.code ne null}">
+							<h:outputText value="#{mappedHierarchyToCategoryMappingRecord.categoryLevelTwoRecord.name}"
+								rendered="#{mappedHierarchyToCategoryMappingRecord.categoryLevelTwoRecord.code ne null}" />
+						</p:column>
+						<p:column headerText="Category Level 3"
+							rendered="#{mappedHierarchyToCategoryMappingRecord.categoryLevelThreeRecord.code ne null}">
+							<h:outputText value="#{mappedHierarchyToCategoryMappingRecord.categoryLevelThreeRecord.name}"
+								rendered="#{mappedHierarchyToCategoryMappingRecord.categoryLevelThreeRecord.code ne null}" />
+						</p:column>
+						<p:column headerText="Category Level 4"
+							rendered="#{mappedHierarchyToCategoryMappingRecord.categoryLevelFourRecord.code ne null}">
+							<h:outputText value="#{mappedHierarchyToCategoryMappingRecord.categoryLevelFourRecord.name}"
+								rendered="#{mappedHierarchyToCategoryMappingRecord.categoryLevelFourRecord.code ne null}" />
+						</p:column>
+					</p:dataTable>
+				</h:panelGroup>
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</ui:composition>

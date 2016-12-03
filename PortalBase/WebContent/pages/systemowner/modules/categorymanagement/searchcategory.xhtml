@@ -25,18 +25,18 @@
 		<h:panelGroup id="searchResultPanelGroup">
 			<p:panel rendered="#{!(empty searchCategoryBB.searchCategoryOpr.categoryList)}">
 				<h:commandLink id="excelLink">
-					<p:graphicImage alt="Export to Xls" value="/staticcontent/images/excel.png" styleClass="imageClass" />
-					<p:dataExporter type="xls" target="categoryRecord" fileName="Categories" />
+					<p:graphicImage alt="Export to Xls" value="/staticcontent/systemowner/images/excel.png" styleClass="imageClass" />
+					<p:dataExporter type="xls" target="categoryTable" fileName="Categories" />
 				</h:commandLink>
 				<p:tooltip for="excelLink" value="Click to export data in the list to MS-Excel" />
 				<h:commandLink id="pdfLink">
-					<p:graphicImage alt="Export to PDF" value="/staticcontent/images/pdf.png" styleClass="imageClass" />
-					<p:dataExporter type="pdf" target="categoryRecord" fileName="Categories" />
+					<p:graphicImage alt="Export to PDF" value="/staticcontent/systemowner/images/pdf.png" styleClass="imageClass" />
+					<p:dataExporter type="pdf" target="categoryTable" fileName="Categories" />
 				</h:commandLink>
 				<p:tooltip for="pdfLink" value="Click to export data in the list to PDF" />
 				<h:commandLink id="xmlLink">
-					<p:graphicImage alt="Export to XML" value="/staticcontent/images/xml.png" styleClass="imageClass" />
-					<p:dataExporter type="xml" target="categoryRecord" fileName="Categories" />
+					<p:graphicImage alt="Export to XML" value="/staticcontent/systemowner/images/xml.png" styleClass="imageClass" />
+					<p:dataExporter type="xml" target="categoryTable" fileName="Categories" />
 				</h:commandLink>
 				<p:tooltip for="xmlLink" value="Click to export data in the list to XML" />
 			</p:panel>

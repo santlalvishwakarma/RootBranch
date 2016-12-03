@@ -51,11 +51,10 @@
 							oncomplete="PF('categoryLevelMappingDialog').show();" /> <p:tooltip for="mapCategoryToCategopryLevelButton"
 							value="Map Category Level" /></td>
 					<td><p:commandButton id="mapHierarchyToCategoryButton" process="@this" value="Map Hierarchy"
-							actionListener="#{addEditCategoryBB.getMappedHierarchyCategory}"
+							actionListener="#{addEditCategoryBB.openHierarchyCategoryMappingDialogBox}"
 							rendered="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.id ne null}"
-							update=":categoryTabView:categoryHierarchyMappingForm:categoryHierarchyMappingPanelGroup"
-							oncomplete="PF('categoryHierarchyMappingDialog').show();" /> <p:tooltip for="mapHierarchyToCategoryButton"
-							value="Map Hierarchy Category" /></td>
+							update=":categoryTabView:categoryHierarchyMappingForm" oncomplete="PF('categoryHierarchyMappingDialog').show();" />
+						<p:tooltip for="mapHierarchyToCategoryButton" value="Map Hierarchy Category" /></td>
 					<td><p:commandButton id="btnSearch" update="addEditCategoryField" process="@this, addEditCategoryField"
 							actionListener="#{addEditCategoryBB.executeSave}" value="Save" /> <p:tooltip for="btnSearch"
 							value="Click to Save" /> <p:hotkey bind="ctrl+shift+s" /></td>
@@ -67,4 +66,5 @@
 	</h:form>
 	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/categorylevelmapping.xhtml" />
 	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/categoryhierarchymapping.xhtml" />
+	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/mappedHierarchyToCategory.xhtml" />
 </ui:composition>

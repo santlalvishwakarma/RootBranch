@@ -2,121 +2,92 @@
 	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<h:form id="categoryHierarchyMappingForm">
-		<h:panelGroup id="categoryHierarchyMappingPanelGroup" layout="block">
-			<p:dialog id="categoryHierarchyMappingDialog" header="Category Level Mapping"
-				widgetVar="categoryHierarchyMappingDialog" dynamic="true" modal="true" height="#{addCategoryBB.modalHeight}">
-				<p:panel id="categoryHierarchyMappingPanel">
-
-					<h:panelGroup layout="block">
-						<table>
-							<tr>
-								<td>Category Levels</td>
-								<td><p:selectOneMenu id="statusList"
-										value="#{addEditCategoryBB.addEditCategoryOpr.hierarchyCategoryMappingLevelNo}">
-										<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="0" />
-										<f:selectItems value="#{addEditCategoryBB.allOptions.allOptionsValues['categoryMappedLevelList']}"
-											var="categoryLevel" itemLabel="#{categoryLevel}" itemValue="#{categoryLevel}" />
-										<p:ajax event="change" process="@this" />
-									</p:selectOneMenu></td>
-								<td>Hierarchy Code</td>
-								<td><p:autoComplete id="categoryHierarchyMappingAutoComplete" maxResults="20"
-										value="#{addEditCategoryBB.addEditCategoryOpr.selectedHierarchyCategoryMappingRecord}" minQueryLength="2"
-										effect="fade" forceSelection="true" completeMethod="#{addEditCategoryBB.getSuggestedHierarchyMappingForCode}"
-										var="hierarchyCategoryMappingRecord" itemLabel="#{hierarchyCategoryMappingRecord.hierarchyRecord.code}"
-										itemValue="#{hierarchyCategoryMappingRecord}" global="false" converter="#{addEditCategoryBB.baseDVOConverter}">
-										<p:ajax event="itemSelect" process="@this" listener="#{addEditCategoryBB.setHierarchyCategoryMapping}"
-											update="@this, categoryHierarchyMappingTablePanelGroup" />
-										<p:column headerText="Hierarchy Code">
+		<p:dialog id="categoryHierarchyMappingDialog" header="Category Level Mapping"
+			widgetVar="categoryHierarchyMappingDialog" showEffect="explode" hideEffect="explode" dynamic="true" modal="true"
+			height="#{addEditCategoryBB.modalHeight}">
+			<p:ajax event="close" listener="#{addEditCategoryBB.closeModalWindow}" />
+			<p:panel id="categoryHierarchyMappingPanel">
+				<h:panelGroup layout="block">
+					<table>
+						<tr>
+							<td>Category Levels</td>
+							<td><p:selectOneMenu id="statusList"
+									value="#{addEditCategoryBB.addEditCategoryOpr.hierarchyCategoryMappingLevelNo}">
+									<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="0" />
+									<f:selectItems value="#{addEditCategoryBB.allOptions.allOptionsValues['categoryMappedLevelList']}"
+										var="categoryLevel" itemLabel="#{categoryLevel}" itemValue="#{categoryLevel}" />
+									<p:ajax event="change" process="@this" />
+								</p:selectOneMenu></td>
+							<td>Hierarchy Code</td>
+							<td><p:autoComplete id="categoryHierarchyMappingAutoComplete" maxResults="20"
+									value="#{addEditCategoryBB.addEditCategoryOpr.selectedHierarchyCategoryMappingRecord}" minQueryLength="2"
+									effect="fade" forceSelection="true" completeMethod="#{addEditCategoryBB.getSuggestedHierarchyMappingForCode}"
+									var="hierarchyCategoryMappingRecord" itemLabel="#{hierarchyCategoryMappingRecord.hierarchyRecord.code}"
+									itemValue="#{hierarchyCategoryMappingRecord}" global="false" converter="#{addEditCategoryBB.baseDVOConverter}">
+									<p:ajax event="itemSelect" process="@this" listener="#{addEditCategoryBB.setHierarchyCategoryMapping}"
+										update="@this, categoryHierarchyMappingTablePanelGroup, mapHierarchyCategoryButtonPanelGroup" />
+									<p:column headerText="Hierarchy Code">
 											#{hierarchyCategoryMappingRecord.hierarchyRecord.name}</p:column>
-										<p:column headerText="Category Code 1">
+									<p:column headerText="Category Code 1">
 											#{hierarchyCategoryMappingRecord.categoryLevelOneRecord.name}</p:column>
-										<p:column headerText="Category Code 2">
+									<p:column headerText="Category Code 2">
 											#{hierarchyCategoryMappingRecord.categoryLevelTwoRecord.name}</p:column>
-										<p:column headerText="Category Code 3">
+									<p:column headerText="Category Code 3">
 											#{hierarchyCategoryMappingRecord.categoryLevelThreeRecord.name}</p:column>
-									</p:autoComplete> <p:watermark for="categoryHierarchyMappingAutoComplete" value="Enter first 2 chars" /></td>
-							</tr>
-						</table>
-					</h:panelGroup>
-
-					<h:panelGroup id="categoryHierarchyMappingTablePanelGroup">
-						<p:dataTable id="categoryHierarchyMappingTable" rows="#{addEditCategoryBB.paginationNumber}"
-							var="categoryHierarchyMappingRecord" paginator="true" rowsPerPageTemplate="5,10,15"
-							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page"
-							rendered="#{!(empty addEditCategoryBB.addEditCategoryOpr.mappedHierarchyCategoryMappingList)}"
-							value="#{addEditCategoryBB.addEditCategoryOpr.mappedHierarchyCategoryMappingList}">
-							<f:facet name="header">Map Hierarchy</f:facet>
-							<p:column headerText="Hierarchy">
-								<h:outputText value="#{categoryHierarchyMappingRecord.hierarchyRecord.code}" />
-							</p:column>
-							<p:column headerText="Category Level 1"
-								rendered="#{categoryHierarchyMappingRecord.categoryLevelOneRecord.code ne null}">
-								<h:outputText value="#{categoryHierarchyMappingRecord.categoryLevelOneRecord.name}"
-									rendered="#{categoryHierarchyMappingRecord.categoryLevelOneRecord.code ne null}" />
-							</p:column>
-							<p:column headerText="Category Level 2"
-								rendered="#{categoryHierarchyMappingRecord.categoryLevelTwoRecord.code ne null}">
-								<h:outputText value="#{categoryHierarchyMappingRecord.categoryLevelTwoRecord.name}"
-									rendered="#{categoryHierarchyMappingRecord.categoryLevelTwoRecord.code ne null}" />
-							</p:column>
-							<p:column headerText="Category Level 3"
-								rendered="#{categoryHierarchyMappingRecord.categoryLevelThreeRecord.code ne null}">
-								<h:outputText value="#{categoryHierarchyMappingRecord.categoryLevelThreeRecord.name}"
-									rendered="#{categoryHierarchyMappingRecord.categoryLevelThreeRecord.code ne null}" />
-							</p:column>
-							<p:column headerText="Category Level 4"
-								rendered="#{categoryHierarchyMappingRecord.categoryLevelFourRecord.code ne null}">
-								<h:outputText value="#{categoryHierarchyMappingRecord.categoryLevelFourRecord.name}"
-									rendered="#{categoryHierarchyMappingRecord.categoryLevelFourRecord.code ne null}" />
-							</p:column>
-						</p:dataTable>
-					</h:panelGroup>
-
+								</p:autoComplete> <p:watermark for="categoryHierarchyMappingAutoComplete" value="Enter first 2 chars" /></td>
+						</tr>
+					</table>
+				</h:panelGroup>
+				<h:panelGroup id="categoryHierarchyMappingTablePanelGroup">
+					<p:dataTable id="categoryHierarchyMappingTable" rows="#{addEditCategoryBB.paginationNumber}"
+						var="categoryHierarchyMappingRecord" paginator="true" rowsPerPageTemplate="5,10,15"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page"
+						rendered="#{!(empty addEditCategoryBB.addEditCategoryOpr.mappedHierarchyCategoryMappingList)}"
+						value="#{addEditCategoryBB.addEditCategoryOpr.mappedHierarchyCategoryMappingList}">
+						<f:facet name="header">Map Hierarchy</f:facet>
+						<p:column headerText="Hierarchy">
+							<h:outputText value="#{categoryHierarchyMappingRecord.hierarchyRecord.code}" />
+						</p:column>
+						<p:column headerText="Category Level 1"
+							rendered="#{categoryHierarchyMappingRecord.categoryLevelOneRecord.code ne null}">
+							<h:outputText value="#{categoryHierarchyMappingRecord.categoryLevelOneRecord.name}"
+								rendered="#{categoryHierarchyMappingRecord.categoryLevelOneRecord.code ne null}" />
+						</p:column>
+						<p:column headerText="Category Level 2"
+							rendered="#{categoryHierarchyMappingRecord.categoryLevelTwoRecord.code ne null}">
+							<h:outputText value="#{categoryHierarchyMappingRecord.categoryLevelTwoRecord.name}"
+								rendered="#{categoryHierarchyMappingRecord.categoryLevelTwoRecord.code ne null}" />
+						</p:column>
+						<p:column headerText="Category Level 3"
+							rendered="#{categoryHierarchyMappingRecord.categoryLevelThreeRecord.code ne null}">
+							<h:outputText value="#{categoryHierarchyMappingRecord.categoryLevelThreeRecord.name}"
+								rendered="#{categoryHierarchyMappingRecord.categoryLevelThreeRecord.code ne null}" />
+						</p:column>
+						<p:column headerText="Category Level 4"
+							rendered="#{categoryHierarchyMappingRecord.categoryLevelFourRecord.code ne null}">
+							<h:outputText value="#{categoryHierarchyMappingRecord.categoryLevelFourRecord.name}"
+								rendered="#{categoryHierarchyMappingRecord.categoryLevelFourRecord.code ne null}" />
+						</p:column>
+					</p:dataTable>
+				</h:panelGroup>
+				<h:panelGroup id="mapHierarchyCategoryButtonPanelGroup" layout="block">
 					<table>
 						<tr>
 							<td><p:commandButton id="mapHierarchyCategoryButton" process="@this" value="Map"
-									update="categoryHierarchyMappingTablePanelGroup, mappedCategoryHierarchyMappingPanelGroup"
+									update="categoryHierarchyMappingTablePanelGroup"
+									rendered="#{!(empty addEditCategoryBB.addEditCategoryOpr.mappedHierarchyCategoryMappingList)}"
 									actionListener="#{addEditCategoryBB.mapHierarchyToCategory}"></p:commandButton></td>
 							<td><p:commandButton id="closePopup" process="@this" value="Close" action="#{addEditCategoryBB.clearFields}"
 									oncomplete="PF('categoryHierarchyMappingDialog').hide();"></p:commandButton></td>
+							<td><p:commandLink id="viewMappedHierarchy" value="View Mapped Hierarchy" process="@this"
+									actionListener="#{addEditCategoryBB.getMappedHierarchyCategory}"
+									update=":categoryTabView:mappedHierarchyToCategoryDialogForm:mappedHierarchyToCategoryMappingPanelGroup"
+									oncomplete="PF('mappedHierarchyToCategory').show();" /></td>
 						</tr>
 					</table>
-
-					<h:panelGroup id="mappedCategoryHierarchyMappingPanelGroup" layout="block">
-						<p:dataTable id="mappedCategoryHierarchyMappingTable" rows="#{addEditCategoryBB.paginationNumber}"
-							var="mappedCategoryHierarchyMappingRecord" paginator="true" rowsPerPageTemplate="5,10,15"
-							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page"
-							rendered="#{!(empty addEditCategoryBB.addEditCategoryOpr.categoryRecord.hierarchyCategoryMappingList)}"
-							value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.hierarchyCategoryMappingList}">
-							<f:facet name="header">Mapped Hierarchy-Category</f:facet>
-							<p:column headerText="Hierarchy">
-								<h:outputText value="#{mappedCategoryHierarchyMappingRecord.hierarchyRecord.name}" />
-							</p:column>
-							<p:column headerText="Category Level 1"
-								rendered="#{mappedCategoryHierarchyMappingRecord.categoryLevelOneRecord.code ne null}">
-								<h:outputText value="#{mappedCategoryHierarchyMappingRecord.categoryLevelOneRecord.name}"
-									rendered="#{mappedCategoryHierarchyMappingRecord.categoryLevelOneRecord.code ne null}" />
-							</p:column>
-							<p:column headerText="Category Level 2"
-								rendered="#{mappedCategoryHierarchyMappingRecord.categoryLevelTwoRecord.code ne null}">
-								<h:outputText value="#{mappedCategoryHierarchyMappingRecord.categoryLevelTwoRecord.name}"
-									rendered="#{mappedCategoryHierarchyMappingRecord.categoryLevelTwoRecord.code ne null}" />
-							</p:column>
-							<p:column headerText="Category Level 3"
-								rendered="#{mappedCategoryHierarchyMappingRecord.categoryLevelThreeRecord.code ne null}">
-								<h:outputText value="#{mappedCategoryHierarchyMappingRecord.categoryLevelThreeRecord.name}"
-									rendered="#{mappedCategoryHierarchyMappingRecord.categoryLevelThreeRecord.code ne null}" />
-							</p:column>
-							<p:column headerText="Category Level 4"
-								rendered="#{mappedCategoryHierarchyMappingRecord.categoryLevelFourRecord.code ne null}">
-								<h:outputText value="#{mappedCategoryHierarchyMappingRecord.categoryLevelFourRecord.name}"
-									rendered="#{mappedCategoryHierarchyMappingRecord.categoryLevelFourRecord.code ne null}" />
-							</p:column>
-						</p:dataTable>
-					</h:panelGroup>
-
-				</p:panel>
-			</p:dialog>
-		</h:panelGroup>
+				</h:panelGroup>
+			</p:panel>
+			<p:messages autoUpdate="true" showDetail="false" showSummary="true" />
+		</p:dialog>
 	</h:form>
 </ui:composition>
