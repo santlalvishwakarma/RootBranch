@@ -17,7 +17,7 @@
 			<div id="productgallery">
 				<!---prod-thumbnail Ends-->
 				<div id="mainproduct" class="productdetleft">
-					<img src="#{retailReadMoreBB.readMoreOpr.productSkuRecord.imageRecord.imageURL}" class="bookdetimg" />
+					<img src="#{retailReadMoreBB.readMoreOpr.productSkuRecord.defaultImageRecord.imageURL}" class="bookdetimg" />
 					<div class="iconbox">
 						<ul>
 							<li>
@@ -47,11 +47,11 @@
 						<h:outputText styleClass="producttitle" value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.name}" />
 						<br /> <br /> <br />
 						<h:outputText style="margin: 24px 0 0 30px; color: #BC7504;"
-							value="ISBN:#{retailReadMoreBB.readMoreOpr.productSkuRecord.code}" />
+							value="Sku Code:#{retailReadMoreBB.readMoreOpr.productSkuRecord.code}" />
 						<br />
 						<div class="productprice">
 							<h:panelGroup styleClass="productpricelft" id="pricePanel">
-								<h:panelGroup rendered="#{!(retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice eq null)}">
+								<h:panelGroup rendered="#{(retailReadMoreBB.readMoreOpr.productSkuRecord.renderedDiscountPrice)}">
 									<span>List Price: </span>
 									<span class="WebRupee"><h:outputText value="Rs." /> </span>
 									<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.basePrice}" styleClass="overline light">
@@ -60,35 +60,19 @@
 									<br />
 									<span>Our Price: </span>
 									<span class="WebRupee"><h:outputText value="Rs." /> </span>
-									<h:outputText styleClass="org-color" value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice}">
+									<h:outputText styleClass="org-color" value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.finalBasePrice}">
 										<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 									</h:outputText>
 								</h:panelGroup>
-								<h:panelGroup rendered="#{retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice eq null}">
+								<h:panelGroup rendered="#{!(retailReadMoreBB.readMoreOpr.productSkuRecord.renderedDiscountPrice)}">
 									<span>Our Price: </span>
 									<span class="WebRupee"><h:outputText value="Rs." /> </span>
-									<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.basePrice}">
+									<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.finalBasePrice}">
 										<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 									</h:outputText>
 								</h:panelGroup>
 							</h:panelGroup>
-							<!-- <h:panelGroup id="discountPanel"
-								rendered="#{!(retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice eq null)}">
-								<div class="discount-rate">
-									<h:outputText styleClass="percent-discount"
-										rendered="#{!(retailReadMoreBB.readMoreOpr.productSkuRecord.discountAmount eq null)}"
-										value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.discountAmount}">
-										<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
-									</h:outputText>
-									<h:panelGroup rendered="#{!(retailReadMoreBB.readMoreOpr.productSkuRecord.discountPercent eq null)}">
-										<h:outputText styleClass="percent-discount"
-											value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.discountPercent}">
-											<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
-										</h:outputText>
-										<span class="percent-discount-span">%</span>
-									</h:panelGroup>
-								</div>
-							</h:panelGroup> -->
+							
 						</div>
 						<br /> <br /> <br />
 						<div class="addcart">
@@ -120,7 +104,7 @@
 		<h:panelGroup id="navigationPanelGroup">
 			<p:outputPanel rendered="#{retailReadMoreBB.navigatePanel}">
 				<div class="productImage">
-					<h:graphicImage value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.imageRecord.thumbnailImageURL}" />
+					<h:graphicImage value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.defaultImageRecord.thumbnailImageURL}" />
 				</div>
 				<!-- Product Info Box Starts -->
 				<div class="productContent">
@@ -129,12 +113,7 @@
 					</h3>
 					<div class="price">
 						Our Price : <span class="WebRupee"><h:outputText value="Rs." /> </span>
-						<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice}"
-							rendered="#{!(retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice eq null)}">
-							<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
-						</h:outputText>
-						<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.basePrice}"
-							rendered="#{retailReadMoreBB.readMoreOpr.productSkuRecord.discountPrice eq null}">
+						<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.finalBasePrice}">
 							<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 						</h:outputText>
 					</div>

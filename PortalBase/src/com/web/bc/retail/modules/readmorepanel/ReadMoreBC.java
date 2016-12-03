@@ -199,10 +199,12 @@ public class ReadMoreBC extends BackingClass {
 
 				productSkuDVO.setSkuSEODescription((String) resultRow.get("seo_description"));
 
-				productSkuDVO.getImageRecord().setThumbnailImageURL(
+				productSkuDVO.getDefaultImageRecord().setThumbnailImageURL(
 						(String) resultRow.get("default_thumbnail_image_url"));
 
-				productSkuDVO.getImageRecord().setZoomImageURL((String) resultRow.get("default_zoom_image_url"));
+				productSkuDVO.getDefaultImageRecord().setZoomImageURL((String) resultRow.get("default_zoom_image_url"));
+
+				productSkuDVO.getDefaultImageRecord().setImageURL((String) resultRow.get("default_image_url"));
 
 				if (resultRow.get("base_price") != null) {
 					productSkuDVO.setBasePrice(Float.valueOf(resultRow.get("base_price").toString()));
@@ -223,7 +225,7 @@ public class ReadMoreBC extends BackingClass {
 				if (productSkuDVO.getDiscountPercent() != null || productSkuDVO.getDiscountAmount() != null) {
 					myLog.debug("discount percent not null:::" + productSkuDVO.getDiscountPercent() + ":::"
 							+ productSkuDVO.getDiscountAmount());
-					productSkuDVO.setDiscountPrice(productSkuDVO.getFinalBasePrice());
+					productSkuDVO.setRenderedDiscountPrice(true);
 				}
 
 				readMoreOpr.setProductSkuRecord(productSkuDVO);

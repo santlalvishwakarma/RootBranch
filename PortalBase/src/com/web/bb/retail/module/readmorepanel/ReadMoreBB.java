@@ -410,7 +410,7 @@ public class ReadMoreBB extends BackingBean {
 	public void enlargeImageClicked() {
 		// ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.IMAGE_DVO, productImageRecord.getProductSkuRecord().getImageRecord());
+				.put(CommonConstant.IMAGE_DVO, productImageRecord.getProductSkuRecord().getDefaultImageRecord());
 	}
 
 	public ReadMoreOpr getProductImageRecord() {
@@ -702,9 +702,9 @@ public class ReadMoreBB extends BackingBean {
 				+ ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest())
 						.getContextPath();
 		myLog.debug("context==" + context);
-		myLog.debug("image url==" + getReadMoreOpr().getProductSkuRecord().getImageRecord().getImageURL());
+		myLog.debug("image url==" + getReadMoreOpr().getProductSkuRecord().getDefaultImageRecord().getImageURL());
 		externalContext.getRequestMap().put(CommonConstant.PopulateFacebookData.PRODUCT_IMAGE_URL,
-				context + getReadMoreOpr().getProductSkuRecord().getImageRecord().getImageURL());
+				context + getReadMoreOpr().getProductSkuRecord().getDefaultImageRecord().getImageURL());
 		myLog.debug("product image url1"
 				+ externalContext.getRequestMap().get(CommonConstant.PopulateFacebookData.PRODUCT_IMAGE_URL));
 		externalContext.getRequestMap().put(CommonConstant.PopulateFacebookData.PRODUCT_TITLE,
@@ -936,13 +936,13 @@ public class ReadMoreBB extends BackingBean {
 			readMoreOpr = new ReadMoreBF().getProductSizes(readMoreOpr);
 
 			String imageUrl = null;
-			if (readMoreOpr.getProductSkuRecord().getImageRecord().getImageURL() != null) {
+			if (readMoreOpr.getProductSkuRecord().getDefaultImageRecord().getImageURL() != null) {
 				FacesContext
 						.getCurrentInstance()
 						.getExternalContext()
 						.getRequestMap()
 						.put(CommonConstant.PopulateFacebookData.PRODUCT_IMAGE_URL,
-								readMoreOpr.getProductSkuRecord().getImageRecord().getImageURL());
+								readMoreOpr.getProductSkuRecord().getDefaultImageRecord().getImageURL());
 			} else {
 				FacesContext
 						.getCurrentInstance()
@@ -955,12 +955,11 @@ public class ReadMoreBB extends BackingBean {
 
 			myLog.debug("image url here :::::::::::::::" + imageUrl);
 
-			convertedPrice(readMoreOpr);
+			// convertedPrice(readMoreOpr);
 
-			originalBasePrice = readMoreOpr.getProductSkuRecord().getBasePrice();
-			if (readMoreOpr.getProductSkuRecord().getDiscountPrice() != null
-					&& readMoreOpr.getProductSkuRecord().getDiscountPrice() > 0.0f) {
-				originalDiscountPrice = readMoreOpr.getProductSkuRecord().getDiscountPrice();
+			originalBasePrice = readMoreOpr.getProductSkuRecord().getFinalBasePrice();
+			if (readMoreOpr.getProductSkuRecord().isRenderedDiscountPrice()) {
+				originalDiscountPrice = readMoreOpr.getProductSkuRecord().getBasePrice();
 			}
 
 		} catch (FrameworkException e) {
@@ -1046,7 +1045,7 @@ public class ReadMoreBB extends BackingBean {
 			increasePrice = (discountprice * increasePercent) / 100;
 			discountprice = discountprice + increasePrice;
 			myLog.debug("inside if discount price" + discountprice);
-			readMoreOpr.getProductSkuRecord().setDiscountPrice(convertCurrency(discountprice));
+			// readMoreOpr.getProductSkuRecord().setDiscountPrice(convertCurrency(discountprice));
 			readMoreOpr.getProductSkuRecord().setOriginalDiscountPrice(convertCurrency(discountprice));
 			myLog.debug("Original discount price" + readMoreOpr.getProductSkuRecord().getOriginalDiscountPrice());
 			// baseprice = 0.0f;
@@ -1067,7 +1066,7 @@ public class ReadMoreBB extends BackingBean {
 			myLog.debug("Original base price" + readMoreOpr.getProductSkuRecord().getOriginalBasePrice());
 		}
 		myLog.debug("before convertedPrice base price" + readMoreOpr.getProductSkuRecord().getBasePrice());
-		convertedPrice(readMoreOpr);
+		// convertedPrice(readMoreOpr);
 		myLog.debug("after convertedPrice base price" + readMoreOpr.getProductSkuRecord().getBasePrice());
 		// readMoreOpr.getProductSkuRecord().getSizeRecord().setCode(sCode);
 	}
@@ -1188,70 +1187,82 @@ public class ReadMoreBB extends BackingBean {
 		return convertedValue;
 	}
 
-	private void convertedPrice(ReadMoreOpr readMoreOpr) {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug(" inside convertedPrice ::: ");
-		convertedPriceReadMoreOpr = (ReadMoreOpr) DeepCopy.copy(readMoreOpr);
-		Float conversionRate = 0.0F;
-		Float convertedBasePrice = 0.0F;
-		Float convertedDiscountPrice = 0.0F;
-		String currencySymbol = null;
-		boolean currencyFlag = false;
-
-		// GEOPLUGIN - to set original base, discount prices and base and
-		// converted currencies
-
-		readMoreOpr.getProductSkuRecord().setOriginalBasePrice(readMoreOpr.getProductSkuRecord().getBasePrice());
-		readMoreOpr.getProductSkuRecord()
-				.setOriginalDiscountPrice(readMoreOpr.getProductSkuRecord().getDiscountPrice());
-		readMoreOpr.getProductSkuRecord().setOriginalCurrencyRecord(
-				readMoreOpr.getProductSkuRecord().getCurrencyRecord());
-
-		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.get(CommonConstant.CONVERTED_CURRENCY_SYMBOL) != null) {
-			currencySymbol = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-					.get(CommonConstant.CONVERTED_CURRENCY_SYMBOL);
-		}
-
-		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(CommonConstant.CURRENCY_FLAG) != null) {
-			currencyFlag = (Boolean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-					.get(CommonConstant.CURRENCY_FLAG);
-		}
-
-		// GEOPLUGIN - to set converted currency symbol
-		readMoreOpr.getProductSkuRecord().getCurrencyRecord().setCurrencySymbol(currencySymbol);
-
-		myLog.debug("currency flag=="
-				+ FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-						.get(CommonConstant.CURRENCY_FLAG));
-
-		myLog.debug("Product Base Price" + convertedPriceReadMoreOpr.getProductSkuRecord().getBasePrice());
-		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.get(CommonConstant.CURRENCY_CONVERSION_RATE) != null) {
-			conversionRate = (Float) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-					.get(CommonConstant.CURRENCY_CONVERSION_RATE);
-			myLog.debug("Conversion Rate==" + conversionRate);
-			convertedBasePrice = convertedPriceReadMoreOpr.getProductSkuRecord().getBasePrice();
-			if (convertedPriceReadMoreOpr.getProductSkuRecord().getDiscountPrice() != null
-					&& convertedPriceReadMoreOpr.getProductSkuRecord().getDiscountPrice() > 0.0) {
-				convertedDiscountPrice = convertedPriceReadMoreOpr.getProductSkuRecord().getDiscountPrice();
-			}
-
-			convertedBasePrice = convertedBasePrice * conversionRate;
-			convertedDiscountPrice = convertedDiscountPrice * conversionRate;
-			readMoreOpr.getProductSkuRecord().setBasePrice(convertedBasePrice);
-			readMoreOpr.getProductSkuRecord().setDiscountPrice(convertedDiscountPrice);
-			myLog.debug("convertedBasePrice==" + convertedBasePrice);
-			myLog.debug("convertedDiscountPrice==" + convertedDiscountPrice);
-			if (convertedDiscountPrice != null && convertedDiscountPrice > 0.0f) {
-				emiPrice = convertedDiscountPrice / 3;
-			} else {
-				emiPrice = convertedBasePrice / 3;
-			}
-
-			myLog.debug("Product price for emi:::::" + emiPrice);
-		}
-	}
+	// private void convertedPrice(ReadMoreOpr readMoreOpr) {
+	// ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+	// myLog.debug(" inside convertedPrice ::: ");
+	// convertedPriceReadMoreOpr = (ReadMoreOpr) DeepCopy.copy(readMoreOpr);
+	// Float conversionRate = 0.0F;
+	// Float convertedBasePrice = 0.0F;
+	// Float convertedDiscountPrice = 0.0F;
+	// String currencySymbol = null;
+	// boolean currencyFlag = false;
+	//
+	// // GEOPLUGIN - to set original base, discount prices and base and
+	// // converted currencies
+	//
+	// readMoreOpr.getProductSkuRecord().setOriginalBasePrice(readMoreOpr.getProductSkuRecord().getBasePrice());
+	// readMoreOpr.getProductSkuRecord()
+	// .setOriginalDiscountPrice(readMoreOpr.getProductSkuRecord().getDiscountPrice());
+	// readMoreOpr.getProductSkuRecord().setOriginalCurrencyRecord(
+	// readMoreOpr.getProductSkuRecord().getCurrencyRecord());
+	//
+	// if
+	// (FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+	// .get(CommonConstant.CONVERTED_CURRENCY_SYMBOL) != null) {
+	// currencySymbol = (String)
+	// FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+	// .get(CommonConstant.CONVERTED_CURRENCY_SYMBOL);
+	// }
+	//
+	// if
+	// (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(CommonConstant.CURRENCY_FLAG)
+	// != null) {
+	// currencyFlag = (Boolean)
+	// FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+	// .get(CommonConstant.CURRENCY_FLAG);
+	// }
+	//
+	// // GEOPLUGIN - to set converted currency symbol
+	// readMoreOpr.getProductSkuRecord().getCurrencyRecord().setCurrencySymbol(currencySymbol);
+	//
+	// myLog.debug("currency flag=="
+	// + FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+	// .get(CommonConstant.CURRENCY_FLAG));
+	//
+	// myLog.debug("Product Base Price" +
+	// convertedPriceReadMoreOpr.getProductSkuRecord().getBasePrice());
+	// if
+	// (FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+	// .get(CommonConstant.CURRENCY_CONVERSION_RATE) != null) {
+	// conversionRate = (Float)
+	// FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+	// .get(CommonConstant.CURRENCY_CONVERSION_RATE);
+	// myLog.debug("Conversion Rate==" + conversionRate);
+	// convertedBasePrice =
+	// convertedPriceReadMoreOpr.getProductSkuRecord().getBasePrice();
+	// if (convertedPriceReadMoreOpr.getProductSkuRecord().getDiscountPrice() !=
+	// null
+	// && convertedPriceReadMoreOpr.getProductSkuRecord().getDiscountPrice() >
+	// 0.0) {
+	// convertedDiscountPrice =
+	// convertedPriceReadMoreOpr.getProductSkuRecord().getDiscountPrice();
+	// }
+	//
+	// convertedBasePrice = convertedBasePrice * conversionRate;
+	// convertedDiscountPrice = convertedDiscountPrice * conversionRate;
+	// readMoreOpr.getProductSkuRecord().setBasePrice(convertedBasePrice);
+	// readMoreOpr.getProductSkuRecord().setDiscountPrice(convertedDiscountPrice);
+	// myLog.debug("convertedBasePrice==" + convertedBasePrice);
+	// myLog.debug("convertedDiscountPrice==" + convertedDiscountPrice);
+	// if (convertedDiscountPrice != null && convertedDiscountPrice > 0.0f) {
+	// emiPrice = convertedDiscountPrice / 3;
+	// } else {
+	// emiPrice = convertedBasePrice / 3;
+	// }
+	//
+	// myLog.debug("Product price for emi:::::" + emiPrice);
+	// }
+	// }
 
 	public void getCountryDependentCurrencyConversion() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());

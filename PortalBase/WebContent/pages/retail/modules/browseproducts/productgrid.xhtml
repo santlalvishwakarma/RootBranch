@@ -8,7 +8,7 @@
 					<h:outputText value="There are no products matching your search criteria." />
 				</h2>
 			</p:outputPanel>
-			<div id="products">
+			<div id="products" style="padding-left: 25px;">
 				<h:panelGroup rendered="#{not empty retailBrowseProductsBB.browseProductsOpr.productSkuList}">
 					<ul>
 						<ui:repeat id="productGrid" value="#{retailBrowseProductsBB.browseProductsOpr.productSkuList}" var="product"
@@ -20,7 +20,7 @@
 											<tr>
 												<td><h:outputLink style="text-decoration: none;" id="readMoreLink"
 														value="#{facesContext.externalContext.requestContextPath}#{product.productURL}">
-														<h:graphicImage value="#{product.imageRecord.imageURL}" style="width: 145px;height:184px;border:0;" />
+														<h:graphicImage value="#{product.defaultImageRecord.imageURL}" style="width: 160px;height:184px;border:0;" />
 													</h:outputLink></td>
 											</tr>
 											<!-- <tr>
@@ -32,7 +32,7 @@
 												<td><h:outputText value="#{product.name}" /></td>
 											</tr>
 											<tr>
-												<td><h:panelGroup rendered="#{!(product.discountPrice eq 0) and !(product.discountPrice eq null)}">
+												<td><h:panelGroup rendered="#{product.renderedDiscountPrice}">
 														<span class="light">List Price :</span>
 														<span class="overline light"> <span class="WebRupee"><h:outputText value="Rs." /> </span> <h:outputText
 																value="#{product.basePrice}">
@@ -42,65 +42,22 @@
 														<br />
 														<span class="org-color">Our Price : </span>
 														<span class="WebRupee"><h:outputText value="Rs." /> </span>
-														<h:outputText value="#{product.discountPrice}">
+														<h:outputText value="#{product.finalBasePrice}">
 															<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 														</h:outputText>
 													</h:panelGroup></td>
 											</tr>
 											<tr>
-												<td><h:panelGroup rendered="#{(product.discountPrice eq 0) || (product.discountPrice eq null)}">
+												<td><h:panelGroup rendered="#{!(product.renderedDiscountPrice)}">
 														<span class="org-color">Our Price : </span>
 														<span class="WebRupee"><h:outputText value="Rs." /> </span>
-														<h:outputText value="#{product.basePrice}">
+														<h:outputText value="#{product.finalBasePrice}">
 															<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 														</h:outputText>
 													</h:panelGroup></td>
 											</tr>
 										</table>
 									</p:outputPanel>
-									<!-- <p:outputPanel id="convertedPricePanel" rendered="#{!sessionScope['CURRENCY_FLAG']}">
-									<table>
-										<tr>
-											<td><h:outputLink style="text-decoration: none;" id="readMoreLink2"
-													value="#{facesContext.externalContext.requestContextPath}#{product.productURL}">
-													<h:graphicImage value="#{product.imageRecord.imageURL}" style="width: 145px;height:184px;border:0;" />
-												</h:outputLink></td>
-										</tr>
-										<tr>
-											<td><h:outputLink style="text-decoration: none;" id="readMoreButton2"
-													value="#{facesContext.externalContext.requestContextPath}#{product.productURL}" styleClass="buyBtn1">Buy Now</h:outputLink>
-											</td>
-										</tr>
-										<tr>
-											<td><h:outputText value="#{product.name}" /></td>
-										</tr>
-										<tr>
-											<td><h:panelGroup rendered="#{!(product.discountPrice eq 0)}">
-													<span class="light">List Price :</span>
-													<span class="overline light"> <span>#{sessionScope['CONVERTED_CURRENCY_SYMBOL']} </span> <h:outputText
-															value="#{product.basePrice}">
-															<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
-														</h:outputText>
-													</span>
-													<br />
-													<span class="org-color">Our Price : <span>#{sessionScope['CONVERTED_CURRENCY_SYMBOL']} </span>
-													</span>
-													<h:outputText value="#{product.discountPrice}">
-														<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
-													</h:outputText>
-												</h:panelGroup></td>
-										</tr>
-										<tr>
-											<td><h:panelGroup rendered="#{product.discountPrice eq 0}">
-													<span class="org-color">Our Price : <span>#{sessionScope['CONVERTED_CURRENCY_SYMBOL']} </span>
-													</span>
-													<h:outputText value="#{product.basePrice}">
-														<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
-													</h:outputText>
-												</h:panelGroup></td>
-										</tr>
-									</table>
-								</p:outputPanel> -->
 								</div>
 							</li>
 						</ui:repeat>

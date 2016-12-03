@@ -992,8 +992,7 @@ footer.global .footer-a ul li.footer-reach-us {
 
 /* Added for portal base start*/
 .wrapper {
-	width: 940px;
-	margin: 23px auto 31px auto;
+	width: 1198px;
 }
 
 /* browse product page starts ends */
@@ -1068,7 +1067,7 @@ div#breadcrumbs ul li a:hover {
 }
 
 .productBrowser {
-	width: 972px;
+	width: 1198px;
 }
 
 .leftbar {
@@ -1155,11 +1154,11 @@ div#breadcrumbs ul li a:hover {
 .productbox {
 	border: 1px solid #cccccc;
 	background-color: #ffffff;
-	width: 740px;
+	width: 999px;
 	height: auto;
 	/*     display:block; */
 	display: inline-block;
-	margin: 28px 0px 21px 0px;
+	/* margin: 0px 0px 21px 0px; */
 	-moz-box-shadow: 3px 3px 5px #e5e5e5;
 	-webkit-box-shadow: 3px 3px 5px #e5e5e5;
 	box-shadow: 3px 3px 5px #e5e5e5;
@@ -1178,8 +1177,8 @@ div#breadcrumbs ul li a:hover {
 	display: inline-block;
 	list-style-type: none;
 	margin: 0;
-	padding: 0 18px 0 19px;
-	width: 145px;
+	padding: 0 35px 0 35px;
+	width: 160px;
 }
 
 .ttletxt1 {
@@ -1207,10 +1206,10 @@ div#breadcrumbs ul li a:hover {
 
 /* product grid page starts */
 .browse-product-description {
-	padding: 10px 1px 0px 1px;
+	padding: 15px 1px 0px 1px;
 	font-size: 14px;
 	text-align: center;
-	height: 328px;
+	height: 289px;
 }
 
 .buyBtn1 {

@@ -1,5 +1,5 @@
 .jqueryslidemenu-upper-div { /* width: 940px; */
-	width: 931px;
+	width: 1198px;
 	/* padding-left: 160px; */
 	/* margin: 0 auto 31px; */
 }
@@ -13,7 +13,7 @@
 	/* 	background: #444242; */
 	/* width: 785px; */
 	/* width: 795px; */
-	width: 931px;
+	width: 1198px;
 	margin: -1px auto;
 	height: 40px;
 }
@@ -28,7 +28,7 @@
 	margin: 0 -10px 0 0;
 	/* width: 785px; */
 	/* width: 810px; */
-	width: 931px;
+	width: 1198px;
 }
 
 /*Top level list items*/
@@ -37,7 +37,7 @@
 	display: inline;
 	float: left;
 	/* width: 157px; */
-	width: 133px;
+	width: 217px;
 	height: 40px;
 	background-image: url("/p/staticcontent/retail/images/menu/menu_outer_bg2.jpg");
 	background-position: right top;
@@ -70,7 +70,7 @@
 	display: block;
 	visibility: hidden;
 	background-image: none;
-	width: 132px;
+	width: 217px;
 	margin: 0px 0px 0px -1px;
 }
 
@@ -81,7 +81,7 @@
 	float: none;
 	height: 32px;
 	/* width: 155px; */
-	width: 135px;
+	width: 217px;
 	/* 	width: 159px; */
 	background-image: none;
 }
@@ -101,7 +101,7 @@
 	text-align: center;
 	line-height: 31px;
 	/* width: 153px; */
-	width: 134px;
+	width: 216px;
 	border-bottom: 1px solid gray;
 	/* text-indent: -4px; */
 	text-indent: -2px;

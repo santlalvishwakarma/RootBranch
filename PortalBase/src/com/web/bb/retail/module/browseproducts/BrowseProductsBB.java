@@ -654,18 +654,23 @@ public class BrowseProductsBB extends BackingBean {
 		// Float convertedMaxPrice = 0.0F;
 		//
 		// Float convertedMinPrice = 0.0F;
-		// if ((placeHolderBrowseProductsOpr.getProductSkuRecord().getMaxPrice() != null &&
+		// if ((placeHolderBrowseProductsOpr.getProductSkuRecord().getMaxPrice()
+		// != null &&
 		// !placeHolderBrowseProductsOpr
 		// .getProductSkuRecord().getMaxPrice().equals(0.0))
-		// && (placeHolderBrowseProductsOpr.getProductSkuRecord().getMinPrice() != null && !placeHolderBrowseProductsOpr
+		// && (placeHolderBrowseProductsOpr.getProductSkuRecord().getMinPrice()
+		// != null && !placeHolderBrowseProductsOpr
 		// .getProductSkuRecord().getMinPrice().equals(0.0))) {
-		// convertedMaxPrice = placeHolderBrowseProductsOpr.getProductSkuRecord().getMaxPrice();
+		// convertedMaxPrice =
+		// placeHolderBrowseProductsOpr.getProductSkuRecord().getMaxPrice();
 		// myLog.debug("Getting max price" + convertedMaxPrice);
 		// convertedMaxPrice = convertedMaxPrice * conversionRate;
-		// myLog.debug("Getting max price after multiply::" + convertedMaxPrice);
+		// myLog.debug("Getting max price after multiply::" +
+		// convertedMaxPrice);
 		// placeHolderBrowseProductsOpr.getProductSkuRecord().setMaxPrice(convertedMaxPrice);
 		//
-		// convertedMinPrice = placeHolderBrowseProductsOpr.getProductSkuRecord().getMinPrice();
+		// convertedMinPrice =
+		// placeHolderBrowseProductsOpr.getProductSkuRecord().getMinPrice();
 		// convertedMinPrice = convertedMinPrice * conversionRate;
 		// placeHolderBrowseProductsOpr.getProductSkuRecord().setMinPrice(convertedMinPrice);
 		// }
@@ -816,13 +821,16 @@ public class BrowseProductsBB extends BackingBean {
 		// in case the call fails for whatever reason avoid a null pointer
 		myLog.debug("before convertedPrice browseProductsOpr.getProductList().size():: "
 				+ browseProductsOpr.getProductSkuList().size());
-		convertedPrice(browseProductsOpr);
+		// convertedPrice(browseProductsOpr);
 		myLog.debug("after convertedPrice browseProductsOpr.getProductList().size():: "
 				+ browseProductsOpr.getProductSkuList().size());
 
-		// for (int i = 0; i < browseProductsOpr.getProductSkuList().size(); i++) {
-		// myLog.debug("product name : " + browseProductsOpr.getProductSkuList().get(i).getName());
-		// myLog.debug("base price : " + browseProductsOpr.getProductSkuList().get(i).getBasePrice());
+		// for (int i = 0; i < browseProductsOpr.getProductSkuList().size();
+		// i++) {
+		// myLog.debug("product name : " +
+		// browseProductsOpr.getProductSkuList().get(i).getName());
+		// myLog.debug("base price : " +
+		// browseProductsOpr.getProductSkuList().get(i).getBasePrice());
 		// }
 
 		// if (commentsOpr != null) {
@@ -1349,32 +1357,40 @@ public class BrowseProductsBB extends BackingBean {
 		this.timer = timer;
 	}
 
-	private void convertedPrice(BrowseProductsOpr browseProductsOpr) {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		Float conversionRate = 1.0F;
-		Float convertedBasePrice = 0.0F;
-		Float convertedDiscountPrice = 0.0F;
-		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.get(CommonConstant.CURRENCY_CONVERSION_RATE) != null) {
-			conversionRate = (Float) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-					.get(CommonConstant.CURRENCY_CONVERSION_RATE);
-		}
-		myLog.debug("conersion rate ==" + conversionRate);
+	// private void convertedPrice(BrowseProductsOpr browseProductsOpr) {
+	// ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+	// Float conversionRate = 1.0F;
+	// Float convertedBasePrice = 0.0F;
+	// Float convertedDiscountPrice = 0.0F;
+	// if
+	// (FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+	// .get(CommonConstant.CURRENCY_CONVERSION_RATE) != null) {
+	// conversionRate = (Float)
+	// FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+	// .get(CommonConstant.CURRENCY_CONVERSION_RATE);
+	// }
+	// myLog.debug("conersion rate ==" + conversionRate);
 
-		for (int i = 0; i < browseProductsOpr.getProductSkuList().size(); i++) {
-			convertedBasePrice = 0.0F;
-			convertedDiscountPrice = 0.0F;
-			convertedBasePrice = browseProductsOpr.getProductSkuList().get(i).getBasePrice() * conversionRate;
-			browseProductsOpr.getProductSkuList().get(i).setBasePrice(convertedBasePrice);
-
-			if (browseProductsOpr.getProductSkuList().get(i).getDiscountPrice() != null
-					&& browseProductsOpr.getProductSkuList().get(i).getDiscountPrice() > 0.0) {
-				convertedDiscountPrice = browseProductsOpr.getProductSkuList().get(i).getDiscountPrice()
-						* conversionRate;
-				browseProductsOpr.getProductSkuList().get(i).setDiscountPrice(convertedDiscountPrice);
-			}
-		}
-	}
+	// for (int i = 0; i < browseProductsOpr.getProductSkuList().size();
+	// i++) {
+	// convertedBasePrice = 0.0F;
+	// convertedDiscountPrice = 0.0F;
+	// convertedBasePrice =
+	// browseProductsOpr.getProductSkuList().get(i).getBasePrice() *
+	// conversionRate;
+	// browseProductsOpr.getProductSkuList().get(i).setBasePrice(convertedBasePrice);
+	//
+	// if (browseProductsOpr.getProductSkuList().get(i).getDiscountPrice()
+	// != null
+	// && browseProductsOpr.getProductSkuList().get(i).getDiscountPrice() >
+	// 0.0) {
+	// convertedDiscountPrice =
+	// browseProductsOpr.getProductSkuList().get(i).getDiscountPrice()
+	// * conversionRate;
+	// browseProductsOpr.getProductSkuList().get(i).setDiscountPrice(convertedDiscountPrice);
+	// }
+	// }
+	// }
 
 	private Float convertCurrency(Float originalValue) {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());

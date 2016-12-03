@@ -505,10 +505,11 @@ public class BrowseProductsBC extends BackingClass {
 				productSkuDVO.setCode((String) (resultSetMap.get("sku_code")));
 				productSkuDVO.setName((String) (resultSetMap.get("sku_name")));
 				productSkuDVO.setDescription((String) (resultSetMap.get("sku_description")));
-				productSkuDVO.getImageRecord().setImageURL((String) (resultSetMap.get("default_zoom_image_url")));
-				productSkuDVO.getImageRecord().setThumbnailImageURL(
+				productSkuDVO.getDefaultImageRecord().setImageURL((String) (resultSetMap.get("default_image_url")));
+				productSkuDVO.getDefaultImageRecord().setThumbnailImageURL(
 						(String) (resultSetMap.get("default_thumbnail_image_url")));
-				productSkuDVO.getImageRecord().setZoomImageURL((String) (resultSetMap.get("default_zoom_image_url")));
+				productSkuDVO.getDefaultImageRecord().setZoomImageURL(
+						(String) (resultSetMap.get("default_zoom_image_url")));
 				productSkuDVO.getHierarchyCategoryMappingRecord().getHierarchyRecord().setName(hierarchyName);
 
 				if (resultSetMap.get("hierarchy_id") != null) {
@@ -575,14 +576,8 @@ public class BrowseProductsBC extends BackingClass {
 					productSkuDVO.setFinalBasePrice(Float.valueOf(resultSetMap.get("final_base_price").toString()));
 				}
 
-				if (productSkuDVO.getDiscountPercent() != null || productSkuDVO.getDiscountAmount() != null) {
-					myLog.debug("discount percent not null:::" + productSkuDVO.getDiscountPercent() + ":::"
-							+ productSkuDVO.getDiscountAmount());
-					productSkuDVO.setDiscountPrice(productSkuDVO.getFinalBasePrice());
-				}
-
 				// if (productSkuDVO.getDiscountPrice() != 0.0f) {
-				if (productSkuDVO.getDiscountPrice() != null && productSkuDVO.getDiscountPrice() > Float.valueOf(0)) {
+				if (productSkuDVO.getDiscountAmount() != null || productSkuDVO.getDiscountPercent() != null) {
 					productSkuDVO.setRenderedDiscountPrice(Boolean.TRUE);
 				} else {
 					productSkuDVO.setRenderedDiscountPrice(Boolean.FALSE);
