@@ -58,8 +58,8 @@
 					<td><p:commandButton id="btnSearch" update="addEditCategoryField" process="@this, addEditCategoryField"
 							actionListener="#{addEditCategoryBB.executeSave}" value="Save" /> <p:tooltip for="btnSearch"
 							value="Click to Save" /> <p:hotkey bind="ctrl+shift+s" /></td>
-					<td><p:commandButton id="btnCancel" action="#{addEditCategoryBB.resetPage}" value="Reset" process="@this"
-							update="addEditCategoryField" /> <p:tooltip for="btnCancel" value="Click to Reset" /></td>
+					<td><p:commandButton id="btnClear" action="#{addEditCategoryBB.clearPage}" value="Clear" process="@this"
+							update="addEditCategoryField" /> <p:tooltip for="btnClear" value="Click to Clear" /></td>
 				</tr>
 			</table>
 		</h:panelGroup>

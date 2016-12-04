@@ -517,6 +517,9 @@ public class BrowseProductsBC extends BackingClass {
 							.setId(Long.valueOf(resultSetMap.get("hierarchy_id").toString()));
 				}
 
+				productSkuDVO.getHierarchyCategoryMappingRecord().getHierarchyRecord()
+						.setName((String) resultSetMap.get("hierarchy_name"));
+
 				if (resultSetMap.get("category_level_1") != null) {
 					productSkuDVO.getHierarchyCategoryMappingRecord().getCategoryLevelOneRecord()
 							.setId(Long.valueOf(resultSetMap.get("category_level_1").toString()));

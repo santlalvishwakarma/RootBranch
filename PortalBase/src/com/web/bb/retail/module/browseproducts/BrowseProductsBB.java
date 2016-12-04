@@ -681,7 +681,7 @@ public class BrowseProductsBB extends BackingBean {
 	// WE JUST TO ENSURE THAT THE RIGHT PARAMS ARE PASSED TO THIS
 	public void doSearch(BrowseProductsOpr searchBrowseProductsOpr) {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-
+		myLog.debug(" inside doSearch::: ");
 		try {
 
 			searchBrowseProductsOpr.getProductSkuRecord().setUserLogin(
@@ -714,70 +714,71 @@ public class BrowseProductsBB extends BackingBean {
 				}
 			}
 			// if there is at least one category code, search on category code
-			if (searchBrowseProductsOpr.getProductSkuRecord().getHierarchyCategoryMappingRecord()
-					.getCategoryLevelOneRecord().getCode() != null) {
-				myLog.debug("M IN CATERGORY CODE SEARCH=========");
-				myLog.debug("before searchProductsOnCategoryCodes :: categoryCodeLevel1 :: " + categoryCodeLevel1);
-				BrowseProductsOpr browseProductsOprRet = new BrowseProductsBF()
-						.searchProductsOnCategoryCodes(searchBrowseProductsOpr);
-				browseProductsOpr.setProductSkuList(browseProductsOprRet.getProductSkuList());
+			// if
+			// (searchBrowseProductsOpr.getProductSkuRecord().getHierarchyCategoryMappingRecord()
+			// .getCategoryLevelOneRecord().getCode() != null) {
+			myLog.debug("M IN CATERGORY CODE SEARCH=========");
+			myLog.debug("before searchProductsOnCategoryCodes :: categoryCodeLevel1 :: " + categoryCodeLevel1);
+			BrowseProductsOpr browseProductsOprRet = new BrowseProductsBF()
+					.searchProductsOnCategoryCodes(searchBrowseProductsOpr);
+			browseProductsOpr.setProductSkuList(browseProductsOprRet.getProductSkuList());
 
-				if (browseProductsOpr.getProductSkuList() != null && !browseProductsOpr.getProductSkuList().isEmpty()) {
-					ProductSkuDVO productSkuDVO = browseProductsOpr.getProductSkuList().get(0);
+			if (browseProductsOpr.getProductSkuList() != null && !browseProductsOpr.getProductSkuList().isEmpty()) {
+				ProductSkuDVO productSkuDVO = browseProductsOpr.getProductSkuList().get(0);
 
-					browseProductsOpr
-							.getProductSkuRecord()
-							.getHierarchyCategoryMappingRecord()
-							.getCategoryLevelOneRecord()
-							.setName(
-									productSkuDVO.getHierarchyCategoryMappingRecord().getCategoryLevelOneRecord()
-											.getName());
+				browseProductsOpr
+						.getProductSkuRecord()
+						.getHierarchyCategoryMappingRecord()
+						.getCategoryLevelOneRecord()
+						.setName(
+								productSkuDVO.getHierarchyCategoryMappingRecord().getCategoryLevelOneRecord().getName());
 
-					browseProductsOpr
-							.getProductSkuRecord()
-							.getHierarchyCategoryMappingRecord()
-							.getCategoryLevelTwoRecord()
-							.setName(
-									productSkuDVO.getHierarchyCategoryMappingRecord().getCategoryLevelTwoRecord()
-											.getName());
+				browseProductsOpr
+						.getProductSkuRecord()
+						.getHierarchyCategoryMappingRecord()
+						.getCategoryLevelTwoRecord()
+						.setName(
+								productSkuDVO.getHierarchyCategoryMappingRecord().getCategoryLevelTwoRecord().getName());
 
-					browseProductsOpr
-							.getProductSkuRecord()
-							.getHierarchyCategoryMappingRecord()
-							.getCategoryLevelThreeRecord()
-							.setName(
-									productSkuDVO.getHierarchyCategoryMappingRecord().getCategoryLevelThreeRecord()
-											.getName());
+				browseProductsOpr
+						.getProductSkuRecord()
+						.getHierarchyCategoryMappingRecord()
+						.getCategoryLevelThreeRecord()
+						.setName(
+								productSkuDVO.getHierarchyCategoryMappingRecord().getCategoryLevelThreeRecord()
+										.getName());
 
-					browseProductsOpr
-							.getProductSkuRecord()
-							.getHierarchyCategoryMappingRecord()
-							.getCategoryLevelFourRecord()
-							.setName(
-									productSkuDVO.getHierarchyCategoryMappingRecord().getCategoryLevelFourRecord()
-											.getName());
-				}
-
-				myLog.debug("browseProductsOpr.getProductList().size():: "
-						+ browseProductsOpr.getProductSkuList().size());
-
-				myLog.debug("after searchProductsOnCategoryCodes :: categoryCodeLevel1 :: " + categoryCodeLevel1);
-				BrowseProductsOpr categoryListBrowseProductsOprRet = new BrowseProductsBF()
-						.searchSubCategory(searchBrowseProductsOpr);
-				browseProductsOpr.setSubCategoryList(categoryListBrowseProductsOprRet.getSubCategoryList());
-				myLog.debug("before searchMappingOnCategoryCodes :: categoryCodeLevel1 :: " + categoryCodeLevel1);
-
-				myLog.debug("M Back IN CATERGORY CODE SEARCH=========");
-			} else {
-				myLog.debug("M IN ELSE SEARCH=========");
-				// productIntegrationOpr = new
-				// ProductIntegration().searchProductsOnHierarchy(searchIntegrationOpr);
-				//
-				// myLog.debug("======= Min Price======" +
-				// productIntegrationOpr.getProductRecord().getMinPrice());
-				// myLog.debug("======= Max Price======" +
-				// productIntegrationOpr.getProductRecord().getMaxPrice());
+				browseProductsOpr
+						.getProductSkuRecord()
+						.getHierarchyCategoryMappingRecord()
+						.getCategoryLevelFourRecord()
+						.setName(
+								productSkuDVO.getHierarchyCategoryMappingRecord().getCategoryLevelFourRecord()
+										.getName());
 			}
+
+			myLog.debug("browseProductsOpr.getProductList().size():: " + browseProductsOpr.getProductSkuList().size());
+
+			myLog.debug("after searchProductsOnCategoryCodes :: categoryCodeLevel1 :: " + categoryCodeLevel1);
+			BrowseProductsOpr categoryListBrowseProductsOprRet = new BrowseProductsBF()
+					.searchSubCategory(searchBrowseProductsOpr);
+			browseProductsOpr.setSubCategoryList(categoryListBrowseProductsOprRet.getSubCategoryList());
+			myLog.debug("before searchMappingOnCategoryCodes :: categoryCodeLevel1 :: " + categoryCodeLevel1);
+
+			myLog.debug("M Back IN CATERGORY CODE SEARCH=========");
+			// }
+			// else {
+			// myLog.debug("M IN ELSE SEARCH=========");
+			// ProductOpr searchProductOpr = new ProductOpr();
+			// searchProductOpr.getProductRecord().setProductSkuRecord(searchBrowseProductsOpr.getProductSkuRecord());
+			// ProductOpr returnProductOpr = new
+			// CoreSF().searchProductsOnHierarchy(searchProductOpr);
+			//
+			// browseProductsOpr.setProductSkuList((ArrayList<ProductSkuDVO>)
+			// returnProductOpr.getProductRecord()
+			// .getProductSkuList());
+			//
+			// }
 
 			// calculation of min price and max price
 
@@ -811,7 +812,7 @@ public class BrowseProductsBB extends BackingBean {
 		// browseProductsOpr.getProductSkuRecord().getHierarchyLevelTwo().getCategoryRecord()
 		// .setCode(categoryCodeLevel2);
 		// browseProductsOpr.getProductSkuRecord().getHierarchyLevelThree().getCategoryRecord()
-		// .setCode(categoryCodeLevel3);
+		// .setCode(categoryCodeLe vel3);
 		// browseProductsOpr.getProductSkuRecord().getHierarchyLevelFour().getCategoryRecord()
 		// .setCode(categoryCodeLevel4);
 		// } else {

@@ -172,12 +172,6 @@ public class AddEditCategoryBB extends BackingBean {
 		return null;
 	}
 
-	public void resetPage() {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug(" resetPage starts: ");
-
-	}
-
 	public CategoryOpr getAddEditCategoryOpr() {
 		if (FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 				.containsKey(CommonConstant.ACTIVE_TAB_OPR)) {

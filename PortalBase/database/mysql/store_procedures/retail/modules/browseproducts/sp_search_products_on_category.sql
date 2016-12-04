@@ -46,8 +46,6 @@ END IF;
 
 IF p_level_4_category_code IS NOT NULL THEN
 	
-	SELECT v_level_4_category_id;
-
 	SELECT  psh.sku_code, psh.sku_name, psh.sku_description, psh.product_sku_id, psh.product_id, psh.sku_property_text, psh.default_thumbnail_image_url, psh.default_zoom_image_url, ph.product_id, psh.default_image_url,
 			psh.base_price, psh.discount_amount, psh.discount_percent, psh.final_base_price, psh.is_active, phcm.hierarchy_id, phcm.category_level_1, phcm.category_level_2, phcm.category_level_3,
 			phcm.category_level_4, phcm.category_level_5, fn_get_category_name_based_on_id(phcm.category_level_1) 'category_level_1_name', fn_get_category_name_based_on_id(phcm.category_level_2) 'category_level_2_name',
@@ -66,8 +64,6 @@ IF p_level_4_category_code IS NOT NULL THEN
 	
 ELSEIF p_level_3_category_code IS NOT NULL AND p_level_4_category_code IS NULL THEN
 
-	SELECT v_level_3_category_id;
-
 	SELECT  psh.sku_code, psh.sku_name, psh.sku_description, psh.product_sku_id, psh.product_id, psh.sku_property_text, psh.default_thumbnail_image_url, psh.default_zoom_image_url, ph.product_id, psh.default_image_url,
 			psh.base_price, psh.discount_amount, psh.discount_percent, psh.final_base_price, psh.is_active, phcm.hierarchy_id, phcm.category_level_1, phcm.category_level_2, phcm.category_level_3,
 			phcm.category_level_4, phcm.category_level_5, fn_get_category_name_based_on_id(phcm.category_level_1) 'category_level_1_name', fn_get_category_name_based_on_id(phcm.category_level_2) 'category_level_2_name',
@@ -85,8 +81,6 @@ ELSEIF p_level_3_category_code IS NOT NULL AND p_level_4_category_code IS NULL T
 
 ELSEIF p_level_2_category_code IS NOT NULL AND p_level_3_category_code IS NULL AND p_level_4_category_code IS NULL THEN
 
-	SELECT v_level_2_category_id;
-
 	SELECT  psh.sku_code, psh.sku_name, psh.sku_description, psh.product_sku_id, psh.product_id, psh.sku_property_text, psh.default_thumbnail_image_url, psh.default_zoom_image_url, ph.product_id, psh.default_image_url,
 			psh.base_price, psh.discount_amount, psh.discount_percent, psh.final_base_price, psh.is_active, phcm.hierarchy_id, phcm.category_level_1, phcm.category_level_2, phcm.category_level_3,
 			phcm.category_level_4, phcm.category_level_5, fn_get_category_name_based_on_id(phcm.category_level_1) 'category_level_1_name', fn_get_category_name_based_on_id(phcm.category_level_2) 'category_level_2_name'
@@ -102,8 +96,6 @@ ELSEIF p_level_2_category_code IS NOT NULL AND p_level_3_category_code IS NULL A
 	
 ELSEIF p_level_1_category_code IS NOT NULL AND p_level_2_category_code IS NULL AND p_level_3_category_code IS NULL AND p_level_4_category_code IS NULL THEN
 
-	SELECT v_level_1_category_id;
-
 	SELECT  psh.sku_code, psh.sku_name, psh.sku_description, psh.product_sku_id, psh.product_id, psh.sku_property_text, psh.default_thumbnail_image_url, psh.default_zoom_image_url, ph.product_id, psh.default_image_url,
 			psh.base_price, psh.discount_amount, psh.discount_percent, psh.final_base_price, psh.is_active, phcm.hierarchy_id, phcm.category_level_1, phcm.category_level_2, phcm.category_level_3,
 			phcm.category_level_4, phcm.category_level_5, fn_get_category_name_based_on_id(phcm.category_level_1) 'category_level_1_name'
@@ -115,13 +107,22 @@ ELSEIF p_level_1_category_code IS NOT NULL AND p_level_2_category_code IS NULL A
 	AND		ph.product_id = psh.product_id
 	AND		psh.is_active = 1;
 
+ELSE
+
+	SELECT  psh.sku_code, psh.sku_name, psh.sku_description, psh.product_sku_id, psh.product_id, psh.sku_property_text,
+			psh.default_thumbnail_image_url, psh.default_zoom_image_url, ph.product_id, psh.default_image_url,
+			psh.base_price, psh.discount_amount, psh.discount_percent, psh.final_base_price, psh.is_active,
+			phcm.hierarchy_id, fn_get_hierarchy_name_based_on_id(phcm.hierarchy_id) hierarchy_name,
+			phcm.category_level_1, phcm.category_level_2, phcm.category_level_3,
+			phcm.category_level_4, phcm.category_level_5, fn_get_category_name_based_on_id(phcm.category_level_1) 'category_level_1_name'
+	FROM	product_hierarchy_category_mapping phcm, product_header ph, product_sku_header psh
+	WHERE	phcm.hierarchy_id = v_hierarchy_id
+	AND		phcm.product_id = ph.product_id
+	AND		ph.is_active = 1
+	AND		ph.product_id = psh.product_id
+	AND		psh.is_active = 1;
 
 END IF;
 
-
-
-
-
 END $$
 DELIMITER ;
-
