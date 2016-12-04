@@ -99,7 +99,7 @@
 		<f:facet name="header">
 			<!-- <h:outputText rendered="#{!retailReadMoreBB.addProductSuccessful}" value="Please Select Proper Customization" /> -->
 			<h:outputText rendered="#{!retailReadMoreBB.sizeSelect}" value="Your session has expired" />
-			<h:outputText rendered="#{retailReadMoreBB.navigatePanel}" value="Product Added To Shopping Bag" />
+			<span class="productTitleHeader"><h:outputText rendered="#{retailReadMoreBB.navigatePanel}" value="Add Product To Shopping Bag" /></span>
 		</f:facet>
 		<h:panelGroup id="navigationPanelGroup">
 			<p:outputPanel rendered="#{retailReadMoreBB.navigatePanel}">

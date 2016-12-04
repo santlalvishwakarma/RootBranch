@@ -116,6 +116,8 @@ public interface CommonConstant {
 
 	public static final String BLANK_SPACE = " ";
 
+	public static final String SLASH = "/";
+
 	public interface MessageLocation {
 
 		public static final String COMMON_MESSAGES = "com/web/common/parents/messages";

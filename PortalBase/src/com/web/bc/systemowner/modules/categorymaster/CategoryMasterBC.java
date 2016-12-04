@@ -114,6 +114,8 @@ public class CategoryMasterBC extends BackingClass {
 
 				categoryRecord.setActive((Boolean) resultSetMap.get("is_active"));
 
+				setAuditAttributes(categoryRecord, resultSetMap);
+
 				categoryList.add(categoryRecord);
 			}
 		}
