@@ -77,10 +77,7 @@ public class ShoppingCartProductDVO extends BaseDVO {
 				// }
 
 				if (quantity != null) {
-					subTotal = quantity * productSkuRecord.getBasePrice();
-					if (productSkuRecord.getDiscountPrice() != null && productSkuRecord.getDiscountPrice() > 0.0) {
-						subTotal = quantity * productSkuRecord.getDiscountPrice();
-					}
+					subTotal = quantity * productSkuRecord.getFinalBasePrice();
 				}
 			}
 		}

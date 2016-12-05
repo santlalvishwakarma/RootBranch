@@ -152,15 +152,9 @@ public class ShoppingCartBB extends BackingBean {
 
 			for (ShoppingCartProductDVO shoppingCartProductDVO : shoppingCartOpr.getShoppingCartProductList()) {
 				Integer quantity = shoppingCartProductDVO.getQuantity();
-				if (shoppingCartProductDVO.getProductSkuRecord().getDiscountPrice() != null
-						&& shoppingCartProductDVO.getProductSkuRecord().getDiscountPrice() > 0) {
-					totalPrice = quantity * shoppingCartProductDVO.getProductSkuRecord().getDiscountPrice();
-				} else if (shoppingCartProductDVO.getProductSkuRecord().getBasePrice() != null
-						&& shoppingCartProductDVO.getProductSkuRecord().getBasePrice() > 0) {
-					totalPrice = quantity * shoppingCartProductDVO.getProductSkuRecord().getBasePrice();
-				}
+				Float pricePerProduct = quantity * shoppingCartProductDVO.getProductSkuRecord().getFinalBasePrice();
 
-				totalPrice += totalPrice;
+				totalPrice += pricePerProduct;
 			}
 
 			shoppingCartOpr.setTotalPrice(totalPrice);
@@ -864,7 +858,7 @@ public class ShoppingCartBB extends BackingBean {
 				.getExternalContext()
 				.getRequestMap()
 				.put(CommonConstant.IMAGE_DVO,
-						shoppingCartOpr.getShoppingCartProductRecord().getProductSkuRecord().getImageRecord());
+						shoppingCartOpr.getShoppingCartProductRecord().getProductSkuRecord().getDefaultImageRecord());
 	}
 
 	public ShoppingCartOpr getShoppingCartOpr() {
@@ -1363,7 +1357,6 @@ public class ShoppingCartBB extends BackingBean {
 		// TODO Auto-generated method stub
 		// need to improve code
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		ShoppingCartBF shoppingCartBF = new ShoppingCartBF();
 
 		myLog.debug("inside getShippingDependentStates ::: "
 				+ shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getCountryDvo().getCode());
@@ -1416,7 +1409,6 @@ public class ShoppingCartBB extends BackingBean {
 
 	public void validateQuantity(ShoppingCartProductDVO shoppingCartProductDVO) {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		ArrayList<ShoppingCartProductDVO> gotShoppingCartProductDVOList = shoppingCartOpr.getShoppingCartProductList();
 		myLog.debug("inside validateQuantity");
 		boolean quantityValid = true;
 		Integer currentRowIndex = (Integer) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance())
@@ -2240,9 +2232,6 @@ public class ShoppingCartBB extends BackingBean {
 		myLog.debug("Country id for getting charges "
 				+ shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getCountryDvo().getCode());
 		if (shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getCountryDvo().getCode() != null) {
-			for (int i = 0; i < shoppingCartOpr.getShoppingCartProductList().size(); i++) {
-				ShoppingCartProductDVO shoppingCartProductDVO = shoppingCartOpr.getShoppingCartProductList().get(i);
-			}
 
 			try {
 				shoppingCartOpr = new ShoppingCartBF().getShippingChargesMode(shoppingCartOpr);
@@ -2263,7 +2252,8 @@ public class ShoppingCartBB extends BackingBean {
 				Float express = 0.0f;
 				for (int i = 0; i < returnShoppingCartOpr.getShoppingCartProductList().size(); i++) {
 					Float dutiesPercent = 0.0f;
-					Float productPrice = 0.0f;
+					Float productPrice = returnShoppingCartOpr.getShoppingCartProductList().get(i)
+							.getProductSkuRecord().getFinalBasePrice();
 					myLog.debug("check in shoppingcartBB for delivery chagres"
 							+ returnShoppingCartOpr.getShoppingCartProductList().get(i).getProductSkuRecord()
 									.getDeliverChargesRecord().getDeliveryCharge());
@@ -2285,18 +2275,6 @@ public class ShoppingCartBB extends BackingBean {
 									.getShoppingCartProductList().get(i).getQuantity());
 					dutiesPercent = (returnShoppingCartOpr.getShoppingCartProductList().get(i).getProductSkuRecord()
 							.getDeliverChargesRecord().getDutiesCharge()) / 100;
-
-					if (returnShoppingCartOpr.getShoppingCartProductList().get(i).getProductSkuRecord()
-							.getDiscountPrice() == null) {
-						productPrice = (float) (returnShoppingCartOpr.getShoppingCartProductList().get(i)
-								.getProductSkuRecord().getOriginalBasePrice() * returnShoppingCartOpr
-								.getShoppingCartProductList().get(i).getQuantity());
-					} else if (returnShoppingCartOpr.getShoppingCartProductList().get(i).getProductSkuRecord()
-							.getDiscountPrice() > 0.0f) {
-						productPrice = (float) (returnShoppingCartOpr.getShoppingCartProductList().get(i)
-								.getProductSkuRecord().getOriginalDiscountPrice() * returnShoppingCartOpr
-								.getShoppingCartProductList().get(i).getQuantity());
-					}
 
 					duties = duties + (productPrice * dutiesPercent);
 
