@@ -17,6 +17,16 @@
 
 	<!-- LIST OF ATTRIBUTES TO IGNORE: javax.faces.resource -->
 	<url-mapping id="retail_products_search_cat1">
+		<pattern value="/#{retailBrowseProductsBB.hierarchyName}/products/" />
+		<view-id value="/pages/retail/modules/browseproducts/browseproducts.jsf" />
+		<!-- <action onPostback="false">#{retailBrowseProductsBB.getCountryDependentCurrencyConversion} </action> -->
+		<action onPostback="false">#{retailBrowseProductsBB.doProductSearch}
+		</action>
+		<action onPostback="false" phaseId="RENDER_RESPONSE">#{retailBrowseProductsBB.populateProductSearchWebAttributes}
+		</action>
+		<!-- <action onPostback="false" phaseId="RENDER_RESPONSE">#{retailBrowseProductsBB.populateProductSearchWebAttributes}</action> -->
+	</url-mapping>
+	<url-mapping id="retail_products_search_cat1">
 		<pattern value="/#{retailBrowseProductsBB.hierarchyName}/#{retailBrowseProductsBB.categoryCodeLevel1}/products/" />
 		<view-id value="/pages/retail/modules/browseproducts/browseproducts.jsf" />
 		<!-- <action onPostback="false">#{retailBrowseProductsBB.getCountryDependentCurrencyConversion} </action> -->
