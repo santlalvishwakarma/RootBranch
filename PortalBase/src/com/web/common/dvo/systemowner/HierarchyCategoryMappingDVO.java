@@ -13,6 +13,7 @@ public class HierarchyCategoryMappingDVO extends BaseDVO {
 	private CategoryDVO categoryLevelFiveRecord;
 	private Integer categoryLevel;
 	private CategoryDVO categoryRecord;
+	private String categoryUrl;
 
 	public HierarchyDVO getHierarchyRecord() {
 		if (hierarchyRecord == null) {
@@ -97,6 +98,14 @@ public class HierarchyCategoryMappingDVO extends BaseDVO {
 
 	public void setCategoryRecord(CategoryDVO categoryRecord) {
 		this.categoryRecord = categoryRecord;
+	}
+
+	public String getCategoryUrl() {
+		return categoryUrl;
+	}
+
+	public void setCategoryUrl(String categoryUrl) {
+		this.categoryUrl = categoryUrl;
 	}
 
 }

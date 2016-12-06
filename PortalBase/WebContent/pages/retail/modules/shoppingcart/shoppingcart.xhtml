@@ -1,15 +1,11 @@
-<ui:composition template="/pages/retail/template/template.xhtml"
-	xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
+<ui:composition template="/pages/retail/template/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<ui:define name="content">
 		<!-- Page Content Wrapper Start -->
 		<style type="text/css">
-.ui-datatable.borderless thead th,.ui-datatable.borderless tbody,.ui-datatable.borderless tbody td
-	{
+.ui-datatable.borderless thead th,.ui-datatable.borderless tbody,.ui-datatable.borderless tbody td {
 	border-style: none;
 }
 
@@ -27,20 +23,16 @@
 			<h:form id="shoppingCartForm">
 				<div class="ttletxt3">Shopping Cart</div>
 				<div class="shoppingcart">
-					<p:panel
-						rendered="#{(empty retailShoppingCartBB.shoppingCartOpr.shoppingCartProductList)}"
+					<p:panel rendered="#{(empty retailShoppingCartBB.shoppingCartOpr.shoppingCartProductList)}"
 						style="border-style:none; width:100%">
 						<h2 style="color: #BC7504; margin-bottom: 10px;">
-							<h:outputText
-								value="There are currently no products in your shopping cart" />
+							<h:outputText value="There are currently no products in your shopping cart" />
 						</h2>
 					</p:panel>
-					<h:panelGroup layout="block"
-						rendered="#{!(empty retailShoppingCartBB.shoppingCartOpr.shoppingCartProductList)}"
+					<h:panelGroup layout="block" rendered="#{!(empty retailShoppingCartBB.shoppingCartOpr.shoppingCartProductList)}"
 						id="shoppingCartPanel" styleClass="tabletitle">
 						<h:panelGroup id="productsPanel" style="border-style:none">
-							<h:panelGroup
-								rendered="#{(empty sessionScope['LOGGED_USER_KEY'])}">
+							<h:panelGroup rendered="#{(empty sessionScope['LOGGED_USER_KEY'])}">
 								<table style="width: 100%">
 									<tr style="width: 10px;">
 										<td style="width: 15%; text-align: center;">Product Image</td>
@@ -51,64 +43,35 @@
 									</tr>
 									<tr></tr>
 									<tr>
-										<td colspan="5"><p:dataTable
-												value="#{retailShoppingCartBB.shoppingCartOpr.shoppingCartProductList}"
-												styleClass="borderless" var="shoppingCartProduct"
-												id="shoppingCartTable" style="width:100%"
+										<td colspan="5"><p:dataTable value="#{retailShoppingCartBB.shoppingCartOpr.shoppingCartProductList}"
+												styleClass="borderless" var="shoppingCartProduct" id="shoppingCartTable" style="width:100%"
 												rowKeyVar="rowNumber">
 												<p:column id="productImage"
 													style="vertical-align:middle;border-right: none;text-align:center;border-left:none;width: 15%;">
-													<p:commandLink process="@this" id="imagelink"
-														update=":enlargeImageDialogForm:imagePanel"
-														oncomplete="PF('enlargeImageDialog').show()"
-														action="#{retailShoppingCartBB.enlargeImageClicked}">
-														<f:setPropertyActionListener
-															value="#{shoppingCartProduct.productSkuRecord}"
+													<p:commandLink process="@this" id="imagelink" update=":enlargeImageDialogForm:imagePanel"
+														oncomplete="PF('enlargeImageDialog').show()" action="#{retailShoppingCartBB.enlargeImageClicked}">
+														<f:setPropertyActionListener value="#{shoppingCartProduct.productSkuRecord}"
 															target="#{retailShoppingCartBB.shoppingCartOpr.shoppingCartProductRecord.productSkuRecord}" />
-														<h:graphicImage
-															value="#{shoppingCartProduct.productSkuRecord.imageRecord.thumbnailImageURL}"
-															styleClass="vamtac"
-															style="width: 58px;height:51px;border:0" />
-														<p:tooltip for="imagelink"
-															value="Click to View Enlarged Image" />
+														<h:graphicImage value="#{shoppingCartProduct.productSkuRecord.defaultImageRecord.thumbnailImageURL}"
+															styleClass="vamtac" style="width: 58px;height:51px;border:0" />
+														<p:tooltip for="imagelink" value="Click to View Enlarged Image" />
 													</p:commandLink>
 												</p:column>
-												<p:column styleClass="vamtac prod-width"
-													style="border-right: none;">
-													<h:outputText
-														value="#{shoppingCartProduct.productSkuRecord.name}" />
+												<p:column styleClass="vamtac prod-width" style="border-right: none;">
+													<h:outputText value="#{shoppingCartProduct.productSkuRecord.name}" />
 												</p:column>
-												<p:column id="productPrice"
-													style="width: 25%;border-right: none;  text-align: center;"
-													styleClass="vamtac">
+												<p:column id="productPrice" style="width: 25%;border-right: none;  text-align: center;" styleClass="vamtac">
 													<h:panelGroup id="originalPricePanel">
-														<span class="WebRupee"><h:outputText
-																rendered="#{shoppingCartProduct.productSkuRecord.discountPrice eq null}"
-																value="Rs." /> </span>
-														<h:outputText
-															rendered="#{shoppingCartProduct.productSkuRecord.discountPrice eq null}"
-															value="#{shoppingCartProduct.productSkuRecord.basePrice}">
-															<f:convertNumber minFractionDigits="0"
-																maxFractionDigits="0" />
-														</h:outputText>
-														<span class="WebRupee"><h:outputText
-																rendered="#{!(shoppingCartProduct.productSkuRecord.discountPrice eq null)}"
-																value="Rs." /> </span>
-														<h:outputText
-															rendered="#{!(shoppingCartProduct.productSkuRecord.discountPrice eq null)}"
-															value="#{shoppingCartProduct.productSkuRecord.discountPrice}">
-															<f:convertNumber minFractionDigits="0"
-																maxFractionDigits="0" />
+														<span class="WebRupee"><h:outputText value="Rs." /> </span>
+														<h:outputText value="#{shoppingCartProduct.productSkuRecord.finalBasePrice}">
+															<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 														</h:outputText>
 													</h:panelGroup>
 												</p:column>
-												<p:column label="Quantity" id="productQuantity"
-													style="width: 10%;border-right: none;  text-align: center;"
+												<p:column label="Quantity" id="productQuantity" style="width: 10%;border-right: none;  text-align: center;"
 													styleClass="vamtac">
-													<h:inputText maxlength="2" size="2"
-														value="#{shoppingCartProduct.quantity}"
-														converterMessage="Quantity can only accept number"
-														styleClass="txtboxwidth">
+													<h:inputText maxlength="2" size="2" value="#{shoppingCartProduct.quantity}"
+														converterMessage="Quantity can only accept number" styleClass="txtboxwidth">
 														<f:attribute name="currentRowIndex" value="#{rowNumber}" />
 														<p:ajax event="change"
 															update=":shoppingCartForm:shoppingCartTable, :shoppingCartForm:purchaseSummaryTable"
@@ -116,29 +79,20 @@
 														</p:ajax>
 													</h:inputText>
 												</p:column>
-												<p:column label="Delete"
-													style="width: 10%;border-right: none;  text-align: center;"
-													styleClass="vamtac">
-													<p:commandLink id="removeProduct"
-														update=":shoppingCartForm, :headerForm:goToShoppingCartLink1"
-														action="#{retailShoppingCartBB.removeProduct}"
-														process="@this">
-														<f:setPropertyActionListener
-															value="#{shoppingCartProduct}"
+												<p:column label="Delete" style="width: 10%;border-right: none;  text-align: center;" styleClass="vamtac">
+													<p:commandLink id="removeProduct" update=":shoppingCartForm, :headerForm:goToShoppingCartLink1"
+														action="#{retailShoppingCartBB.removeProduct}" process="@this">
+														<f:setPropertyActionListener value="#{shoppingCartProduct}"
 															target="#{retailShoppingCartBB.productToDelete}" />
-														<h:graphicImage
-															url="/staticcontent/retail/images/portalimages/delete.png"
-															style="border:0" />
-														<p:tooltip for="removeProduct"
-															value="Click to Remove this item from Cart" />
+														<h:graphicImage url="/staticcontent/retail/images/portalimages/delete.png" style="border:0" />
+														<p:tooltip for="removeProduct" value="Click to Remove this item from Cart" />
 													</p:commandLink>
 												</p:column>
 											</p:dataTable></td>
 									</tr>
 								</table>
 							</h:panelGroup>
-							<h:panelGroup
-								rendered="#{!(empty sessionScope['LOGGED_USER_KEY'])}">
+							<h:panelGroup rendered="#{!(empty sessionScope['LOGGED_USER_KEY'])}">
 								<table style="width: 100%">
 									<tr>
 										<td style="width: 15%; text-align: center;">Product Image</td>
@@ -149,64 +103,35 @@
 										<td style="width: 10%; text-align: center;">Whishlist</td>
 									</tr>
 									<tr>
-										<td colspan="6"><p:dataTable
-												value="#{retailShoppingCartBB.shoppingCartOpr.shoppingCartProductList}"
-												styleClass="borderless" var="shoppingCartProduct"
-												id="shoppingCartTable1" style="width:100%"
+										<td colspan="6"><p:dataTable value="#{retailShoppingCartBB.shoppingCartOpr.shoppingCartProductList}"
+												styleClass="borderless" var="shoppingCartProduct" id="shoppingCartTable1" style="width:100%"
 												rowKeyVar="rowNumber">
 												<p:column id="productImage"
 													style="vertical-align:middle;border-right: none;text-align:center;border-left:none;width: 15%;">
-													<p:commandLink process="@this" id="imagelink"
-														update=":enlargeImageDialogForm:imagePanel"
-														oncomplete="PF('enlargeImageDialog').show()"
-														action="#{retailShoppingCartBB.enlargeImageClicked}">
-														<f:setPropertyActionListener
-															value="#{shoppingCartProduct.productSkuRecord}"
+													<p:commandLink process="@this" id="imagelink" update=":enlargeImageDialogForm:imagePanel"
+														oncomplete="PF('enlargeImageDialog').show()" action="#{retailShoppingCartBB.enlargeImageClicked}">
+														<f:setPropertyActionListener value="#{shoppingCartProduct.productSkuRecord}"
 															target="#{retailShoppingCartBB.shoppingCartOpr.shoppingCartProductRecord.productSkuRecord}" />
-														<h:graphicImage
-															value="#{shoppingCartProduct.productSkuRecord.imageRecord.thumbnailImageURL}"
-															styleClass="vamtac"
-															style="width: 58px;height:51px;border:0" />
-														<p:tooltip for="imagelink"
-															value="Click to View Enlarged Image" />
+														<h:graphicImage value="#{shoppingCartProduct.productSkuRecord.defaultImageRecord.thumbnailImageURL}"
+															styleClass="vamtac" style="width: 58px;height:51px;border:0" />
+														<p:tooltip for="imagelink" value="Click to View Enlarged Image" />
 													</p:commandLink>
 												</p:column>
-												<p:column styleClass="vamtac prod-width"
-													style="border-right: none;">
-													<h:outputText
-														value="#{shoppingCartProduct.productSkuRecord.name}" />
+												<p:column styleClass="vamtac prod-width" style="border-right: none;">
+													<h:outputText value="#{shoppingCartProduct.productSkuRecord.name}" />
 												</p:column>
-												<p:column id="productPrice"
-													style="width: 25%;border-right: none;  text-align: center;"
-													styleClass="vamtac">
+												<p:column id="productPrice" style="width: 25%;border-right: none;  text-align: center;" styleClass="vamtac">
 													<h:panelGroup id="originalPricePanel">
-														<span class="WebRupee"><h:outputText
-																rendered="#{shoppingCartProduct.productSkuRecord.discountPrice eq null}"
-																value="Rs." /> </span>
-														<h:outputText
-															rendered="#{shoppingCartProduct.productSkuRecord.discountPrice eq null}"
-															value="#{shoppingCartProduct.productSkuRecord.basePrice}">
-															<f:convertNumber minFractionDigits="0"
-																maxFractionDigits="0" />
-														</h:outputText>
-														<span class="WebRupee"><h:outputText
-																rendered="#{!(shoppingCartProduct.productSkuRecord.discountPrice eq null)}"
-																value="Rs." /> </span>
-														<h:outputText
-															rendered="#{!(shoppingCartProduct.productSkuRecord.discountPrice eq null)}"
-															value="#{shoppingCartProduct.productSkuRecord.discountPrice}">
-															<f:convertNumber minFractionDigits="0"
-																maxFractionDigits="0" />
+														<span class="WebRupee"><h:outputText value="Rs." /> </span>
+														<h:outputText value="#{shoppingCartProduct.productSkuRecord.finalBasePrice}">
+															<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 														</h:outputText>
 													</h:panelGroup>
 												</p:column>
-												<p:column label="Quantity" id="productQuantity"
-													style="width: 10%;border-right: none;  text-align: center;"
+												<p:column label="Quantity" id="productQuantity" style="width: 10%;border-right: none;  text-align: center;"
 													styleClass="vamtac">
-													<h:inputText maxlength="2" size="2"
-														value="#{shoppingCartProduct.quantity}"
-														converterMessage="Quantity can only accept number"
-														styleClass="txtboxwidth">
+													<h:inputText maxlength="2" size="2" value="#{shoppingCartProduct.quantity}"
+														converterMessage="Quantity can only accept number" styleClass="txtboxwidth">
 														<f:attribute name="currentRowIndex" value="#{rowNumber}" />
 														<p:ajax event="change"
 															update=":shoppingCartForm:shoppingCartTable1, :shoppingCartForm:purchaseSummaryTable"
@@ -214,37 +139,22 @@
 														</p:ajax>
 													</h:inputText>
 												</p:column>
-												<p:column label="Delete"
-													style="width: 10%;border-right: none; text-align: center;"
-													styleClass="vamtac">
-													<p:commandLink id="removeProduct"
-														update=":shoppingCartForm, :headerForm:goToShoppingCartLink1"
-														action="#{retailShoppingCartBB.removeProduct}"
-														process="@this">
-														<f:setPropertyActionListener
-															value="#{shoppingCartProduct}"
+												<p:column label="Delete" style="width: 10%;border-right: none; text-align: center;" styleClass="vamtac">
+													<p:commandLink id="removeProduct" update=":shoppingCartForm, :headerForm:goToShoppingCartLink1"
+														action="#{retailShoppingCartBB.removeProduct}" process="@this">
+														<f:setPropertyActionListener value="#{shoppingCartProduct}"
 															target="#{retailShoppingCartBB.productToDelete}" />
-														<h:graphicImage
-															url="/staticcontent/retail/images/portalimages/delete.png"
-															style="border:0" />
-														<p:tooltip for="removeProduct"
-															value="Click to Remove this item from Cart" />
+														<h:graphicImage url="/staticcontent/retail/images/portalimages/delete.png" style="border:0" />
+														<p:tooltip for="removeProduct" value="Click to Remove this item from Cart" />
 													</p:commandLink>
 												</p:column>
-												<p:column label="Wishlist"
-													style="border-right: none;width:10%; text-align: center;"
-													styleClass="vamtac">
+												<p:column label="Wishlist" style="border-right: none;width:10%; text-align: center;" styleClass="vamtac">
 													<p:commandLink id="saveProduct" process="@this"
 														update=":shoppingCartForm, :headerForm:goToShoppingCartLink1"
 														action="#{retailShoppingCartBB.saveProductForLater}">
-														<f:setPropertyActionListener
-															value="#{shoppingCartProduct}"
-															target="#{retailShoppingCartBB.productToSave}" />
-														<h:graphicImage
-															url="/staticcontent/retail/images/portalimages/save.png"
-															style="border:0;" />
-														<p:tooltip for="saveProduct"
-															value="Click to Add this item To Wishlist" />
+														<f:setPropertyActionListener value="#{shoppingCartProduct}" target="#{retailShoppingCartBB.productToSave}" />
+														<h:graphicImage url="/staticcontent/retail/images/portalimages/save.png" style="border:0;" />
+														<p:tooltip for="saveProduct" value="Click to Add this item To Wishlist" />
 													</p:commandLink>
 												</p:column>
 											</p:dataTable></td>
@@ -254,20 +164,14 @@
 						</h:panelGroup>
 						<!-- Products info Ends -->
 						<div class="codetxt">
-							<p>Enter a coupon code and click on 'Apply Discount' to
-								redeem deals &amp; discounts</p>
-							<h:inputText
-								value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.voucherRecord.promoCode}"
-								id="voucherCode" maxlength="40"
-								style="width:186px;	height:15px; margin-right:10px;">
+							<p>Enter a coupon code and click on 'Apply Discount' to redeem deals &amp; discounts</p>
+							<h:inputText value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.voucherRecord.promoCode}"
+								id="voucherCode" maxlength="40" style="width:186px;	height:15px; margin-right:10px;">
 							</h:inputText>
 							<div class="discount">
-								<p:commandLink
-									actionListener="#{retailShoppingCartBB.recalculateTotalPriceBasedOnAction}"
-									update="purchaseSummaryTable,newdiscountedPrice, voucherCode"
-									process="@this" value="Apply Discount">
-									<p:tooltip for="voucherCode"
-										value="Click to Apply Discount and recalculate transaction amount" />
+								<p:commandLink actionListener="#{retailShoppingCartBB.recalculateTotalPriceBasedOnAction}"
+									update="purchaseSummaryTable,newdiscountedPrice, voucherCode" process="@this" value="Apply Discount">
+									<p:tooltip for="voucherCode" value="Click to Apply Discount and recalculate transaction amount" />
 								</p:commandLink>
 							</div>
 							<br />
@@ -278,112 +182,88 @@
 							<div id="box-one" class="addressbox">
 								<div class="billingbox">
 									<h2 style="color: black;">Billing Address</h2>
-									<table cellspacing="0" cellpadding="5" width="100%"
-										class="billingtbl">
+									<table cellspacing="0" cellpadding="5" width="100%" class="billingtbl">
 										<tr>
-											<td align="right" style="width: 100px">First Name:<h:outputText
-													value="#{commonLabel.mand_star}" styleClass="mandRed" />
+											<td align="right" style="width: 100px">First Name:<h:outputText value="#{commonLabel.mand_star}"
+													styleClass="mandRed" />
 											</td>
 											<td><h:inputText
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.firstName}"
-													maxlength="45" styleClass="txt" /></td>
+													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.firstName}" maxlength="45"
+													styleClass="txt" /></td>
 										</tr>
 										<tr>
-											<td align="right">Last Name:<h:outputText
-													value="#{commonLabel.mand_star}" styleClass="mandRed" /></td>
+											<td align="right">Last Name:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" /></td>
 											<td><h:inputText
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.lastName}"
-													maxlength="45" styleClass="txt" /></td>
+													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.lastName}" maxlength="45"
+													styleClass="txt" /></td>
 										</tr>
 										<tr>
-											<td align="right">Mobile Number:<h:outputText
-													value="#{commonLabel.mand_star}" styleClass="mandRed" />
+											<td align="right">Mobile Number:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 											</td>
 											<td><h:inputText id="billingMobileNumber"
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.phone1}"
-													maxlength="15" styleClass="txt" /></td>
+													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.phone1}" maxlength="15"
+													styleClass="txt" /></td>
 										</tr>
 										<tr>
 											<td align="right">Phone Number:</td>
-											<td><h:inputText
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.phone2}"
+											<td><h:inputText value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.phone2}"
 													maxlength="15" styleClass="txt" /></td>
 										</tr>
 										<tr>
-											<td align="right">Email ID:<h:outputText
-													value="#{commonLabel.mand_star}" styleClass="mandRed" />
+											<td align="right">Email ID:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 											</td>
-											<td><h:inputText
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.email1}"
+											<td><h:inputText value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.email1}"
 													maxlength="255" styleClass="txt" /></td>
 										</tr>
 										<tr>
-											<td align="right">Address Line 1:<h:outputText
-													value="#{commonLabel.mand_star}" styleClass="mandRed" />
+											<td align="right">Address Line 1:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 											</td>
 											<td><h:inputText
 													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.addressLine1}"
 													maxlength="100" styleClass="txt" /></td>
 										</tr>
 										<tr>
-											<td align="right">Address Line 2:<h:outputText
-													value="#{commonLabel.mand_star}" styleClass="mandRed" />
+											<td align="right">Address Line 2:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 											</td>
 											<td><h:inputText
 													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.addressLine2}"
 													maxlength="100" styleClass="txt" /></td>
 										</tr>
 										<tr>
-											<td align="right">Country:<h:outputText
-													value="#{commonLabel.mand_star}" styleClass="mandRed" />
+											<td align="right">Country:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 											</td>
-											<td><p:selectOneMenu id="billingCountryName"
-													style="border: 1px solid #4f4f4f;"
+											<td><p:selectOneMenu id="billingCountryName" style="border: 1px solid #4f4f4f;"
 													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.countryDvo.code}">
-													<f:selectItem itemLabel="#{commonLabel.select_label}"
-														itemValue="" />
-													<f:selectItems
-														value="#{retailShoppingCartBB.allOptions.allOptionsValues['countryList']}"
-														var="country" itemLabel="#{country.name}"
-														itemValue="#{country.code}" />
-													<p:ajax event="change"
-														update="billingStateName,shippingAddressPanel,purchaseSummaryTable"
-														process="@this"
+													<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+													<f:selectItems value="#{retailShoppingCartBB.allOptions.allOptionsValues['countryList']}" var="country"
+														itemLabel="#{country.name}" itemValue="#{country.code}" />
+													<p:ajax event="change" update="billingStateName,shippingAddressPanel,purchaseSummaryTable" process="@this"
 														listener="#{retailShoppingCartBB.changeBillingCountry}" />
 												</p:selectOneMenu></td>
 										</tr>
 										<tr>
 											<td align="right">State</td>
-											<td><p:selectOneMenu id="billingStateName"
-													style="border: 1px solid #4f4f4f;"
+											<td><p:selectOneMenu id="billingStateName" style="border: 1px solid #4f4f4f;"
 													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.stateDVO.code}">
 													<f:selectItem itemLabel="Choose State" itemValue="" />
-													<f:selectItems
-														value="#{retailShoppingCartBB.allOptions.allOptionsValues['customerBillingStateList']}"
-														var="state" itemLabel="#{state.name}"
-														itemValue="#{state.code}" />
-													<p:ajax event="change"
-														listener="#{retailShoppingCartBB.changeBillingState}"
-														process="@this" update="billingCity" />
+													<f:selectItems value="#{retailShoppingCartBB.allOptions.allOptionsValues['customerBillingStateList']}"
+														var="state" itemLabel="#{state.name}" itemValue="#{state.code}" />
+													<p:ajax event="change" listener="#{retailShoppingCartBB.changeBillingState}" process="@this"
+														update="billingCity" />
 												</p:selectOneMenu></td>
 										</tr>
 										<tr>
-											<td align="right">City/Town:<h:outputText
-													value="#{commonLabel.mand_star}" styleClass="mandRed" />
+											<td align="right">City/Town:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 											</td>
 											<td><p:selectOneMenu id="billingCity"
 													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.cityDvo.code}">
-													<f:selectItem itemLabel="#{commonLabel.select_label}"
-														itemValue="" />
-													<f:selectItems
-														value="#{retailShoppingCartBB.allOptions.allOptionsValues['customerBillingCityList']}"
-														var="city" itemLabel="#{city.name}"
-														itemValue="#{city.code}" />
+													<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+													<f:selectItems value="#{retailShoppingCartBB.allOptions.allOptionsValues['customerBillingCityList']}"
+														var="city" itemLabel="#{city.name}" itemValue="#{city.code}" />
 												</p:selectOneMenu></td>
 										</tr>
 										<tr>
-											<td align="right">Postal Code:<h:outputText
-													value="#{commonLabel.mand_star}" styleClass="mandRed" />
+											<td align="right">Postal Code:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 											</td>
 											<td><h:inputText
 													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.pinRecord.code}"
@@ -394,14 +274,9 @@
 							</div>
 						</h:panelGroup>
 						<div class="copycontent">
-							<img
-								src="/p/staticcontent/retail/images/portalimages/transfer.png"
-								alt="" />
-							<div class="copytxt">Shipping Address same as Billing
-								Address</div>
-							<h:selectBooleanCheckbox
-								value="#{retailShoppingCartBB.sameAsBilling}"
-								style="width: auto;	margin: 0 0 0 0;">
+							<img src="/p/staticcontent/retail/images/portalimages/transfer.png" alt="" />
+							<div class="copytxt">Shipping Address same as Billing Address</div>
+							<h:selectBooleanCheckbox value="#{retailShoppingCartBB.sameAsBilling}" style="width: auto;	margin: 0 0 0 0;">
 								<p:ajax event="change" process="billingAddressPanel, @this"
 									listener="#{retailShoppingCartBB.copyBillingAddress}"
 									update="shippingAddressPanel,totalPrice,purchaseSummaryTable,expressDeliveryRegion" />
@@ -410,114 +285,91 @@
 						<h:panelGroup id="shippingAddressPanel">
 							<div class="shippingbox">
 								<h2 style="color: black;">Shipping Address</h2>
-								<table cellspacing="0" cellpadding="5" width="100%"
-									class="billingtbl">
+								<table cellspacing="0" cellpadding="5" width="100%" class="billingtbl">
 									<tr>
-										<td align="right" style="width: 100px">First Name:<h:outputText
-												value="#{commonLabel.mand_star}" styleClass="mandRed" />
+										<td align="right" style="width: 100px">First Name:<h:outputText value="#{commonLabel.mand_star}"
+												styleClass="mandRed" />
 										</td>
 										<td><h:inputText
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.firstName}"
-												maxlength="45" styleClass="txt" /></td>
+												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.firstName}" maxlength="45"
+												styleClass="txt" /></td>
 									</tr>
 									<tr>
-										<td align="right">Last Name:<h:outputText
-												value="#{commonLabel.mand_star}" styleClass="mandRed" />
+										<td align="right">Last Name:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 										</td>
 										<td><h:inputText
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.lastName}"
-												maxlength="45" styleClass="txt" /></td>
+												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.lastName}" maxlength="45"
+												styleClass="txt" /></td>
 									</tr>
 									<tr>
-										<td align="right">Mobile Number:<h:outputText
-												value="#{commonLabel.mand_star}" styleClass="mandRed" />
+										<td align="right">Mobile Number:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 										</td>
 										<td><h:inputText id="shippingMobileNumber"
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.phone1}"
-												maxlength="45" styleClass="txt" /></td>
+												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.phone1}" maxlength="45"
+												styleClass="txt" /></td>
 									</tr>
 									<tr>
 										<td align="right">Phone Number:</td>
-										<td><h:inputText
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.phone2}"
+										<td><h:inputText value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.phone2}"
 												maxlength="15" styleClass="txt" /></td>
 									</tr>
 									<tr>
-										<td align="right">Email ID:<h:outputText
-												value="#{commonLabel.mand_star}" styleClass="mandRed" />
+										<td align="right">Email ID:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 										</td>
-										<td><h:inputText
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.email1}"
+										<td><h:inputText value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.email1}"
 												maxlength="255" styleClass="txt" /></td>
 									</tr>
 									<tr>
-										<td align="right">Address Line 1:<h:outputText
-												value="#{commonLabel.mand_star}" styleClass="mandRed" />
+										<td align="right">Address Line 1:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 										</td>
 										<td><h:inputText
 												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.addressLine1}"
 												maxlength="100" styleClass="txt" /></td>
 									</tr>
 									<tr>
-										<td align="right">Address Line 2:<h:outputText
-												value="#{commonLabel.mand_star}" styleClass="mandRed" />
+										<td align="right">Address Line 2:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 										</td>
 										<td><h:inputText
 												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.addressLine2}"
 												maxlength="100" styleClass="txt" /></td>
 									</tr>
 									<tr>
-										<td align="right">Country:<h:outputText
-												value="#{commonLabel.mand_star}" styleClass="mandRed" />
+										<td align="right">Country:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 										</td>
-										<td><p:selectOneMenu id="shippingCountryName"
-												style="border: 1px solid #4f4f4f;"
+										<td><p:selectOneMenu id="shippingCountryName" style="border: 1px solid #4f4f4f;"
 												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.countryDvo.code}"
 												disabled="#{retailShoppingCartBB.shippingCountryDisable}">
 												<f:selectItem itemLabel="Click here to choose" itemValue="" />
-												<f:selectItems
-													value="#{retailShoppingCartBB.allOptions.allOptionsValues['countryList']}"
-													var="country" itemLabel="#{country.name}"
-													itemValue="#{country.code}" />
-												<p:ajax event="change"
-													update="shippingStateName, totalPrice, purchaseSummaryTable,expressDeliveryRegion"
-													process="shippingAddressPanel"
-													listener="#{retailShoppingCartBB.changeShippingCountry}">
+												<f:selectItems value="#{retailShoppingCartBB.allOptions.allOptionsValues['countryList']}" var="country"
+													itemLabel="#{country.name}" itemValue="#{country.code}" />
+												<p:ajax event="change" update="shippingStateName, totalPrice, purchaseSummaryTable,expressDeliveryRegion"
+													process="shippingAddressPanel" listener="#{retailShoppingCartBB.changeShippingCountry}">
 												</p:ajax>
 											</p:selectOneMenu></td>
 									</tr>
 									<tr>
 										<td align="right">State</td>
-										<td><p:selectOneMenu id="shippingStateName"
-												style="border: 1px solid #4f4f4f;"
+										<td><p:selectOneMenu id="shippingStateName" style="border: 1px solid #4f4f4f;"
 												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.stateDVO.code}">
 												<f:selectItem itemLabel="Choose State" itemValue="" />
-												<f:selectItems
-													value="#{retailShoppingCartBB.allOptions.allOptionsValues['customerBillingStateList']}"
-													var="state" itemLabel="#{state.name}"
-													itemValue="#{state.code}" />
-												<p:ajax event="change"
-													listener="#{retailShoppingCartBB.changeShippingState}"
-													process="@this" update="shippingCity" />
+												<f:selectItems value="#{retailShoppingCartBB.allOptions.allOptionsValues['customerBillingStateList']}"
+													var="state" itemLabel="#{state.name}" itemValue="#{state.code}" />
+												<p:ajax event="change" listener="#{retailShoppingCartBB.changeShippingState}" process="@this"
+													update="shippingCity" />
 											</p:selectOneMenu></td>
 									</tr>
 									<tr>
-										<td align="right">City/Town:<h:outputText
-												value="#{commonLabel.mand_star}" styleClass="mandRed" />
+										<td align="right">City/Town:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 										</td>
 										<td><p:selectOneMenu id="shippingCity"
 												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.cityDvo.code}">
-												<f:selectItem itemLabel="#{commonLabel.select_label}"
-													itemValue="" />
-												<f:selectItems
-													value="#{retailShoppingCartBB.allOptions.allOptionsValues['customerShippingCityList']}"
-													var="city" itemLabel="#{city.name}"
-													itemValue="#{city.code}" />
+												<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+												<f:selectItems value="#{retailShoppingCartBB.allOptions.allOptionsValues['customerShippingCityList']}"
+													var="city" itemLabel="#{city.name}" itemValue="#{city.code}" />
 											</p:selectOneMenu></td>
 									</tr>
 									<tr>
-										<td align="right">Postal Code:<h:outputText
-												value="#{commonLabel.mand_star}" styleClass="mandRed" />
+										<td align="right">Postal Code:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
 										</td>
 										<td><h:inputText
 												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.pinRecord.code}"
@@ -530,17 +382,14 @@
 						<div class="devider"></div>
 						<h:panelGroup id="purchaseSummaryTable">
 							<div class="productpriceinfo">
-								<table style="width: 100%;" border="0" cellspacing="0"
-									cellpadding="5" align="right">
+								<table style="width: 100%;" border="0" cellspacing="0" cellpadding="5" align="right">
 									<tr>
 										<td style="text-align: right;">Total Quantity :</td>
-										<td style="text-align: left;"><h:outputText
-												value="#{retailShoppingCartBB.shoppingCartOpr.totalQuantity}" /></td>
+										<td style="text-align: left;"><h:outputText value="#{retailShoppingCartBB.shoppingCartOpr.totalQuantity}" /></td>
 									</tr>
 									<tr>
 										<td style="text-align: right;">Total Price :</td>
-										<td style="text-align: left;"><span class="WebRupee"><h:outputText
-													value="Rs." /> </span> <h:outputText
+										<td style="text-align: left;"><span class="WebRupee"><h:outputText value="Rs." /> </span> <h:outputText
 												value="#{retailShoppingCartBB.shoppingCartOpr.totalPrice}">
 												<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 											</h:outputText></td>
@@ -550,12 +399,10 @@
 											<td style="text-align: right;">Discount Value :</td>
 											<td style="text-align: left;"><h:panelGroup
 													rendered="#{!(retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.voucherRecord.voucherValueInAbsolute eq null)}">
-													<span class="WebRupee"><h:outputText value="Rs." />
-													</span>
+													<span class="WebRupee"><h:outputText value="Rs." /> </span>
 												</h:panelGroup> <h:outputText
 													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.voucherRecord.voucherDiscountValue}">
-													<f:convertNumber minFractionDigits="0"
-														maxFractionDigits="0" />
+													<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 												</h:outputText> <h:panelGroup
 													rendered="#{!(retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.voucherRecord.voucherValueInPercent eq null)}">
 													<span>%</span>
@@ -572,63 +419,50 @@
 									<h:panelGroup rendered="#{retailShoppingCartBB.discount}">
 										<tr>
 											<td style="text-align: right;">Discounted Amount :</td>
-											<td style="text-align: left;"><span class="WebRupee"><h:outputText
-														value="Rs." /> </span> <h:outputText
+											<td style="text-align: left;"><span class="WebRupee"><h:outputText value="Rs." /> </span> <h:outputText
 													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.discountedPrice}">
-													<f:convertNumber minFractionDigits="0"
-														maxFractionDigits="0" />
+													<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 												</h:outputText></td>
 										</tr>
 									</h:panelGroup>
 									<h:panelGroup rendered="#{retailShoppingCartBB.discount}">
 										<tr>
 											<td style="text-align: right;">New Discounted Price :</td>
-											<td style="text-align: left;"><span class="WebRupee"><h:outputText
-														value="Rs." /> </span> <h:outputText
-													value="#{retailShoppingCartBB.shoppingCartOpr.newDiscountedPrice}"
-													id="newdiscountedPrice">
-													<f:convertNumber minFractionDigits="0"
-														maxFractionDigits="0" />
+											<td style="text-align: left;"><span class="WebRupee"><h:outputText value="Rs." /> </span> <h:outputText
+													value="#{retailShoppingCartBB.shoppingCartOpr.newDiscountedPrice}" id="newdiscountedPrice">
+													<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 												</h:outputText></td>
 										</tr>
 									</h:panelGroup>
 									<tr>
 										<td style="text-align: right;">Shipping Charges :</td>
-										<td style="text-align: left;"><span class="WebRupee"><h:outputText
-													value="Rs." /> </span> <h:outputText
+										<td style="text-align: left;"><span class="WebRupee"><h:outputText value="Rs." /> </span> <h:outputText
 												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.deliveryChargesRecord.deliveryCharge}">
 												<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 											</h:outputText></td>
 									</tr>
 									<h:panelGroup id="expressDeliveryRegion">
-										<h:panelGroup
-											rendered="#{(retailShoppingCartBB.expressDeliveryCharge > 0)}">
+										<h:panelGroup rendered="#{(retailShoppingCartBB.expressDeliveryCharge > 0)}">
 											<tr>
-												<td style="text-align: right;">Express Delivery
-													Charges:</td>
-												<td style="text-align: left;"><span class="WebRupee"><h:outputText
-															value="Rs." /> </span> <h:outputText
+												<td style="text-align: right;">Express Delivery Charges:</td>
+												<td style="text-align: left;"><span class="WebRupee"><h:outputText value="Rs." /> </span> <h:outputText
 														value="#{retailShoppingCartBB.expressDeliveryCharge}">
-														<f:convertNumber minFractionDigits="0"
-															maxFractionDigits="0" />
+														<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 													</h:outputText></td>
 											</tr>
 										</h:panelGroup>
 									</h:panelGroup>
 									<tr>
 										<td style="text-align: right;">Total Order Value :</td>
-										<td style="text-align: left;"><span class="WebRupee"><h:outputText
-													value="Rs." /> </span> <h:outputText
-												value="#{retailShoppingCartBB.shoppingCartOpr.totalOrderPrice}"
-												id="totalPrice">
+										<td style="text-align: left;"><span class="WebRupee"><h:outputText value="Rs." /> </span> <h:outputText
+												value="#{retailShoppingCartBB.shoppingCartOpr.totalOrderPrice}" id="totalPrice">
 												<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 											</h:outputText></td>
 									</tr>
 								</table>
 								<table align="right">
 									<tr>
-										<td align="right" style="color: #C66949;"><br /> <span>The
-												order will be shipped within <h:outputText
+										<td align="right" style="color: #C66949;"><br /> <span>The order will be shipped within <h:outputText
 													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.deliveryTimeRecord.leadTimeInDays}" />
 												business days
 										</span></td>
@@ -640,22 +474,17 @@
 						<div class="devider"></div>
 						<h:panelGroup>
 							<div class="agreement">
-								<h:panelGroup
-									rendered="#{(empty sessionScope['LOGGED_USER_KEY'])}">
-									<h:selectBooleanCheckbox
-										value="#{retailShoppingCartBB.registerFlag}" />
+								<h:panelGroup rendered="#{(empty sessionScope['LOGGED_USER_KEY'])}">
+									<h:selectBooleanCheckbox value="#{retailShoppingCartBB.registerFlag}" />
 								&#160;&#160;
-								<h:outputText
-										value="Use my details to register at Amar Chitra Katha"
-										styleClass="vamtal" />
+								<h:outputText value="Use my details to register at Amar Chitra Katha" styleClass="vamtal" />
 								</h:panelGroup>
 							</div>
 							<div class="clear"></div>
 							<div class="devider"></div>
 							<div class="paymentbtn">
 								<div class="payment">
-									<p:commandLink id="confirmOrderPanel" process="@form"
-										value="Proceed To Payment"
+									<p:commandLink id="confirmOrderPanel" process="@form" value="Proceed To Payment"
 										oncomplete="PF('navigationPanelDialog').show()" />
 								</div>
 							</div>
@@ -663,13 +492,11 @@
 						<div class="clear"></div>
 					</h:panelGroup>
 				</div>
-				<p:dialog id="navigationPanel" header="Terms and Conditions"
-					widgetVar="navigationPanelDialog" showEffect="explode"
+				<p:dialog id="navigationPanel" header="Terms and Conditions" widgetVar="navigationPanelDialog" showEffect="explode"
 					hideEffect="explode" modal="true" dynamic="false">
 					<h:panelGroup>
 						<div class="condition" style="margin: 0 auto !important;">
-							<h:selectBooleanCheckbox id="conditionsAccepted"
-								value="#{retailShoppingCartBB.conditionAccepted}"
+							<h:selectBooleanCheckbox id="conditionsAccepted" value="#{retailShoppingCartBB.conditionAccepted}"
 								styleClass="vamtal" />
 							&#160;&#160;I agree to the
 							<h:outputLink id="termsofuse" styleClass="vamtal" target="_blank"
@@ -680,10 +507,8 @@
 						<br />
 						<div class="paymentbtn">
 							<div class="payment">
-								<p:commandLink id="confirmOrder"
-									action="#{retailShoppingCartBB.confirmOrder}"
-									process="shoppingCartForm" update="shoppingCartForm"
-									value="Proceed To Payment">
+								<p:commandLink id="confirmOrder" action="#{retailShoppingCartBB.confirmOrder}" process="shoppingCartForm"
+									update="shoppingCartForm" value="Proceed To Payment">
 								</p:commandLink>
 							</div>
 						</div>
@@ -692,12 +517,10 @@
 			</h:form>
 		</div>
 		<!-- Page Content Wrapper Ends -->
-		<ui:include
-			src="/pages/retail/modules/enlargeimagepanel/enlargeImage.xhtml" />
+		<ui:include src="/pages/retail/modules/enlargeimagepanel/enlargeImage.xhtml" />
 		<!--  MODAL DEFINITIONS START -->
-		<p:dialog id="termsOfUsePanelCart"
-			widgetVar="termsOfUsePanelCartDialog" showEffect="explode"
-			hideEffect="explode" modal="true" dynamic="false">
+		<p:dialog id="termsOfUsePanelCart" widgetVar="termsOfUsePanelCartDialog" showEffect="explode" hideEffect="explode"
+			modal="true" dynamic="false">
 			<f:facet name="header">
 				<h:outputText value="Terms Of Use" />
 			</f:facet>

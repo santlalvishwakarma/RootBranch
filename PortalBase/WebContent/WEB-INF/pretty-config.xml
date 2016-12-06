@@ -8,11 +8,12 @@
 	<url-mapping id="homePage">
 		<pattern value="/" />
 		<view-id value="/pages/retail/modules/home/home.jsf" />
-		<!-- <action onPostback="false">#{homeBean.retrieveData}</action> -->
+		<action onPostback="false">#{retailHomeBB.retrieveData}</action>
 	</url-mapping>
 	<url-mapping id="home">
 		<pattern value="/home/"></pattern>
 		<view-id value="/pages/retail/modules/home/home.jsf" />
+		<action onPostback="false">#{retailHomeBB.retrieveData}</action>
 	</url-mapping>
 
 	<!-- LIST OF ATTRIBUTES TO IGNORE: javax.faces.resource -->
@@ -124,7 +125,7 @@
 		<pattern value="/admin/hierarchy" />
 		<view-id value="/pages/systemowner/modules/hierarchymaster/hierarchy.jsf" />
 	</url-mapping>
-	
+
 	<url-mapping id="sizeMaster">
 		<pattern value="/admin/sizemaster" />
 		<view-id value="/pages/systemowner/modules/sizemaster/sizemaster.jsf" />

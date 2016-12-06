@@ -4,6 +4,28 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<ui:define name="content">
 		<ui:include src="pagerimage.xhtml" />
-		
+		<br />
+		<div id="homePageCategory" class="categoryHomePage">
+			<ul>
+				<ui:repeat var="hierarchyCategoryRecord" value="#{retailHomeBB.homeOpr.homePageCategoryList}">
+					<li>
+						<table>
+							<tr>
+								<td><h:outputLink style="text-decoration: none;" id="categoryLink"
+										value="#{hierarchyCategoryRecord.categoryUrl}">
+										<h:graphicImage value="#{applicationScope['imageURL']}#{hierarchyCategoryRecord.categoryRecord.imageUrl}"
+											style="width: 250px;height:250px;border:0;" />
+									</h:outputLink></td>
+							</tr>
+							<tr>
+								<td><h:outputText value="#{hierarchyCategoryRecord.categoryRecord.name}" /></td>
+							</tr>
+						</table>
+					</li>
+
+				</ui:repeat>
+			</ul>
+		</div>
+
 	</ui:define>
 </ui:composition>
