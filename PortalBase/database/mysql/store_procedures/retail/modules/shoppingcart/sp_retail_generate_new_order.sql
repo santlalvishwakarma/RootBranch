@@ -79,7 +79,7 @@ BEGIN
 	DECLARE v_product_id INT(10);
 	DECLARE v_product_sku_id INT(10);
 	DECLARE v_base_price FLOAT;
-	DECLARE v_discount_price FLOAT;
+	DECLARE v_discount_amount FLOAT;
 	DECLARE v_quantity INT;
 	DECLARE v_sub_total FLOAT;
 	DECLARE v_comments TEXT;
@@ -90,6 +90,8 @@ BEGIN
 	DECLARE v_original_price_per_piece FLOAT;
 	DECLARE v_order_details_id INT;
 	DECLARE v_current_stock_product_sku_id INT;
+	DECLARE v_final_base_price FLOAT;
+	DECLARE v_discount_percent FLOAT;
 	
 	
     DROP TEMPORARY TABLE IF EXISTS product_stock_levels_tmp;
@@ -210,7 +212,7 @@ BEGIN
 		                          ELSEIF v_column_sequence_number = 3 THEN 
 		                          	 SET v_base_price = v_inner_current_node1;	 
 							      ELSEIF v_column_sequence_number = 4 THEN 
-							         SET v_discount_price = v_inner_current_node1;
+							         SET v_discount_amount = v_inner_current_node1;
 							      ELSEIF v_column_sequence_number = 5 THEN
 							         SET v_quantity = v_inner_current_node1;
 							      ELSEIF v_column_sequence_number = 6 THEN
@@ -223,6 +225,10 @@ BEGIN
 							         SET v_original_discount_price = v_inner_current_node1;	 
 							      ELSEIF v_column_sequence_number = 10 THEN
 							         SET v_original_sub_total = v_inner_current_node1;
+							      ELSEIF v_column_sequence_number = 11 THEN
+							         SET v_final_base_price = v_inner_current_node1;
+							      ELSEIF v_column_sequence_number = 12 THEN
+							         SET v_discount_percent = v_inner_current_node1;
 							      END IF;   
 							      
 							      SET v_column_sequence_number = v_column_sequence_number +1;   
@@ -230,7 +236,13 @@ BEGIN
 							                       
 							      SET v_inner_current_index1 = 1;
 							      
-							      	IF v_discount_price IS NOT NULL THEN
+							      SET v_price_per_piece = v_final_base_price;
+							      
+							      SET v_original_price_per_piece = v_final_base_price;
+							      
+							      SET v_original_sub_total = v_sub_total;
+							      
+							      	/*IF v_discount_price IS NOT NULL THEN
 							      	
 							      		SET v_price_per_piece = v_discount_price;
 							      	ELSE
@@ -246,7 +258,7 @@ BEGIN
 							      	
 							      		SET v_original_price_per_piece = v_original_base_price;
 							      		
-							      	END IF;
+							      	END IF;*/
 							      
 							      
 							      	INSERT INTO order_detail
@@ -256,27 +268,30 @@ BEGIN
 									SELECT last_insert_id() INTO v_order_details_id;
 									
 									
-									INSERT INTO order_shipping_mapping(order_header_id, order_detail_id, shipping_first_name, shipping_last_name, shipping_email_address_1, 
+								/*	INSERT INTO order_shipping_mapping(order_header_id, order_detail_id, shipping_first_name, shipping_last_name, shipping_email_address_1, 
 									shipping_mobile_1, shipping_mobile_2, shipping_address_line_1, shipping_address_line_2, shipping_address_line_3, shipping_city, shipping_zip_code, 
 									shipping_state, shipping_country, created_by, created_date, modified_by, modified_date)
 									VALUES(v_order_header_id, v_order_details_id, p_customer_shipping_fname, p_customer_shipping_sname, p_customer_shipping_email_id, p_customer_shipping_primary_phone_number,
 									p_customer_shipping_alternate_phone_number, p_customer_shipping_address_line1, p_customer_shipping_address_line2, p_customer_shipping_address_line3, p_customer_shipping_address_city,
 									p_customer_shipping_address_zip_code, p_customer_shipping_address_state, p_customer_shipping_address_country, p_user_login, NOW(), p_user_login, NOW());
+								*/
 									
 									
-									UPDATE 	 product_sku_stock_level
+								/* UPDATE 	 product_sku_stock_level
 									SET		 available_quantity = IFNULL(available_quantity,0) - v_quantity,
               								 blocked_quantity = IFNULL(blocked_quantity,0) + v_quantity
 									WHERE    product_id = v_product_id
 									AND      product_sku_id = v_product_sku_id;
+								*/
 									
-									 SELECT product_sku_id
+									/* SELECT product_sku_id
 						             INTO v_current_stock_product_sku_id
 						             FROM product_stock_levels_tmp
 						             WHERE product_id = v_product_id and product_sku_id = v_product_sku_id;
+						           */
 						             
 									
-									 IF v_current_stock_product_sku_id IS NOT NULL THEN
+									/* IF v_current_stock_product_sku_id IS NOT NULL THEN
 									 
 						              UPDATE product_stock_levels_tmp a, product_sku_stock_level b
 						              SET a.available_quantity = b.available_quantity,
@@ -299,19 +314,21 @@ BEGIN
 						              AND cpsl.product_id = psh.product_id;
 						              
 						             END IF;  
-									
+									*/
 							      
 							      
 							    SET v_product_id = NULL;
 							    SET v_product_sku_id = NULL;
 							    SET v_base_price = NULL;
-		                        SET v_discount_price = NULL;
+		                        SET v_discount_amount = NULL;
 								SET v_quantity = NULL;
 								SET v_sub_total = NULL;
 								SET v_comments = NULL;
 								SET v_original_base_price = NULL;  
 								SET v_original_discount_price = NULL;
 								SET v_original_sub_total = NULL;
+								SET v_final_base_price = NULL;
+								SET v_discount_percent = NULL;
 															                                                      
 	                END WHILE inner_parse;
 	                      
@@ -321,18 +338,22 @@ BEGIN
       
 	END IF;
 	
-   SELECT COUNT(*)
+  /*SELECT COUNT(*)
    INTO  v_tmp_counter
    FROM product_stock_levels_tmp;
+   */
    
    
-   IF  v_tmp_counter IS NULL OR  v_tmp_counter = 0 THEN
+   select v_order_header_id , v_order_number, v_order_date, v_delivery_date;
+   
+  /* IF  v_tmp_counter IS NULL OR  v_tmp_counter = 0 THEN
    select v_order_header_id , v_order_number, v_order_date, v_delivery_date;
    ELSE
    select v_order_header_id , v_order_number, v_order_date, v_delivery_date,
     product_id, product_sku_id, product_code, product_name, available_quantity, blocked_quantity, reorder_level
    FROM product_stock_levels_tmp;
    END IF;
+   */
 	
    
 END $$

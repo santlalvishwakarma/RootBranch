@@ -18,7 +18,7 @@
 }
 
 a {
-	color: #012A7C !important;
+	color: #000000 !important;
 }
 
 .headerLink {
@@ -35,7 +35,7 @@ body {
 	padding: 0;
 	line-height: 1.5em;
 	/* font-family: Calibri, Arial, Helvetica, sans-serif; */
-	font-size: 11px;
+	font-size: 13px;
 	/* color: #666666; */
 	background: #EEEEEE;
 	/* background: #ffffff; */
@@ -80,7 +80,7 @@ h4 {
 }
 
 #templatemo_container {
-	margin: 0px auto 31px;
+	margin: 9px auto 31px;
 	width: 1198px;
 }
 
@@ -1261,6 +1261,7 @@ div#breadcrumbs ul li a:hover {
 	margin: 0px auto;
 	width: 100%;
 	min-height: 100px;
+	border-bottom: 1px solid #000000;
 	/* margin-top: 50px; */
 }
 
@@ -1513,9 +1514,10 @@ productdetright {
 
 .productpriceinfo {
 	float: right;
-	margin: 10px 13px 13px 13px;
-	line-height: 10px;
+	font-size: 14px;
 	height: 195px;
+	line-height: 20px;
+	margin: 10px 20px 13px;
 }
 
 .orangecolor {
@@ -1535,7 +1537,7 @@ productdetright {
 }
 
 .payment a {
-	margin: 0px 0px 0px 7px;
+	margin: 0px 0px 0px 13px;
 	line-height: 24px;
 	text-decoration: none;
 	color: #000000;
@@ -1606,10 +1608,9 @@ productdetright {
 	margin: 0px auto;
 	border: 1px solid #cccccc;
 	background-color: #ffffff;
-	width: 940px;
 	height: auto;
 	display: block;
-	margin: 33px 0px 136px 0px;
+	margin: 0x 0px 136px 0px;
 	-moz-box-shadow: 3px 3px 5px #e5e5e5;
 	-webkit-box-shadow: 3px 3px 5px #e5e5e5;
 	box-shadow: 3px 3px 5px #e5e5e5;
@@ -1790,7 +1791,7 @@ productdetright {
 
 .footer_widget1 .icon:hover {
 	zoom: 1;
-	filter: alpha(opacity =                                                                         70);
+	filter: alpha(opacity =                                                                             70);
 	opacity: 0.7;
 }
 
@@ -1860,6 +1861,9 @@ productdetright {
 
 .mainmenu {
 	bottom: 0px;
+	width: 100%;
+	border-bottom: 1px solid black;
+	height: 41px;
 }
 
 .bookdetimg {
@@ -1877,6 +1881,10 @@ productdetright {
 	color: green;
 }
 
+.categoryHomePage {
+	background-color: #FFFFFF;
+}
+
 .categoryHomePage ul {
 	display: inline;
 	list-style: outside none none;
@@ -1892,7 +1900,7 @@ productdetright {
 	width: 250px;
 }
 
-.categoryHomePage ul li td{
+.categoryHomePage ul li td {
 	text-align: center;
 	font-size: 20px;
 }

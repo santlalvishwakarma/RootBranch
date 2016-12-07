@@ -178,208 +178,6 @@
 						</div>
 						<div class="devider"></div>
 						<!-- Coupon Box Ends -->
-						<h:panelGroup id="billingAddressPanel">
-							<div id="box-one" class="addressbox">
-								<div class="billingbox">
-									<h2 style="color: black;">Billing Address</h2>
-									<table cellspacing="0" cellpadding="5" width="100%" class="billingtbl">
-										<tr>
-											<td align="right" style="width: 100px">First Name:<h:outputText value="#{commonLabel.mand_star}"
-													styleClass="mandRed" />
-											</td>
-											<td><h:inputText
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.firstName}" maxlength="45"
-													styleClass="txt" /></td>
-										</tr>
-										<tr>
-											<td align="right">Last Name:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" /></td>
-											<td><h:inputText
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.lastName}" maxlength="45"
-													styleClass="txt" /></td>
-										</tr>
-										<tr>
-											<td align="right">Mobile Number:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-											</td>
-											<td><h:inputText id="billingMobileNumber"
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.phone1}" maxlength="15"
-													styleClass="txt" /></td>
-										</tr>
-										<tr>
-											<td align="right">Phone Number:</td>
-											<td><h:inputText value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.phone2}"
-													maxlength="15" styleClass="txt" /></td>
-										</tr>
-										<tr>
-											<td align="right">Email ID:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-											</td>
-											<td><h:inputText value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.email1}"
-													maxlength="255" styleClass="txt" /></td>
-										</tr>
-										<tr>
-											<td align="right">Address Line 1:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-											</td>
-											<td><h:inputText
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.addressLine1}"
-													maxlength="100" styleClass="txt" /></td>
-										</tr>
-										<tr>
-											<td align="right">Address Line 2:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-											</td>
-											<td><h:inputText
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.addressLine2}"
-													maxlength="100" styleClass="txt" /></td>
-										</tr>
-										<tr>
-											<td align="right">Country:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-											</td>
-											<td><p:selectOneMenu id="billingCountryName" style="border: 1px solid #4f4f4f;"
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.countryDvo.code}">
-													<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
-													<f:selectItems value="#{retailShoppingCartBB.allOptions.allOptionsValues['countryList']}" var="country"
-														itemLabel="#{country.name}" itemValue="#{country.code}" />
-													<p:ajax event="change" update="billingStateName,shippingAddressPanel,purchaseSummaryTable" process="@this"
-														listener="#{retailShoppingCartBB.changeBillingCountry}" />
-												</p:selectOneMenu></td>
-										</tr>
-										<tr>
-											<td align="right">State</td>
-											<td><p:selectOneMenu id="billingStateName" style="border: 1px solid #4f4f4f;"
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.stateDVO.code}">
-													<f:selectItem itemLabel="Choose State" itemValue="" />
-													<f:selectItems value="#{retailShoppingCartBB.allOptions.allOptionsValues['customerBillingStateList']}"
-														var="state" itemLabel="#{state.name}" itemValue="#{state.code}" />
-													<p:ajax event="change" listener="#{retailShoppingCartBB.changeBillingState}" process="@this"
-														update="billingCity" />
-												</p:selectOneMenu></td>
-										</tr>
-										<tr>
-											<td align="right">City/Town:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-											</td>
-											<td><p:selectOneMenu id="billingCity"
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.cityDvo.code}">
-													<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
-													<f:selectItems value="#{retailShoppingCartBB.allOptions.allOptionsValues['customerBillingCityList']}"
-														var="city" itemLabel="#{city.name}" itemValue="#{city.code}" />
-												</p:selectOneMenu></td>
-										</tr>
-										<tr>
-											<td align="right">Postal Code:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-											</td>
-											<td><h:inputText
-													value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.billingDetails.pinRecord.code}"
-													maxlength="15" styleClass="txt" /></td>
-										</tr>
-									</table>
-								</div>
-							</div>
-						</h:panelGroup>
-						<div class="copycontent">
-							<img src="/p/staticcontent/retail/images/portalimages/transfer.png" alt="" />
-							<div class="copytxt">Shipping Address same as Billing Address</div>
-							<h:selectBooleanCheckbox value="#{retailShoppingCartBB.sameAsBilling}" style="width: auto;	margin: 0 0 0 0;">
-								<p:ajax event="change" process="billingAddressPanel, @this"
-									listener="#{retailShoppingCartBB.copyBillingAddress}"
-									update="shippingAddressPanel,totalPrice,purchaseSummaryTable,expressDeliveryRegion" />
-							</h:selectBooleanCheckbox>
-						</div>
-						<h:panelGroup id="shippingAddressPanel">
-							<div class="shippingbox">
-								<h2 style="color: black;">Shipping Address</h2>
-								<table cellspacing="0" cellpadding="5" width="100%" class="billingtbl">
-									<tr>
-										<td align="right" style="width: 100px">First Name:<h:outputText value="#{commonLabel.mand_star}"
-												styleClass="mandRed" />
-										</td>
-										<td><h:inputText
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.firstName}" maxlength="45"
-												styleClass="txt" /></td>
-									</tr>
-									<tr>
-										<td align="right">Last Name:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-										</td>
-										<td><h:inputText
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.lastName}" maxlength="45"
-												styleClass="txt" /></td>
-									</tr>
-									<tr>
-										<td align="right">Mobile Number:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-										</td>
-										<td><h:inputText id="shippingMobileNumber"
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.phone1}" maxlength="45"
-												styleClass="txt" /></td>
-									</tr>
-									<tr>
-										<td align="right">Phone Number:</td>
-										<td><h:inputText value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.phone2}"
-												maxlength="15" styleClass="txt" /></td>
-									</tr>
-									<tr>
-										<td align="right">Email ID:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-										</td>
-										<td><h:inputText value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.email1}"
-												maxlength="255" styleClass="txt" /></td>
-									</tr>
-									<tr>
-										<td align="right">Address Line 1:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-										</td>
-										<td><h:inputText
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.addressLine1}"
-												maxlength="100" styleClass="txt" /></td>
-									</tr>
-									<tr>
-										<td align="right">Address Line 2:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-										</td>
-										<td><h:inputText
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.addressLine2}"
-												maxlength="100" styleClass="txt" /></td>
-									</tr>
-									<tr>
-										<td align="right">Country:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-										</td>
-										<td><p:selectOneMenu id="shippingCountryName" style="border: 1px solid #4f4f4f;"
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.countryDvo.code}"
-												disabled="#{retailShoppingCartBB.shippingCountryDisable}">
-												<f:selectItem itemLabel="Click here to choose" itemValue="" />
-												<f:selectItems value="#{retailShoppingCartBB.allOptions.allOptionsValues['countryList']}" var="country"
-													itemLabel="#{country.name}" itemValue="#{country.code}" />
-												<p:ajax event="change" update="shippingStateName, totalPrice, purchaseSummaryTable,expressDeliveryRegion"
-													process="shippingAddressPanel" listener="#{retailShoppingCartBB.changeShippingCountry}">
-												</p:ajax>
-											</p:selectOneMenu></td>
-									</tr>
-									<tr>
-										<td align="right">State</td>
-										<td><p:selectOneMenu id="shippingStateName" style="border: 1px solid #4f4f4f;"
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.stateDVO.code}">
-												<f:selectItem itemLabel="Choose State" itemValue="" />
-												<f:selectItems value="#{retailShoppingCartBB.allOptions.allOptionsValues['customerBillingStateList']}"
-													var="state" itemLabel="#{state.name}" itemValue="#{state.code}" />
-												<p:ajax event="change" listener="#{retailShoppingCartBB.changeShippingState}" process="@this"
-													update="shippingCity" />
-											</p:selectOneMenu></td>
-									</tr>
-									<tr>
-										<td align="right">City/Town:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-										</td>
-										<td><p:selectOneMenu id="shippingCity"
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.cityDvo.code}">
-												<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
-												<f:selectItems value="#{retailShoppingCartBB.allOptions.allOptionsValues['customerShippingCityList']}"
-													var="city" itemLabel="#{city.name}" itemValue="#{city.code}" />
-											</p:selectOneMenu></td>
-									</tr>
-									<tr>
-										<td align="right">Postal Code:<h:outputText value="#{commonLabel.mand_star}" styleClass="mandRed" />
-										</td>
-										<td><h:inputText
-												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.shippingDetails.pinRecord.code}"
-												maxlength="15" styleClass="txt" /></td>
-									</tr>
-								</table>
-							</div>
-						</h:panelGroup>
-						<div class="clear"></div>
-						<div class="devider"></div>
 						<h:panelGroup id="purchaseSummaryTable">
 							<div class="productpriceinfo">
 								<table style="width: 100%;" border="0" cellspacing="0" cellpadding="5" align="right">
@@ -477,14 +275,14 @@
 								<h:panelGroup rendered="#{(empty sessionScope['LOGGED_USER_KEY'])}">
 									<h:selectBooleanCheckbox value="#{retailShoppingCartBB.registerFlag}" />
 								&#160;&#160;
-								<h:outputText value="Use my details to register at Amar Chitra Katha" styleClass="vamtal" />
+								<h:outputText value="Use my details to register" styleClass="vamtal" />
 								</h:panelGroup>
 							</div>
 							<div class="clear"></div>
 							<div class="devider"></div>
 							<div class="paymentbtn">
 								<div class="payment">
-									<p:commandLink id="confirmOrderPanel" process="@form" value="Proceed To Payment"
+									<p:commandLink id="confirmOrderPanel" process="@form" value="Proceed To Quotation"
 										oncomplete="PF('navigationPanelDialog').show()" />
 								</div>
 							</div>
@@ -508,7 +306,7 @@
 						<div class="paymentbtn">
 							<div class="payment">
 								<p:commandLink id="confirmOrder" action="#{retailShoppingCartBB.confirmOrder}" process="shoppingCartForm"
-									update="shoppingCartForm" value="Proceed To Payment">
+									update="shoppingCartForm" value="Proceed To Quotation">
 								</p:commandLink>
 							</div>
 						</div>

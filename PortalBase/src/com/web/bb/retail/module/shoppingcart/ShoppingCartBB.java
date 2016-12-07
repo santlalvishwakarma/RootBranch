@@ -633,105 +633,143 @@ public class ShoppingCartBB extends BackingBean {
 				}
 			}
 		}
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getFirstName())) {
-			addToErrorList(propertiesReader.getValueOfKey("billing_f_name_null"));
-		}
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getLastName())) {
-			addToErrorList(propertiesReader.getValueOfKey("billing_l_name_null"));
-		}
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getPhone1())) {
-			addToErrorList(propertiesReader.getValueOfKey("billing_phone_number_null"));
-		}
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getEmail1())) {
-			addToErrorList(propertiesReader.getValueOfKey("billing_email_null"));
-		} else if (!portalValidator.validateEmail(shoppingCartOpr.getRetailOrderRecord().getBillingDetails()
-				.getEmail1())) {
-			addToErrorList(propertiesReader.getValueOfKey("billing_email_invalid"));
-		}
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getAddressLine1())) {
-			addToErrorList(propertiesReader.getValueOfKey("billing_addr_line1_null"));
-		}
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getAddressLine2())) {
-			addToErrorList(propertiesReader.getValueOfKey("billing_addr_line2_null"));
-		}
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getCityDvo()
-				.getCode())) {
-			addToErrorList(propertiesReader.getValueOfKey("billing_city_null"));
-		}
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getCountryDvo()
-				.getCode())) {
-			addToErrorList(propertiesReader.getValueOfKey("billing_country_null"));
-		}
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getFirstName()))
+		// {
+		// addToErrorList(propertiesReader.getValueOfKey("billing_f_name_null"));
+		// }
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getLastName()))
+		// {
+		// addToErrorList(propertiesReader.getValueOfKey("billing_l_name_null"));
+		// }
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getPhone1()))
+		// {
+		// addToErrorList(propertiesReader.getValueOfKey("billing_phone_number_null"));
+		// }
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getEmail1()))
+		// {
+		// addToErrorList(propertiesReader.getValueOfKey("billing_email_null"));
+		// } else if
+		// (!portalValidator.validateEmail(shoppingCartOpr.getRetailOrderRecord().getBillingDetails()
+		// .getEmail1())) {
+		// addToErrorList(propertiesReader.getValueOfKey("billing_email_invalid"));
+		// }
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getAddressLine1()))
+		// {
+		// addToErrorList(propertiesReader.getValueOfKey("billing_addr_line1_null"));
+		// }
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getAddressLine2()))
+		// {
+		// addToErrorList(propertiesReader.getValueOfKey("billing_addr_line2_null"));
+		// }
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getCityDvo()
+		// .getCode())) {
+		// addToErrorList(propertiesReader.getValueOfKey("billing_city_null"));
+		// }
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getCountryDvo()
+		// .getCode())) {
+		// addToErrorList(propertiesReader.getValueOfKey("billing_country_null"));
+		// }
 
 		// to set state as null
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getStateDVO()
-				.getCode())) {
-			shoppingCartOpr.getRetailOrderRecord().getBillingDetails().setStateDVO(new StateDVO());
-			myLog.debug("set state as new state because no state is selected:::::");
-		}
-
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getPinRecord()
-				.getCode())) {
-			addToErrorList(propertiesReader.getValueOfKey("billing_zipcode_null"));
-		}
-
-		if (portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getPinRecord()
-				.getCode())
-				&& !portalValidator.validateCharsAndNumbers(shoppingCartOpr.getRetailOrderRecord().getBillingDetails()
-						.getPinRecord().getCode())) {
-			addToErrorList(propertiesReader.getValueOfKey("billing_zipcode_invalid"));
-		}
-
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getFirstName())) {
-			addToErrorList(propertiesReader.getValueOfKey("shipping_f_name_null"));
-		}
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getLastName())) {
-			addToErrorList(propertiesReader.getValueOfKey("shipping_l_name_null"));
-		}
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getPhone1())) {
-			addToErrorList(propertiesReader.getValueOfKey("shipping_phone_number_null"));
-		}
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getEmail1())) {
-			addToErrorList(propertiesReader.getValueOfKey("shipping_email_null"));
-		} else if (!portalValidator.validateEmail(shoppingCartOpr.getRetailOrderRecord().getShippingDetails()
-				.getEmail1())) {
-			addToErrorList(propertiesReader.getValueOfKey("shipping_email_invalid"));
-		}
-		if (!portalValidator
-				.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getAddressLine1())) {
-			addToErrorList(propertiesReader.getValueOfKey("shipping_addr_line1_null"));
-		}
-		if (!portalValidator
-				.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getAddressLine2())) {
-			addToErrorList(propertiesReader.getValueOfKey("shipping_addr_line2_null"));
-		}
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getCityDvo()
-				.getCode())) {
-			addToErrorList(propertiesReader.getValueOfKey("shipping_city_null"));
-		}
-
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getCountryDvo()
-				.getCode())) {
-			addToErrorList(propertiesReader.getValueOfKey("shipping_country_null"));
-		}
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getStateDVO()
+		// .getCode())) {
+		// shoppingCartOpr.getRetailOrderRecord().getBillingDetails().setStateDVO(new
+		// StateDVO());
+		// myLog.debug("set state as new state because no state is selected:::::");
+		// }
+		//
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getPinRecord()
+		// .getCode())) {
+		// addToErrorList(propertiesReader.getValueOfKey("billing_zipcode_null"));
+		// }
+		//
+		// if
+		// (portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getBillingDetails().getPinRecord()
+		// .getCode())
+		// &&
+		// !portalValidator.validateCharsAndNumbers(shoppingCartOpr.getRetailOrderRecord().getBillingDetails()
+		// .getPinRecord().getCode())) {
+		// addToErrorList(propertiesReader.getValueOfKey("billing_zipcode_invalid"));
+		// }
+		//
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getFirstName()))
+		// {
+		// addToErrorList(propertiesReader.getValueOfKey("shipping_f_name_null"));
+		// }
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getLastName()))
+		// {
+		// addToErrorList(propertiesReader.getValueOfKey("shipping_l_name_null"));
+		// }
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getPhone1()))
+		// {
+		// addToErrorList(propertiesReader.getValueOfKey("shipping_phone_number_null"));
+		// }
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getEmail1()))
+		// {
+		// addToErrorList(propertiesReader.getValueOfKey("shipping_email_null"));
+		// } else if
+		// (!portalValidator.validateEmail(shoppingCartOpr.getRetailOrderRecord().getShippingDetails()
+		// .getEmail1())) {
+		// addToErrorList(propertiesReader.getValueOfKey("shipping_email_invalid"));
+		// }
+		// if (!portalValidator
+		// .validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getAddressLine1()))
+		// {
+		// addToErrorList(propertiesReader.getValueOfKey("shipping_addr_line1_null"));
+		// }
+		// if (!portalValidator
+		// .validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getAddressLine2()))
+		// {
+		// addToErrorList(propertiesReader.getValueOfKey("shipping_addr_line2_null"));
+		// }
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getCityDvo()
+		// .getCode())) {
+		// addToErrorList(propertiesReader.getValueOfKey("shipping_city_null"));
+		// }
+		//
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getCountryDvo()
+		// .getCode())) {
+		// addToErrorList(propertiesReader.getValueOfKey("shipping_country_null"));
+		// }
 
 		// to set shipping state as null
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getStateDVO()
-				.getCode())) {
-			shoppingCartOpr.getRetailOrderRecord().getShippingDetails().setStateDVO(new StateDVO());
-			myLog.debug("after setting shipping address state as new because nothing selected;;;;;");
-		}
-
-		if (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getPinRecord()
-				.getCode())) {
-			addToErrorList(propertiesReader.getValueOfKey("shipping_zipcode_null"));
-		}
-		if (portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getPinRecord()
-				.getCode())
-				&& !portalValidator.validateCharsAndNumbers(shoppingCartOpr.getRetailOrderRecord().getShippingDetails()
-						.getPinRecord().getCode())) {
-			addToErrorList(propertiesReader.getValueOfKey("shipping_zipcode_invalid"));
-		}
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getStateDVO()
+		// .getCode())) {
+		// shoppingCartOpr.getRetailOrderRecord().getShippingDetails().setStateDVO(new
+		// StateDVO());
+		// myLog.debug("after setting shipping address state as new because nothing selected;;;;;");
+		// }
+		//
+		// if
+		// (!portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getPinRecord()
+		// .getCode())) {
+		// addToErrorList(propertiesReader.getValueOfKey("shipping_zipcode_null"));
+		// }
+		// if
+		// (portalValidator.validateNull(shoppingCartOpr.getRetailOrderRecord().getShippingDetails().getPinRecord()
+		// .getCode())
+		// &&
+		// !portalValidator.validateCharsAndNumbers(shoppingCartOpr.getRetailOrderRecord().getShippingDetails()
+		// .getPinRecord().getCode())) {
+		// addToErrorList(propertiesReader.getValueOfKey("shipping_zipcode_invalid"));
+		// }
 		myLog.debug("condition accepted flag::" + conditionAccepted);
 
 		if (!conditionAccepted) {
