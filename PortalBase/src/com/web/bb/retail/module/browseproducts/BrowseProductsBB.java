@@ -760,9 +760,12 @@ public class BrowseProductsBB extends BackingBean {
 			myLog.debug("browseProductsOpr.getProductList().size():: " + browseProductsOpr.getProductSkuList().size());
 
 			myLog.debug("after searchProductsOnCategoryCodes :: categoryCodeLevel1 :: " + categoryCodeLevel1);
-			BrowseProductsOpr categoryListBrowseProductsOprRet = new BrowseProductsBF()
-					.searchSubCategory(searchBrowseProductsOpr);
-			browseProductsOpr.setSubCategoryList(categoryListBrowseProductsOprRet.getSubCategoryList());
+			if (searchBrowseProductsOpr.getProductSkuRecord().getHierarchyCategoryMappingRecord()
+					.getCategoryLevelOneRecord().getCode() != null) {
+				BrowseProductsOpr categoryListBrowseProductsOprRet = new BrowseProductsBF()
+						.searchSubCategory(searchBrowseProductsOpr);
+				browseProductsOpr.setSubCategoryList(categoryListBrowseProductsOprRet.getSubCategoryList());
+			}
 			myLog.debug("before searchMappingOnCategoryCodes :: categoryCodeLevel1 :: " + categoryCodeLevel1);
 
 			myLog.debug("M Back IN CATERGORY CODE SEARCH=========");
