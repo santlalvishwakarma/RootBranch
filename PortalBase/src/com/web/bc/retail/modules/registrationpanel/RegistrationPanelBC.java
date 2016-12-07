@@ -18,13 +18,14 @@ public class RegistrationPanelBC extends BackingClass {
 			BusinessException {
 		// BACKING CLASS METHOD TEMPLATE ver 1.0
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside executeRegister: ");
 
 		String userLogin = registrationPanelOpr.getUserDetails().getUserLogin();
 		String firstName = registrationPanelOpr.getUserDetails().getFirstName();
 		String lastName = registrationPanelOpr.getUserDetails().getLastName();
 		String primaryEmailId = registrationPanelOpr.getUserDetails().getPrimaryEmailId();
 		Boolean conditionAccepted = registrationPanelOpr.getUserDetails().isConditionAccepted();
-		String password = registrationPanelOpr.getNewPassword();
+		String password = registrationPanelOpr.getUserDetails().getLoginPassword();
 		String primaryPhoneNumber = registrationPanelOpr.getUserDetails().getPrimaryPhoneNumber();
 
 		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();

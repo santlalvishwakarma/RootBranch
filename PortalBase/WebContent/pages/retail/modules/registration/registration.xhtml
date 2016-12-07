@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<p:dialog id="registrationPopup" resizable="false" widgetVar="registrationPopup" header="Registration Form"
+		showEffect="explode" hideEffect="explode" dynamic="true" modal="true">
+		<p:ajax event="close" listener="#{registrationPanelBB.closeModalWindow}" />
+		<h:form id="registrationPopupForm">
+			<p:panel id="registrationPopupPanel">
+				<table style="width: 100%">
+					<tr>
+						<td><label class="labelClass boldClass">User Id</label></td>
+						<td><p:inputText id="userId" value="#{registrationPanelBB.registrationPanelOpr.userDetails.userLogin}" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">First Name</label></td>
+						<td><p:inputText id="userFirstName" value="#{registrationPanelBB.registrationPanelOpr.userDetails.firstName}" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Last Name</label></td>
+						<td><p:inputText id="userLastName" value="#{registrationPanelBB.registrationPanelOpr.userDetails.lastName}" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Email Id</label></td>
+						<td><p:inputText id="userEmailId"
+								value="#{registrationPanelBB.registrationPanelOpr.userDetails.primaryEmailId}" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Phone Number</label></td>
+						<td><p:inputText id="userPhoneNumber"
+								value="#{registrationPanelBB.registrationPanelOpr.userDetails.primaryPhoneNumber}" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Enter Password</label></td>
+						<td><p:password id="userPassword"
+								value="#{registrationPanelBB.registrationPanelOpr.userDetails.loginPassword}" /></td>
+					</tr>
+				</table>
+				<br />
+				<div align="center">
+					<p:commandButton id="registrationSubmit" actionListener="#{registrationPanelBB.executeSave}" value="Register"
+						process="registrationPopupPanel, @this" />
+					<p:tooltip for="registrationSubmit" value="Click to Login" />
+					&#160;
+					<p:commandButton id="closeRegistration" actionListener="#{retailHomeBB.closeModalWindow}" value="Close"
+						process="@this" oncomplete="PF('registrationPopup').hide()" />
+					<p:tooltip for="closeRegistration" value="Click to Close" />
+				</div>
+			</p:panel>
+		</h:form>
+
+	</p:dialog>
+</ui:composition>

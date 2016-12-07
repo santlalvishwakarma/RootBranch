@@ -96,7 +96,7 @@ public class AddEditCategoryBB extends BackingBean {
 		FoundationValidator validator = new FoundationValidator();
 		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 
-		setErrorList(new ArrayList<String>());
+		getErrorList().clear();
 		setSuccessMsg("");
 
 		boolean isCategoryName = validator.validateNull(addEditCategoryOpr.getCategoryRecord().getName());

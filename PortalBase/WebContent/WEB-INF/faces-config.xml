@@ -12,6 +12,11 @@
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
+		<managed-bean-name>registrationPanelBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.retail.module.registrationpanel.RegistrationPanelBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
 		<managed-bean-name>retailHomeBB</managed-bean-name>
 		<managed-bean-class>com.web.bb.retail.module.home.HomeBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>

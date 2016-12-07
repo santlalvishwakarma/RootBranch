@@ -9,6 +9,7 @@
 	<!-- <script src="/p/staticcontent/js/web.js" type="text/javascript" /> -->
 	<ui:include src="/pages/retail/modules/login/login.xhtml" />
 	<ui:include src="/pages/retail/modules/login/forgotPassword.xhtml" />
+	<ui:include src="/pages/retail/modules/registration/registration.xhtml" />
 	<p:growl autoUpdate="true" life="5000" />
 	<div id="templatemo_top" class="header">
 		<div align="center" class="headerContainer">
@@ -25,8 +26,9 @@
 										rendered="#{(sessionScope['LOGGED_USER_KEY'] eq null)}" oncomplete="PF('loginDialog').show()"
 										styleClass="linkClass" process="@this" update=":loginDialogForm:loginDialogPanel" />
 									&#160;&#160;
-								<p:commandLink value="Signup" rendered="#{(sessionScope['LOGGED_USER_KEY'] eq null)}" styleClass="linkClass"
-										process="@this" action="#{homeBean.openUserRegistrationPage}" />
+								<p:commandLink id="registration" value="Signup" rendered="#{(sessionScope['LOGGED_USER_KEY'] eq null)}"
+										styleClass="linkClass" process="@this" oncomplete="PF('registrationPopup').show()"
+										update=":registrationPopupForm" actionListener="#{registrationPanelBB.resetRegistration}" />
 									<h:panelGroup id="logoutLinkGroup" rendered="#{!(sessionScope['LOGGED_USER_KEY'] eq null)}">
 										<span class="labelClass colorClass">Welcome </span>
 										<span class="labelClass colorClass boldClass">#{sessionScope['LOGGED_USER_NAME']}</span>
@@ -46,6 +48,8 @@
 					<a href="/p/home/"><img src="/p/staticcontent/retail/images/logo.jpg" width="189" height="110" alt="MYM" /></a>
 				</div>
 				<p:remoteCommand name="refreshLoginDetails" partialSubmit="true" process="@this" update="loginLinkGroup" />
+				<p:remoteCommand name="loginAfterUserRegistration" partialSubmit="true" process="@this" update="loginLinkGroup"
+					oncomplete="PF('registrationPopup').hide()" />
 			</h:form>
 		</div>
 	</div>

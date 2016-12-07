@@ -7,6 +7,8 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import org.primefaces.context.RequestContext;
+
 import com.web.bf.retail.modules.registrationpanel.RegistrationPanelBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.retail.RegistrationPanelOpr;
@@ -22,7 +24,7 @@ import com.web.util.PropertiesReader;
 public class RegistrationPanelBB extends BackingBean {
 
 	private static final long serialVersionUID = -7504284781250691375L;
-	RegistrationPanelOpr registrationPanelOpr;
+	private RegistrationPanelOpr registrationPanelOpr;
 	private String propertiesLocation = "com/web/bb/retail/module/registrationpanel/registrationpanel";
 	private String termsOfUsePage;
 
@@ -53,6 +55,28 @@ public class RegistrationPanelBB extends BackingBean {
 
 	@Override
 	public void executeSave(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside executeSave:");
+
+		boolean validateFlag = validateSave();
+
+		if (validateFlag) {
+			try {
+				registrationPanelOpr = new RegistrationPanelBF().executeRegister(getRegistrationPanelOpr());
+				ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+				externalContext.getSessionMap().put(CommonConstant.LOGGED_USER_KEY,
+						registrationPanelOpr.getUserDetails().getUserLogin());
+				externalContext.getSessionMap().put(CommonConstant.LOGGED_USER_DATA,
+						registrationPanelOpr.getUserDetails());
+				externalContext.getSessionMap().put(CommonConstant.LOGGED_USER_NAME,
+						registrationPanelOpr.getUserDetails().getFirstName());
+				RequestContext.getCurrentInstance().execute("loginAfterUserRegistration();");
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
 
 	}
 
@@ -63,8 +87,72 @@ public class RegistrationPanelBB extends BackingBean {
 
 	@Override
 	public boolean validateSave() {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside validateSave:");
 
-		return false;
+		boolean validate = true;
+
+		FoundationValidator validator = new FoundationValidator();
+		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+
+		getErrorList().clear();
+		setSuccessMsg("");
+
+		String userLogin = registrationPanelOpr.getUserDetails().getUserLogin();
+		String firstName = registrationPanelOpr.getUserDetails().getFirstName();
+		String lastName = registrationPanelOpr.getUserDetails().getLastName();
+		String email = registrationPanelOpr.getUserDetails().getPrimaryEmailId();
+		String password = registrationPanelOpr.getUserDetails().getLoginPassword();
+
+		boolean isUserLogin = validator.validateNull(userLogin);
+		boolean isFirstName = validator.validateNull(firstName);
+		boolean isLastName = validator.validateNull(lastName);
+		boolean isEmail = validator.validateNull(email);
+		boolean isPassword = validator.validateNull(password);
+
+		if (!isUserLogin) {
+			addToErrorList(propertiesReader.getValueOfKey("login_null"));
+			validate = false;
+		} else {
+			RegistrationPanelOpr returnRegistrationPanelOpr = new RegistrationPanelOpr();
+			RegistrationPanelBF registrationPanelBF = new RegistrationPanelBF();
+			try {
+				returnRegistrationPanelOpr = registrationPanelBF.checkUserAvailability(registrationPanelOpr);
+				if (validator.validateNull(returnRegistrationPanelOpr.getUserDetails().getUserLogin())) {
+					addToErrorList(propertiesReader.getValueOfKey("user_login_not_available"));
+					validate = false;
+				}
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+
+		if (!isFirstName) {
+			addToErrorList(propertiesReader.getValueOfKey("first_name_null"));
+			validate = false;
+		}
+
+		if (!isLastName) {
+			addToErrorList(propertiesReader.getValueOfKey("last_name_null"));
+			validate = false;
+		}
+
+		if (!isEmail) {
+			addToErrorList(propertiesReader.getValueOfKey("email_null"));
+			validate = false;
+		} else if (!validator.validateEmail(email)) {
+			addToErrorList(propertiesReader.getValueOfKey("email_invalid"));
+			validate = false;
+		}
+
+		if (!isPassword) {
+			addToErrorList(propertiesReader.getValueOfKey("password_null"));
+			validate = false;
+		}
+
+		return validate;
 	}
 
 	@Override
@@ -412,5 +500,13 @@ public class RegistrationPanelBB extends BackingBean {
 
 	@Override
 	public void executeAddRow(ActionEvent event) {
+	}
+
+	public void resetRegistration(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside resetRegistration: ");
+		getRegistrationPanelOpr().setUserDetails(null);
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put(CommonConstant.LOGIN_TYPE, CommonConstant.RETAIL_LOGIN_TYPE);
 	}
 }

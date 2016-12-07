@@ -1,7 +1,5 @@
 package com.web.bb.systemowner.modules.hierarchymaster;
 
-import java.util.ArrayList;
-
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -86,7 +84,7 @@ public class AddEditHierarchyMasterBB extends BackingBean {
 		FoundationValidator validator = new FoundationValidator();
 		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 
-		setErrorList(new ArrayList<String>());
+		getErrorList().clear();
 		setSuccessMsg("");
 
 		boolean isHierarchyName = validator.validateNull(addEditHierarchyOpr.getHierarchyRecord().getName());
