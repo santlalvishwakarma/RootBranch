@@ -201,8 +201,10 @@ public class ShoppingCartBC extends BackingClass {
 
 			Long productId = currentRow.getProductSkuRecord().getProductRecord().getId();
 			Long productSkuId = currentRow.getProductSkuRecord().getId();
+			Float finalBasePrice = currentRow.getProductSkuRecord().getFinalBasePrice();
 			Float basePrice = currentRow.getProductSkuRecord().getBasePrice();
-			Float discountPrice = currentRow.getProductSkuRecord().getDiscountPrice();
+			Float discountAmount = currentRow.getProductSkuRecord().getDiscountAmount();
+			Float discountPercent = currentRow.getProductSkuRecord().getDiscountPercent();
 			Integer quantity = currentRow.getQuantity();
 			Float subTotal = currentRow.getSubTotal();
 			String comments = currentRow.getComments();
@@ -228,8 +230,8 @@ public class ShoppingCartBC extends BackingClass {
 
 			parseString.append("~");
 
-			if (discountPrice != null) {
-				parseString.append(discountPrice);
+			if (discountAmount != null) {
+				parseString.append(discountAmount);
 			}
 
 			parseString.append("~");
@@ -266,6 +268,18 @@ public class ShoppingCartBC extends BackingClass {
 
 			if (originalSubTotal != null) {
 				parseString.append(originalSubTotal);
+			}
+
+			parseString.append("~");
+
+			if (finalBasePrice != null) {
+				parseString.append(finalBasePrice);
+			}
+
+			parseString.append("~");
+
+			if (discountPercent != null) {
+				parseString.append(discountPercent);
 			}
 
 			parseString.append(";");
@@ -585,25 +599,33 @@ public class ShoppingCartBC extends BackingClass {
 				shoppingCartOpr.getRetailOrderRecord().setOrderDate((Date) resultRow.get("v_order_date"));
 				shoppingCartOpr.getRetailOrderRecord().setDeliveryDate((Date) resultRow.get("v_delivery_date"));
 
-				Long productId = Long.valueOf(resultRow.get("product_id").toString());
-				Long productSkuId = Long.valueOf(resultRow.get("product_sku_id").toString());
-				String productCode = (String) resultRow.get("product_code");
-				String productName = (String) resultRow.get("product_name");
-				Integer availableQuantity = (Integer) resultRow.get("available_quantity");
-				Integer blockedQuantity = (Integer) resultRow.get("blocked_quantity");
-				// Integer shippedQuantity = (Integer)
-				// resultRow.get("shipped_quantity");
-				Integer reOrderLevel = (Integer) resultRow.get("reorder_level");
-				myLog.debug("Product Stock Level Details " + productId + "/" + productCode + "/" + productName + "/"
-						+ productSkuId + "/" + availableQuantity + "/" + blockedQuantity + "/" + reOrderLevel);
-
-				ProductSkuStockLevelDVO productStockLevelDVO = new ProductSkuStockLevelDVO();
-				productStockLevelDVO.getProductRecord().setId(productId);
-				productStockLevelDVO.getProductSkuRecord().setId(productSkuId);
-				productStockLevelDVO.getProductSkuRecord().setName(productName);
-				productStockLevelDVO.getProductSkuRecord().setCode(productCode);
-
-				currentProductStockLevels.add(productStockLevelDVO);
+				// Long productId =
+				// Long.valueOf(resultRow.get("product_id").toString());
+				// Long productSkuId =
+				// Long.valueOf(resultRow.get("product_sku_id").toString());
+				// String productCode = (String) resultRow.get("product_code");
+				// String productName = (String) resultRow.get("product_name");
+				// Integer availableQuantity = (Integer)
+				// resultRow.get("available_quantity");
+				// Integer blockedQuantity = (Integer)
+				// resultRow.get("blocked_quantity");
+				// // Integer shippedQuantity = (Integer)
+				// // resultRow.get("shipped_quantity");
+				// Integer reOrderLevel = (Integer)
+				// resultRow.get("reorder_level");
+				// myLog.debug("Product Stock Level Details " + productId + "/"
+				// + productCode + "/" + productName + "/"
+				// + productSkuId + "/" + availableQuantity + "/" +
+				// blockedQuantity + "/" + reOrderLevel);
+				//
+				// ProductSkuStockLevelDVO productStockLevelDVO = new
+				// ProductSkuStockLevelDVO();
+				// productStockLevelDVO.getProductRecord().setId(productId);
+				// productStockLevelDVO.getProductSkuRecord().setId(productSkuId);
+				// productStockLevelDVO.getProductSkuRecord().setName(productName);
+				// productStockLevelDVO.getProductSkuRecord().setCode(productCode);
+				//
+				// currentProductStockLevels.add(productStockLevelDVO);
 			}
 		} else {
 			myLog.error("ShoppingCartBC :: Confirm Order :: Return Record empty ::::: ");

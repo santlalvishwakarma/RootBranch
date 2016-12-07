@@ -1,27 +1,19 @@
-<ui:composition template="/pages/retail/template/template.xhtml"
-	xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
+<ui:composition template="/pages/retail/template/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<ui:define name="content">
 		<!-- Page Content Wrapper Start -->
 		<h:form>
 			<div id="homecat-wrapper" class="wrapper">
-				<p:panel
-					rendered="#{empty retailPaymentBB.paymentOpr.shoppingCartProductList}"
+				<p:panel rendered="#{empty retailPaymentBB.paymentOpr.shoppingCartProductList}"
 					style="border-style:none; width:100%">
-					<strong><h:outputText
-							value="You seem to have navigated to this page by error. " /> <h:outputText
-							value="If you have bookmarked this page kindly remove the bookmark" />
-					</strong>
+					<strong><h:outputText value="You seem to have navigated to this page by error. " /> <h:outputText
+							value="If you have bookmarked this page kindly remove the bookmark" /> </strong>
 				</p:panel>
-				<p:outputPanel
-					rendered="#{not empty retailPaymentBB.paymentOpr.shoppingCartProductList}"
-					id="paymentDetails">
+				<p:outputPanel rendered="#{not empty retailPaymentBB.paymentOpr.shoppingCartProductList}" id="paymentDetails">
 					<div id="orderdetails-box" class="orderdetailsbox">
-						<div id="rowone" class="bilAddDet">
+						<!-- <div id="rowone" class="bilAddDet">
 							<div class="billingbox">
 								<h3>Billing Address</h3>
 								<p>
@@ -92,7 +84,7 @@
 										value="#{retailPaymentBB.paymentOpr.retailOrderRecord.shippingDetails.phone1}" />
 								</p>
 							</div>
-						</div>
+						</div> -->
 						<div class="clear"></div>
 						<!-- Row One Ends -->
 						<div class="purchasetitle">Purchase Details</div>
@@ -101,89 +93,73 @@
 								<td class="cell-border-left">Total Quality</td>
 								<td class="cell-border-left">Total Price</td>
 								<td class="cell-border-left">Discount</td>
-								<td class="cell-border-left">Promo Code</td>
+								<h:panelGroup rendered="#{!(retailPaymentBB.paymentOpr.retailOrderRecord.voucherRecord.promoCode eq null)}">
+									<td class="cell-border-left">Promo Code</td>
+								</h:panelGroup>
 								<td class="cell-border-left">Shipping Charges</td>
 								<td class="cell-border-left">Delivery Time(days)</td>
 								<td class="cell-border-left">Total Order Value</td>
 								<td class="cell-border-left1">Order Number</td>
 							</tr>
 							<tr align="center">
-								<td class="cell-border-left2"><h:outputText
-										value="#{retailPaymentBB.paymentOpr.totalQuantity}" /></td>
-								<td class="cell-border-left2"><p:outputPanel
-										rendered="#{sessionScope['CURRENCY_FLAG']}">
+								<td class="cell-border-left2"><h:outputText value="#{retailPaymentBB.paymentOpr.totalQuantity}" /></td>
+								<td class="cell-border-left2"><p:outputPanel rendered="#{sessionScope['CURRENCY_FLAG']}">
 										<span class="WebRupee"><h:outputText value="Rs." /> </span>
 										<h:outputText value="#{retailPaymentBB.paymentOpr.totalPrice}">
 											<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 										</h:outputText>
 									</p:outputPanel> <p:outputPanel rendered="#{!sessionScope['CURRENCY_FLAG']}">
-										<h:outputText
-											value="#{sessionScope['CONVERTED_CURRENCY_SYMBOL']}"
-											escape="false" />
+										<h:outputText value="#{sessionScope['CONVERTED_CURRENCY_SYMBOL']}" escape="false" />
 										<h:outputText value="#{retailPaymentBB.paymentOpr.totalPrice}">
 											<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 										</h:outputText>
 									</p:outputPanel></td>
-								<td class="cell-border-left2"><p:outputPanel
-										rendered="#{sessionScope['CURRENCY_FLAG']}">
+								<td class="cell-border-left2"><p:outputPanel rendered="#{sessionScope['CURRENCY_FLAG']}">
 										<span class="WebRupee"><h:outputText value="Rs." /> </span>
-										<h:outputText
-											value="#{retailPaymentBB.paymentOpr.retailOrderRecord.voucherRecord.voucherDiscountValue}">
+										<h:outputText value="#{retailPaymentBB.paymentOpr.retailOrderRecord.voucherRecord.voucherDiscountValue}">
 											<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 										</h:outputText>
 									</p:outputPanel> <p:outputPanel rendered="#{!sessionScope['CURRENCY_FLAG']}">
-										<h:outputText
-											value="#{sessionScope['CONVERTED_CURRENCY_SYMBOL']}"
-											escape="false" />
-										<h:outputText
-											value="#{retailPaymentBB.paymentOpr.retailOrderRecord.voucherRecord.voucherDiscountValue}">
+										<h:outputText value="#{sessionScope['CONVERTED_CURRENCY_SYMBOL']}" escape="false" />
+										<h:outputText value="#{retailPaymentBB.paymentOpr.retailOrderRecord.voucherRecord.voucherDiscountValue}">
 											<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 										</h:outputText>
 									</p:outputPanel></td>
-								<td class="cell-border-left2"><h:outputText
-										value="#{retailPaymentBB.paymentOpr.retailOrderRecord.voucherRecord.promoCode}" /></td>
-								<td class="cell-border-left2"><p:outputPanel
-										rendered="#{sessionScope['CURRENCY_FLAG']}">
+								<h:panelGroup rendered="#{!(retailPaymentBB.paymentOpr.retailOrderRecord.voucherRecord.promoCode eq null)}">
+									<td class="cell-border-left2"><h:outputText
+											value="#{retailPaymentBB.paymentOpr.retailOrderRecord.voucherRecord.promoCode}" /></td>
+								</h:panelGroup>
+								<td class="cell-border-left2"><p:outputPanel rendered="#{sessionScope['CURRENCY_FLAG']}">
 										<p:outputPanel
 											rendered="#{retailPaymentBB.paymentOpr.retailOrderRecord.deliveryChargesRecord.deliveryCharge > 0}">
 											<span class="WebRupee"><h:outputText value="Rs." /> </span>
-											<h:outputText
-												value="#{retailPaymentBB.paymentOpr.retailOrderRecord.deliveryChargesRecord.deliveryCharge}">
+											<h:outputText value="#{retailPaymentBB.paymentOpr.retailOrderRecord.deliveryChargesRecord.deliveryCharge}">
 												<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 											</h:outputText>
 										</p:outputPanel>
 										<p:outputPanel
 											rendered="#{retailPaymentBB.paymentOpr.retailOrderRecord.deliveryChargesRecord.expressCharge > 0}">
 											<span class="WebRupee"><h:outputText value="Rs." /> </span>
-											<h:outputText
-												value="#{retailPaymentBB.paymentOpr.retailOrderRecord.deliveryChargesRecord.expressCharge}">
+											<h:outputText value="#{retailPaymentBB.paymentOpr.retailOrderRecord.deliveryChargesRecord.expressCharge}">
 												<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 											</h:outputText>
 										</p:outputPanel>
 									</p:outputPanel> <p:outputPanel rendered="#{!sessionScope['CURRENCY_FLAG']}">
-										<h:outputText
-											value="#{sessionScope['CONVERTED_CURRENCY_SYMBOL']}"
-											escape="false" />
-										<h:outputText
-											value="#{retailPaymentBB.paymentOpr.retailOrderRecord.deliveryChargesRecord.deliveryCharge}">
+										<h:outputText value="#{sessionScope['CONVERTED_CURRENCY_SYMBOL']}" escape="false" />
+										<h:outputText value="#{retailPaymentBB.paymentOpr.retailOrderRecord.deliveryChargesRecord.deliveryCharge}">
 											<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 										</h:outputText>
 									</p:outputPanel></td>
 								<td class="cell-border-left2"><h:outputText
 										value="#{retailPaymentBB.paymentOpr.retailOrderRecord.deliveryTimeRecord.leadTimeInDays}" /></td>
-								<td class="cell-border-left2"><p:outputPanel
-										rendered="#{sessionScope['CURRENCY_FLAG']}">
+								<td class="cell-border-left2"><p:outputPanel rendered="#{sessionScope['CURRENCY_FLAG']}">
 										<span class="WebRupee"><h:outputText value="Rs." /> </span>
-										<h:outputText
-											value="#{retailPaymentBB.paymentOpr.totalOrderPriceIntValue}">
+										<h:outputText value="#{retailPaymentBB.paymentOpr.totalOrderPriceIntValue}">
 											<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 										</h:outputText>
 									</p:outputPanel> <p:outputPanel rendered="#{!sessionScope['CURRENCY_FLAG']}">
-										<h:outputText
-											value="#{sessionScope['CONVERTED_CURRENCY_SYMBOL']}"
-											escape="false" />
-										<h:outputText
-											value="#{retailPaymentBB.paymentOpr.totalOrderPriceIntValue}">
+										<h:outputText value="#{sessionScope['CONVERTED_CURRENCY_SYMBOL']}" escape="false" />
+										<h:outputText value="#{retailPaymentBB.paymentOpr.totalOrderPriceIntValue}">
 											<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 										</h:outputText>
 									</p:outputPanel></td>
@@ -194,120 +170,85 @@
 						<!-- 					</div> -->
 						<!-- Row Three Ends -->
 						<!--Order Details Box Ends -->
-						<div class="purchasetitle">
+						<!-- <div class="purchasetitle">
 							Proceed to Payment<br /> <br />Credit Card / Debit Card /
 							Netbanking
-						</div>
-						<table width="100%" align="center" cellpadding="0" cellspacing="0"
-							border="0">
+						</div> -->
+						<table width="100%" align="center" cellpadding="0" cellspacing="0" border="0">
 							<tr style="height: 30px;">
 								<td align="center"><p:outputPanel id="merchantFormPanel">
 										<form method="post" name="merchantForm" id="merchantForm"
 											action="https://www.ccavenue.com/shopzone/cc_details.jsp">
-											<input type="hidden" name="Merchant_Id"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentMerchantId}" />
-											<input type="hidden" name="Amount"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentAmount}" />
-											<input type="hidden" name="Order_Id"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentOrderId}" />
-											<input type="hidden" name="Redirect_Url"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentRedirectUrl}" />
-											<input type="hidden" name="Checksum"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentCheckSum}" />
-											<input type="hidden" name="billing_cust_name"
+											<input type="hidden" name="Merchant_Id" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentMerchantId}" /> <input
+												type="hidden" name="Amount" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentAmount}" /> <input
+												type="hidden" name="Order_Id" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentOrderId}" /> <input
+												type="hidden" name="Redirect_Url" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentRedirectUrl}" /> <input
+												type="hidden" name="Checksum" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentCheckSum}" /> <input
+												type="hidden" name="billing_cust_name"
 												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.firstName} #{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.lastName}" />
 											<input type="hidden" name="billing_cust_address"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.addressLine1}" />
-											<input type="hidden" name="billing_cust_countryDvo"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.countryDvo.name}" />
-											<input type="hidden" name="billing_cust_state"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.stateDVO.name}" />
+												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.addressLine1}" /> <input type="hidden"
+												name="billing_cust_countryDvo"
+												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.countryDvo.name}" /> <input type="hidden"
+												name="billing_cust_state" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.stateDVO.name}" />
 											<input type="hidden" name="billing_cust_tel"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.phone1}" />
-											<input type="hidden" name="billing_cust_email"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.email1}" />
-											<input type="hidden" name="delivery_cust_name"
+												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.phone1}" /> <input type="hidden"
+												name="billing_cust_email" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.email1}" /> <input
+												type="hidden" name="delivery_cust_name"
 												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.firstName} #{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.lastName}" />
 											<input type="hidden" name="delivery_cust_address"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.addressLine1}" />
-											<input type="hidden" name="delivery_cust_countryDvo"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.countryDvo.name}" />
-											<input type="hidden" name="delivery_cust_state"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.stateDVO.name}" />
-											<input type="hidden" name="delivery_cust_tel"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.phone1}" />
-											<input type="hidden" name="delivery_cust_notes"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryNotes}" />
+												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.addressLine1}" /> <input type="hidden"
+												name="delivery_cust_countryDvo"
+												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.countryDvo.name}" /> <input
+												type="hidden" name="delivery_cust_state"
+												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.stateDVO.name}" /> <input type="hidden"
+												name="delivery_cust_tel" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.phone1}" /> <input
+												type="hidden" name="delivery_cust_notes" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryNotes}" />
 											<input type="hidden" name="Merchant_Param"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentMerchantParameter}" />
-											<input type="hidden" name="billing_cust_city"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.cityDvo.name}" />
+												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentMerchantParameter}" /> <input type="hidden"
+												name="billing_cust_city" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.cityDvo.name}" />
 											<input type="hidden" name="billing_zip_code"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.pinRecord.code}" />
-											<input type="hidden" name="delivery_cust_city"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.cityDvo.name}" />
+												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.pinRecord.code}" /> <input type="hidden"
+												name="delivery_cust_city" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.cityDvo.name}" />
 											<input type="hidden" name="delivery_zip_code"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.pinRecord.code}" />
-											<input type="submit" value="Make Payment" id="payNowSubmit"
-												style="display: none;" />
+												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentDeliveryAddress.pinRecord.code}" /> <input type="submit"
+												value="Make Payment" id="payNowSubmit" style="display: none;" />
 										</form>
-									</p:outputPanel> <!-- added by ketan for payu starts  --> <p:outputPanel
-										id="payuFormPanel">
-										<form action="https://secure.payu.in/_payment" method="post"
-											name="payuForm">
-											<input type="hidden" name="key"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentMerchantId}" />
-											<input name="hash"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentCheckSum}"
-												type="hidden" /> <input name="txnid"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentOrderId}"
-												type="hidden" /> <input name="amount"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentAmount}"
-												type="hidden" /> <input name="firstname"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.firstName}"
-												type="hidden" /> <input name="email" id="email"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.email1}"
+									</p:outputPanel> <!-- added by ketan for payu starts  --> <p:outputPanel id="payuFormPanel">
+										<form action="https://secure.payu.in/_payment" method="post" name="payuForm">
+											<input type="hidden" name="key" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentMerchantId}" /> <input
+												name="hash" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentCheckSum}" type="hidden" /> <input
+												name="txnid" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentOrderId}" type="hidden" /> <input
+												name="amount" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentAmount}" type="hidden" /> <input
+												name="firstname" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.firstName}" type="hidden" />
+											<input name="email" id="email" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.email1}"
 												type="hidden" /> <input name="phone"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.phone1}"
-												type="hidden" /> <input name="productinfo" value="Books"
-												size="64" type="hidden" /> <input name="surl"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentRedirectUrl}"
-												size="64" type="hidden" /> <input name="furl"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentRedirectUrl}"
-												size="64" type="hidden" /> <input name="lastname"
-												id="lastname"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.lastName}"
+												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.phone1}" type="hidden" /> <input
+												name="productinfo" value="Books" size="64" type="hidden" /> <input name="surl"
+												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentRedirectUrl}" size="64" type="hidden" /> <input
+												name="furl" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentRedirectUrl}" size="64" type="hidden" /> <input
+												name="lastname" id="lastname" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.lastName}"
 												type="hidden" /> <input name="address1"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.addressLine1}"
-												type="hidden" /> <input name="city"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.cityDvo.name}"
-												type="hidden" /> <input name="countryDvo"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.countryDvo.name}"
+												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.addressLine1}" type="hidden" /> <input
+												name="city" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.cityDvo.name}" type="hidden" />
+											<input name="countryDvo" value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.countryDvo.name}"
 												type="hidden" /> <input name="pinRecord.code"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.pinRecord.code}"
-												type="hidden" /> <input name="Pg"
-												value="#{retailPaymentBB.paymentOpr.paymentDVO.paymentOption.paymentName}"
-												type="hidden" /> <input type="submit" value="Submit"
-												id="payUSubmit" style="display: none;" />
+												value="#{retailPaymentBB.paymentOpr.paymentDVO.sentBillingAddress.pinRecord.code}" type="hidden" /> <input
+												name="Pg" value="#{retailPaymentBB.paymentOpr.paymentDVO.paymentOption.paymentName}" type="hidden" /> <input
+												type="submit" value="Submit" id="payUSubmit" style="display: none;" />
 										</form>
 									</p:outputPanel> <!-- added by ketan for payu end  --> <br /> <br />
 									<div class="clear"></div>
 									<div class="lnkbtn">
 										<ul>
-											<li><p:commandLink id="cancelPayment"
-													styleClass="secondary-action"
-													actionListener="#{retailPaymentBB.cancelPayment}"
-													process="@this" value="Cancel Order"
+											<li><p:commandLink id="cancelPayment" styleClass="secondary-action"
+													actionListener="#{retailPaymentBB.cancelPayment}" process="@this" value="Cancel Order"
 													action="pretty:shoppingCart">
 												</p:commandLink></li>
-											<li><p:commandLink styleClass="secondary-action"
-													action="#{retailPaymentBB.saveToWishlist}" process="@this"
-													value="Save To Wishlist"
-													rendered="#{!(empty sessionScope['LOGGED_USER_KEY'])}" /></li>
-											<li><p:commandLink styleClass="secondary-action"
-													action="#{retailPaymentBB.registerSaveToWishlist}"
-													process="@this" value="Regsiter and Save To Wishlist"
-													rendered="#{empty sessionScope['LOGGED_USER_KEY']}" /></li>
+											<li><p:commandLink styleClass="secondary-action" action="#{retailPaymentBB.saveToWishlist}"
+													process="@this" value="Save To Wishlist" rendered="#{!(empty sessionScope['LOGGED_USER_KEY'])}" /></li>
+											<li><p:commandLink styleClass="secondary-action" action="#{retailPaymentBB.registerSaveToWishlist}"
+													process="@this" value="Regsiter and Save To Wishlist" rendered="#{empty sessionScope['LOGGED_USER_KEY']}" /></li>
 										</ul>
 									</div></td>
 							</tr>
