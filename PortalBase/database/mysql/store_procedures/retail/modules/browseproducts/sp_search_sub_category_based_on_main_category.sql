@@ -46,8 +46,6 @@ END IF;
 	
 IF p_level_3_category_code IS NOT NULL AND p_level_4_category_code IS NULL THEN
 
-	SELECT v_level_3_category_id;
-
 	SELECT  DISTINCT cm.category_id, cm.category_code, cm.category_name, cm.category_description, cm.seo_title, cm.seo_keyword, cm.seo_description, cm.image_url, cm.is_active
 	FROM 	hierarchy_category_mapping hcm, category_master cm
 	WHERE	hcm.hierarchy_id = v_hierarchy_id
@@ -61,8 +59,6 @@ IF p_level_3_category_code IS NOT NULL AND p_level_4_category_code IS NULL THEN
 
 ELSEIF p_level_2_category_code IS NOT NULL AND p_level_3_category_code IS NULL AND p_level_4_category_code IS NULL THEN
 
-	SELECT v_level_2_category_id;
-
 	SELECT  DISTINCT cm.category_id, cm.category_code, cm.category_name, cm.category_description, cm.seo_title, cm.seo_keyword, cm.seo_description, cm.image_url, cm.is_active
 	FROM 	hierarchy_category_mapping hcm, category_master cm
 	WHERE	hcm.hierarchy_id = v_hierarchy_id
@@ -74,8 +70,6 @@ ELSEIF p_level_2_category_code IS NOT NULL AND p_level_3_category_code IS NULL A
 	
 ELSEIF p_level_1_category_code IS NOT NULL AND p_level_2_category_code IS NULL AND p_level_3_category_code IS NULL AND p_level_4_category_code IS NULL THEN
 
-	SELECT v_level_1_category_id;
-
 	SELECT  DISTINCT cm.category_id, cm.category_code, cm.category_name, cm.category_description, cm.seo_title, cm.seo_keyword, cm.seo_description, cm.image_url, cm.is_active
 	FROM 	hierarchy_category_mapping hcm, category_master cm
 	WHERE	hcm.hierarchy_id = v_hierarchy_id
@@ -84,6 +78,14 @@ ELSEIF p_level_1_category_code IS NOT NULL AND p_level_2_category_code IS NULL A
 	AND		hcm.is_active = 1
 	AND 	cm.is_active = 1;	
 
+ELSEIF p_hierarchy_name IS NOT NULL AND p_level_1_category_code IS NULL AND p_level_2_category_code IS NULL AND p_level_3_category_code IS NULL AND p_level_4_category_code IS NULL THEN
+
+	SELECT  DISTINCT cm.category_id, cm.category_code, cm.category_name, cm.category_description, cm.seo_title, cm.seo_keyword, cm.seo_description, cm.image_url, cm.is_active
+	FROM 	hierarchy_category_mapping hcm, category_master cm
+	WHERE	hcm.hierarchy_id = v_hierarchy_id
+	AND		hcm.category_level_1 = cm.category_id
+	AND		hcm.is_active = 1
+	AND 	cm.is_active = 1;	
 
 END IF;
 
