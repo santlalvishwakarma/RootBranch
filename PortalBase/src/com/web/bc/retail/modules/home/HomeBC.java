@@ -6,6 +6,7 @@ import com.web.common.dvo.common.OperationalDataValueObject;
 import com.web.common.dvo.opr.retail.HomeOpr;
 import com.web.common.dvo.systemowner.HierarchyCategoryMappingDVO;
 import com.web.common.dvo.systemowner.ImageDVO;
+import com.web.common.dvo.systemowner.PublishToHomeCategoryDVO;
 import com.web.common.parents.BackingClass;
 import com.web.foundation.dao.DAOResult;
 import com.web.foundation.dao.IDAOConstant;
@@ -122,48 +123,62 @@ public class HomeBC extends BackingClass {
 			for (int i = 0; i < responseMap.size(); i++) {
 				HashMap<String, Object> resultRow = responseMap.get(i);
 
-				HierarchyCategoryMappingDVO hierarchyCategoryMappingRecord = new HierarchyCategoryMappingDVO();
+				PublishToHomeCategoryDVO publishToHomeCategoryRecord = new PublishToHomeCategoryDVO();
 
-				if (resultRow.get("category_id") != null) {
-					hierarchyCategoryMappingRecord.getCategoryRecord().setId(
-							Long.valueOf(resultRow.get("category_id").toString()));
+				if (resultRow.get("publish_to_home_category_id") != null) {
+					publishToHomeCategoryRecord.setId(Long.valueOf(resultRow.get("publish_to_home_category_id")
+							.toString()));
 				}
-
-				hierarchyCategoryMappingRecord.getCategoryRecord().setCode((String) resultRow.get("category_code"));
-				hierarchyCategoryMappingRecord.getCategoryRecord().setName((String) resultRow.get("category_name"));
-				hierarchyCategoryMappingRecord.getCategoryRecord().setDescription(
-						(String) resultRow.get("category_description"));
-
-				hierarchyCategoryMappingRecord.getCategoryRecord().setPublishToHome(
-						(Boolean) resultRow.get("publish_to_home_page"));
-
-				if (resultRow.get("publish_position") != null) {
-					hierarchyCategoryMappingRecord.getCategoryRecord().setPublishPosition(
-							Integer.valueOf(resultRow.get("publish_position").toString()));
-				}
-
-				hierarchyCategoryMappingRecord.getHierarchyRecord().setCode((String) resultRow.get("hierarchy_code"));
 
 				if (resultRow.get("hierarchy_id") != null) {
-					hierarchyCategoryMappingRecord.getHierarchyRecord().setId(
+					publishToHomeCategoryRecord.getHierarchyRecord().setId(
 							Long.valueOf(resultRow.get("hierarchy_id").toString()));
 				}
 
-				hierarchyCategoryMappingRecord.getCategoryRecord().setImageUrl((String) resultRow.get("image_url"));
+				publishToHomeCategoryRecord.getHierarchyRecord().setCode((String) resultRow.get("hierarchy_code"));
 
-				hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().setCode(
+				if (resultRow.get("category_level_4") != null) {
+					publishToHomeCategoryRecord.getCategoryRecord().setCode(
+							(String) resultRow.get("level_4_category_code"));
+					publishToHomeCategoryRecord.getCategoryRecord().setName(
+							(String) resultRow.get("level_4_category_name"));
+				} else if (resultRow.get("category_level_3") != null) {
+					publishToHomeCategoryRecord.getCategoryRecord().setCode(
+							(String) resultRow.get("level_3_category_code"));
+					publishToHomeCategoryRecord.getCategoryRecord().setName(
+							(String) resultRow.get("level_3_category_name"));
+				} else if (resultRow.get("category_level_2") != null) {
+					publishToHomeCategoryRecord.getCategoryRecord().setCode(
+							(String) resultRow.get("level_2_category_code"));
+					publishToHomeCategoryRecord.getCategoryRecord().setName(
+							(String) resultRow.get("level_2_category_name"));
+				} else if (resultRow.get("category_level_1") != null) {
+					publishToHomeCategoryRecord.getCategoryRecord().setCode(
+							(String) resultRow.get("level_1_category_code"));
+					publishToHomeCategoryRecord.getCategoryRecord().setName(
+							(String) resultRow.get("level_1_category_name"));
+				}
+
+				if (resultRow.get("publish_position") != null) {
+					publishToHomeCategoryRecord.setPublishPosition(Integer.valueOf(resultRow.get("publish_position")
+							.toString()));
+				}
+
+				publishToHomeCategoryRecord.getCategoryRecord().setImageUrl((String) resultRow.get("image_url"));
+
+				publishToHomeCategoryRecord.getCategoryLevelOneRecord().setCode(
 						(String) resultRow.get("level_1_category_code"));
 
-				hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().setCode(
+				publishToHomeCategoryRecord.getCategoryLevelTwoRecord().setCode(
 						(String) resultRow.get("level_2_category_code"));
 
-				hierarchyCategoryMappingRecord.getCategoryLevelThreeRecord().setCode(
+				publishToHomeCategoryRecord.getCategoryLevelThreeRecord().setCode(
 						(String) resultRow.get("level_3_category_code"));
 
-				hierarchyCategoryMappingRecord.getCategoryLevelFourRecord().setCode(
+				publishToHomeCategoryRecord.getCategoryLevelFourRecord().setCode(
 						(String) resultRow.get("level_4_category_code"));
 
-				homeOpr.getHomePageCategoryList().add(hierarchyCategoryMappingRecord);
+				homeOpr.getHomePageCategoryList().add(publishToHomeCategoryRecord);
 			}
 		}
 

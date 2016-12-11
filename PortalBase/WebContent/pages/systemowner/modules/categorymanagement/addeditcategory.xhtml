@@ -36,12 +36,12 @@
 						</h:panelGroup></td>
 				</tr>
 			</table>
-			<div align="left">
+			<!-- <div align="left">
 				<p:commandLink value="Publish to Fornt Page" process="addEditCategoryField, @this"
 					rendered="#{!(addEditCategoryBB.addEditCategoryOpr.categoryRecord eq null)}"
 					update=":productHierarchyMappingDialogForm" actionListener="#{addEditCategoryBB.opePublishToHomeDialog}"
 					oncomplete="PF('categoryPushlishDialog').show();" />
-			</div>
+			</div> -->
 			<table style="width: 40%">
 				<tr>
 					<td><p:commandButton id="mapCategoryToCategopryLevelButton" process="@this" value="Map Level"

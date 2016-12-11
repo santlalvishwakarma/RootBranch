@@ -60,11 +60,6 @@ public class ProductDefinitionBF extends BusinessFacade {
 		return new ProductDefinitionBC().getSuggestedProductsList(productDVO);
 	}
 
-	public ArrayList<Object> getSuggestedSKUList(ProductSkuDVO productSkuDVO) throws FrameworkException,
-			BusinessException {
-		return new ProductDefinitionBC().getSuggestedSKUList(productSkuDVO);
-	}
-
 	public ProductOpr getHierarchiesMappingList(ProductOpr productOpr) throws FrameworkException, BusinessException {
 		return new ProductDefinitionBC().getHierarchiesMappingList(productOpr);
 	}

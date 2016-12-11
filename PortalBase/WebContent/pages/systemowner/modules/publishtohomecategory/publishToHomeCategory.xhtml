@@ -1,0 +1,128 @@
+<ui:composition template="/pages/systemowner/template/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<ui:define name="content">
+		<h:form id="publishToHomeCategoryForm">
+			<p:panel id="categoryPushlishListPanel">
+				<p:commandLink id="categoryPushlishAddRow" process="categoryPushlishListPanel, @this" styleClass="linkClass"
+					actionListener="#{publishToHomeCategoryBB.executeCategoryPublishAddRow}" update="categoryPushlishListPanel">
+					<p:graphicImage alt="Add Row" value="/staticcontent/systemowner/images/add.png" />
+				</p:commandLink>
+				<label class="addRowMsgClass">Please click here to add a new row</label>
+				<br />
+				<br />
+				<h:panelGroup id="categoryPushlishListPanelGroup">
+					<p:dataTable id="productHierarchyMappingListTable" rows="#{publishToHomeCategoryBB.paginationNumber}"
+						var="categoryPublishRecord" paginator="true" rowsPerPageTemplate="5,10,15"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page"
+						rendered="#{!(empty publishToHomeCategoryBB.publishToHomeCategoryOpr.publishToHomeCategoryList)}"
+						value="#{publishToHomeCategoryBB.publishToHomeCategoryOpr.publishToHomeCategoryList}">
+						<f:facet name="header">Publish Category</f:facet>
+						<p:column headerText="Hierarchy">
+							<p:autoComplete id="categoryHierarchyCodeAutoComplete" maxResults="20"
+								value="#{categoryPublishRecord.hierarchyRecord}" minQueryLength="2" effect="fade" forceSelection="true"
+								completeMethod="#{publishToHomeCategoryBB.getSuggestedHierarchiesForCode}" var="productHierarchyRecord"
+								itemLabel="#{productHierarchyRecord.code}" itemValue="#{productHierarchyRecord}" global="false"
+								converter="#{publishToHomeCategoryBB.baseDVOConverter}">
+								<p:ajax event="itemSelect" process="@this"
+									listener="#{publishToHomeCategoryBB.hierarchyChanged(categoryPublishRecord)}"
+									update="productCategoryLevel1AutoComplete, productCategoryLevel2AutoComplete, productCategoryLevel3AutoComplete, productCategoryLevel4AutoComplete" />
+								<p:column headerText="Code">#{productHierarchyRecord.code}</p:column>
+								<p:column headerText="Name">#{productHierarchyRecord.name}</p:column>
+							</p:autoComplete>
+							<p:watermark for="categoryHierarchyCodeAutoComplete" value="Enter first 2 chars" />
+						</p:column>
+
+						<p:column headerText="Category Level one">
+							<p:autoComplete id="productCategoryLevel1AutoComplete" maxResults="10"
+								value="#{categoryPublishRecord.categoryLevelOneRecord}" minQueryLength="2" effect="fade" forceSelection="true"
+								completeMethod="#{publishToHomeCategoryBB.getSuggestedCategoryLevel1BasedOnHierarchy}"
+								var="categoryLevel1Record" itemLabel="#{categoryLevel1Record.name}" itemValue="#{categoryLevel1Record}"
+								global="false" converter="#{publishToHomeCategoryBB.baseDVOConverter}">
+								<f:attribute name="hierarchyId" value="#{categoryPublishRecord.hierarchyRecord.id}" />
+								<p:ajax event="itemSelect" process="@this"
+									listener="#{publishToHomeCategoryBB.categoryLevel1Changed(categoryPublishRecord)}"
+									update="productCategoryLevel2AutoComplete, productCategoryLevel3AutoComplete, productCategoryLevel4AutoComplete" />
+								<p:column headerText="Code">#{categoryLevel1Record.code}</p:column>
+								<p:column headerText="Name">#{categoryLevel1Record.name}</p:column>
+							</p:autoComplete>
+							<p:watermark for="productCategoryLevel1AutoComplete" value="Enter first 2 chars" />
+						</p:column>
+						<p:column headerText="Category Level Two">
+							<p:autoComplete id="productCategoryLevel2AutoComplete" maxResults="20"
+								value="#{categoryPublishRecord.categoryLevelTwoRecord}" minQueryLength="2" effect="fade" forceSelection="true"
+								completeMethod="#{publishToHomeCategoryBB.getSuggestedCategoryLevel2BasedOnHierarchy}"
+								var="categoryLevel2Record" itemLabel="#{categoryLevel2Record.name}" itemValue="#{categoryLevel2Record}"
+								global="false" converter="#{publishToHomeCategoryBB.baseDVOConverter}">
+								<f:attribute name="hierarchyId" value="#{categoryPublishRecord.hierarchyRecord.id}" />
+								<f:attribute name="category1Id" value="#{categoryPublishRecord.categoryLevelOneRecord.id}" />
+								<p:ajax event="itemSelect" process="@this"
+									listener="#{publishToHomeCategoryBB.categoryLevel2Changed(categoryPublishRecord)}"
+									update="productCategoryLevel3AutoComplete, productCategoryLevel4AutoComplete" />
+								<p:column headerText="Code">#{categoryLevel2Record.code}</p:column>
+								<p:column headerText="Name">#{categoryLevel2Record.name}</p:column>
+							</p:autoComplete>
+							<p:watermark for="productCategoryLevel2AutoComplete" value="Enter first 2 chars" />
+						</p:column>
+						<p:column headerText="Category Level Three">
+							<p:autoComplete id="productCategoryLevel3AutoComplete" maxResults="20"
+								value="#{categoryPublishRecord.categoryLevelThreeRecord}" minQueryLength="2" effect="fade" forceSelection="true"
+								completeMethod="#{publishToHomeCategoryBB.getSuggestedCategoryLevel3BasedOnHierarchy}"
+								var="categoryLevel3Record" itemLabel="#{categoryLevel3Record.name}" itemValue="#{categoryLevel3Record}"
+								global="false" converter="#{publishToHomeCategoryBB.baseDVOConverter}">
+								<f:attribute name="hierarchyId" value="#{categoryPublishRecord.hierarchyRecord.id}" />
+								<f:attribute name="category1Id" value="#{categoryPublishRecord.categoryLevelOneRecord.id}" />
+								<f:attribute name="category2Id" value="#{categoryPublishRecord.categoryLevelTwoRecord.id}" />
+								<p:ajax event="itemSelect" process="@this"
+									listener="#{publishToHomeCategoryBB.categoryLevel3Changed(categoryPublishRecord)}"
+									update="productCategoryLevel4AutoComplete" />
+								<p:column headerText="Code">#{categoryLevel3Record.code}</p:column>
+								<p:column headerText="Name">#{categoryLevel3Record.name}</p:column>
+							</p:autoComplete>
+							<p:watermark for="productCategoryLevel3AutoComplete" value="Enter first 2 chars" />
+						</p:column>
+						<p:column headerText="Category Level Four">
+							<p:autoComplete id="productCategoryLevel4AutoComplete" maxResults="20"
+								value="#{categoryPublishRecord.categoryLevelFourRecord}" minQueryLength="2" effect="fade" forceSelection="true"
+								completeMethod="#{publishToHomeCategoryBB.getSuggestedCategoryLevel4BasedOnHierarchy}"
+								var="categoryLevel4Record" itemLabel="#{categoryLevel4Record.name}" itemValue="#{categoryLevel4Record}"
+								global="false" converter="#{publishToHomeCategoryBB.baseDVOConverter}">
+								<f:attribute name="hierarchyId" value="#{categoryPublishRecord.hierarchyRecord.id}" />
+								<f:attribute name="category1Id" value="#{categoryPublishRecord.categoryLevelOneRecord.id}" />
+								<f:attribute name="category2Id" value="#{categoryPublishRecord.categoryLevelTwoRecord.id}" />
+								<f:attribute name="category3Id" value="#{categoryPublishRecord.categoryLevelThreeRecord.id}" />
+								<p:column headerText="Code">#{categoryLevel4Record.code}</p:column>
+								<p:column headerText="Name">#{categoryLevel4Record.name}</p:column>
+							</p:autoComplete>
+							<p:watermark for="productCategoryLevel4AutoComplete" value="Enter first 2 chars" />
+						</p:column>
+
+
+						<p:column headerText="Position">
+							<p:inputText value="#{categoryPublishRecord.publishPosition}"></p:inputText>
+						</p:column>
+
+						<p:column headerText="Delete">
+							<p:selectBooleanCheckbox value="#{categoryPublishRecord.operationalAttributes.recordDeleted}" />
+						</p:column>
+					</p:dataTable>
+					<table style="margin: 0 auto;">
+						<tr>
+							<td><p:commandButton id="btnSaveHierarchy"
+									actionListener="#{publishToHomeCategoryBB.executeSavePublishCategory}"
+									rendered="#{!(empty publishToHomeCategoryBB.publishToHomeCategoryOpr.publishToHomeCategoryList)}" value="Save"
+									process="categoryPushlishListPanel, @this" update="categoryPushlishListPanel" /> <p:tooltip
+									for="btnSaveHierarchy" value="Click to Save" /></td>
+							<td><p:commandButton id="btnCloseHierarchy" actionListener="#{publishToHomeCategoryBB.closeModalWindow}"
+									rendered="#{!(empty publishToHomeCategoryBB.publishToHomeCategoryOpr.publishToHomeCategoryList)}" value="Close"
+									process="@this" /> <p:tooltip for="btnCloseHierarchy" value="Click to Close" /></td>
+						</tr>
+					</table>
+				</h:panelGroup>
+			</p:panel>
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>

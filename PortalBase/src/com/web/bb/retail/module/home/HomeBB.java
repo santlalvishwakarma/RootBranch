@@ -6,6 +6,7 @@ import com.web.bf.retail.modules.home.HomeBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.retail.HomeOpr;
 import com.web.common.dvo.systemowner.HierarchyCategoryMappingDVO;
+import com.web.common.dvo.systemowner.PublishToHomeCategoryDVO;
 import com.web.common.dvo.util.OptionsDVO;
 import com.web.common.parents.BackingBean;
 import com.web.foundation.exception.BusinessException;
@@ -74,34 +75,34 @@ public class HomeBB extends BackingBean {
 
 			if (!homeOpr.getHomePageCategoryList().isEmpty()) {
 
-				for (HierarchyCategoryMappingDVO categoryMappingDVO : homeOpr.getHomePageCategoryList()) {
+				for (PublishToHomeCategoryDVO publishToHomeCategoryDVO : homeOpr.getHomePageCategoryList()) {
 					StringBuffer categoryUrl = new StringBuffer();
 					categoryUrl.append(CommonConstant.CONTEXT_PATH + CommonConstant.SLASH);
-					categoryUrl.append(categoryMappingDVO.getHierarchyRecord().getCode());
+					categoryUrl.append(publishToHomeCategoryDVO.getHierarchyRecord().getCode());
 
-					if (categoryMappingDVO.getCategoryLevelOneRecord().getCode() != null) {
+					if (publishToHomeCategoryDVO.getCategoryLevelOneRecord().getCode() != null) {
 						categoryUrl.append(CommonConstant.SLASH
-								+ categoryMappingDVO.getCategoryLevelOneRecord().getCode());
+								+ publishToHomeCategoryDVO.getCategoryLevelOneRecord().getCode());
 					}
 
-					if (categoryMappingDVO.getCategoryLevelTwoRecord().getCode() != null) {
+					if (publishToHomeCategoryDVO.getCategoryLevelTwoRecord().getCode() != null) {
 						categoryUrl.append(CommonConstant.SLASH
-								+ categoryMappingDVO.getCategoryLevelTwoRecord().getCode());
+								+ publishToHomeCategoryDVO.getCategoryLevelTwoRecord().getCode());
 					}
 
-					if (categoryMappingDVO.getCategoryLevelThreeRecord().getCode() != null) {
+					if (publishToHomeCategoryDVO.getCategoryLevelThreeRecord().getCode() != null) {
 						categoryUrl.append(CommonConstant.SLASH
-								+ categoryMappingDVO.getCategoryLevelThreeRecord().getCode());
+								+ publishToHomeCategoryDVO.getCategoryLevelThreeRecord().getCode());
 					}
 
-					if (categoryMappingDVO.getCategoryLevelFourRecord().getCode() != null) {
+					if (publishToHomeCategoryDVO.getCategoryLevelFourRecord().getCode() != null) {
 						categoryUrl.append(CommonConstant.SLASH
-								+ categoryMappingDVO.getCategoryLevelFourRecord().getCode());
+								+ publishToHomeCategoryDVO.getCategoryLevelFourRecord().getCode());
 					}
 
 					categoryUrl.append(CommonConstant.SLASH + "products" + CommonConstant.SLASH);
 
-					categoryMappingDVO.setCategoryUrl(categoryUrl.toString());
+					publishToHomeCategoryDVO.setCategoryUrl(categoryUrl.toString());
 				}
 			}
 

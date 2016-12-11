@@ -147,5 +147,11 @@
 		<managed-bean-class>com.web.bb.systemowner.modules.sizemaster.SizeMasterBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>publishToHomeCategoryBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.publishtohomecategory.PublishToHomeCategoryBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

@@ -1864,6 +1864,8 @@ productdetright {
 	width: 100%;
 	border-bottom: 1px solid black;
 	height: 41px;
+	 background: #ffffff none repeat scroll 0 0;
+	 padding-left: 194px;
 }
 
 .bookdetimg {
@@ -1896,7 +1898,7 @@ productdetright {
 	display: inline-block;
 	list-style-type: none;
 	margin: 0;
-	padding: 0 22px 35px;
+	padding: 17px 22px 35px;
 	width: 250px;
 }
 

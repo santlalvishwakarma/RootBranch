@@ -9,6 +9,7 @@ import com.web.common.dvo.systemowner.CurrencyDVO;
 import com.web.common.dvo.systemowner.HierarchyCategoryMappingDVO;
 import com.web.common.dvo.systemowner.ImageDVO;
 import com.web.common.dvo.systemowner.ProductDVO;
+import com.web.common.dvo.systemowner.PublishToHomeCategoryDVO;
 
 public class HomeOpr extends OperationalDataValueObject {
 
@@ -19,7 +20,7 @@ public class HomeOpr extends OperationalDataValueObject {
 	private ArrayList<ImageDVO> imageList;
 	private CountryDVO countryRecord;
 	private CurrencyDVO currencyRecord;
-	private List<HierarchyCategoryMappingDVO> homePageCategoryList;
+	private List<PublishToHomeCategoryDVO> homePageCategoryList;
 
 	public ProductDVO getProductRecord() {
 		if (productRecord == null) {
@@ -87,14 +88,14 @@ public class HomeOpr extends OperationalDataValueObject {
 		this.currencyRecord = currencyRecord;
 	}
 
-	public List<HierarchyCategoryMappingDVO> getHomePageCategoryList() {
+	public List<PublishToHomeCategoryDVO> getHomePageCategoryList() {
 		if (homePageCategoryList == null) {
-			homePageCategoryList = new ArrayList<HierarchyCategoryMappingDVO>();
+			homePageCategoryList = new ArrayList<PublishToHomeCategoryDVO>();
 		}
 		return homePageCategoryList;
 	}
 
-	public void setHomePageCategoryList(List<HierarchyCategoryMappingDVO> homePageCategoryList) {
+	public void setHomePageCategoryList(List<PublishToHomeCategoryDVO> homePageCategoryList) {
 		this.homePageCategoryList = homePageCategoryList;
 	}
 
