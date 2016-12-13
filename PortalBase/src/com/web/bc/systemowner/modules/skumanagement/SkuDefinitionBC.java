@@ -385,9 +385,7 @@ public class SkuDefinitionBC extends BackingClass {
 		Long skuId = productSkuRecord.getId();
 		Long productId = productRecord.getId();
 		String skuName = productSkuRecord.getName();
-		Boolean active = false;
-		if (productSkuRecord.getActive() != null)
-			active = !(productSkuRecord.getActive());
+		Boolean active = productSkuRecord.getActive();
 		Boolean defaultSKU = productSkuRecord.getDefaultSku();
 		String skuCode = productSkuRecord.getCode();
 		String userLogin = productSkuRecord.getUserLogin();

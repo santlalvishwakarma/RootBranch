@@ -53,7 +53,7 @@ public class CategoryMasterBC extends BackingClass {
 		return productCategoryList;
 	}
 
-	public CategoryOpr executeSearch(CategoryOpr searchCategoryOpr) throws FrameworkException {
+	public CategoryOpr executeSearch(CategoryOpr searchCategoryOpr) throws FrameworkException, BusinessException {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug(" Inside executeSearch: ");
 
@@ -118,6 +118,8 @@ public class CategoryMasterBC extends BackingClass {
 
 				categoryList.add(categoryRecord);
 			}
+		} else {
+			throw new BusinessException("no_data_from_db_excep_msg");
 		}
 		searchCategoryOpr.setCategoryList(categoryList);
 
