@@ -98,7 +98,7 @@ h4 {
 
 .sitename_panel {
 	float: left;
-	padding-top: 25px;
+	padding-top: 10px;
 	/* width: 150px; */
 	/* height: 150px; */
 	/* height: 52px; */
@@ -598,7 +598,7 @@ h4 {
 }
 
 .ui-corner-all {
-	border-radius: 10px 10px 10px 10px;
+	border-radius: 4px;
 }
 
 .bodyClass { /* IE10 Consumer Preview */
@@ -685,8 +685,9 @@ a img {
 
 .ui-button:hover {
 	text-decoration: none;
-	border-bottom: 2px solid #FF0000 !important;
-	font-style: italic;
+	/* border-bottom: 2px solid #FF0000 !important; */
+	font-weight: bold;
+	font-size: 18px;
 }
 
 .mandRed {
