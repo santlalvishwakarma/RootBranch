@@ -2368,6 +2368,8 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 							skuOpr.getProductSkuRecord().setDefaultImageRecord(imageMappingDVO.getImageRecord());
 						}
 					}
+				} else {
+					skuOpr.getProductSkuRecord().setDefaultImageRecord(null);
 				}
 
 			} catch (FrameworkException e) {

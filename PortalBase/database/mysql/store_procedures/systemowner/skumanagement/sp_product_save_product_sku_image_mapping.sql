@@ -46,6 +46,7 @@ DECLARE v_report_url 				    VARCHAR(4000);
 DECLARE v_sequence_number 				INT(10);
 DECLARE v_deleteYN						TINYINT(1);
 DECLARE v_last_inserted_id 				INT(10);
+DECLARE v_sequence						INT(10);
 
 DECLARE v_is_modify_images 				TINYINT(1);
 DECLARE v_is_modify_images_counter  	INT;
@@ -237,6 +238,19 @@ IF p_error_code IS NULL AND p_image_parse_string IS NOT NULL THEN
 		                       	
 							ELSEIF v_product_image_mapping_id IS NOT NULL AND v_deleteYN = 1 THEN
 							
+								SELECT sequence_number INTO v_sequence
+								FROM	product_sku_image_mapping
+								WHERE  product_sku_id = p_product_sku_id;
+								
+								IF v_sequence = 0 THEN
+								
+									UPDATE product_sku_header
+									SET		default_thumbnail_image_url = NULL,
+											default_image_url = NULL,
+											default_zoom_image_url = NULL
+									WHERE	product_sku_id = p_product_sku_id;
+								END IF;
+							
 								DELETE 	FROM product_sku_image_mapping
 								WHERE 	product_sku_id = p_product_sku_id
 								AND 	product_sku_image_mapping_id = v_product_image_mapping_id
@@ -254,6 +268,7 @@ IF p_error_code IS NULL AND p_image_parse_string IS NOT NULL THEN
 		              SET v_report_url = NULL;
 		              SET v_sequence_number = NULL;
 	                  SET v_deleteYN = NULL;
+	                  SET v_sequence = NULL;
                                               
                 END WHILE inner_parse;
                       
