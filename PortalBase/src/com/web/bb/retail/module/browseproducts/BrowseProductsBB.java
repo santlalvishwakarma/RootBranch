@@ -1531,12 +1531,18 @@ public class BrowseProductsBB extends BackingBean {
 				.getHierarchyCategoryMappingRecord();
 		String hierarchicalBreadcrumbTitle = null;
 
+		String hierarchyUrl = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
+				+ "/"
+				+ (hierarchyCategoryMappingRecord.getHierarchyRecord().getName() == null ? ""
+						: hierarchyCategoryMappingRecord.getHierarchyRecord().getName())
+				+ CommonConstant.BROWSE_PRODUCTS_URL;
+
 		String levelOneUrl = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
 				+ "/"
 				+ (hierarchyCategoryMappingRecord.getHierarchyRecord().getName() == null ? ""
 						: hierarchyCategoryMappingRecord.getHierarchyRecord().getName())
-				+ (hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getName() == null ? "" : "/"
-						+ hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getName())
+				+ (hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getCode() == null ? "" : "/"
+						+ hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getCode())
 				+ CommonConstant.BROWSE_PRODUCTS_URL;
 
 		myLog.debug("levelOneUrl:::::" + levelOneUrl);
@@ -1544,38 +1550,47 @@ public class BrowseProductsBB extends BackingBean {
 				+ "/"
 				+ (hierarchyCategoryMappingRecord.getHierarchyRecord().getName() == null ? ""
 						: hierarchyCategoryMappingRecord.getHierarchyRecord().getName())
-				+ (hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getName() == null ? "" : "/"
-						+ hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getName())
-				+ (hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getName() == null ? "" : "/"
-						+ hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getName())
+				+ (hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getCode() == null ? "" : "/"
+						+ hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getCode())
+				+ (hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getCode() == null ? "" : "/"
+						+ hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getCode())
 				+ CommonConstant.BROWSE_PRODUCTS_URL;
 		myLog.debug("levelTwoUrl:::::" + levelTwoUrl);
 		String levelThreeUrl = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
 				+ "/"
 				+ (hierarchyCategoryMappingRecord.getHierarchyRecord().getName() == null ? ""
 						: hierarchyCategoryMappingRecord.getHierarchyRecord().getName())
-				+ (hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getName() == null ? "" : "/"
-						+ hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getName())
-				+ (hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getName() == null ? "" : "/"
-						+ hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getName())
-				+ (hierarchyCategoryMappingRecord.getCategoryLevelThreeRecord().getName() == null ? "" : "/"
-						+ hierarchyCategoryMappingRecord.getCategoryLevelThreeRecord().getName())
+				+ (hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getCode() == null ? "" : "/"
+						+ hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getCode())
+				+ (hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getCode() == null ? "" : "/"
+						+ hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getCode())
+				+ (hierarchyCategoryMappingRecord.getCategoryLevelThreeRecord().getCode() == null ? "" : "/"
+						+ hierarchyCategoryMappingRecord.getCategoryLevelThreeRecord().getCode())
 				+ CommonConstant.BROWSE_PRODUCTS_URL;
 		myLog.debug("levelThreeUrl:::::" + levelThreeUrl);
 
-		if (hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getName() == null
-				&& hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getName() != null) {
-			hierarchicalBreadcrumbTitle = "<li class=\"last\"><a href=\"" + levelOneUrl + "\">"
+		if (hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getCode() == null) {
+			hierarchicalBreadcrumbTitle = "<li class=\"last\"><a href=\"" + hierarchyUrl + "\">"
+					+ hierarchyCategoryMappingRecord.getHierarchyRecord().getName() + "</a></li>";
+		} else if (hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getCode() == null
+				&& hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getCode() != null) {
+			hierarchicalBreadcrumbTitle = "<li class=\"last\"><a href=\"" + hierarchyUrl + "\">"
+					+ hierarchyCategoryMappingRecord.getHierarchyRecord().getName() + "</a></li>"
+					+ "<li class=\"\"><a>" + ">" + "</a></li>" + "<li class=\"last\"><a href=\"" + levelOneUrl + "\">"
 					+ hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getName() + "</a></li>";
-		} else if (hierarchyCategoryMappingRecord.getCategoryLevelThreeRecord().getName() == null
-				&& hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getName() != null) {
-			hierarchicalBreadcrumbTitle = "<li class=\"\"><a href=\"" + levelOneUrl + "\">"
+		} else if (hierarchyCategoryMappingRecord.getCategoryLevelThreeRecord().getCode() == null
+				&& hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getCode() != null) {
+			hierarchicalBreadcrumbTitle = "<li class=\"last\"><a href=\"" + hierarchyUrl + "\">"
+					+ hierarchyCategoryMappingRecord.getHierarchyRecord().getName() + "</a></li>"
+					+ "<li class=\"\"><a>" + ">" + "</a></li>" + "<li class=\"\"><a href=\"" + levelOneUrl + "\">"
 					+ hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getName() + "</a></li>"
 					+ "<li class=\"\"><a>" + ">" + "</a></li>" + "<li class=\"last\"><a href=\"" + levelTwoUrl + "\">"
 					+ hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getName() + "</a></li>";
-		} else if (hierarchyCategoryMappingRecord.getCategoryLevelThreeRecord().getName() != null) {
+		} else if (hierarchyCategoryMappingRecord.getCategoryLevelThreeRecord().getCode() != null) {
 
-			hierarchicalBreadcrumbTitle = "<li class=\"\"><a href=\"" + levelOneUrl + "\">"
+			hierarchicalBreadcrumbTitle = "<li class=\"last\"><a href=\"" + hierarchyUrl + "\">"
+					+ hierarchyCategoryMappingRecord.getHierarchyRecord().getName() + "</a></li>"
+					+ "<li class=\"\"><a>" + ">" + "</a></li>" + "<li class=\"\"><a href=\"" + levelOneUrl + "\">"
 					+ hierarchyCategoryMappingRecord.getCategoryLevelOneRecord().getName() + "</a></li>"
 					+ "<li class=\"\"><a>" + ">" + "</a></li>" + "<li class=\"\"><a href=\"" + levelTwoUrl + "\">"
 					+ hierarchyCategoryMappingRecord.getCategoryLevelTwoRecord().getName() + "</a></li>"

@@ -197,7 +197,7 @@ public class AddEditCategoryBB extends BackingBean {
 
 		String fileName = event.getFile().getFileName();
 		myLog.debug("fileName " + fileName);
-		String contextPath = "product/";
+		String contextPath = "category/";
 
 		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 		boolean uploadFlag = false;
@@ -207,6 +207,7 @@ public class AddEditCategoryBB extends BackingBean {
 		String code = addEditCategoryOpr.getCategoryRecord().getCode();
 		code = code.replace(" ", "_");
 		String zoomFileName = code + "_0_z." + uploadFile.getExtension();
+		uploadFile.setName(zoomFileName);
 		myLog.debug("zoom fileName " + uploadFile.getName());
 		uploadFlag = uploadImage(uploadFile, CommonConstant.ImageAttributes.ZOOM_IMAGE_WIDTH,
 				CommonConstant.ImageAttributes.ZOOM_IMAGE_HEIGHT, contextPath);

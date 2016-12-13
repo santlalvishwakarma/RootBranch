@@ -110,7 +110,7 @@ public class CategoryMasterBC extends BackingClass {
 				categoryRecord.setSeoKeyword((String) resultSetMap.get("seo_keyword"));
 				categoryRecord.setSeoDescription((String) resultSetMap.get("seo_description"));
 
-				categoryRecord.setSeoTitle((String) resultSetMap.get("image_url"));
+				categoryRecord.setImageUrl((String) resultSetMap.get("image_url"));
 
 				categoryRecord.setActive((Boolean) resultSetMap.get("is_active"));
 
