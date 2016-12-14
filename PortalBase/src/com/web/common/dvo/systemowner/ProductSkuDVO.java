@@ -171,6 +171,11 @@ public class ProductSkuDVO extends BaseDVO {
 
 	public String getHierarchicalProductTitle() {
 
+		String hierarchyUrl = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
+				+ "/"
+				+ (getHierarchyCategoryMappingRecord().getHierarchyRecord().getName() == null ? ""
+						: getHierarchyCategoryMappingRecord().getHierarchyRecord().getName());
+
 		String levelOneUrl = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
 				+ "/"
 				+ (getHierarchyCategoryMappingRecord().getHierarchyRecord().getName() == null ? ""
@@ -189,7 +194,17 @@ public class ProductSkuDVO extends BaseDVO {
 		if (getHierarchyCategoryMappingRecord().getCategoryLevelThreeRecord().getCode() == null
 				&& getHierarchyCategoryMappingRecord().getCategoryLevelTwoRecord().getCode() != null) {
 			hierarchicalProductTitle = "<li><a href=\""
+					+ hierarchyUrl
+					+ CommonConstant.BROWSE_PRODUCTS_URL
+					+ "\"> "
+					+ getHierarchyCategoryMappingRecord().getHierarchyRecord().getName()
+					+ "</a></li>"
+					+ "<li class=\"\"><a>"
+					+ ">"
+					+ "</a></li>"
+					+ "<li><a href=\""
 					+ levelOneUrl
+					+ CommonConstant.BROWSE_PRODUCTS_URL
 					+ "\">"
 					+ getHierarchyCategoryMappingRecord().getCategoryLevelOneRecord().getName()
 					+ "</a></li>"
@@ -197,13 +212,23 @@ public class ProductSkuDVO extends BaseDVO {
 					+ ">"
 					+ "</a></li>"
 					+ (getHierarchyCategoryMappingRecord().getCategoryLevelTwoRecord().getName() == null ? ""
-							: "<li><a href=\"" + levelTwoUrl + "\">"
+							: "<li><a href=\"" + levelTwoUrl + CommonConstant.BROWSE_PRODUCTS_URL + "\">"
 									+ getHierarchyCategoryMappingRecord().getCategoryLevelTwoRecord().getName()
 									+ "</a></li>") + "<li class=\"\"><a>" + ">" + "</a></li>" + "<li class=\"last\">"
 					+ getName() + "</li>";
 		} else if (getHierarchyCategoryMappingRecord().getCategoryLevelThreeRecord().getCode() != null) {
 			hierarchicalProductTitle = "<li><a href=\""
+					+ hierarchyUrl
+					+ CommonConstant.BROWSE_PRODUCTS_URL
+					+ "\"> "
+					+ getHierarchyCategoryMappingRecord().getHierarchyRecord().getName()
+					+ "</a></li>"
+					+ "<li class=\"\"><a>"
+					+ ">"
+					+ "</a></li>"
+					+ "<li><a href=\""
 					+ levelOneUrl
+					+ CommonConstant.BROWSE_PRODUCTS_URL
 					+ "\">"
 					+ getHierarchyCategoryMappingRecord().getCategoryLevelOneRecord().getName()
 					+ "</a></li>"
@@ -218,7 +243,7 @@ public class ProductSkuDVO extends BaseDVO {
 					+ ">"
 					+ "</a></li>"
 					+ (getHierarchyCategoryMappingRecord().getCategoryLevelThreeRecord().getName() == null ? ""
-							: "<li><a href=\"" + levelThreeUrl + "\">"
+							: "<li><a href=\"" + levelThreeUrl + CommonConstant.BROWSE_PRODUCTS_URL + "\">"
 									+ getHierarchyCategoryMappingRecord().getCategoryLevelThreeRecord().getName()
 									+ "</a></li>") + "<li class=\"\"><a>" + ">" + "</a></li>" + "<li class=\"last\">"
 					+ getName() + "</li>";
