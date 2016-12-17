@@ -14,18 +14,37 @@
 						<tr>
 							<td>Category Level</td>
 							<td><p:autoComplete id="categoryLevelMapping" effect="fade" forceSelection="true" minQueryLength="1"
-									multiple="true" value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.categoryLevels}"
+									value="#{addEditCategoryBB.addEditCategoryOpr.categoryLevelRecord}"
 									completeMethod="#{addEditCategoryBB.getSuggestedCategoryLevel}" var="categoryLevelRecord"
 									itemLabel="#{categoryLevelRecord.levelNo}" itemValue="#{categoryLevelRecord}" global="false" maxResults="20"
 									converter="#{addEditCategoryBB.baseDVOConverter}">
 									<p:column headerText="Level">#{categoryLevelRecord.levelNo}</p:column>
+									<p:ajax event="itemSelect" process="@this" listener="#{addEditCategoryBB.setCategoryLevel}"
+										update="@this, categoryLevelMappingTablePanelGroup" />
 								</p:autoComplete></td>
 						</tr>
 					</table>
+
+					<h:panelGroup id="categoryLevelMappingTablePanelGroup">
+						<p:dataTable id="categoryLevelMappingTable" rows="#{addEditCategoryBB.paginationNumber}"
+							var="categoryLevelMappingRecord" paginator="true" rowsPerPageTemplate="5,10,15"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page"
+							rendered="#{!(empty addEditCategoryBB.addEditCategoryOpr.categoryRecord.categoryLevels)}"
+							value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.categoryLevels}">
+							<f:facet name="header">Map Category Level</f:facet>
+							<p:column headerText="Category Level">
+								<h:outputText value="#{categoryLevelMappingRecord.levelNo}" />
+							</p:column>
+							<p:column headerText="Delete">
+								<p:selectBooleanCheckbox value="#{categoryLevelMappingRecord.operationalAttributes.recordDeleted}" />
+							</p:column>
+						</p:dataTable>
+					</h:panelGroup>
+
 					<table style="width: 40%">
 						<tr>
 							<td><p:commandButton id="mapCategory" value="Map"
-									process="@this, :categoryTabView:categoryLevelMappingForm:categoryLevelMappingPanelGroup, :categoryTabView:categoryLevelMappingForm:categoryLevelMapping"
+									process="@this, :categoryTabView:categoryLevelMappingForm:categoryLevelMappingPanelGroup"
 									update=":categoryTabView:categoryLevelMappingForm:categoryLevelMappingPanelGroup"
 									actionListener="#{addEditCategoryBB.mapCategoryToLevels}" /></td>
 							<td><p:commandButton id="closePopup" process="@this" value="Close"

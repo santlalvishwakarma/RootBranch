@@ -331,19 +331,18 @@ public class AddEditCategoryBB extends BackingBean {
 					isAlreadyMapped = true;
 				}
 			}
-			if (inputLevel > 3) {
+			if (inputLevel > 5) {
 				levelExceed = true;
 			}
 			if (!levelExceed && !isAlreadyMapped) {
 				CategoryLevelDVO categoryLevelRecord = new CategoryLevelDVO();
 				categoryLevelRecord.setCode(addEditCategoryOpr.getCategoryRecord().getCode() + "-" + inputLevel);
+				myLog.debug("inputLevel: " + inputLevel);
 				categoryLevelRecord.setLevelNo(inputLevel);
 				categoryLevelRecord.setCategoryRecord(addEditCategoryOpr.getCategoryRecord());
 				newCategoryLevels.add(categoryLevelRecord);
-				categoryLevels.add(categoryLevelRecord);
 			}
-			myLog.debug("size::: " + categoryLevels.size());
-			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("categoryLevelMapping", categoryLevels);
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("categoryLevelMapping", newCategoryLevels);
 		}
 
 		return newCategoryLevels;
@@ -439,6 +438,14 @@ public class AddEditCategoryBB extends BackingBean {
 		} catch (BusinessException e) {
 			handleException(e, propertiesLocation);
 		}
+	}
+
+	public void setCategoryLevel(SelectEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside setCategoryLevel::: " + addEditCategoryOpr.getCategoryLevelRecord().getCode());
+
+		addEditCategoryOpr.getCategoryRecord().getCategoryLevels().add(addEditCategoryOpr.getCategoryLevelRecord());
+		addEditCategoryOpr.setCategoryLevelRecord(null);
 	}
 
 	public void setHierarchyCategoryMapping(SelectEvent event) {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.web.common.dvo.common.OperationalDataValueObject;
 import com.web.common.dvo.systemowner.CategoryDVO;
+import com.web.common.dvo.systemowner.CategoryLevelDVO;
 import com.web.common.dvo.systemowner.HierarchyCategoryMappingDVO;
 
 public class CategoryOpr extends OperationalDataValueObject {
@@ -18,6 +19,7 @@ public class CategoryOpr extends OperationalDataValueObject {
 	private Integer hierarchyCategoryMappingLevelNo;
 	private HierarchyCategoryMappingDVO selectedHierarchyCategoryMappingRecord;
 	private List<HierarchyCategoryMappingDVO> mappedHierarchyCategoryMappingList;
+	private CategoryLevelDVO categoryLevelRecord;
 
 	public CategoryDVO getCategoryRecord() {
 		if (categoryRecord == null) {
@@ -93,6 +95,17 @@ public class CategoryOpr extends OperationalDataValueObject {
 	public void setMappedHierarchyCategoryMappingList(
 			List<HierarchyCategoryMappingDVO> mappedHierarchyCategoryMappingList) {
 		this.mappedHierarchyCategoryMappingList = mappedHierarchyCategoryMappingList;
+	}
+
+	public CategoryLevelDVO getCategoryLevelRecord() {
+		if (categoryLevelRecord == null) {
+			categoryLevelRecord = new CategoryLevelDVO();
+		}
+		return categoryLevelRecord;
+	}
+
+	public void setCategoryLevelRecord(CategoryLevelDVO categoryLevelRecord) {
+		this.categoryLevelRecord = categoryLevelRecord;
 	}
 
 }

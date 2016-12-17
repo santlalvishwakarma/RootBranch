@@ -219,59 +219,62 @@ public class CategoryMasterBC extends BackingClass {
 		String userLogin = addEditCategoryOpr.getCategoryRecord().getUserLogin();
 
 		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
-		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.DELETE_SQL);
-		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
-
-		queryDetailsMap.put(IDAOConstant.SQL_TEXT, CategoryMasterSqlTemplate.DELETE_MAPPED_CATEGORY_LEVELS);
-		Object strSqlParams[][] = new Object[1][3];
-
-		strSqlParams[0][0] = "1";
-		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
-		strSqlParams[0][2] = categoryId;
-
-		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
 
 		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
 		queryDetailsMap.put(IDAOConstant.SQL_TEXT, CategoryMasterSqlTemplate.MAP_CATEGORY_TO_LEVELS);
 
-		strSqlParams = new Object[5][3];
+		DAOResult daoResult = null;
+		Object[][] strSqlParams = new Object[6][3];
 
 		List<CategoryLevelDVO> categoryLevels = addEditCategoryOpr.getCategoryRecord().getCategoryLevels();
 		int categorySize = categoryLevels.size();
 
-		myLog.debug(" 1::: ");
-		myLog.debug(" categorySize::: " + categorySize);
 		for (int i = 0; i < categorySize; i++) {
-			myLog.debug(" categorySize::: " + categorySize);
 			CategoryLevelDVO categoryLevelRecord = categoryLevels.get(i);
 			Long categoryLevelMappingId = categoryLevelRecord.getId();
 			Integer levelNo = categoryLevelRecord.getLevelNo();
 			Boolean levelActive = categoryLevelRecord.getActive();
+			Boolean recordDeleted = categoryLevelRecord.getOperationalAttributes().getRecordDeleted();
 
 			strSqlParams[0][0] = "1";
 			strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
-			strSqlParams[0][2] = null;
-			// strSqlParams[0][2] = categoryLevelMappingId;
+			strSqlParams[0][2] = categoryLevelMappingId;
+			myLog.debug("categoryLevelMappingId: " + categoryLevelMappingId);
 
 			strSqlParams[1][0] = "2";
 			strSqlParams[1][1] = IDAOConstant.LONG_DATATYPE;
 			strSqlParams[1][2] = categoryId;
+			myLog.debug("categoryId: " + categoryId);
 
 			strSqlParams[2][0] = "3";
 			strSqlParams[2][1] = IDAOConstant.INT_DATATYPE;
 			strSqlParams[2][2] = levelNo;
+			myLog.debug("levelNo: " + levelNo);
 
 			strSqlParams[3][0] = "4";
 			strSqlParams[3][1] = IDAOConstant.BOOLEAN_DATATYPE;
 			strSqlParams[3][2] = levelActive;
+			myLog.debug("levelActive: " + levelActive);
 
 			strSqlParams[4][0] = "5";
-			strSqlParams[4][1] = IDAOConstant.STRING_DATATYPE;
-			strSqlParams[4][2] = userLogin;
+			strSqlParams[4][1] = IDAOConstant.BOOLEAN_DATATYPE;
+			strSqlParams[4][2] = recordDeleted;
+			myLog.debug("recordDeleted: " + recordDeleted);
+
+			strSqlParams[5][0] = "6";
+			strSqlParams[5][1] = IDAOConstant.STRING_DATATYPE;
+			strSqlParams[5][2] = userLogin;
+			myLog.debug("userLogin: " + userLogin);
+
+			if (categoryLevelMappingId == null && recordDeleted) {
+				continue;
+			}
 
 			daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
 			HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
-			myLog.debug(" 2::: ");
+			myLog.debug(" response map size ::: " + responseMap);
+
 			int responseSize = responseMap.size();
 			if (responseSize > 0) {
 

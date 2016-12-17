@@ -24,19 +24,24 @@
 				</tr>
 				<tr>
 					<td><label class="labelClass boldClass">Is Active</label></td>
-					<td><p:selectBooleanCheckbox value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.active}" /></td>
+					<td><p:selectBooleanCheckbox value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.active}" /> <h:panelGroup
+							id="categoryImagePanelGroup">
+							<img id="categoryImage"
+								src="/retailwebdav/images/#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.imageUrl}"
+								alt="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.name}"
+								title="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.name}" width="50px" height="80px" />
+						</h:panelGroup></td>
 					<td><label class="labelClass boldClass">Image</label></td>
 					<td><h:panelGroup id="categoryImageContainer" layout="block">
-							<p:fileUpload id="categoryImageFIleUpload" update="@this, categoryImageContainer" process="@this" mode="advanced"
-								dragDropSupport="false" fileUploadListener="#{addEditCategoryBB.handleFileUploadForCategoryImage}"
-								sizeLimit="4097152" label="Select" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" description="Images" />
-							<img src="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.imageUrl}"
-								alt="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.imageUrl}"
-								title="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.imageUrl}" />
+							<p:fileUpload id="categoryImageFIleUpload" update="@this, categoryImageContainer,categoryImagePanelGroup"
+								process="@this" mode="advanced" dragDropSupport="false"
+								fileUploadListener="#{addEditCategoryBB.handleFileUploadForCategoryImage}" sizeLimit="4097152" label="Select"
+								allowTypes="/(\.|\/)(gif|jpe?g|png)$/" description="Images">
+							</p:fileUpload>
 						</h:panelGroup></td>
 				</tr>
 			</table>
-			
+
 			<table style="width: 40%">
 				<tr>
 					<td><p:commandButton id="mapCategoryToCategopryLevelButton" process="@this" value="Map Level"

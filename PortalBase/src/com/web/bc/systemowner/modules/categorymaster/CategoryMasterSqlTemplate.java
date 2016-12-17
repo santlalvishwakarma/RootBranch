@@ -64,9 +64,7 @@ public interface CategoryMasterSqlTemplate extends SqlTemplate {
 
 	static final String SAVE_PUBLISH_CATEGORY_LIST = "CALL sp_product_save_publish_category(?,?,?,?, @p_error_code, @p_error_message);";
 
-	public static final String MAP_CATEGORY_TO_LEVELS = " CALL sp_save_edit_category_levels(?, ?, ?, ?, ?, @p_error_code, @p_error_message); ";
-
-	public static final String DELETE_MAPPED_CATEGORY_LEVELS = " DELETE FROM category_level_mapping WHERE category_id = ?; ";
+	public static final String MAP_CATEGORY_TO_LEVELS = " CALL sp_save_edit_category_levels(?, ?, ?, ?, ?, ?, @p_error_code, @p_error_message); ";
 
 	public static final String GET_MAPPED_LEVELS_TO_CATEGORY = " SELECT level_no FROM category_level_mapping WHERE category_id = ? ";
 
