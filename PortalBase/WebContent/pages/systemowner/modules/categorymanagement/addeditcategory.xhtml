@@ -25,7 +25,8 @@
 				<tr>
 					<td><label class="labelClass boldClass">Is Active</label></td>
 					<td><p:selectBooleanCheckbox value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.active}" /> <h:panelGroup
-							id="categoryImagePanelGroup">
+							id="categoryImagePanelGroup"
+							rendered="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.imageUrl ne null and addEditCategoryBB.addEditCategoryOpr.categoryRecord.imageUrl ne ''}">
 							<img id="categoryImage"
 								src="/retailwebdav/images/#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.imageUrl}"
 								alt="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.name}"
