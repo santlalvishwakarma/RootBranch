@@ -4,7 +4,10 @@
 	<h:panelGroup layout="block" id="readMorePanel">
 		<div id="breadcrumbs" class="breadcrum">
 			<ul>
-				<li class="home"><a href="/p"> Home </a></li>
+				<li><a
+					href="http://#{facesContext.externalContext.request.serverName}#{facesContext.externalContext.requestContextPath}/home/"><span
+						style="float: left; padding-right: 3px;"><img
+							src="/p/staticcontent/retail/images/portalimages/homeIcon.png" /></span> Home </a></li>
 				<li><a> > </a></li>
 				<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.hierarchicalProductTitle}" escape="false" />
 			</ul>
@@ -17,7 +20,9 @@
 			<div id="productgallery">
 				<!---prod-thumbnail Ends-->
 				<div id="mainproduct" class="productdetleft">
-					<img src="#{applicationScope['imageURL']}#{retailReadMoreBB.readMoreOpr.productSkuRecord.defaultImageRecord.imageURL}" class="bookdetimg" />
+					<img
+						src="#{applicationScope['imageURL']}#{retailReadMoreBB.readMoreOpr.productSkuRecord.defaultImageRecord.imageURL}"
+						class="bookdetimg" />
 					<div class="iconbox">
 						<ul>
 							<li>
@@ -72,7 +77,7 @@
 									</h:outputText>
 								</h:panelGroup>
 							</h:panelGroup>
-							
+
 						</div>
 						<br /> <br /> <br />
 						<div class="addcart">
@@ -95,16 +100,22 @@
 	</h:panelGroup>
 	<!---middlewrapper Ends-->
 	<p:dialog id="navigationPanel" autosized="true" widgetVar="navigationPanel" showEffect="fade" hideEffect="fade"
-		dynamic="true" modal="true" width="500" resizable="false" height="500">
+		closable="false" dynamic="true" modal="true" width="500" resizable="false" height="500">
 		<f:facet name="header">
 			<!-- <h:outputText rendered="#{!retailReadMoreBB.addProductSuccessful}" value="Please Select Proper Customization" /> -->
 			<h:outputText rendered="#{!retailReadMoreBB.sizeSelect}" value="Your session has expired" />
-			<span class="productTitleHeader"><h:outputText rendered="#{retailReadMoreBB.navigatePanel}" value="Add Product To Shopping Bag" /></span>
+			<span class="productTitleHeader"><h:outputText rendered="#{retailReadMoreBB.navigatePanel}"
+					value="Add Product To Shopping Bag" /></span>
+			<p:commandLink styleClass="closeIcon" onclick="PF('navigationPanel').hide()">
+				<img src="/p/staticcontent/retail/images/portalimages/closeIcon.png"></img>
+			</p:commandLink>
+
 		</f:facet>
 		<h:panelGroup id="navigationPanelGroup">
 			<p:outputPanel rendered="#{retailReadMoreBB.navigatePanel}">
 				<div class="productImage">
-					<h:graphicImage value="#{applicationScope['imageURL']}#{retailReadMoreBB.readMoreOpr.productSkuRecord.defaultImageRecord.imageURL}" />
+					<h:graphicImage
+						value="#{applicationScope['imageURL']}#{retailReadMoreBB.readMoreOpr.productSkuRecord.defaultImageRecord.imageURL}" />
 				</div>
 				<!-- Product Info Box Starts -->
 				<div class="productContent">

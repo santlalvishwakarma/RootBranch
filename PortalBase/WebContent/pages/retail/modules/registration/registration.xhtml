@@ -1,9 +1,17 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
-	<p:dialog id="registrationPopup" resizable="false" widgetVar="registrationPopup" header="Registration Form"
-		showEffect="explode" hideEffect="explode" dynamic="true" modal="true">
-		<p:ajax event="close" listener="#{registrationPanelBB.closeModalWindow}" />
+	<p:dialog id="registrationPopup" resizable="false" widgetVar="registrationPopup" showEffect="explode"
+		hideEffect="explode" dynamic="true" modal="true" closable="false">
+		<f:facet name="header">
+			<span class="productTitleHeader">Register</span>
+			<h:form>
+				<p:commandLink styleClass="closeIcon" onclick="PF('registrationPopup').hide()">
+					<img src="/p/staticcontent/retail/images/portalimages/closeIcon.png"></img>
+				</p:commandLink>
+			</h:form>
+
+		</f:facet>
 		<h:form id="registrationPopupForm">
 			<p:panel id="registrationPopupPanel">
 				<table style="width: 100%">

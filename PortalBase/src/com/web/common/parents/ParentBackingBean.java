@@ -824,10 +824,10 @@ public abstract class ParentBackingBean implements Serializable {
 		ShoppingCartOpr shoppingCartOpr = (ShoppingCartOpr) FacesContext.getCurrentInstance().getExternalContext()
 				.getSessionMap().get(CommonConstant.SHOPPING_CART_OPR);
 		if (shoppingCartOpr == null) {
-			shoppingCartString = "Shopping Bag ( 0 items )";
+			shoppingCartString = "( 0 items )";
 			myLog.debug("getShoppingBagStyleString2222 " + shoppingCartString);
 		} else {
-			shoppingCartString = "Shopping Bag ( " + shoppingCartOpr.getShoppingCartProductList().size() + " items )";
+			shoppingCartString = " ( " + shoppingCartOpr.getShoppingCartProductList().size() + " items )";
 		}
 		myLog.debug("getShoppingBagStyleString3333333 " + shoppingCartString);
 		return shoppingCartString;

@@ -8,8 +8,9 @@
 			<h:form id="browseProductsForm" style="float: left;">
 				<div id="breadcrumbs" class="breadcrum">
 					<ul>
-						<li class="home"><h:outputLink value="http://#{facesContext.externalContext.request.serverName}">
-								Home
+						<li><h:outputLink value="http://#{facesContext.externalContext.request.serverName}#{facesContext.externalContext.requestContextPath}/home/">
+								<span style="float: left; padding-right: 3px;"><img
+									src="/p/staticcontent/retail/images/portalimages/homeIcon.png" /></span>Home
 							</h:outputLink></li>
 						<li><a> > </a> <span> <h:outputText
 									value="#{retailBrowseProductsBB.browseProductsOpr.productSkuRecord.hierarchicalBreadcrumbTitle}" escape="false" />
