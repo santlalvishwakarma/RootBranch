@@ -17,10 +17,10 @@
 				<div align="right" class="headerLink">
 					<table style="float: right;">
 						<tr>
-							<td><p:commandLink id="goToShoppingCartLink1" styleClass="#{retailHomeBB.shoppingBagStyleString}"
-									action="pretty:shoppingCart">
-									<h:outputText value="#{retailHomeBB.shoppingCartString}" />
-								</p:commandLink></td>
+							<td><p:commandLink id="goToShoppingCartLink1" action="pretty:shoppingCart">
+									<p:graphicImage value="/staticcontent/retail/images/portalimages/shoppingcart.png" styleClass="cartIcon" />
+									<h:outputText value="#{retailHomeBB.shoppingCartString}"></h:outputText>
+								</p:commandLink>&#160;&#160;</td>
 							<td><h:panelGroup id="loginLinkGroup">
 									<p:commandLink value="Login" style="text-align: center;" actionListener="#{loginPanelBean.openLoginPopup}"
 										rendered="#{(sessionScope['LOGGED_USER_KEY'] eq null)}" oncomplete="PF('loginDialog').show()"
@@ -39,8 +39,8 @@
 									</h:panelGroup>
 									&#160;&#160;
 							</h:panelGroup></td>
-							<td><p:commandLink style="" rendered="#{(sessionScope['LOGGED_USER_KEY'] eq null)}" process="@this"
-									id="orderTrackingLink" value="Track My Order" action="pretty:ordertracking" /></td>
+							<!-- <td><p:commandLink style="" rendered="#{(sessionScope['LOGGED_USER_KEY'] eq null)}" process="@this"
+									id="orderTrackingLink" value="Track My Order" action="pretty:ordertracking" /></td> -->
 						</tr>
 					</table>
 				</div>
