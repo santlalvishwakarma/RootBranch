@@ -5,9 +5,9 @@
 		<h:panelGroup id="addEditCategoryField" layout="block">
 			<table style="width: 100%;">
 				<tr>
-					<td><label class="labelClass boldClass">Category Name</label></td>
+					<td><label class="labelClass boldClass">Category Name</label> <label class="mandRed">#{commonLabel.mand_star}</label></td>
 					<td><p:inputText value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.name}" /></td>
-					<td><label class="labelClass boldClass">Category Code</label></td>
+					<td><label class="labelClass boldClass">Category Code</label> <label class="mandRed">#{commonLabel.mand_star}</label></td>
 					<td><p:inputText value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.code}" /></td>
 				</tr>
 				<tr>
@@ -32,8 +32,11 @@
 								alt="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.name}"
 								title="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.name}" width="50px" height="80px" />
 						</h:panelGroup></td>
-					<td><label class="labelClass boldClass">Image</label></td>
-					<td><h:panelGroup id="categoryImageContainer" layout="block">
+					<td><h:panelGroup layout="block" rendered="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.id ne null}">
+							<label class="labelClass boldClass">Image</label>
+						</h:panelGroup></td>
+					<td><h:panelGroup id="categoryImageContainer" layout="block"
+							rendered="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.id ne null}">
 							<p:fileUpload id="categoryImageFIleUpload" update="@this, categoryImageContainer,categoryImagePanelGroup"
 								process="@this" mode="advanced" dragDropSupport="false"
 								fileUploadListener="#{addEditCategoryBB.handleFileUploadForCategoryImage}" sizeLimit="4097152" label="Select"

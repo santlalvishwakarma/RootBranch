@@ -11,7 +11,7 @@
 					<td><p:inputText value="#{searchCategoryBB.searchCategoryOpr.categoryRecord.code}" /></td>
 				</tr>
 			</table>
-			<table style="width: 40%">
+			<table style="width: 60%">
 				<tr>
 					<td><p:commandButton id="btnSearch" update="searchResultPanelGroup" process="@this, searchCategoryField"
 							actionListener="#{searchCategoryBB.executeSearch}" value="Search" /> <p:tooltip for="btnSearch"
@@ -19,6 +19,9 @@
 					<td><p:commandButton id="btnCancel" action="#{searchCategoryBB.clearFields}" value="Clear Search"
 							process="@this" update="searchCategoryField, searchResultPanelGroup" /> <p:tooltip for="btnCancel"
 							value="Click to Clear" /></td>
+					<td><p:commandButton id="btnAddNew" process="@this" value="Add New"
+							actionListener="#{searchCategoryBB.createNewCategory}" update=":categoryTabView" /> <p:tooltip for="btnAddNew"
+							value="Click to Add New" /></td>
 				</tr>
 			</table>
 		</h:panelGroup>

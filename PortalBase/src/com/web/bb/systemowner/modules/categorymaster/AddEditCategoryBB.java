@@ -599,7 +599,7 @@ public class AddEditCategoryBB extends BackingBean {
 		FoundationValidator validator = new FoundationValidator();
 		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 
-		setErrorList(new ArrayList<String>());
+		getErrorList().clear();
 		int j = 1;
 		if (!addEditCategoryOpr.getPublishToHomeCategoryList().isEmpty()) {
 			for (int i = 0; i < addEditCategoryOpr.getPublishToHomeCategoryList().size(); i++) {

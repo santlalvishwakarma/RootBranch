@@ -136,4 +136,19 @@ public class SearchCategoryBB extends BackingBean {
 		searchCategoryOpr.getCategoryRecord().setCode("");
 		searchCategoryOpr.getCategoryList().clear();
 	}
+
+	public void createNewCategory() {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside :: createNewCategory starts ");
+
+		getErrorList().clear();
+		setSuccessMsg("");
+
+		CategoryOpr categoryOpr = new CategoryOpr();
+
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+				.put(CommonConstant.ACTIVE_TAB_OPR, categoryOpr);
+
+	}
 }
