@@ -32,7 +32,7 @@ body {
 	/* font-family: Calibri, Arial, Helvetica, sans-serif; */
 	font-size: 13px;
 	/* color: #666666; */
-	background: #EEEEEE;
+	background: #FFFFFF;
 	/* background: #ffffff; */
 }
 
@@ -1557,7 +1557,7 @@ productdetright {
 	overflow: hidden;
 	margin: 0px auto;
 	width: 100%;
-	min-height: 250px;
+	min-height: 131px;
 	margin-top: 50px;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.79);
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eeeeee+0,eeeeee+55,eeeeee+100 */
@@ -1618,7 +1618,7 @@ productdetright {
 	border-left: 1px solid #000000;
 	margin-top: 18px;
 	width: 148px;
-	height: 165px;
+	height: 131px;
 }
 
 .footer_widget1 a { /* color: #ffffff; */
@@ -1735,7 +1735,7 @@ productdetright {
 	border-bottom: 1px solid black;
 	height: 41px;
 	background: #ffffff none repeat scroll 0 0;
-	padding-left: 194px;
+	/* padding-left: 194px; */
 }
 
 .bookdetimg {

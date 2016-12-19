@@ -3,29 +3,29 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<ui:define name="content">
-		<ui:include src="pagerimage.xhtml" />
 		<br />
-		<div id="homePageCategory" class="categoryHomePage">
-			<ul>
-				<ui:repeat var="publishToHomeCategoryRecord" value="#{retailHomeBB.homeOpr.homePageCategoryList}">
-					<li>
-						<table>
-							<tr>
-								<td><h:outputLink style="text-decoration: none;" id="categoryLink"
-										value="#{publishToHomeCategoryRecord.categoryUrl}">
-										<h:graphicImage value="#{applicationScope['imageURL']}#{publishToHomeCategoryRecord.categoryRecord.imageUrl}"
-											style="width: 250px;height:250px;border:0;" />
-									</h:outputLink></td>
-							</tr>
-							<tr style="height: 50px;">
-								<td><h:outputText value="#{publishToHomeCategoryRecord.categoryRecord.name}" /></td>
-							</tr>
-						</table>
-					</li>
+		<h:form id="homeForm" prependId="false">
+			<div id="homePageCategory" class="categoryHomePage">
+				<ul>
+					<ui:repeat var="publishToHomeCategoryRecord" value="#{retailHomeBB.homeOpr.homePageCategoryList}">
+						<li>
+							<table>
+								<tr>
+									<td><h:outputLink style="text-decoration: none;" id="categoryLink"
+											value="#{publishToHomeCategoryRecord.categoryUrl}">
+											<h:graphicImage value="#{applicationScope['imageURL']}#{publishToHomeCategoryRecord.categoryRecord.imageUrl}"
+												style="width: 250px;height:250px;border:0;" />
+										</h:outputLink></td>
+								</tr>
+								<tr style="height: 50px;">
+									<td><h:outputText value="#{publishToHomeCategoryRecord.categoryRecord.name}" /></td>
+								</tr>
+							</table>
+						</li>
 
-				</ui:repeat>
-			</ul>
-		</div>
-
+					</ui:repeat>
+				</ul>
+			</div>
+		</h:form>
 	</ui:define>
 </ui:composition>

@@ -11,7 +11,6 @@
 			interval: 4000, 
 			turnTo: "c", 
 			paper: true, 
-			width:1198,
 			height:438
 		};
 		return this.each(function() {

@@ -56,4 +56,7 @@
 	<div class="mainmenu">
 		<ui:include src="/pages/retail/modules/menu/menu.xhtml" />
 	</div>
+	<h:panelGroup rendered="#{retailHomeBB.bannerImageRender}">
+		<ui:include src="/pages/retail/modules/home/pagerimage.xhtml"></ui:include>
+	</h:panelGroup>
 </ui:composition>
