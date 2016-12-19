@@ -1,7 +1,5 @@
-.jqueryslidemenu-upper-div { /* width: 940px; */
+.jqueryslidemenu-upper-div { 
 	width: 100%;
-	/* padding-left: 160px; */
-	/* margin: 0 auto 31px; */
 }
 
 .jqueryslidemenu {
@@ -10,12 +8,8 @@
 	text-decoration: none;
 	text-align: center;
 	line-height: 36px;
-	/* 	background: #444242; */
-	/* width: 785px; */
-	/* width: 795px; */
 	width: 1345px;
 	margin: -1px auto;
-	/* height: 40px; */
 }
 
 .jqueryslidemenu ul {
@@ -23,12 +17,9 @@
 	padding: 0;
 	list-style-type: none;
 	z-index: 1000;
-	/* background-image: url("/p/staticcontent/retail/images/menu/menu_inner_bg.jpg"); */
 	background-color: white;
 	height: 40px;
 	margin: 0 -10px 0 0;
-	/* width: 785px; */
-	/* width: 810px; */
 	width: 100%;
 }
 
@@ -37,13 +28,11 @@
 	position: relative;
 	display: inline;
 	float: left;
-	/* width: 157px; */
 	width: 217px;
 	height: 40px;
-	/* background-image: url("/p/staticcontent/retail/images/menu/menu_outer_bg2.jpg"); */
 	background-position: right top;
 	background-repeat: no-repeat;
-	border-right: 1px solid black;
+	/* border-right: 1px solid black; */
 }
 
 /*Top level menu link items style*/
@@ -55,13 +44,6 @@
 	height: 40px;
 }
 
-/* * html .jqueryslidemenu ul li a { IE6 hack to get sub menu links to behave correctly
-	display: inline-block;
-} */
-
-/* .jqueryslidemenu ul li a:link,.jqueryslidemenu ul li a:visited {
-	color: white;
-} */
 .jqueryslidemenu ul li a:hover {
 	color: black;
 	background-color: #DDE96E;
@@ -104,16 +86,13 @@
 	text-decoration: none;
 	text-align: center;
 	line-height: 31px;
-	/* width: 153px; */
 	height: 31px;
 	width: 216px;
-	border-bottom: 1px solid gray;
-	/* text-indent: -4px; */
+	/* border-bottom: 1px solid gray; */
 	text-indent: -2px;
 	font-weight: bold;
-	border: 1px solid #000000;
+	/* border: 1px solid #000000; */
 	background-image: none;
-	/* padding: 7px 5px 0 15px; */
 }
 
 .jqueryslidemenuz ul li ul li a:hover { /*sub menus hover style*/
