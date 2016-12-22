@@ -197,7 +197,7 @@ public class ReadMoreBB extends BackingBean {
 		}
 	}
 
-	public void addToCart() {
+	public String addToCart() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		boolean validateVariant = false;
 		String skuCode = readMoreOpr.getProductSkuRecord().getId().toString() + "~";
@@ -332,6 +332,7 @@ public class ReadMoreBB extends BackingBean {
 		} else {
 			myLog.debug("Variant does not exist :::::: ");
 		}
+		return null;
 
 	}
 

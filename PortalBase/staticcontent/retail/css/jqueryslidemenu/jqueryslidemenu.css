@@ -1,4 +1,4 @@
-.jqueryslidemenu-upper-div { 
+.jqueryslidemenu-upper-div {
 	width: 100%;
 }
 
@@ -34,6 +34,16 @@
 	background-repeat: no-repeat;
 	/* border-right: 1px solid black; */
 }
+
+/* .jqueryslidemenu ul li a:HOVER{
+	font-size: 11px;
+	display: block;
+	color: white;
+	text-decoration: none;
+	height: 40px;
+	border: 1px solid #000000;
+	border-bottom-color: 1px sloid #000000;
+} */
 
 /*Top level menu link items style*/
 .jqueryslidemenu ul li a {

@@ -497,13 +497,15 @@ a img {
 
 .ui-button {
 	font-size: 15px !important;
+	background-color: #55a32a;
+    border-color: #55a32a;
+    color: #ffffff !important;
+    background-image: none;
 }
 
 .ui-button:hover {
-	text-decoration: none;
-	/* border-bottom: 2px solid #FF0000 !important; */
-	font-weight: bold;
-	font-size: 18px;
+	background-color: #3d8901;
+    border-color: #3d8901;
 }
 
 .mandRed {

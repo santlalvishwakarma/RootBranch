@@ -80,14 +80,17 @@
 
 						</div>
 						<br /> <br /> <br />
-						<div class="addcart">
-							<p:commandLink styleClass="addtocart" process="@this" id="addToCartLink" action="#{retailReadMoreBB.addToCart}"
-								update="navigationPanel" value="Add to cart" oncomplete="PF('navigationPanel').show()">
+						<h:outputText value="Quantity:" />
+						<!-- <p:inputText value="#{retailReadMoreBB.addToCartProductRecord.shoppingCartProduct.quantity}" /> -->
+						<p:spinner min="1" prefix="1" value="#{retailReadMoreBB.addToCartProductRecord.shoppingCartProduct.quantity}"></p:spinner>
+						<br /> <br /> 
+						<div>
+							<p:commandButton value="Add To Cart" process="readMoreForm, @this" id="addToCartLink"
+								action="#{retailReadMoreBB.addToCart}" update="navigationPanel" oncomplete="PF('navigationPanel').show()">
 								<f:setPropertyActionListener value="#{retailReadMoreBB.readMoreOpr.productSkuRecord}"
 									target="#{retailReadMoreBB.addToCartProductRecord.shoppingCartProduct.productSkuRecord}" />
-								<f:setPropertyActionListener value="1"
-									target="#{retailReadMoreBB.addToCartProductRecord.shoppingCartProduct.quantity}" />
-							</p:commandLink>
+							</p:commandButton>
+
 						</div>
 						<div class="productcontent">
 							<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.description}" />
