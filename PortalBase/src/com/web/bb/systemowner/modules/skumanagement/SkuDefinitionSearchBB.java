@@ -94,8 +94,7 @@ public class SkuDefinitionSearchBB extends BackingBean {
 	public void executeSearch(ActionEvent event) {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		setErrorList(new ArrayList<String>());
-		setSuccessMsg("");
-		myLog.debug("In Product Definition Search BB :: executeSearch starts ");
+		myLog.debug("In SkuDefinitionSearchBB :: executeSearch starts ");
 
 		if (validateSearch()) {
 
@@ -120,7 +119,7 @@ public class SkuDefinitionSearchBB extends BackingBean {
 	@Override
 	public boolean validateSearch() {
 		FoundationValidator validator = new FoundationValidator();
-		PropertiesReader propertiesReader = new PropertiesReader(CommonConstant.MessageLocation.COMMON_MESSAGES);
+		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 		boolean validateFlag = true;
 		setErrorList(new ArrayList<String>());
 
@@ -153,7 +152,7 @@ public class SkuDefinitionSearchBB extends BackingBean {
 	@Override
 	public void editDetails() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Search BB :: editDetails starts ");
+		myLog.debug("In SkuDefinitionSearchBB :: editDetails starts ");
 
 		setErrorList(new ArrayList<String>());
 		setSuccessMsg("");
@@ -189,7 +188,6 @@ public class SkuDefinitionSearchBB extends BackingBean {
 	public void retrieveData() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("In SkuDefinitionSearchBB :: retrieveData starts ");
-		beanName = "productDefinitionSearchListBB";
 
 		allOptions = new OptionsDVO();
 

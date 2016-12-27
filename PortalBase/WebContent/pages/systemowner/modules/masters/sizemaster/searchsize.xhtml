@@ -26,55 +26,61 @@
 					<td><p:commandButton id="btnSearch" update="searchResultPanelGroup" process="@this, searchCategoryField"
 							actionListener="#{searchSizeBB.executeSearch}" value="Search" /> <p:tooltip for="btnSearch"
 							value="Click to Search" /> <p:hotkey bind="ctrl+shift+s" /></td>
-					<td><p:commandButton id="btnCancel" action="#{searchSizeBB.clearFields}" value="Clear Search"
-							process="@this" update="searchCategoryField, searchResultPanelGroup" /> <p:tooltip for="btnCancel"
+					<td><p:commandButton id="btnCancel" action="#{searchSizeBB.clearPage}" value="Clear Search"
+							process="@this" update="searchSizeField, searchResultPanelGroup" /> <p:tooltip for="btnCancel"
 							value="Click to Clear" /></td>
 				</tr>
 			</table>
 		</h:panelGroup>
 		<h:panelGroup id="searchResultPanelGroup">
-			<p:panel rendered="#{!(empty searchSizeBB.searchCategoryOpr.categoryList)}">
+			<p:panel rendered="#{!(empty searchSizeBB.sizeOpr.sizeList)}">
 				<h:commandLink id="excelLink">
 					<p:graphicImage alt="Export to Xls" value="/staticcontent/images/excel.png" styleClass="imageClass" />
-					<p:dataExporter type="xls" target="categoryRecord" fileName="Categories" />
+					<p:dataExporter type="xls" target="sizeTable" fileName="Sizes" />
 				</h:commandLink>
 				<p:tooltip for="excelLink" value="Click to export data in the list to MS-Excel" />
 				<h:commandLink id="pdfLink">
 					<p:graphicImage alt="Export to PDF" value="/staticcontent/images/pdf.png" styleClass="imageClass" />
-					<p:dataExporter type="pdf" target="categoryRecord" fileName="Categories" />
+					<p:dataExporter type="pdf" target="sizeTable" fileName="Sizes" />
 				</h:commandLink>
 				<p:tooltip for="pdfLink" value="Click to export data in the list to PDF" />
 				<h:commandLink id="xmlLink">
 					<p:graphicImage alt="Export to XML" value="/staticcontent/images/xml.png" styleClass="imageClass" />
-					<p:dataExporter type="xml" target="categoryRecord" fileName="Categories" />
+					<p:dataExporter type="xml" target="sizeTable" fileName="Sizes" />
 				</h:commandLink>
 				<p:tooltip for="xmlLink" value="Click to export data in the list to XML" />
 			</p:panel>
-			<p:dataTable id="categoryTable" rows="#{searchSizeBB.paginationNumber}" var="categoryRecord"
-				rowsPerPageTemplate="5,10,15" rendered="#{!(empty searchSizeBB.searchCategoryOpr.categoryList)}"
-				value="#{searchSizeBB.searchCategoryOpr.categoryList}" style="width: 100%;"
+			<p:dataTable id="sizeTable" rows="#{searchSizeBB.paginationNumber}" var="sizeRecord"
+				rowsPerPageTemplate="5,10,15" rendered="#{!(empty searchSizeBB.sizeOpr.sizeList)}"
+				value="#{searchSizeBB.sizeOpr.sizeList}" style="width: 100%;"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page"
 				paginator="true">
-				<f:facet name="header">Categories</f:facet>
-				<p:column style="text-align: center;" sortBy="#{categoryRecord.name}" filterBy="#{categoryRecord.name}"
-					filterMatchMode="contains">
-					<f:facet name="header">Name</f:facet>
-					<p:commandLink styleClass="linkClass" process="@this" update=":categoryTabView" value="#{categoryRecord.name}"
-						action="#{searchSizeBB.editDetails}">
-						<f:setPropertyActionListener target="#{searchSizeBB.searchCategoryOpr.selectedCategoryRecord}"
-							value="#{categoryRecord}" />
-					</p:commandLink>
-				</p:column>
-				<p:column style="text-align: center;" sortBy="#{categoryRecord.code}" filterBy="#{categoryRecord.code}"
+				<f:facet name="header">Sizes</f:facet>
+				<p:column style="text-align: center;" sortBy="#{sizeRecord.name}" filterBy="#{sizeRecord.name}"
 					filterMatchMode="contains">
 					<f:facet name="header">Code</f:facet>
-					<h:outputText value="#{categoryRecord.code}" styleClass="labelClass" />
+					<p:commandLink styleClass="linkClass" process="@this" update=":sizeTabView" value="#{sizeRecord.code}"
+						action="#{searchSizeBB.editDetails}">
+						<f:setPropertyActionListener target="#{searchSizeBB.sizeOpr.selectedSizeRecord}"
+							value="#{sizeRecord}" />
+					</p:commandLink>
 				</p:column>
-				<p:column style="text-align: center;" sortBy="#{categoryRecord.description}"
-					filterBy="#{categoryRecord.description}" filterMatchMode="contains">
+				<p:column style="text-align: center;" sortBy="#{sizeRecord.name}" filterBy="#{sizeRecord.name}"
+					filterMatchMode="contains">
+					<f:facet name="header">Name</f:facet>
+					<h:outputText value="#{sizeRecord.name}" styleClass="labelClass" />
+				</p:column>
+				<p:column style="text-align: center;" sortBy="#{sizeRecord.description}"
+					filterBy="#{sizeRecord.description}" filterMatchMode="contains">
 					<f:facet name="header">Description</f:facet>
-					<h:outputText value="#{categoryRecord.description}" styleClass="labelClass" />
+					<h:outputText value="#{sizeRecord.description}" styleClass="labelClass" />
 				</p:column>
+				<p:column sortBy="#{sizeRecord.activeDescription}" filterBy="#{sizeRecord.activeDescription}"
+					filterMatchMode="contains">
+					<f:facet name="header">Active</f:facet>
+					<h:outputText value="#{sizeRecord.activeDescription}" styleClass="labelClass" />
+				</p:column>
+				<f:facet name="footer">Total skus : #{fn:length(searchSizeBB.sizeOpr.sizeList)}</f:facet>
 			</p:dataTable>
 		</h:panelGroup>
 	</h:form>

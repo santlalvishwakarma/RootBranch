@@ -2,6 +2,7 @@ package com.web.bc.systemowner.modules.skumanagement;
 
 import java.util.HashMap;
 
+import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.systemowner.SkuOpr;
 import com.web.common.dvo.systemowner.ProductDVO;
 import com.web.common.dvo.systemowner.ProductSkuDVO;
@@ -58,9 +59,9 @@ public class SkuDefinitionBC extends BackingClass {
 
 		strSqlParams[4][0] = "5";
 		strSqlParams[4][1] = IDAOConstant.BOOLEAN_DATATYPE;
-		if (statusCode != null && statusCode.equalsIgnoreCase("active"))
+		if (statusCode != null && statusCode.equalsIgnoreCase(CommonConstant.StatusCodes.ACTIVE))
 			strSqlParams[4][2] = true;
-		else if (statusCode != null && statusCode.equalsIgnoreCase("inactive"))
+		else if (statusCode != null && statusCode.equalsIgnoreCase(CommonConstant.StatusCodes.INACTIVE))
 			strSqlParams[4][2] = false;
 		myLog.debug(" parameter 5 statusCode:: " + strSqlParams[4][2]);
 

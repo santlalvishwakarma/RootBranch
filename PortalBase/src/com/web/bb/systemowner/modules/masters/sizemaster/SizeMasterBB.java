@@ -1,4 +1,4 @@
-package com.web.bb.systemowner.modules.sizemaster;
+package com.web.bb.systemowner.modules.masters.sizemaster;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;

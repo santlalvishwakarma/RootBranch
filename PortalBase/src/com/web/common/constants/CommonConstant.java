@@ -208,6 +208,7 @@ public interface CommonConstant {
 		public static final String PENDING_APPROVAL = "PENDING_APPROVAL";
 		public static final String APPROVED = "APPROVED";
 		public static final String INACTIVE = "INACTIVE";
+		public static final String ACTIVE = "ACTIVE";
 		public static final String REJECT = "REJECT";
 		public static final String REWORK = "REWORK";
 		public static final String CLOSED = "CLOSED";

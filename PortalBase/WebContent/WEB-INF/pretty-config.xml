@@ -136,5 +136,11 @@
 		<view-id value="/pages/systemowner/modules/publishtohomecategory/publishToHomeCategory.jsf" />
 		<action onPostback="false">#{publishToHomeCategoryBB.retrieveData}</action>
 	</url-mapping>
+	
+	<url-mapping id="sizeMaster">
+		<pattern value="/admin/sizeMaster" />
+		<view-id value="/pages/systemowner/modules/sizemaster/sizemaster.jsf" />
+		<action onPostback="false">#{sizeMasterBB.retrieveData}</action>
+	</url-mapping>
 
 </pretty-config>

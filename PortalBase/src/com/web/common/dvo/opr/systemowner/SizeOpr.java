@@ -11,6 +11,7 @@ public class SizeOpr extends OperationalDataValueObject {
 	private static final long serialVersionUID = 6315509217120631754L;
 	private SizeDVO sizeRecord;
 	private List<SizeDVO> sizeList;
+	private SizeDVO selectedSizeRecord;
 
 	public SizeDVO getSizeRecord() {
 		if (sizeRecord == null) {
@@ -32,6 +33,17 @@ public class SizeOpr extends OperationalDataValueObject {
 
 	public void setSizeList(List<SizeDVO> sizeList) {
 		this.sizeList = sizeList;
+	}
+
+	public SizeDVO getSelectedSizeRecord() {
+		if (selectedSizeRecord == null) {
+			selectedSizeRecord = new SizeDVO();
+		}
+		return selectedSizeRecord;
+	}
+
+	public void setSelectedSizeRecord(SizeDVO selectedSizeRecord) {
+		this.selectedSizeRecord = selectedSizeRecord;
 	}
 
 }
