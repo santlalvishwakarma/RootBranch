@@ -5,9 +5,9 @@
 		<h:panelGroup id="addEditSizePanelGroup">
 			<table style="width: 100%;">
 				<tr>
-					<td><label class="labelClass boldClass">Size Code</label></td>
+					<td><label class="labelClass boldClass">Size Code</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
 					<td><p:inputText value="#{addEditSizeBB.addEditSizeOpr.sizeRecord.code}" /></td>
-					<td><label class="labelClass boldClass">Size Name</label></td>
+					<td><label class="labelClass boldClass">Size Name</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
 					<td><p:inputText value="#{addEditSizeBB.addEditSizeOpr.sizeRecord.name}" /></td>
 				</tr>
 				<tr>
@@ -19,10 +19,10 @@
 			</table>
 			<table style="width: 40%">
 				<tr>
-					<td><p:commandButton id="btnSearch" update="addEditCategoryField" process="@this, addEditSizePanelGroup"
-							actionListener="#{addEditSizeBB.executeSave}" value="Save" /> <p:tooltip for="btnSearch"
-							value="Click to Save" /> <p:hotkey bind="ctrl+shift+s" /></td>
-					<td><p:commandButton id="btnCancel" action="#{addEditSizeBB.resetPage}" value="Reset" process="@this"
+					<td><p:commandButton id="btnSave" update="addEditSizePanelGroup" process="@this, addEditSizePanelGroup"
+							actionListener="#{addEditSizeBB.executeSave}" value="Save" /> <p:tooltip for="btnSave" value="Click to Save" />
+						<p:hotkey bind="ctrl+shift+s" /></td>
+					<td><p:commandButton id="btnCancel" action="#{addEditSizeBB.clearPage}" value="Reset" process="@this"
 							update="addEditSizePanelGroup" /> <p:tooltip for="btnCancel" value="Click to Reset" /></td>
 				</tr>
 			</table>

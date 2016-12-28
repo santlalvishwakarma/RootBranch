@@ -44,7 +44,7 @@ public class SizeMasterBB extends BackingBean {
 		String tabId = activeTab.getId();
 		myLog.debug(" In SizeMasterBB : tabChanged : tab id : " + tabId);
 
-		if (tabId.equals("searchListSku")) {
+		if (tabId.equals("searchListSize")) {
 			if (!FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 					.containsKey(CommonConstant.RE_INITIALIZE_OPR)) {
 				FacesContext.getCurrentInstance().getExternalContext().getRequestMap()

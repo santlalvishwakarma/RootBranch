@@ -4,7 +4,8 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<ui:define name="content">
 		<p:tabView id="sizeTabView" activeIndex="#{sizeMasterBB.activeTabIndex}">
-			<p:ajax event="tabChange" listener="#{sizeMasterBB.tabChanged}" process="@this" update=":sizeTabView" />
+			<p:ajax event="tabChange" listener="#{sizeMasterBB.tabChanged}"
+				update=":sizeTabView:sizeSearchForm, :sizeTabView:sizeAddEditForm" />
 			<p:tab id="searchListSize" title="Search/List">
 				<div style="overflow-x: auto; overflow-y: auto;">
 					<ui:include src="searchsize.xhtml" />

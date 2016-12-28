@@ -1,7 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
-	<h:form id="categorySearchForm">
+	<h:form id="sizeSearchForm">
 		<h:panelGroup id="searchSizeField">
 			<table style="width: 100%;">
 				<tr>
@@ -23,7 +23,7 @@
 			<br />
 			<table style="width: 40%">
 				<tr>
-					<td><p:commandButton id="btnSearch" update="searchResultPanelGroup" process="@this, searchCategoryField"
+					<td><p:commandButton id="btnSearch" update="searchResultPanelGroup" process="@this, searchSizeField"
 							actionListener="#{searchSizeBB.executeSearch}" value="Search" /> <p:tooltip for="btnSearch"
 							value="Click to Search" /> <p:hotkey bind="ctrl+shift+s" /></td>
 					<td><p:commandButton id="btnCancel" action="#{searchSizeBB.clearPage}" value="Clear Search"
@@ -35,17 +35,17 @@
 		<h:panelGroup id="searchResultPanelGroup">
 			<p:panel rendered="#{!(empty searchSizeBB.sizeOpr.sizeList)}">
 				<h:commandLink id="excelLink">
-					<p:graphicImage alt="Export to Xls" value="/staticcontent/images/excel.png" styleClass="imageClass" />
+					<p:graphicImage alt="Export to Xls" value="/staticcontent/systemowner/images/excel.png" styleClass="imageClass" />
 					<p:dataExporter type="xls" target="sizeTable" fileName="Sizes" />
 				</h:commandLink>
 				<p:tooltip for="excelLink" value="Click to export data in the list to MS-Excel" />
 				<h:commandLink id="pdfLink">
-					<p:graphicImage alt="Export to PDF" value="/staticcontent/images/pdf.png" styleClass="imageClass" />
+					<p:graphicImage alt="Export to PDF" value="/staticcontent/systemowner/images/pdf.png" styleClass="imageClass" />
 					<p:dataExporter type="pdf" target="sizeTable" fileName="Sizes" />
 				</h:commandLink>
 				<p:tooltip for="pdfLink" value="Click to export data in the list to PDF" />
 				<h:commandLink id="xmlLink">
-					<p:graphicImage alt="Export to XML" value="/staticcontent/images/xml.png" styleClass="imageClass" />
+					<p:graphicImage alt="Export to XML" value="/staticcontent/systemowner/images/xml.png" styleClass="imageClass" />
 					<p:dataExporter type="xml" target="sizeTable" fileName="Sizes" />
 				</h:commandLink>
 				<p:tooltip for="xmlLink" value="Click to export data in the list to XML" />

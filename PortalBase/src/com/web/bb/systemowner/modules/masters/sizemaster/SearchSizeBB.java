@@ -3,9 +3,11 @@ package com.web.bb.systemowner.modules.masters.sizemaster;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import com.web.bf.systemowner.modules.masters.sizemaster.SizeMasterBF;
+import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.common.Parameter;
 import com.web.common.dvo.opr.systemowner.SizeOpr;
 import com.web.common.dvo.systemowner.SizeDVO;
@@ -28,6 +30,13 @@ public class SearchSizeBB extends BackingBean {
 	public SizeOpr getSizeOpr() {
 		if (sizeOpr == null) {
 			sizeOpr = new SizeOpr();
+		}
+
+		if (FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+				.containsKey(CommonConstant.RE_INITIALIZE_OPR)) {
+			sizeOpr.setSizeList(new ArrayList<SizeDVO>());
+			FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+					.remove(CommonConstant.RE_INITIALIZE_OPR);
 		}
 		return sizeOpr;
 	}
@@ -99,8 +108,18 @@ public class SearchSizeBB extends BackingBean {
 
 	@Override
 	public void editDetails() {
-		// TODO Auto-generated method stub
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In SearchSizeBB :: editDetails starts ");
 
+		setErrorList(new ArrayList<String>());
+		setSuccessMsg("");
+
+		SizeOpr sizeOprSent = new SizeOpr();
+		sizeOprSent.setSizeRecord(sizeOpr.getSelectedSizeRecord());
+
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+				.put(CommonConstant.ACTIVE_TAB_OPR, sizeOprSent);
 	}
 
 	@Override

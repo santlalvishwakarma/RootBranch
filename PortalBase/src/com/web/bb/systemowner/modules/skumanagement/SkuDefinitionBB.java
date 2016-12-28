@@ -7,7 +7,7 @@ import org.primefaces.component.tabview.Tab;
 import org.primefaces.event.TabChangeEvent;
 
 import com.web.common.constants.CommonConstant;
-import com.web.common.dvo.opr.systemowner.ProductOpr;
+import com.web.common.dvo.opr.systemowner.SkuOpr;
 import com.web.common.dvo.util.OptionsDVO;
 import com.web.common.parents.BackingBean;
 import com.web.foundation.logger.ITSDLogger;
@@ -93,13 +93,13 @@ public class SkuDefinitionBB extends BackingBean {
 			if (!FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 					.containsKey(CommonConstant.RE_INITIALIZE_OPR)) {
 				FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-						.put(CommonConstant.RE_INITIALIZE_OPR, new ProductOpr());
+						.put(CommonConstant.RE_INITIALIZE_OPR, new SkuOpr());
 			}
 		} else if (tabId.equals("addEditSku")) {
 			if (!FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 					.containsKey(CommonConstant.ACTIVE_TAB_OPR)) {
 				FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-						.put(CommonConstant.ACTIVE_TAB_OPR, new ProductOpr());
+						.put(CommonConstant.ACTIVE_TAB_OPR, new SkuOpr());
 			}
 		}
 	}

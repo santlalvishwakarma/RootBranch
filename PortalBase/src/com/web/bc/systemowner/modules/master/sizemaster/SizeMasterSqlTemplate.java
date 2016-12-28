@@ -6,4 +6,9 @@ public interface SizeMasterSqlTemplate extends SqlTemplate {
 
 	String SEARCH_SIZE_DETAILS = "SELECT size_id, size_code, size_name, size_description, is_active, modified_by, modified_date FROM core_size_master ";
 
+	String SAVE_SIZE_DETAILS = "CALL sp_core_save_size_details(?,?,?,?,?,?,?, @p_error_code, @p_error_message);";
+
+	String GET_SIZE_DETAILS = "SELECT size_id, size_code, size_name, size_description, is_active, modified_by, modified_date FROM core_size_master"
+			+ " WHERE size_id = ?;";
+
 }
