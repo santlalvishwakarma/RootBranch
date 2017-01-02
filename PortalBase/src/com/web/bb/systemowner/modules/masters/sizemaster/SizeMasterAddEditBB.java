@@ -8,6 +8,7 @@ import javax.faces.event.ActionEvent;
 import com.web.bf.systemowner.modules.masters.sizemaster.SizeMasterBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.systemowner.SizeOpr;
+import com.web.common.dvo.opr.systemowner.SkuOpr;
 import com.web.common.dvo.systemowner.SizeDVO;
 import com.web.common.dvo.util.OptionsDVO;
 import com.web.common.parents.BackingBean;
@@ -146,6 +147,21 @@ public class SizeMasterAddEditBB extends BackingBean {
 
 	@Override
 	public void setAllOptions(OptionsDVO allOptions) {
+	}
+
+	public void executeAddMore(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In SizeMasterAddEditBB :: add more starts ");
+
+		setErrorList(new ArrayList<String>());
+		setSuccessMsg("");
+
+		SizeOpr sizeOprSent = new SizeOpr();
+
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+				.put(CommonConstant.ACTIVE_TAB_OPR, sizeOprSent);
+
 	}
 
 }
