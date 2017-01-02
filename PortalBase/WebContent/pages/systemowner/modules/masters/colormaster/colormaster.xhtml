@@ -1,0 +1,21 @@
+<ui:composition template="/pages/systemowner/template/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<ui:define name="content">
+		<p:tabView id="colorTabView" activeIndex="#{sizeMasterBB.activeTabIndex}">
+			<p:ajax event="tabChange" listener="#{sizeMasterBB.tabChanged}"
+				update=":colorTabView:colorSearchForm, :colorTabView:colorAddEditForm" />
+			<p:tab id="searchListcolor" title="Search/List">
+				<div style="overflow-x: auto; overflow-y: auto;">
+					<ui:include src="searchcolor.xhtml" />
+				</div>
+			</p:tab>
+			<p:tab id="addeditcolor" title="Add/Edit color">
+				<div style="overflow-x: auto; overflow-y: auto;">
+					<ui:include src="addeditcolor.xhtml" />
+				</div>
+			</p:tab>
+		</p:tabView>
+	</ui:define>
+</ui:composition>

@@ -153,5 +153,22 @@
 		<managed-bean-class>com.web.bb.systemowner.modules.publishtohomecategory.PublishToHomeCategoryBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>addEditColorBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.colormaster.ColorMasterAddEditBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>searchColorBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.colormaster.SearchColorBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>colorMasterBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.colormaster.ColorMasterBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

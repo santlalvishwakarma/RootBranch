@@ -138,4 +138,10 @@
 		<action onPostback="false">#{publishToHomeCategoryBB.retrieveData}</action>
 	</url-mapping>
 	
+	<url-mapping id="colorMaster">
+		<pattern value="/admin/colormaster" />
+		<view-id value="/pages/systemowner/modules/masters/colormaster/colormaster.jsf" />
+		<action onPostback="false">#{searchColorBB.retrieveData}</action>
+	</url-mapping>
+	
 </pretty-config>
