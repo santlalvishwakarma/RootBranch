@@ -170,5 +170,22 @@
 		<managed-bean-class>com.web.bb.systemowner.modules.masters.colormaster.ColorMasterBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>addEditMaterialBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.materialmaster.MaterialMasterAddEditBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>searchMaterialBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.materialmaster.SearchMaterialBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>materialMasterBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.materialmaster.MaterialMasterBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

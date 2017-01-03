@@ -35,14 +35,14 @@
 											<tr>
 												<td><h:panelGroup rendered="#{product.renderedDiscountPrice}">
 														<span class="light">List Price :</span>
-														<span class="overline light"> <span class="WebRupee"><h:outputText value="Rs." /> </span> <h:outputText
+														<span class="overline light"> <i class="fa fa-inr"></i> <h:outputText
 																value="#{product.basePrice}">
 																<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 															</h:outputText>
 														</span>
 														<br />
 														<span class="org-color">Our Price : </span>
-														<span class="WebRupee"><h:outputText value="Rs." /> </span>
+														<h:outputText>&#8377;</h:outputText>
 														<h:outputText value="#{product.finalBasePrice}">
 															<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 														</h:outputText>

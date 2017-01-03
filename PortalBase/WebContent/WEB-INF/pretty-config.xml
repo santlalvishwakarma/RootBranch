@@ -144,4 +144,10 @@
 		<action onPostback="false">#{searchColorBB.retrieveData}</action>
 	</url-mapping>
 	
+	<url-mapping id="materialMaster">
+		<pattern value="/admin/materialmaster" />
+		<view-id value="/pages/systemowner/modules/masters/materialmaster/materialmaster.jsf" />
+		<action onPostback="false">#{searchMaterialBB.retrieveData}</action>
+	</url-mapping>
+	
 </pretty-config>

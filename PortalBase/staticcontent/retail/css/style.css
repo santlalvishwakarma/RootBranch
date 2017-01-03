@@ -1554,4 +1554,8 @@ productdetright {
 	opacity: 0.7;
 }
 
+.productbox ul li:HOVER {
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.89);
+}
+
 /* Added for portal base end*/
