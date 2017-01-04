@@ -150,4 +150,10 @@
 		<action onPostback="false">#{searchMaterialBB.retrieveData}</action>
 	</url-mapping>
 	
+	<url-mapping id="unitMaster">
+		<pattern value="/admin/unitmaster" />
+		<view-id value="/pages/systemowner/modules/masters/unitmaster/unitmaster.jsf" />
+		<action onPostback="false">#{searchUnitBB.retrieveData}</action>
+	</url-mapping>
+	
 </pretty-config>

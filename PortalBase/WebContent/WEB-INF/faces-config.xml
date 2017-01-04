@@ -187,5 +187,22 @@
 		<managed-bean-class>com.web.bb.systemowner.modules.masters.materialmaster.MaterialMasterBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>addEditUnitBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.unitmaster.UnitMasterAddEditBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>searchUnitBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.unitmaster.SearchUnitBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>unitMasterBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.unitmaster.UnitMasterBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

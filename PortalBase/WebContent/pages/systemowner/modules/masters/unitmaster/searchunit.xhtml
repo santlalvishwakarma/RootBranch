@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="unitSearchForm">
+		<h:panelGroup id="searchUnitField">
+			<table style="width: 100%;">
+				<tr>
+					<td><label class="labelClass boldClass">Unit Code</label></td>
+					<td><p:inputText value="#{searchUnitBB.unitOpr.unitRecord.code}" /></td>
+					<td><label class="labelClass boldClass">Unit Name</label></td>
+					<td><p:inputText value="#{searchUnitBB.unitOpr.unitRecord.name}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Status</label></td>
+					<td><p:selectOneMenu id="statusList" value="#{searchUnitBB.unitOpr.unitRecord.statusRecord.code}">
+							<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+							<f:selectItems value="#{searchUnitBB.allOptions.allOptionsValues['statusList']}" var="statusRecord"
+								itemLabel="#{statusRecord.name}" itemValue="#{statusRecord.code}" />
+						</p:selectOneMenu></td>
+				</tr>
+			</table>
+			<br />
+			<table style="width: 40%">
+				<tr>
+					<td><p:commandButton id="btnSearch" update="searchResultPanelGroup" process="@this, searchUnitField"
+							actionListener="#{searchUnitBB.executeSearch}" value="Search" /> <p:tooltip for="btnSearch"
+							value="Click to Search" /> <p:hotkey bind="ctrl+shift+s" /></td>
+					<td><p:commandButton id="btnCancel" action="#{searchUnitBB.clearPage}" value="Clear Search" process="@this"
+							update="searchUnitField, searchResultPanelGroup" /> <p:tooltip for="btnCancel" value="Click to Clear" /></td>
+				</tr>
+			</table>
+		</h:panelGroup>
+		<h:panelGroup id="searchResultPanelGroup">
+			<p:panel rendered="#{!(empty searchUnitBB.unitOpr.unitList)}">
+				<h:commandLink id="excelLink">
+					<p:graphicImage alt="Export to Xls" value="/staticcontent/systemowner/images/excel.png" styleClass="imageClass" />
+					<p:dataExporter type="xls" target="unitTable" fileName="Units" />
+				</h:commandLink>
+				<p:tooltip for="excelLink" value="Click to export data in the list to MS-Excel" />
+				<h:commandLink id="pdfLink">
+					<p:graphicImage alt="Export to PDF" value="/staticcontent/systemowner/images/pdf.png" styleClass="imageClass" />
+					<p:dataExporter type="pdf" target="unitTable" fileName="Units" />
+				</h:commandLink>
+				<p:tooltip for="pdfLink" value="Click to export data in the list to PDF" />
+				<h:commandLink id="xmlLink">
+					<p:graphicImage alt="Export to XML" value="/staticcontent/systemowner/images/xml.png" styleClass="imageClass" />
+					<p:dataExporter type="xml" target="unitTable" fileName="Units" />
+				</h:commandLink>
+				<p:tooltip for="xmlLink" value="Click to export data in the list to XML" />
+			</p:panel>
+			<p:dataTable id="unitTable" rows="#{searchUnitBB.paginationNumber}" var="unitRecord" rowsPerPageTemplate="5,10,15"
+				rendered="#{!(empty searchUnitBB.unitOpr.unitList)}" value="#{searchUnitBB.unitOpr.unitList}" style="width: 100%;"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page"
+				paginator="true">
+				<f:facet name="header">Units</f:facet>
+				<p:column style="text-align: center;" sortBy="#{unitRecord.name}" filterBy="#{unitRecord.name}"
+					filterMatchMode="contains">
+					<f:facet name="header">Code</f:facet>
+					<p:commandLink styleClass="linkClass" process="@this" update=":unitTabView" value="#{unitRecord.code}"
+						action="#{searchUnitBB.editDetails}">
+						<f:setPropertyActionListener target="#{searchUnitBB.unitOpr.unitAddEditRecord}" value="#{unitRecord}" />
+					</p:commandLink>
+				</p:column>
+				<p:column style="text-align: center;" sortBy="#{unitRecord.name}" filterBy="#{unitRecord.name}"
+					filterMatchMode="contains">
+					<f:facet name="header">Name</f:facet>
+					<h:outputText value="#{unitRecord.name}" styleClass="labelClass" />
+				</p:column>
+				<p:column style="text-align: center;" sortBy="#{unitRecord.displayName}" filterBy="#{unitRecord.displayName}"
+					filterMatchMode="contains">
+					<f:facet name="header">Display Name</f:facet>
+					<h:outputText value="#{unitRecord.displayName}" styleClass="labelClass" />
+				</p:column>
+				<p:column style="text-align: center;" sortBy="#{unitRecord.description}" filterBy="#{unitRecord.description}"
+					filterMatchMode="contains">
+					<f:facet name="header">Description</f:facet>
+					<h:outputText value="#{unitRecord.description}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{unitRecord.activeDescription}" filterBy="#{unitRecord.activeDescription}"
+					filterMatchMode="contains">
+					<f:facet name="header">Active</f:facet>
+					<h:outputText value="#{unitRecord.activeDescription}" styleClass="labelClass" />
+				</p:column>
+				<f:facet name="footer">Total units : #{fn:length(searchUnitBB.unitOpr.unitList)}</f:facet>
+			</p:dataTable>
+		</h:panelGroup>
+	</h:form>
+</ui:composition>

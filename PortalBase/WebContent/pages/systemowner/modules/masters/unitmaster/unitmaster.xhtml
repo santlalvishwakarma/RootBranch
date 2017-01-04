@@ -3,17 +3,17 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<ui:define name="content">
-		<p:tabView id="colorTabView" activeIndex="#{colorMasterBB.activeTabIndex}">
-			<p:ajax event="tabChange" listener="#{colorMasterBB.tabChanged}"
-				update=":colorTabView:colorSearchForm, :colorTabView:colorAddEditForm" />
-			<p:tab id="searchListcolor" title="Search/List">
+		<p:tabView id="unitTabView" activeIndex="#{unitMasterBB.activeTabIndex}">
+			<p:ajax event="tabChange" listener="#{unitMasterBB.tabChanged}"
+				update=":unitTabView:unitSearchForm, :unitTabView:unitAddEditForm" />
+			<p:tab id="searchListunit" title="Search/List">
 				<div style="overflow-x: auto; overflow-y: auto;">
-					<ui:include src="searchcolor.xhtml" />
+					<ui:include src="searchunit.xhtml" />
 				</div>
 			</p:tab>
-			<p:tab id="addeditcolor" title="Add/Edit color">
+			<p:tab id="addeditunit" title="Add/Edit Unit">
 				<div style="overflow-x: auto; overflow-y: auto;">
-					<ui:include src="addeditcolor.xhtml" />
+					<ui:include src="addeditunit.xhtml" />
 				</div>
 			</p:tab>
 		</p:tabView>
