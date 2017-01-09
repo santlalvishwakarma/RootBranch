@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="sizeAddEditForm">
+		<h:panelGroup id="addEditSizePanelGroup">
+			<table style="width: 100%;">
+				<tr>
+					<td><label class="labelClass boldClass">Size Code</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+					<td><p:inputText value="#{addEditSizeBB.addEditSizeOpr.sizeRecord.code}" /></td>
+					<td><label class="labelClass boldClass">Size Name</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+					<td><p:inputText value="#{addEditSizeBB.addEditSizeOpr.sizeRecord.name}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Size Description</label></td>
+					<td><p:inputText value="#{addEditSizeBB.addEditSizeOpr.sizeRecord.description}" /></td>
+					<td><label class="labelClass boldClass">Is Active</label></td>
+					<td><p:selectBooleanCheckbox value="#{addEditSizeBB.addEditSizeOpr.sizeRecord.active}" /></td>
+				</tr>
+			</table>
+			<br />
+			<div align="center">
+				<p:commandButton id="btnSave" actionListener="#{addEditSizeBB.executeSave}" value="Save"
+					update="addEditSizePanelGroup" />
+				<p:tooltip for="btnSave" value="Click to Save" />
+				<p:hotkey bind="ctrl+shift+s" update="addEditSizePanelGroup" actionListener="#{addEditSizeBB.executeSave}" />
+				&#160;&#160;
+				<p:commandButton id="btnCancel" action="#{addEditSizeBB.clearPage}" value="Cancel" process="@this" />
+				<p:tooltip for="btnCancel" value="Click to Cancel" />
+				&#160;&#160;
+				<p:commandButton id="btnAddNew" process="@this" value="Add New" actionListener="#{addEditSizeBB.executeAddMore}"
+					update="addEditSizePanelGroup" />
+				<p:tooltip for="btnAddNew" value="Click to Add New" />
+			</div>
+		</h:panelGroup>
+	</h:form>
+</ui:composition>
