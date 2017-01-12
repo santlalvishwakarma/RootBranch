@@ -1,0 +1,47 @@
+<ui:composition template="/pages/systemowner/template/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<ui:define name="content">
+		<h:form id="propertyValueMasterForm">
+			<h:panelGroup id="propertyValueMasterPanel">
+				<table style="width: 100%">
+					<tr>
+						<td>Property Code</td>
+						<td><p:autoComplete id="propertyCodeSuggestionBox" size="40"
+								value="#{propertyValueMasterBB.propertyValueMappingOpr.propertyValueMappingRecord.sizeRecord}"
+								completeMethod="#{propertyValueMasterBB.getSuggestedSizeRecordForCode}" var="sizeRecord"
+								itemLabel="#{sizeRecord.code}" itemValue="#{sizeRecord}" converter="#{propertyValueMasterBB.baseDVOConverter}"
+								minQueryLength="2" global="false" forceSelection="true">
+								<p:column>#{sizeRecord.code}</p:column>
+								<p:column>#{sizeRecord.name}</p:column>
+								<p:ajax event="itemSelect" process="propertyCodeSuggestionBox,@this" update="propertyNameSuggestionBox"
+									partialSubmit="true" />
+							</p:autoComplete> <p:watermark for="propertyCodeSuggestionBox" value="Enter first 2 chars" /></td>
+						<td>Property Name</td>
+						<td><p:autoComplete id="propertyNameSuggestionBox" size="40"
+								value="#{propertyValueMasterBB.propertyValueMappingOpr.propertyValueMappingRecord.sizeRecord}"
+								completeMethod="#{propertyValueMasterBB.getSuggestedSizeRecordForName}" var="sizeRecord"
+								itemLabel="#{sizeRecord.name}" itemValue="#{sizeRecord}" converter="#{propertyValueMasterBB.baseDVOConverter}"
+								minQueryLength="2" global="false" forceSelection="true">
+								<p:column>#{sizeRecord.name}</p:column>
+								<p:column>#{sizeRecord.code}</p:column>
+								<p:ajax event="itemSelect" process="propertyNameSuggestionBox,@this" update="propertyCodeSuggestionBox"
+									partialSubmit="true" />
+							</p:autoComplete> <p:watermark for="propertyNameSuggestionBox" value="Enter first 2 chars" /></td>
+					</tr>
+				</table>
+				<br />
+				<div align="center">
+					<p:commandButton id="btnSearch" actionListener="#{propertyValueMasterBB.executeSearch}" value="Search"
+						update="skuListPanel" />
+					<p:tooltip for="btnSearch" value="Click to Search" />
+					<p:hotkey bind="ctrl+shift+s" update="skuListPanel" actionListener="#{propertyValueMasterBB.executeSearch}" />
+					&#160;&#160;
+					<p:commandButton id="btnCancel" action="#{propertyValueMasterBB.clearPage}" value="Clear Search" process="@this" />
+					<p:tooltip for="btnCancel" value="Click to Cancel" />
+				</div>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

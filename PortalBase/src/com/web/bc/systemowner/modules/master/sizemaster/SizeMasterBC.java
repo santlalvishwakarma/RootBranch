@@ -1,6 +1,8 @@
 package com.web.bc.systemowner.modules.master.sizemaster;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.systemowner.SizeOpr;
@@ -248,5 +250,99 @@ public class SizeMasterBC extends BackingClass {
 			}
 		}
 		return sizeOpr;
+	}
+
+	public List<Object> getSuggestedSizeRecord(SizeDVO sizeDVO) throws FrameworkException, BusinessException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In SizeMasterBC executeSearch ");
+
+		String sizeCode = sizeDVO.getCode();
+		String sizeName = sizeDVO.getName();
+		Boolean isActive = sizeDVO.getStatusRecord().getActive();
+
+		myLog.debug(" sizeCode " + sizeCode);
+		myLog.debug(" sizeName " + sizeName);
+		myLog.debug(" isActive " + isActive);
+
+		StringBuffer dynamicWhere = new StringBuffer();
+
+		int parameterCount = 0;
+
+		if (sizeCode != null && sizeCode.trim().length() > 0) {
+			sizeCode = sizeCode.trim().concat("%");
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND size_code LIKE '" + sizeCode + "'");
+			} else {
+				dynamicWhere.append(" size_code LIKE '" + sizeCode + "'");
+			}
+			parameterCount++;
+		}
+
+		if (sizeName != null && sizeName.trim().length() > 0) {
+			sizeName = sizeName.trim().concat("%");
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND size_name LIKE '" + sizeName + "'");
+			} else {
+				dynamicWhere.append(" size_name LIKE '" + sizeName + "'");
+			}
+			parameterCount++;
+		}
+
+		if (isActive == null || isActive) {
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND is_active = 1 ");
+			} else {
+				dynamicWhere.append(" is_active = 1 ");
+			}
+			parameterCount += 1;
+		}
+
+		if (parameterCount == 0) {
+			dynamicWhere.append(" 1 = 1 ");
+		}
+		dynamicWhere.append(" ORDER BY size_code ");
+		myLog.debug("dynamicWhere ::::: " + dynamicWhere);
+
+		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
+		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT, SizeMasterSqlTemplate.SEARCH_SIZE_DETAILS);
+
+		Object strSqlParams[][] = new Object[0][0];
+
+		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, dynamicWhere.toString());
+		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
+		myLog.debug(" SizeMasterBC executeSearch :: Resultset got ::" + responseMap);
+
+		List<Object> sizeList = new ArrayList<Object>();
+
+		if (responseMap.size() > 0) {
+			for (int i = 0; i < responseMap.size(); i++) {
+
+				HashMap<String, Object> resultSetMap = responseMap.get(i);
+				handleAndThrowException(resultSetMap);
+
+				SizeDVO sizeRecord = new SizeDVO();
+
+				if (resultSetMap.get("size_id") != null)
+					sizeRecord.setId(Long.valueOf(resultSetMap.get("size_id").toString()));
+
+				sizeRecord.setCode((String) resultSetMap.get("size_code"));
+				sizeRecord.setName((String) resultSetMap.get("size_name"));
+				sizeRecord.setDescription((String) resultSetMap.get("size_description"));
+
+				if (resultSetMap.get("is_active") != null) {
+					sizeRecord.setActive((Boolean) resultSetMap.get("is_active"));
+				} else {
+					sizeRecord.setActive(false);
+				}
+
+				setAuditAttributes(sizeRecord, resultSetMap);
+
+				sizeList.add(sizeRecord);
+			}
+		}
+
+		return sizeList;
 	}
 }
