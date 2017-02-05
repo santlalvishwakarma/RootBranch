@@ -182,11 +182,13 @@ DECLARE v_last_inserted_id              INT(10);
 	                          
 	                        ELSE
 	                        
-	                        	INSERT INTO publish_to_home_category
-	                        	(hierarchy_id, category_level_1, category_level_2, category_level_3, category_level_4, publish_position, is_active, created_by, created_date, modified_by, 
-	                        	modified_date)
-	                        	values(v_hierarchy_id, v_category_level_1_id, v_category_level_2_id, v_category_level_3_id, v_category_level_4_id, v_publish_position, 1, p_user_login, NOW(), p_user_login, NOW());
+	                        	IF v_deleteYN = 0 THEN 
 	                        
+		                        	INSERT INTO publish_to_home_category
+		                        	(hierarchy_id, category_level_1, category_level_2, category_level_3, category_level_4, publish_position, is_active, created_by, created_date, modified_by, 
+		                        	modified_date)
+		                        	values(v_hierarchy_id, v_category_level_1_id, v_category_level_2_id, v_category_level_3_id, v_category_level_4_id, v_publish_position, 1, p_user_login, NOW(), p_user_login, NOW());
+	                        	END IF;
 	                    	END IF;	     
 	                    	
 	                    	SET v_publish_category_id = NULL;

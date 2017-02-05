@@ -174,7 +174,7 @@ public class PublishToHomeCategoryBC extends BackingClass {
 				categoryParseString.append("");
 			categoryParseString.append("~");
 
-			if (recordDeleted)
+			if (recordDeleted != null && recordDeleted)
 				categoryParseString.append("1");
 			else
 				categoryParseString.append("0");
