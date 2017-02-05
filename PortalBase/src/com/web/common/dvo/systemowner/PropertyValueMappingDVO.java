@@ -7,6 +7,7 @@ public class PropertyValueMappingDVO extends BaseDVO {
 	private static final long serialVersionUID = 3384686881478271718L;
 	private SizeDVO sizeRecord;
 	private UnitDVO unitRecord;
+	private String propertyValue;
 
 	public SizeDVO getSizeRecord() {
 		if (sizeRecord == null) {
@@ -28,6 +29,14 @@ public class PropertyValueMappingDVO extends BaseDVO {
 
 	public void setUnitRecord(UnitDVO unitRecord) {
 		this.unitRecord = unitRecord;
+	}
+
+	public String getPropertyValue() {
+		return propertyValue;
+	}
+
+	public void setPropertyValue(String propertyValue) {
+		this.propertyValue = propertyValue;
 	}
 
 }

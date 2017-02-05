@@ -204,5 +204,11 @@
 		<managed-bean-class>com.web.bb.systemowner.modules.masters.unitmaster.UnitMasterBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>propertyValueMasterBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.propertyvaluemaster.PropertyValueMasterBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>
