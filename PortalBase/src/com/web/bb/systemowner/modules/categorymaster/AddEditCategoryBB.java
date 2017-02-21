@@ -166,9 +166,6 @@ public class AddEditCategoryBB extends BackingBean {
 		// myLog.debug(" Category Name: " +
 		// editCategoryOpr.getCategoryRecord().getName());
 
-		myLog.debug("My name is "
-				+ FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get("MY_NAME"));
-
 		return null;
 	}
 

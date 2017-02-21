@@ -64,13 +64,16 @@ public abstract class OrderDetailsDVO extends BaseDVO {
 		subTotal = Float.valueOf(0);
 		if (productSkuRecord != null) {
 			if (productSkuRecord.getBasePrice() != null) {
-				if (productQuantity != null && productSkuRecord.getDiscountPrice() <= 0.0) {
+				if (productQuantity != null) {
 					subTotal = productQuantity * productSkuRecord.getBasePrice();
-				} else {
-					if (productQuantity != null && productSkuRecord.getDiscountPrice() > 0.0) {
-						subTotal = productQuantity * productSkuRecord.getDiscountPrice();
-					}
 				}
+				// else {
+				// if (productQuantity != null &&
+				// productSkuRecord.getDiscountPrice() > 0.0) {
+				// subTotal = productQuantity *
+				// productSkuRecord.getDiscountPrice();
+				// }
+				// }
 			}
 		}
 		return subTotal;

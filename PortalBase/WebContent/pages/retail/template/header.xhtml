@@ -50,6 +50,8 @@
 				<p:remoteCommand name="refreshLoginDetails" partialSubmit="true" process="@this" update="loginLinkGroup" />
 				<p:remoteCommand name="loginAfterUserRegistration" partialSubmit="true" process="@this" update="loginLinkGroup"
 					oncomplete="PF('registrationPopup').hide()" />
+				<p:remoteCommand name="forgotPasswordPopupClose" partialSubmit="true" process="@this"
+					oncomplete="PF('forgotPasswordDialog').hide()" />
 			</h:form>
 		</div>
 	</div>

@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="orderEditForm">
+		<h:panelGroup id="orderEditFields">
+			<table style="width: 100%;">
+				<tr>
+					<td><label class="labelClass boldClass">Order Number</label></td>
+					<td><p:inputText value="#{editOrdersBB.editRetailOrderOpr.retailOrderRecord.orderNumber}" /></td>
+					<td><label class="labelClass boldClass">Quantity</label></td>
+					<td><p:inputText value="#{editOrdersBB.editRetailOrderOpr.retailOrderRecord.totalQuantity}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Delivery days</label></td>
+					<td><p:inputText
+							value="#{editOrdersBB.editRetailOrderOpr.retailOrderRecord.deliveryTimeRecord.leadTimeInDays}" /></td>
+					<td><label class="labelClass boldClass">Amount</label></td>
+					<td><p:inputText value="#{editOrdersBB.editRetailOrderOpr.retailOrderRecord.totalAmount}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Total payable amount</label></td>
+					<td><p:inputText value="#{editOrdersBB.editRetailOrderOpr.retailOrderRecord.originalTotalPayableAmount}" /></td>
+					<td><label class="labelClass boldClass">Express Charge</label></td>
+					<td><p:inputText
+							value="#{editOrdersBB.editRetailOrderOpr.retailOrderRecord.deliveryChargesRecord.expressCharge}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Duties Charge</label></td>
+					<td><p:inputText
+							value="#{editOrdersBB.editRetailOrderOpr.retailOrderRecord.deliveryChargesRecord.dutiesCharge}" /></td>
+					<td><label class="labelClass boldClass">Duties Charge</label></td>
+					<td><p:inputText
+							value="#{editOrdersBB.editRetailOrderOpr.retailOrderRecord.deliveryChargesRecord.originalDutiesCharge}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Payment Status</label></td>
+					<td><p:selectOneMenu id="editPaymentStatusList"
+							value="#{editOrdersBB.editRetailOrderOpr.retailOrderRecord.paymentStatus.parameterID}">
+							<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+							<f:selectItems value="#{orderBB.allOptions.allOptionsValues['paymentStatusList']}" var="paymentStatus"
+								itemLabel="#{paymentStatus.parameterStringValue}" itemValue="#{paymentStatus.parameterID}" />
+						</p:selectOneMenu></td>
+
+					<td><label class="labelClass boldClass">Order Status</label></td>
+					<td><p:selectOneMenu id="editOrderStatusList"
+							value="#{editOrdersBB.editRetailOrderOpr.retailOrderRecord.orderStatus}">
+							<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+							<f:selectItems value="#{orderBB.allOptions.allOptionsValues['orderStatusList']}" var="orderStatus"
+								itemLabel="#{orderStatus.parameterStringValue}" itemValue="#{orderStatus.parameterID}" />
+						</p:selectOneMenu></td>
+				</tr>
+			</table>
+		</h:panelGroup>
+		<h:panelGroup id="editOrderDetailsPanelGroup">
+			<p:dataTable id="editOrderDetailsDataTable" rows="#{editOrdersBB.paginationNumber}" var="detailOrderRecord"
+				rowsPerPageTemplate="5,10,15" style="width: 100%;"
+				value="#{editOrdersBB.editRetailOrderOpr.retailOrderRecord.orderDetailsList}" paginator="true"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page">
+				<f:facet name="header">Order Details</f:facet>
+				<p:column sortBy="#{detailOrderRecord.productSkuRecord.productRecord.name}"
+					filterBy="#{detailOrderRecord.productSkuRecord.productRecord.name}" filterMatchMode="contains">
+					<f:facet name="header">Product Name</f:facet>
+					<h:outputText value="#{detailOrderRecord.productSkuRecord.productRecord.name}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{detailOrderRecord.productSkuRecord.name}" filterBy="#{detailOrderRecord.productSkuRecord.name}"
+					filterMatchMode="contains">
+					<f:facet name="header">Sku Name</f:facet>
+					<h:outputText value="#{detailOrderRecord.productSkuRecord.name}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{detailOrderRecord.pricePerPiece}" filterBy="#{detailOrderRecord.pricePerPiece}"
+					filterMatchMode="contains">
+					<f:facet name="header">Price</f:facet>
+					<h:outputText value="#{detailOrderRecord.pricePerPiece}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{detailOrderRecord.productQuantity}" filterBy="#{detailOrderRecord.productQuantity}"
+					filterMatchMode="contains">
+					<f:facet name="header">Price</f:facet>
+					<h:outputText value="#{detailOrderRecord.productQuantity}" styleClass="labelClass" />
+				</p:column>
+			</p:dataTable>
+		</h:panelGroup>
+	</h:form>
+</ui:composition>

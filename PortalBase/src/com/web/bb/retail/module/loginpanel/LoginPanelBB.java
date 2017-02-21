@@ -456,6 +456,8 @@ public class LoginPanelBB extends BackingBean {
 		if (!validator.validateNull(forgotPasswordOpr.getUserDetails().getUserLogin())) {
 			String errorMessage = propertiesReader.getValueOfKey("enter_email");
 			addToErrorList(errorMessage);
+		} else if (!validator.validateEmail(forgotPasswordOpr.getUserDetails().getUserLogin())) {
+			addToErrorList(propertiesReader.getValueOfKey("email_invalid"));
 		}
 
 		if (getErrorList().size() > 0) {
@@ -472,6 +474,7 @@ public class LoginPanelBB extends BackingBean {
 			try {
 				forgotPasswordOpr = new LoginPanelBF().executeForgotPassword(forgotPasswordOpr);
 				forgotPasswordSent = true;
+				RequestContext.getCurrentInstance().execute("forgotPasswordPopupClose();");
 			} catch (FrameworkException e) {
 				// handle framework exception
 				handleException((Exception) e, propertiesLocation);

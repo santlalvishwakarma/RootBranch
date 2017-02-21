@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="orderSearchForm">
+		<h:panelGroup id="orderSearchFields">
+			<table style="width: 100%;">
+				<tr>
+					<td><label class="labelClass boldClass">Order Number</label></td>
+					<td><p:inputText value="#{searchOrdersBB.searchRetailOrderOpr.retailOrderRecord.orderNumber}" /></td>
+					<td><label class="labelClass boldClass">User Login</label></td>
+					<td><p:inputText value="#{searchOrdersBB.searchRetailOrderOpr.retailOrderRecord.userRecord.userLogin}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Payment Status</label></td>
+					<td><p:selectOneMenu id="searchPaymentStatusList"
+							value="#{searchOrdersBB.searchRetailOrderOpr.retailOrderRecord.paymentStatus.parameterID}">
+							<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+							<f:selectItems value="#{orderBB.allOptions.allOptionsValues['paymentStatusList']}" var="paymentStatus"
+								itemLabel="#{paymentStatus.parameterStringValue}" itemValue="#{paymentStatus.parameterID}" />
+						</p:selectOneMenu></td>
+
+					<td><label class="labelClass boldClass">Order Status</label></td>
+					<td><p:selectOneMenu id="searchOrderStatusList"
+							value="#{searchOrdersBB.searchRetailOrderOpr.retailOrderRecord.orderStatus.parameterID}">
+							<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+							<f:selectItems value="#{orderBB.allOptions.allOptionsValues['orderStatusList']}" var="orderStatus"
+								itemLabel="#{orderStatus.parameterStringValue}" itemValue="#{orderStatus.parameterID}" />
+						</p:selectOneMenu></td>
+				</tr>
+			</table>
+		</h:panelGroup>
+		<br />
+		<div align="center">
+			<p:commandButton id="btnSearch" actionListener="#{searchOrdersBB.executeSearch}" value="Search"
+				update="orderSearchListPanelGroup" process="@this, orderSearchFields" />
+			<p:tooltip for="btnSearch" value="Click to Search" />
+			<p:hotkey bind="ctrl+shift+s" update="orderSearchListPanelGroup" actionListener="#{searchOrdersBB.executeSearch}" />
+			&#160;&#160;
+			<p:commandButton id="btnCancel" action="#{searchOrdersBB.clearPage}" value="Clear Search" process="@this" />
+			<p:tooltip for="btnCancel" value="Click to Cancel" />
+		</div>
+		<h:panelGroup id="orderSearchListPanelGroup">
+			<p:panel rendered="#{!(empty searchOrdersBB.searchRetailOrderOpr.retailOrderList)}">
+				<h:commandLink id="excelLink">
+					<p:graphicImage alt="Export to Xls" value="/staticcontent/systemowner/images/excel.png" styleClass="imageClass" />
+					<p:dataExporter type="xls" target="orderSearchListTable" fileName="Orders" />
+				</h:commandLink>
+				<p:tooltip for="excelLink" value="Click to export data in the list to MS-Excel" />
+				<h:commandLink id="pdfLink">
+					<p:graphicImage alt="Export to PDF" value="/staticcontent/systemowner/images/pdf.png" styleClass="imageClass" />
+					<p:dataExporter type="pdf" target="orderSearchListTable" fileName="Orders" />
+				</h:commandLink>
+				<p:tooltip for="pdfLink" value="Click to export data in the list to PDF" />
+				<h:commandLink id="xmlLink">
+					<p:graphicImage alt="Export to XML" value="/staticcontent/systemowner/images/xml.png" styleClass="imageClass" />
+					<p:dataExporter type="xml" target="orderSearchListTable" fileName="Orders" />
+				</h:commandLink>
+				<p:tooltip for="xmlLink" value="Click to export data in the list to XML" />
+			</p:panel>
+			<p:dataTable id="orderSearchListTable" rows="#{searchOrdersBB.paginationNumber}" var="orderRecord"
+				rowsPerPageTemplate="5,10,15" style="width: 100%;"
+				rendered="#{!(empty searchOrdersBB.searchRetailOrderOpr.retailOrderList)}"
+				value="#{searchOrdersBB.searchRetailOrderOpr.retailOrderList}" paginator="true"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page">
+				<f:facet name="header">Order</f:facet>
+				<p:column sortBy="#{orderRecord.orderNumber}" filterBy="#{orderRecord.orderNumber}" filterMatchMode="contains">
+					<f:facet name="header">Order Number</f:facet>
+					<p:commandLink styleClass="linkClass" action="#{searchOrdersBB.editDetails}" update=":ordersTabView"
+						value="#{orderRecord.orderNumber}">
+						<f:setPropertyActionListener target="#{searchOrdersBB.searchRetailOrderOpr.selectedRetailOrderRecord}"
+							value="#{orderRecord}" />
+					</p:commandLink>
+				</p:column>
+				<p:column sortBy="#{orderRecord.userRecord.userLogin}" filterBy="#{orderRecord.userRecord.userLogin}"
+					filterMatchMode="contains">
+					<f:facet name="header">User Login</f:facet>
+					<h:outputText value="#{orderRecord.userRecord.userLogin}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{orderRecord.totalAmount}" filterBy="#{orderRecord.totalAmount}" filterMatchMode="contains">
+					<f:facet name="header">Total Amount</f:facet>
+					<h:outputText value="#{orderRecord.totalAmount}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{orderRecord.totalQuantity}" filterBy="#{orderRecord.totalQuantity}" filterMatchMode="contains">
+					<f:facet name="header">Total Quantity</f:facet>
+					<h:outputText value="#{orderRecord.totalQuantity}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{orderRecord.paymentStatus.parameterStringValue}"
+					filterBy="#{orderRecord.paymentStatus.parameterStringValue}" filterMatchMode="contains">
+					<f:facet name="header">Payment Status</f:facet>
+					<h:outputText value="#{orderRecord.paymentStatus.parameterStringValue}" styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{orderRecord.orderStatus.parameterStringValue}"
+					filterBy="#{orderRecord.orderStatus.parameterStringValue}" filterMatchMode="contains">
+					<f:facet name="header">Order Status</f:facet>
+					<h:outputText value="#{orderRecord.orderStatus.parameterStringValue}" styleClass="labelClass" />
+				</p:column>
+			</p:dataTable>
+		</h:panelGroup>
+	</h:form>
+</ui:composition>

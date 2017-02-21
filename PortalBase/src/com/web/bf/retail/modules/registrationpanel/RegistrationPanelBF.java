@@ -32,58 +32,50 @@ public class RegistrationPanelBF extends BusinessFacade {
 		myLog.debug("before calling send email in RegistrationPanelBF ::::");
 
 		// send email
-		// PropertiesReader propertiesReader = new
-		// PropertiesReader(propertiesLocation);
-		// if
-		// ((propertiesReader.getValueOfKey("registration_welcome_mail_enabled")
-		// != null)
-		// &&
-		// propertiesReader.getValueOfKey("registration_welcome_mail_enabled").equals("1"))
-		// {
-		//
-		// PropertiesReader propertiesReaderCommon = new PropertiesReader(
-		// CommonConstant.MessageLocation.COMMON_MESSAGES);
-		// MailParameters mailParameters = new MailParameters();
-		//
-		// InternetAddress[] addressTo = new InternetAddress[1];
-		// InternetAddress[] addressBCC = new InternetAddress[3];
-		//
-		// InternetAddress ia = new InternetAddress();
-		// ia.setAddress(returnRegistrationPanelOpr.getUserDetails().getPrimaryEmailId());
-		// addressTo[0] = ia;
-		//
-		// InternetAddress iaBCC = new InternetAddress();
-		// iaBCC.setAddress(propertiesReaderCommon.getValueOfKey("system_owner_email_id"));
-		// addressBCC[0] = iaBCC;
-		//
-		// InternetAddress iaBCC1 = new InternetAddress();
-		// iaBCC1.setAddress(propertiesReaderCommon.getValueOfKey("system_owner_email_id_1"));
-		// addressBCC[1] = iaBCC1;
-		//
-		// InternetAddress iaBCC2 = new InternetAddress();
-		// iaBCC2.setAddress(propertiesReaderCommon.getValueOfKey("system_owner_email_id_2"));
-		// addressBCC[2] = iaBCC2;
-		//
-		// mailParameters.setMailRecipients(addressTo);
-		// mailParameters.setMailRecipientsBCC(addressBCC);
-		// mailParameters.setMailSubject(propertiesReader.getValueOfKey("registration_welcome_mail_subject"));
-		// myLog.debug("mail subject in RegistrationPanelBF ::::" +
-		// mailParameters.getMailSubject());
-		// String mailMessage = "user id = " +
-		// returnRegistrationPanelOpr.getUserDetails().getPrimaryEmailId()
-		// + " password = " +
-		// returnRegistrationPanelOpr.getUserDetails().getPrimaryPhoneNumber();
-		// mailParameters.setMailMessage(mailMessage);
-		// mailParameters.setCustomerKey(propertiesReaderCommon.getValueOfKey("customer_key"));
-		// mailParameters.setMailFormat(CommonConstant.MimeType.TEXT_HTML);
-		//
-		// try {
-		// WebMail webMail = new WebMail(mailParameters);
-		// webMail.sendMultipleMail();
-		// } catch (MessagingException e) {
-		// throw new FrameworkException("messaging_exception", e.getCause());
-		// }
-		// }
+		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+		if ((propertiesReader.getValueOfKey("registration_welcome_mail_enabled") != null)
+				&& propertiesReader.getValueOfKey("registration_welcome_mail_enabled").equals("1")) {
+
+			PropertiesReader propertiesReaderCommon = new PropertiesReader(
+					CommonConstant.MessageLocation.COMMON_MESSAGES);
+			MailParameters mailParameters = new MailParameters();
+
+			InternetAddress[] addressTo = new InternetAddress[1];
+			InternetAddress[] addressBCC = new InternetAddress[3];
+
+			InternetAddress ia = new InternetAddress();
+			ia.setAddress(returnRegistrationPanelOpr.getUserDetails().getPrimaryEmailId());
+			addressTo[0] = ia;
+
+			InternetAddress iaBCC = new InternetAddress();
+			iaBCC.setAddress(propertiesReaderCommon.getValueOfKey("system_owner_email_id"));
+			addressBCC[0] = iaBCC;
+
+			InternetAddress iaBCC1 = new InternetAddress();
+			iaBCC1.setAddress(propertiesReaderCommon.getValueOfKey("system_owner_email_id_1"));
+			addressBCC[1] = iaBCC1;
+
+			InternetAddress iaBCC2 = new InternetAddress();
+			iaBCC2.setAddress(propertiesReaderCommon.getValueOfKey("system_owner_email_id_2"));
+			addressBCC[2] = iaBCC2;
+
+			mailParameters.setMailRecipients(addressTo);
+			mailParameters.setMailRecipientsBCC(addressBCC);
+			mailParameters.setMailSubject(propertiesReader.getValueOfKey("registration_welcome_mail_subject"));
+			myLog.debug("mail subject in RegistrationPanelBF ::::" + mailParameters.getMailSubject());
+			String mailMessage = "user id = " + returnRegistrationPanelOpr.getUserDetails().getPrimaryEmailId()
+					+ " password = " + returnRegistrationPanelOpr.getUserDetails().getPrimaryPhoneNumber();
+			mailParameters.setMailMessage(mailMessage);
+			mailParameters.setCustomerKey(propertiesReaderCommon.getValueOfKey("customer_key"));
+			mailParameters.setMailFormat(CommonConstant.MimeType.TEXT_HTML);
+
+			try {
+				WebMail webMail = new WebMail(mailParameters);
+				webMail.sendMultipleMail();
+			} catch (MessagingException e) {
+				throw new FrameworkException("messaging_exception", e.getCause());
+			}
+		}
 
 		return returnRegistrationPanelOpr;
 	}

@@ -103,8 +103,6 @@ public class SearchCategoryBB extends BackingBean {
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 				.put(CommonConstant.ACTIVE_TAB_OPR, searchCategoryOpr);
 
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("MY_NAME", "Deepak Naithani");
-
 		myLog.debug(" Category Id: " + searchCategoryOpr.getCategoryRecord().getId());
 		myLog.debug(" Category Code: " + searchCategoryOpr.getCategoryRecord().getCode());
 		myLog.debug(" Category Name: " + searchCategoryOpr.getCategoryRecord().getName());

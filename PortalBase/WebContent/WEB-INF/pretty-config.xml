@@ -137,29 +137,35 @@
 		<view-id value="/pages/systemowner/modules/publishtohomecategory/publishToHomeCategory.jsf" />
 		<action onPostback="false">#{publishToHomeCategoryBB.retrieveData}</action>
 	</url-mapping>
-	
+
 	<url-mapping id="colorMaster">
 		<pattern value="/admin/colormaster" />
 		<view-id value="/pages/systemowner/modules/masters/colormaster/colormaster.jsf" />
 		<action onPostback="false">#{searchColorBB.retrieveData}</action>
 	</url-mapping>
-	
+
 	<url-mapping id="materialMaster">
 		<pattern value="/admin/materialmaster" />
 		<view-id value="/pages/systemowner/modules/masters/materialmaster/materialmaster.jsf" />
 		<action onPostback="false">#{searchMaterialBB.retrieveData}</action>
 	</url-mapping>
-	
+
 	<url-mapping id="unitMaster">
 		<pattern value="/admin/unitmaster" />
 		<view-id value="/pages/systemowner/modules/masters/unitmaster/unitmaster.jsf" />
 		<action onPostback="false">#{searchUnitBB.retrieveData}</action>
 	</url-mapping>
-	
+
 	<url-mapping id="propertyValueMaster">
 		<pattern value="/admin/propertyvaluemaster" />
 		<view-id value="/pages/systemowner/modules/masters/propertyvaluemastermaster/propertyvaluemastermaster.jsf" />
 		<action onPostback="false">#{searchUnitBB.retrieveData}</action>
 	</url-mapping>
-	
+
+	<url-mapping id="orderMaster">
+		<pattern value="/admin/orderMaster" />
+		<view-id value="/pages/systemowner/modules/ordermanagement/orders.jsf" />
+		<action onPostback="false">#{orderBB.retrieveData}</action>
+	</url-mapping>
+
 </pretty-config>

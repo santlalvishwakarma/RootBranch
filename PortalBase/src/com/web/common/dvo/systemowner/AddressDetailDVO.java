@@ -26,6 +26,7 @@ public class AddressDetailDVO implements Serializable {
 	private AreaDVO areaRecord;
 	private PinDVO pinRecord;
 	private String firstName;
+	private String middleName;
 	private String lastName;
 	private String landmark;
 
@@ -186,6 +187,14 @@ public class AddressDetailDVO implements Serializable {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
 	}
 
 	public String getLastName() {

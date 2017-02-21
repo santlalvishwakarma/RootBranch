@@ -17,7 +17,7 @@ import com.web.foundation.mail.WebMail;
 import com.web.util.PropertiesReader;
 
 public class LoginPanelBF extends BusinessFacade {
-	private String propertiesLocation = getClass().getPackage().getName().replaceAll("\\.", "/") + "/loginpanel";
+	private String propertiesLocation = "/com/web/bb/retail/module/loginpanel/loginpanel";
 
 	public LoginPanelOpr executeLogin(LoginPanelOpr loginPanelOpr) throws FrameworkException, BusinessException {
 		LoginPanelBC loginPanelBC = new LoginPanelBC();

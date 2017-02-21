@@ -147,13 +147,13 @@
 		<managed-bean-class>com.web.bb.systemowner.modules.masters.sizemaster.SizeMasterBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
-	
+
 	<managed-bean>
 		<managed-bean-name>publishToHomeCategoryBB</managed-bean-name>
 		<managed-bean-class>com.web.bb.systemowner.modules.publishtohomecategory.PublishToHomeCategoryBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
-	
+
 	<managed-bean>
 		<managed-bean-name>addEditColorBB</managed-bean-name>
 		<managed-bean-class>com.web.bb.systemowner.modules.masters.colormaster.ColorMasterAddEditBB</managed-bean-class>
@@ -170,7 +170,7 @@
 		<managed-bean-class>com.web.bb.systemowner.modules.masters.colormaster.ColorMasterBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
-	
+
 	<managed-bean>
 		<managed-bean-name>addEditMaterialBB</managed-bean-name>
 		<managed-bean-class>com.web.bb.systemowner.modules.masters.materialmaster.MaterialMasterAddEditBB</managed-bean-class>
@@ -187,7 +187,7 @@
 		<managed-bean-class>com.web.bb.systemowner.modules.masters.materialmaster.MaterialMasterBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
-	
+
 	<managed-bean>
 		<managed-bean-name>addEditUnitBB</managed-bean-name>
 		<managed-bean-class>com.web.bb.systemowner.modules.masters.unitmaster.UnitMasterAddEditBB</managed-bean-class>
@@ -204,10 +204,28 @@
 		<managed-bean-class>com.web.bb.systemowner.modules.masters.unitmaster.UnitMasterBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
-	
+
 	<managed-bean>
 		<managed-bean-name>propertyValueMasterBB</managed-bean-name>
 		<managed-bean-class>com.web.bb.systemowner.modules.masters.propertyvaluemaster.PropertyValueMasterBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>searchOrdersBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.ordermanagement.SearchOrdersBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>editOrdersBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.ordermanagement.EditOrdersBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>orderBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.ordermanagement.OrderBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 

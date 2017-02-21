@@ -149,6 +149,9 @@ public interface CommonConstant {
 		public static final String PRODUCT_STATUS = "PRODUCT_STATUS";
 
 		public static final String ACTIVE_INACTIVE_STATUS = "ACTIVE_INACTIVE_STATUS";
+
+		public static final String PAYMENT_STATUS = "PAYMENT_STATUS";
+		public static final String ORDER_STATUS = "ORDER_STATUS";
 	}
 
 	public interface ParamDatatype {
