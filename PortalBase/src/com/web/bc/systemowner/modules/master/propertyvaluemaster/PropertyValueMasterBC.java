@@ -2,11 +2,8 @@ package com.web.bc.systemowner.modules.master.propertyvaluemaster;
 
 import java.util.HashMap;
 
-import com.web.bc.systemowner.modules.master.unitmaster.UnitMasterSqlTemplate;
 import com.web.common.dvo.opr.systemowner.PropertyValueMappingOpr;
-import com.web.common.dvo.opr.systemowner.UnitOpr;
 import com.web.common.dvo.systemowner.PropertyValueMappingDVO;
-import com.web.common.dvo.systemowner.UnitDVO;
 import com.web.common.parents.BackingClass;
 import com.web.foundation.dao.DAOResult;
 import com.web.foundation.dao.IDAOConstant;
@@ -59,6 +56,9 @@ public class PropertyValueMasterBC extends BackingClass {
 					PropertyValueMappingRecord.getSizeRecord().setId(
 							Long.valueOf(resultSetMap.get("size_id").toString()));
 
+				PropertyValueMappingRecord.getSizeRecord().setName((String) resultSetMap.get("size_name"));
+				PropertyValueMappingRecord.getSizeRecord().setCode((String) resultSetMap.get("size_code"));
+
 				if (resultSetMap.get("unit_id") != null)
 					PropertyValueMappingRecord.getUnitRecord().setId(
 							Long.valueOf(resultSetMap.get("unit_id").toString()));
@@ -85,70 +85,66 @@ public class PropertyValueMasterBC extends BackingClass {
 		return PropertyValueMappingOprRet;
 	}
 
-	public UnitOpr executeSave(UnitOpr addEditUnitOpr) throws FrameworkException, BusinessException {
+	public PropertyValueMappingOpr executeSave(PropertyValueMappingOpr propertyValueMappingOpr)
+			throws FrameworkException, BusinessException {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("In PropertyValueMasterBC executeSave ");
 
-		UnitDVO unitRecord = addEditUnitOpr.getUnitRecord();
+		PropertyValueMappingDVO propertyValueMappingRecord = propertyValueMappingOpr
+				.getSelectedPropertyValueMappingRecord();
 
-		Long unitId = unitRecord.getId();
-		String unitCode = unitRecord.getCode();
-		String unitName = unitRecord.getName();
-		String unitDescription = unitRecord.getDescription();
-		String displayName = unitRecord.getDisplayName();
+		Long propertyValueMappingId = propertyValueMappingRecord.getId();
+		Long sizeId = propertyValueMappingRecord.getSizeRecord().getId();
+		String propertyValue = propertyValueMappingRecord.getPropertyValue();
+		Long unitId = propertyValueMappingRecord.getUnitRecord().getId();
 
-		Boolean active = unitRecord.getActive();
-		String userLogin = unitRecord.getUserLogin();
+		Boolean active = propertyValueMappingRecord.getActive();
+		String userLogin = propertyValueMappingRecord.getUserLogin();
 		String lastModifiedDate = null;
-		if (unitRecord.getAuditAttributes().getLastModifiedDate() != null)
-			lastModifiedDate = unitRecord.getAuditAttributes().getLastModifiedDate().toString();
+		if (propertyValueMappingRecord.getAuditAttributes().getLastModifiedDate() != null)
+			lastModifiedDate = propertyValueMappingRecord.getAuditAttributes().getLastModifiedDate().toString();
 
 		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
 		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
 		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
-		queryDetailsMap.put(IDAOConstant.SQL_TEXT, UnitMasterSqlTemplate.SAVE_UNIT_DETAILS);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT, PropertyValueMasterSqlTemplate.SAVE_PROPERTY_VALUE_MAPPING_DETAILS);
 
-		Object strSqlParams[][] = new Object[8][3];
+		Object strSqlParams[][] = new Object[7][3];
 
 		strSqlParams[0][0] = "1";
-		strSqlParams[0][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[0][2] = unitCode;
-		myLog.debug(" parameter 1 unitCode:: " + unitCode);
+		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
+		strSqlParams[0][2] = propertyValueMappingId;
+		myLog.debug(" parameter 1 propertyValueMappingId:: " + propertyValueMappingId);
 
 		strSqlParams[1][0] = "2";
-		strSqlParams[1][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[1][2] = unitName;
-		myLog.debug(" parameter 2 unitName:: " + unitName);
+		strSqlParams[1][1] = IDAOConstant.LONG_DATATYPE;
+		strSqlParams[1][2] = sizeId;
+		myLog.debug(" parameter 2 sizeId:: " + sizeId);
 
 		strSqlParams[2][0] = "3";
 		strSqlParams[2][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[2][2] = unitDescription;
-		myLog.debug(" parameter 3 unitDescription:: " + unitDescription);
+		strSqlParams[2][2] = propertyValue;
+		myLog.debug(" parameter 3 propertyValue:: " + propertyValue);
 
 		strSqlParams[3][0] = "4";
-		strSqlParams[3][1] = IDAOConstant.BOOLEAN_DATATYPE;
-		strSqlParams[3][2] = active;
-		myLog.debug(" parameter 4 active:: " + active);
+		strSqlParams[3][1] = IDAOConstant.LONG_DATATYPE;
+		strSqlParams[3][2] = unitId;
+		myLog.debug(" parameter 4 unitId:: " + unitId);
 
 		strSqlParams[4][0] = "5";
-		strSqlParams[4][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[4][2] = userLogin;
-		myLog.debug(" parameter 5 userLogin:: " + userLogin);
+		strSqlParams[4][1] = IDAOConstant.BOOLEAN_DATATYPE;
+		strSqlParams[4][2] = active;
+		myLog.debug(" parameter 5 active:: " + active);
 
 		strSqlParams[5][0] = "6";
 		strSqlParams[5][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[5][2] = lastModifiedDate;
-		myLog.debug(" parameter 6 lastModifiedDate:: " + lastModifiedDate);
+		strSqlParams[5][2] = userLogin;
+		myLog.debug(" parameter 6 userLogin:: " + userLogin);
 
 		strSqlParams[6][0] = "7";
-		strSqlParams[6][1] = IDAOConstant.LONG_DATATYPE;
-		strSqlParams[6][2] = unitId;
-		myLog.debug(" parameter 7 unitId:: " + unitId);
-
-		strSqlParams[7][0] = "8";
-		strSqlParams[7][1] = IDAOConstant.STRING_DATATYPE;
-		strSqlParams[7][2] = displayName;
-		myLog.debug(" parameter 8 displayName:: " + displayName);
+		strSqlParams[6][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[6][2] = lastModifiedDate;
+		myLog.debug(" parameter 7 lastModifiedDate:: " + lastModifiedDate);
 
 		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
 		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
@@ -160,66 +156,14 @@ public class PropertyValueMasterBC extends BackingClass {
 				HashMap<String, Object> resultSetMap = responseMap.get(i);
 				handleAndThrowException(resultSetMap);
 
-				if (resultSetMap.get("unit_id") != null)
-					unitRecord.setId(Long.valueOf(resultSetMap.get("unit_id").toString()));
+				if (resultSetMap.get("property_value_mapping_id") != null)
+					propertyValueMappingOpr.getPropertyValueMappingRecord().setId(
+							Long.valueOf(resultSetMap.get("property_value_mapping_id").toString()));
 
-				setAuditAttributes(addEditUnitOpr.getUnitRecord(), resultSetMap);
-
-			}
-		}
-		return getUnitDetails(unitRecord.getId());
-	}
-
-	public UnitOpr getUnitDetails(Long unitId) throws FrameworkException, BusinessException {
-
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In PropertyValueMasterBC :: getunitDetails starts ");
-
-		UnitOpr unitOpr = new UnitOpr();
-
-		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
-		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
-		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
-		queryDetailsMap.put(IDAOConstant.SQL_TEXT, UnitMasterSqlTemplate.GET_UNIT_DETAILS);
-
-		Object strSqlParams[][] = new Object[1][3];
-
-		strSqlParams[0][0] = "1";
-		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
-		strSqlParams[0][2] = unitId;
-		myLog.debug(" parameter 1 unitId:: " + unitId);
-
-		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
-		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
-		myLog.debug(" PropertyValueMasterBC getunitDetails :: Resultset got ::" + responseMap);
-
-		if (responseMap.size() > 0) {
-			for (int i = 0; i < responseMap.size(); i++) {
-
-				HashMap<String, Object> resultSetMap = responseMap.get(i);
-
-				UnitDVO unitRecord = new UnitDVO();
-
-				if (resultSetMap.get("unit_id") != null)
-					unitRecord.setId(Long.valueOf(resultSetMap.get("unit_id").toString()));
-
-				unitRecord.setCode((String) resultSetMap.get("unit_code"));
-				unitRecord.setName((String) resultSetMap.get("unit_name"));
-				unitRecord.setDescription((String) resultSetMap.get("unit_description"));
-				unitRecord.setDisplayName((String) resultSetMap.get("display_name"));
-
-				if (resultSetMap.get("is_active") != null) {
-					unitRecord.setActive((Boolean) resultSetMap.get("is_active"));
-				} else {
-					unitRecord.setActive(false);
-				}
-
-				setAuditAttributes(unitRecord, resultSetMap);
-
-				unitOpr.setUnitRecord(unitRecord);
+				setAuditAttributes(propertyValueMappingOpr.getSelectedPropertyValueMappingRecord(), resultSetMap);
 
 			}
 		}
-		return unitOpr;
+		return propertyValueMappingOpr;
 	}
 }

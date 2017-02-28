@@ -1,6 +1,8 @@
 package com.web.bc.systemowner.modules.master.unitmaster;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.systemowner.UnitOpr;
@@ -258,5 +260,103 @@ public class UnitMasterBC extends BackingClass {
 			}
 		}
 		return unitOpr;
+	}
+
+	public List<Object> getSuggestedUnitRecord(UnitDVO unitDVO) throws FrameworkException, BusinessException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In UnitMasterBC getSuggestedUnitRecord ");
+
+		String unitCode = unitDVO.getCode();
+		String unitName = unitDVO.getName();
+		Boolean isActive = unitDVO.getActive();
+
+		myLog.debug(" unitCode " + unitCode);
+		myLog.debug(" unitName " + unitName);
+		myLog.debug(" isActive " + isActive);
+
+		StringBuffer dynamicWhere = new StringBuffer();
+
+		int parameterCount = 0;
+
+		if (unitCode != null && unitCode.trim().length() > 0) {
+			unitCode = unitCode.trim().concat("%");
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND unit_code LIKE '" + unitCode + "'");
+			} else {
+				dynamicWhere.append(" unit_code LIKE '" + unitCode + "'");
+			}
+			parameterCount++;
+		}
+
+		if (unitName != null && unitName.trim().length() > 0) {
+			unitName = unitName.trim().concat("%");
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND unit_name LIKE '" + unitName + "'");
+			} else {
+				dynamicWhere.append(" unit_name LIKE '" + unitName + "'");
+			}
+			parameterCount++;
+		}
+
+		if (isActive == null || isActive) {
+			if (parameterCount > 0) {
+				dynamicWhere.append(" AND is_active = 1 ");
+			} else {
+				dynamicWhere.append(" is_active = 1 ");
+			}
+			parameterCount += 1;
+		}
+
+		if (parameterCount == 0) {
+			dynamicWhere.append(" 1 = 1 ");
+		}
+		dynamicWhere.append(" ORDER BY unit_code ");
+		myLog.debug("dynamicWhere ::::: " + dynamicWhere);
+
+		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
+		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT, UnitMasterSqlTemplate.SEARCH_UNIT_DETAILS);
+
+		Object strSqlParams[][] = new Object[0][0];
+
+		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, dynamicWhere.toString());
+		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
+		myLog.debug(" UnitMasterBC executeSearch :: Resultset got ::" + responseMap);
+
+		List<Object> unitList = new ArrayList<Object>();
+
+		if (responseMap.size() > 0) {
+			for (int i = 0; i < responseMap.size(); i++) {
+
+				HashMap<String, Object> resultSetMap = responseMap.get(i);
+				handleAndThrowException(resultSetMap);
+
+				UnitDVO unitRecord = new UnitDVO();
+
+				if (resultSetMap.get("unit_id") != null)
+					unitRecord.setId(Long.valueOf(resultSetMap.get("unit_id").toString()));
+
+				unitRecord.setCode((String) resultSetMap.get("unit_code"));
+				unitRecord.setName((String) resultSetMap.get("unit_name"));
+				unitRecord.setDescription((String) resultSetMap.get("unit_description"));
+				unitRecord.setDisplayName((String) resultSetMap.get("display_name"));
+
+				if (resultSetMap.get("is_active") != null) {
+					unitRecord.setActive((Boolean) resultSetMap.get("is_active"));
+				} else {
+					unitRecord.setActive(false);
+				}
+
+				setAuditAttributes(unitRecord, resultSetMap);
+
+				unitList.add(unitRecord);
+
+			}
+		} else {
+			throw new BusinessException("no_data_from_db_excep_msg");
+		}
+
+		return unitList;
 	}
 }

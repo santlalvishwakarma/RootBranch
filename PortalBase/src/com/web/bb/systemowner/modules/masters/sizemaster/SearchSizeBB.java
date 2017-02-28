@@ -172,7 +172,7 @@ public class SearchSizeBB extends BackingBean {
 				yesNoValuesMap.put(parameter.getParameterBooleanValue(), parameter.getParameterCode());
 			}
 		}
-		if (!sizeOpr.getSizeList().isEmpty()) {
+		if (!getSizeOpr().getSizeList().isEmpty()) {
 			for (SizeDVO sizeRecord : sizeOpr.getSizeList()) {
 				String activeDescription = yesNoValuesMap.get(sizeRecord.getActive());
 				sizeRecord.setActiveDescription(activeDescription);

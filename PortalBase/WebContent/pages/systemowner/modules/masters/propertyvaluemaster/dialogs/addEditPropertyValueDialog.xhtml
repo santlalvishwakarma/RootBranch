@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="addEditPropertyValueMappingForm">
+		<p:dialog id="addEditPropertyValueMappingDialog" header="Property Value Mapping"
+			widgetVar="addEditPropertyValueMappingDialog" showEffect="explode" hideEffect="explode" dynamic="true" modal="true">
+			<p:ajax event="close" listener="#{propertyValueMasterBB.closeModalWindow}" />
+			<p:panel id="addEditPropertyValueMappingPanel">
+				<table>
+					<tr>
+						<td><label class="labelClass boldClass">Property</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+						<td><p:autoComplete id="propertySuggestionBox" size="20"
+								disabled="#{!(propertyValueMasterBB.propertyValueMappingOpr.selectedPropertyValueMappingRecord.id eq null)}"
+								value="#{propertyValueMasterBB.propertyValueMappingOpr.selectedPropertyValueMappingRecord.sizeRecord}"
+								completeMethod="#{propertyValueMasterBB.getSuggestedSizeRecordForCode}" var="sizeRecord"
+								itemLabel="#{sizeRecord.code}" itemValue="#{sizeRecord}" converter="#{propertyValueMasterBB.baseDVOConverter}"
+								minQueryLength="2" global="false" forceSelection="true">
+								<p:column>#{sizeRecord.code}</p:column>
+								<p:column>#{sizeRecord.name}</p:column>
+							</p:autoComplete> <p:watermark for="propertySuggestionBox" value="Enter first 2 chars" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Property Value</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+						<td><p:inputText
+								value="#{propertyValueMasterBB.propertyValueMappingOpr.selectedPropertyValueMappingRecord.propertyValue}" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Unit</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+						<td><p:autoComplete id="unitSuggestionBox" size="20"
+								value="#{propertyValueMasterBB.propertyValueMappingOpr.selectedPropertyValueMappingRecord.unitRecord}"
+								completeMethod="#{propertyValueMasterBB.getSuggestedUnitRecord}" var="unitRecord" itemLabel="#{unitRecord.name}"
+								itemValue="#{unitRecord}" converter="#{propertyValueMasterBB.baseDVOConverter}" minQueryLength="2"
+								global="false" forceSelection="true">
+								<p:column>#{unitRecord.name}</p:column>
+								<p:column>#{unitRecord.code}</p:column>
+							</p:autoComplete> <p:watermark for="unitSuggestionBox" value="Enter first 2 chars" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Active</label></td>
+						<td><p:selectBooleanCheckbox
+								value="#{propertyValueMasterBB.propertyValueMappingOpr.selectedPropertyValueMappingRecord.active}" /></td>
+					</tr>
+				</table>
+				<br />
+				<div align="center">
+					<p:commandButton id="saveButton"
+						process="addEditPropertyValueMappingForm, addEditPropertyValueMappingPanel, addEditPropertyValueMappingDialog, @this"
+						value="Save" actionListener="#{propertyValueMasterBB.executeSave}" />
+					&#160;&#160;
+					<p:commandButton id="closePopup" process="@this" value="Close"
+						actionListener="#{propertyValueMasterBB.closeModalWindow}"
+						oncomplete="PF('addEditPropertyValueMappingDialog').hide();" />
+				</div>
+			</p:panel>
+			<p:messages autoUpdate="true" showDetail="false" showSummary="true" />
+		</p:dialog>
+		<p:remoteCommand name="updateSearchList" update="addEditPropertyValueMappingPanel, :propertyValueMasterForm"
+			process="@this" partialSubmit="true" />
+	</h:form>
+</ui:composition>

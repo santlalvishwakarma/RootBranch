@@ -11,6 +11,7 @@ public class PropertyValueMappingOpr extends OperationalDataValueObject {
 	private static final long serialVersionUID = -4686866216857750255L;
 	private PropertyValueMappingDVO propertyValueMappingRecord;
 	private List<PropertyValueMappingDVO> propertyValueMappingList;
+	private PropertyValueMappingDVO selectedPropertyValueMappingRecord;
 
 	public PropertyValueMappingDVO getPropertyValueMappingRecord() {
 		if (propertyValueMappingRecord == null) {
@@ -32,6 +33,17 @@ public class PropertyValueMappingOpr extends OperationalDataValueObject {
 
 	public void setPropertyValueMappingList(List<PropertyValueMappingDVO> propertyValueMappingList) {
 		this.propertyValueMappingList = propertyValueMappingList;
+	}
+
+	public PropertyValueMappingDVO getSelectedPropertyValueMappingRecord() {
+		if (selectedPropertyValueMappingRecord == null) {
+			selectedPropertyValueMappingRecord = new PropertyValueMappingDVO();
+		}
+		return selectedPropertyValueMappingRecord;
+	}
+
+	public void setSelectedPropertyValueMappingRecord(PropertyValueMappingDVO selectedPropertyValueMappingRecord) {
+		this.selectedPropertyValueMappingRecord = selectedPropertyValueMappingRecord;
 	}
 
 }

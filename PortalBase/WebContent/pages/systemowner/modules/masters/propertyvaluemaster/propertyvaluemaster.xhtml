@@ -8,7 +8,7 @@
 				<table style="width: 100%">
 					<tr>
 						<td>Property Code</td>
-						<td><p:autoComplete id="propertyCodeSuggestionBox" size="40"
+						<td><p:autoComplete id="propertyCodeSuggestionBox" size="30"
 								value="#{propertyValueMasterBB.propertyValueMappingOpr.propertyValueMappingRecord.sizeRecord}"
 								completeMethod="#{propertyValueMasterBB.getSuggestedSizeRecordForCode}" var="sizeRecord"
 								itemLabel="#{sizeRecord.code}" itemValue="#{sizeRecord}" converter="#{propertyValueMasterBB.baseDVOConverter}"
@@ -19,7 +19,7 @@
 									partialSubmit="true" />
 							</p:autoComplete> <p:watermark for="propertyCodeSuggestionBox" value="Enter first 2 chars" /></td>
 						<td>Property Name</td>
-						<td><p:autoComplete id="propertyNameSuggestionBox" size="40"
+						<td><p:autoComplete id="propertyNameSuggestionBox" size="30"
 								value="#{propertyValueMasterBB.propertyValueMappingOpr.propertyValueMappingRecord.sizeRecord}"
 								completeMethod="#{propertyValueMasterBB.getSuggestedSizeRecordForName}" var="sizeRecord"
 								itemLabel="#{sizeRecord.name}" itemValue="#{sizeRecord}" converter="#{propertyValueMasterBB.baseDVOConverter}"
@@ -34,14 +34,80 @@
 				<br />
 				<div align="center">
 					<p:commandButton id="btnSearch" actionListener="#{propertyValueMasterBB.executeSearch}" value="Search"
-						update="skuListPanel" />
+						update="propertyValueListPanel" />
 					<p:tooltip for="btnSearch" value="Click to Search" />
-					<p:hotkey bind="ctrl+shift+s" update="skuListPanel" actionListener="#{propertyValueMasterBB.executeSearch}" />
+					<p:hotkey bind="ctrl+shift+s" update="propertyValueListPanel"
+						actionListener="#{propertyValueMasterBB.executeSearch}" />
+					&#160;&#160;
+					<p:commandButton id="btnAddNew" value="Add new" process="@this" partialSubmit="true"
+						update=":addEditPropertyValueMappingForm:addEditPropertyValueMappingPanel"
+						actionListener="#{propertyValueMasterBB.executeAddRow}" />
+					<p:tooltip for="btnAddNew" value="Click to Add new" />
 					&#160;&#160;
 					<p:commandButton id="btnCancel" action="#{propertyValueMasterBB.clearPage}" value="Clear Search" process="@this" />
 					<p:tooltip for="btnCancel" value="Click to Cancel" />
 				</div>
 			</h:panelGroup>
+			<h:panelGroup id="propertyValueListPanel">
+				<p:panel rendered="#{!(empty propertyValueMasterBB.propertyValueMappingOpr.propertyValueMappingList)}">
+					<h:commandLink id="excelLink">
+						<p:graphicImage alt="Export to Xls" value="/staticcontent/systemowner/images/excel.png" styleClass="imageClass" />
+						<p:dataExporter type="xls" target="propertyValueListTable" fileName="PropertyValue" />
+					</h:commandLink>
+					<p:tooltip for="excelLink" value="Click to export data in the list to MS-Excel" />
+					<h:commandLink id="pdfLink">
+						<p:graphicImage alt="Export to PDF" value="/staticcontent/systemowner/images/pdf.png" styleClass="imageClass" />
+						<p:dataExporter type="pdf" target="propertyValueListTable" fileName="PropertyValue" />
+					</h:commandLink>
+					<p:tooltip for="pdfLink" value="Click to export data in the list to PDF" />
+					<h:commandLink id="xmlLink">
+						<p:graphicImage alt="Export to XML" value="/staticcontent/systemowner/images/xml.png" styleClass="imageClass" />
+						<p:dataExporter type="xml" target="propertyValueListTable" fileName="PropertyValue" />
+					</h:commandLink>
+					<p:tooltip for="xmlLink" value="Click to export data in the list to XML" />
+				</p:panel>
+				<p:dataTable id="propertyValueListTable" rows="#{propertyValueMasterBB.paginationNumber}" var="propertyValueRecord"
+					rowsPerPageTemplate="5,10,15" style="width: 100%;"
+					rendered="#{!(empty propertyValueMasterBB.propertyValueMappingOpr.propertyValueMappingList)}"
+					value="#{propertyValueMasterBB.propertyValueMappingOpr.propertyValueMappingList}" paginator="true"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page">
+					<f:facet name="header">Property Value Mapping Record</f:facet>
+					<p:column exportable="false" style="text-align:center" width="6%">
+						<p:commandLink id="lnkEdit" oncomplete="PF('addEditPropertyValueMappingDialog').show()"
+							process=":propertyValueMasterForm:propertyValueMasterPanel, @this" partialSubmit="true"
+							update=":addEditPropertyValueMappingForm:addEditPropertyValueMappingPanel"
+							action="#{propertyValueMasterBB.editDetails}">
+							<p:graphicImage alt="Edit" value="/staticcontent/systemowner/images/editDetails.png" />
+							<f:setPropertyActionListener
+								target="#{propertyValueMasterBB.propertyValueMappingOpr.selectedPropertyValueMappingRecord}"
+								value="#{propertyValueRecord}" />
+						</p:commandLink>
+						<p:tooltip for="lnkEdit" value="Click to Edit details" />
+					</p:column>
+					<p:column sortBy="#{propertyValueRecord.sizeRecord.name}" filterBy="#{propertyValueRecord.sizeRecord.name}"
+						filterMatchMode="contains">
+						<f:facet name="header">Property</f:facet>
+						<h:outputText value="#{propertyValueRecord.sizeRecord.name}"></h:outputText>
+					</p:column>
+					<p:column sortBy="#{propertyValueRecord.propertyValue}" filterBy="#{propertyValueRecord.propertyValue}"
+						filterMatchMode="contains">
+						<f:facet name="header">Value</f:facet>
+						<h:outputText value="#{propertyValueRecord.propertyValue}" styleClass="labelClass" />
+					</p:column>
+					<p:column sortBy="#{propertyValueRecord.unitRecord.name}" filterBy="#{propertyValueRecord.unitRecord.name}"
+						filterMatchMode="contains">
+						<f:facet name="header">Unit Value</f:facet>
+						<h:outputText value="#{propertyValueRecord.unitRecord.name}" styleClass="labelClass" />
+					</p:column>
+					<p:column sortBy="#{propertyValueRecord.activeDescription}" filterBy="#{propertyValueRecord.activeDescription}"
+						filterMatchMode="contains">
+						<f:facet name="header">Active</f:facet>
+						<h:outputText value="#{propertyValueRecord.activeDescription}" styleClass="labelClass" />
+					</p:column>
+					<f:facet name="footer">Total Value Mapped : #{fn:length(propertyValueMasterBB.propertyValueMappingOpr.propertyValueMappingList)}</f:facet>
+				</p:dataTable>
+			</h:panelGroup>
 		</h:form>
+		<ui:include src="/pages/systemowner/modules/masters/propertyvaluemaster/dialogs/addEditPropertyValueDialog.xhtml" />
 	</ui:define>
 </ui:composition>
