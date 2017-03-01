@@ -158,7 +158,7 @@
 
 	<url-mapping id="propertyValueMaster">
 		<pattern value="/admin/propertyvaluemaster" />
-		<view-id value="/pages/systemowner/modules/masters/propertyvaluemaster/propertyvaluemaster.jsf" />
+		<view-id value="/pages/systemowner/modules/masters/propertyvaluemappingmaster/propertyvaluemappingmaster.jsf" />
 		<action onPostback="false">#{propertyValueMasterBB.retrieveData}</action>
 	</url-mapping>
 
