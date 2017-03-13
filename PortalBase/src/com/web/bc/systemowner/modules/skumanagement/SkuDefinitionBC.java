@@ -1001,9 +1001,9 @@ public class SkuDefinitionBC extends BackingClass {
 		return materialList;
 	}
 
-	public SkuOpr executeSavePropertyMapping(SkuOpr skuOpr) {
+	public SkuOpr executeSavePropertyMapping(SkuOpr skuOpr) throws FrameworkException, BusinessException {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In PublishToHomeCategoryBC :: executeSavePropertyMapping starts ");
+		myLog.debug("In SkuDefinitionBC :: executeSavePropertyMapping starts ");
 
 		StringBuffer sizeParseString = new StringBuffer();
 		StringBuffer colorParseString = new StringBuffer();
@@ -1177,7 +1177,17 @@ public class SkuDefinitionBC extends BackingClass {
 
 		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
 		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
-		myLog.debug(" PublishToHomeCategoryBC executeSavePublishCategory :: Resultset got ::" + responseMap);
+		myLog.debug(" SkuDefinitionBC executeSavePropertyMapping :: Resultset got ::" + responseMap);
 
+		if (responseMap.size() > 0) {
+			for (int i = 0; i < responseMap.size(); i++) {
+
+				HashMap<String, Object> resultSetMap = responseMap.get(i);
+				handleAndThrowException(resultSetMap);
+
+				setAuditAttributes(skuOpr.getProductSkuRecord(), resultSetMap);
+			}
+		}
+		return skuOpr;
 	}
 }

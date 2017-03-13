@@ -1,11 +1,11 @@
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS sp_sku_save_size_property_mapping $$
-CREATE  PROCEDURE sp_sku_save_size_property_mapping(
+DROP PROCEDURE IF EXISTS sp_sku_save_material_property_mapping $$
+CREATE  PROCEDURE sp_sku_save_material_property_mapping(
 IN p_product_id INT(10),
 IN p_product_sku_id INT(10),
 IN p_user_login VARCHAR(50),
-IN p_size_parse_srting TEXT,
+IN p_material_parse_srting TEXT,
 OUT p_error_code VARCHAR(50),
 OUT p_error_message VARCHAR(500)
 )
@@ -34,10 +34,8 @@ DECLARE	v_row_id                        INT(4);
 DECLARE v_property_row_VALUES           TEXT;
 DECLARE v_column_sequence_number        INT(10);
                             
-DECLARE v_product_sku_size_Mapping_id  	INT(10);
-DECLARE v_size_id						INT(10);
-DECLARE v_property_value				VARCHAR(60);
-DECLARE v_unit_id						INT(10);
+DECLARE v_product_sku_material_Mapping_id  INT(10);
+DECLARE v_material_id						INT(10);
 DECLARE v_deleteYN						TINYINT(1);
 
 DECLARE v_modified_date 				DATETIME ;
@@ -52,7 +50,7 @@ outer_parse: WHILE v_current_index > 0
 		DO
 		  
 			SET v_previous_index = v_current_index;
-			SELECT LOCATE(';', p_size_parse_srting, v_current_index) INTO v_current_index;
+			SELECT LOCATE(';', p_material_parse_srting, v_current_index) INTO v_current_index;
 			IF v_current_index > 0
 			THEN
 				SET v_start_point = v_previous_index;
@@ -60,10 +58,10 @@ outer_parse: WHILE v_current_index > 0
 				SET v_current_index = v_current_index + 1;	
 			ELSE
 				SET v_start_point = v_previous_index;
-				SET v_end_point = LENGTH(p_size_parse_srting);
+				SET v_end_point = LENGTH(p_material_parse_srting);
 			END IF;
 	
-			SET v_current_node = SUBSTR(p_size_parse_srting,v_start_point,v_end_point);
+			SET v_current_node = SUBSTR(p_material_parse_srting,v_start_point,v_end_point);
 	     SET v_row_id = v_current_index ;
 	     SET  v_property_row_VALUES = v_current_node;
 	     
@@ -112,14 +110,10 @@ outer_parse: WHILE v_current_index > 0
 	                      END IF;
 	                      
 	                       		 IF v_column_sequence_number = 1 THEN 
-	                        	     SET v_product_sku_size_Mapping_id = v_inner_current_node1;	                        	     	
+	                        	     SET v_product_sku_material_Mapping_id = v_inner_current_node1;	                        	     	
 	                      		 ELSEIF v_column_sequence_number = 2 THEN 
-	                        	     SET v_size_id = v_inner_current_node1;
+	                        	     SET v_material_id = v_inner_current_node1;
 	                        	 ELSEIF v_column_sequence_number = 3 THEN
-	                        	 	 SET v_property_value = v_inner_current_node1;
-	                        	 ELSEIF v_column_sequence_number = 4 THEN
-	                        	 	 SET v_unit_id = v_inner_current_node1;
-	                        	 ELSEIF v_column_sequence_number = 5 THEN
 	                        	 	 SET v_deleteYN = v_inner_current_node1;
 	                     		 END IF;   
 	                     	                     
@@ -128,30 +122,28 @@ outer_parse: WHILE v_current_index > 0
 	                       
 	                        SET v_inner_current_index1 = 1;
 	                        
-	                        IF v_product_sku_size_Mapping_id IS NOT NULL THEN 
+	                        IF v_product_sku_material_Mapping_id IS NOT NULL THEN 
 	                        
 		                        SELECT  COUNT(1) INTO v_counter
-								FROM  	product_sku_size_mapping 
-								WHERE   product_sku_size_mapping_id = v_product_sku_size_Mapping_id
+								FROM  	product_sku_material_mapping 
+								WHERE   product_sku_material_mapping_id = v_product_sku_material_Mapping_id
 								AND     modified_date  = v_modified_date; 
 								
 								IF v_counter > 0 THEN
 			                        	
 		                        	IF v_deleteYN = 1 THEN 
 		                        		
-			                        	DELETE  FROM product_sku_size_mapping
-			                        	WHERE 	product_sku_size_mapping_id = v_product_sku_size_Mapping_id;
+			                        	DELETE  FROM product_sku_material_mapping
+			                        	WHERE 	product_sku_material_mapping_id = v_product_sku_material_Mapping_id;
 			                        	
 		                        	ELSE
 		                        	
-		                        		UPDATE	product_sku_size_mapping
-				                        SET 	size_id = v_size_id,
-				                        		property_value = v_property_value,
-				                        		unit_id = v_unit_id,
+		                        		UPDATE	product_sku_material_mapping
+				                        SET 	material_id = v_material_id,
 				                        		is_active = 1,
 				                        		modified_by = p_user_login,
 				                        		modified_date = NOW()
-				                        WHERE 	product_sku_size_mapping_id = v_product_sku_size_Mapping_id;
+				                        WHERE 	product_sku_material_mapping_id = v_product_sku_material_Mapping_id;
 		                        	
 		                        	END IF;
 		                        	
@@ -159,11 +151,11 @@ outer_parse: WHILE v_current_index > 0
 		                          ELSE
 		                          
 			                          SELECT  modified_by INTO v_user_login 
-									  FROM    product_sku_size_mapping
-									  WHERE   product_sku_size_mapping_id = v_product_sku_size_Mapping_id;
+									  FROM    product_sku_material_mapping
+									  WHERE   product_sku_material_mapping_id = v_product_sku_material_Mapping_id;
 									            
 									  SET p_error_code = 'no_data_update_db_excep_msg';
-									  SET p_error_message = CONCAT( 'Sku size property has been updated by (',v_user_login,'). Please search for the updated record to view or make changes.');
+									  SET p_error_message = CONCAT( 'Sku material property has been updated by (',v_user_login,'). Please search for the updated record to view or make changes.');
 		                        	
 		                          END IF;
 	                          
@@ -171,16 +163,14 @@ outer_parse: WHILE v_current_index > 0
 	                        
 	                        	IF v_deleteYN = 0 THEN 
 	                        
-		                        	INSERT INTO product_sku_size_mapping
-		                        	(product_id, product_sku_id, size_id, property_value, unit_id, is_active, created_by, created_date, modified_by, modified_date)
-		                        	values(p_product_id, p_product_sku_id, v_size_id, v_property_value, v_unit_id, 1, p_user_login, NOW(), p_user_login, NOW());
+		                        	INSERT INTO product_sku_material_mapping
+		                        	(product_id, product_sku_id, material_id, is_active, created_by, created_date, modified_by, modified_date)
+		                        	values(p_product_id, p_product_sku_id, v_material_id, 1, p_user_login, NOW(), p_user_login, NOW());
 	                        	END IF;
 	                    	END IF;	     
 	                    	
-	                    	SET v_product_sku_size_Mapping_id = NULL;
-	                        SET v_property_value = NULL;
-	                        SET v_unit_id = NULL;
-	                        SET v_size_id = NULL;
+	                    	SET v_product_sku_material_Mapping_id = NULL;
+	                        SET v_material_id = NULL;
 	                        SET v_deleteYN = NULL;
 	                        SET v_counter = NULL;
 	                      
@@ -198,7 +188,7 @@ END $$
 /*
 call sp_product_save_product_hierarchies_mapping(
 1, -- p_product_id INT(10),
-'3~5~1;~6~1', --  p_size_parse_srting TEXT,
+'3~5~1;~6~1', --  p_material_parse_srting TEXT,
 'TSD', -- p_user_login VARCHAR(50),
 '2012-07-16 16:30:56', -- IN p_modified_date VARCHAR(25),
 @p_error_code,

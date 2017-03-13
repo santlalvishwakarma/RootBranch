@@ -29,6 +29,6 @@ public interface SkuDefinitionSqlTemplate extends SqlTemplate {
 
 	static final String GET_SUGGESTED_MATERIAL_DETAILS = "SELECT material_id, material_code, material_name, material_description, is_active, modified_by, modified_date FROM core_material_master ";
 
-	static final String SAVE_PRODUCT_SKU_PROPERTY_MAPPING = "CALL sp_sku_get_mapped_properties(?,?, @p_error_code, @p_error_message);";
+	static final String SAVE_PRODUCT_SKU_PROPERTY_MAPPING = "CALL sp_sku_save_property_mapping(?,?,?,?,?,?,?, @p_error_code, @p_error_message);";
 
 }
