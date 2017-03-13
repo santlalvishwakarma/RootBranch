@@ -1,17 +1,18 @@
-package com.web.bc.systemowner.modules.ordermanagement;
+package com.web.bc.systemowner.modules.master.ordermanagement;
 
 import com.web.foundation.dao.SqlTemplate;
 
 public interface OrderMasterSqlTemplate extends SqlTemplate {
 
 	public static String SEARCH_ORDERS = " SELECT order_header_id, user_id, user_login, order_no, total_quantity, total_amount, "
-			+ " payment_status, order_status FROM order_header ";
-	// fn_get_parameter_value_text(payment_status) payment_status_value,
-	// fn_get_parameter_value_text(order_status) order_status_value
+			+ " payment_status, fn_get_parameter_value_text(payment_status) payment_status_value, "
+			+ " order_status , fn_get_parameter_value_text(order_status) order_status_value FROM order_header ";
 
 	public static String GET_ORDER_HEADER = " SELECT order_header_id, user_id, user_login, order_no, total_quantity, lead_time, total_amount, "
 			+ " original_total_amount, express_delivery_charge, original_express_delivery_charge, duties, original_duties, "
-			+ " currency_conversion_rate, currency_code, currency_symbol_flag, payment_status, order_status, "
+			+ " currency_conversion_rate, currency_code, currency_symbol_flag, "
+			+ " payment_status, fn_get_parameter_value_text(payment_status) payment_status_value, "
+			+ " order_status , fn_get_parameter_value_text(order_status) order_status_value, "
 			+ " billing_status, billing_first_name, billing_middle_name, billing_last_name, billing_email_address_1, "
 			+ " billing_email_address_2, billing_mobile_1, billing_mobile_2, billing_address_line_1, billing_address_line_2, "
 			+ " billing_address_line_3, billing_city, billing_zip_code, billing_state, billing_country, "

@@ -1,11 +1,11 @@
-package com.web.bb.systemowner.modules.ordermanagement;
+package com.web.bb.systemowner.modules.masters.ordermanagement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.faces.event.ActionEvent;
 
-import com.web.bf.systemowner.modules.ordermanagement.OrderMasterBF;
+import com.web.bf.systemowner.modules.masters.ordermanagement.OrderMasterBF;
 import com.web.common.dvo.util.OptionsDVO;
 import com.web.common.parents.BackingBean;
 import com.web.foundation.exception.BusinessException;

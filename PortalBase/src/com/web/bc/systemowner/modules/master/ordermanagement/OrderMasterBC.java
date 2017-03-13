@@ -1,4 +1,4 @@
-package com.web.bc.systemowner.modules.ordermanagement;
+package com.web.bc.systemowner.modules.master.ordermanagement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,15 +18,15 @@ import com.web.foundation.logger.TSDLogger;
 
 public class OrderMasterBC extends BackingClass {
 
-	public RetailOrderOpr executeSearch(RetailOrderOpr searchRetailOrderOpr) throws FrameworkException,
-			BusinessException {
+	public RetailOrderOpr executeSearch(RetailOrderOpr searchRetailOrderOpr)
+			throws FrameworkException, BusinessException {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("Inside executeSearch: ");
 
 		String orderNumber = searchRetailOrderOpr.getRetailOrderRecord().getOrderNumber();
 		String userLogin = searchRetailOrderOpr.getRetailOrderRecord().getUserRecord().getUserLogin();
-		String paymentStatus = searchRetailOrderOpr.getRetailOrderRecord().getPaymentStatus().getParameterStringValue();
-		String orderStatus = searchRetailOrderOpr.getRetailOrderRecord().getOrderStatus().getParameterStringValue();
+		Integer paymentStatus = searchRetailOrderOpr.getRetailOrderRecord().getPaymentStatus().getParameterID();
+		Integer orderStatus = searchRetailOrderOpr.getRetailOrderRecord().getOrderStatus().getParameterID();
 
 		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
 		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
@@ -52,24 +52,26 @@ public class OrderMasterBC extends BackingClass {
 			parameterCount++;
 		}
 
-		if (paymentStatus != null && paymentStatus.trim().length() > 0) {
+		if (paymentStatus != null && !paymentStatus.equals(0)) {
 			if (parameterCount > 0) {
-				dynamicWhere.append(" AND payment_status = '" + paymentStatus + "'");
+				dynamicWhere.append(" AND payment_status = " + paymentStatus + "");
 			} else {
-				dynamicWhere.append(" payment_status = '" + paymentStatus + "'");
+				dynamicWhere.append(" payment_status = " + paymentStatus + "");
 			}
 			parameterCount++;
 		}
 
-		if (orderStatus != null && orderStatus.trim().length() > 0) {
+		if (orderStatus != null && !orderStatus.equals(0)) {
 			if (parameterCount > 0) {
-				dynamicWhere.append(" AND order_status = '" + orderStatus + "'");
+				dynamicWhere.append(" AND order_status = " + orderStatus + "");
 			} else {
-				dynamicWhere.append(" order_status = '" + orderStatus + "'");
+				dynamicWhere.append(" order_status = " + orderStatus + "");
 			}
 			parameterCount++;
 		}
 
+		myLog.debug("Dynamic Where : " + dynamicWhere);
+		System.out.println(dynamicWhere);
 		Object strSqlParams[][] = new Object[0][3];
 
 		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, dynamicWhere.toString());
@@ -108,10 +110,17 @@ public class OrderMasterBC extends BackingClass {
 					retailOrderRecord.setTotalAmount(Float.valueOf(resultSetMap.get("total_amount").toString()));
 				}
 
-				paymentStatusParameter.setParameterStringValue((String) resultSetMap.get("payment_status"));
+				if (resultSetMap.get("payment_status") != null) {
+					paymentStatusParameter
+							.setParameterID(Integer.valueOf(resultSetMap.get("payment_status").toString()));
+				}
+				paymentStatusParameter.setParameterStringValue((String) resultSetMap.get("payment_status_value"));
 				retailOrderRecord.setPaymentStatus(paymentStatusParameter);
 
-				orderStatusParameter.setParameterStringValue((String) resultSetMap.get("order_status"));
+				if (resultSetMap.get("order_status") != null) {
+					orderStatusParameter.setParameterID(Integer.valueOf(resultSetMap.get("order_status").toString()));
+				}
+				orderStatusParameter.setParameterStringValue((String) resultSetMap.get("order_status_value"));
 				retailOrderRecord.setOrderStatus(orderStatusParameter);
 
 				setAuditAttributes(retailOrderRecord, resultSetMap);
@@ -126,8 +135,8 @@ public class OrderMasterBC extends BackingClass {
 		return searchRetailOrderOpr;
 	}
 
-	public RetailOrderOpr getOrderHeaderRecord(RetailOrderOpr editRetailOrderOpr) throws FrameworkException,
-			BusinessException {
+	public RetailOrderOpr getOrderHeaderRecord(RetailOrderOpr editRetailOrderOpr)
+			throws FrameworkException, BusinessException {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug(" inside getOrderHeaderRecord: ");
 
@@ -168,8 +177,8 @@ public class OrderMasterBC extends BackingClass {
 				}
 
 				if (resultSetMap.get("lead_time") != null) {
-					retailOrderRecord.getDeliveryTimeRecord().setLeadTimeInDays(
-							Integer.valueOf(resultSetMap.get("lead_time").toString()));
+					retailOrderRecord.getDeliveryTimeRecord()
+							.setLeadTimeInDays(Integer.valueOf(resultSetMap.get("lead_time").toString()));
 				}
 
 				if (resultSetMap.get("total_amount") != null) {
@@ -177,13 +186,13 @@ public class OrderMasterBC extends BackingClass {
 				}
 
 				if (resultSetMap.get("original_total_amount") != null) {
-					retailOrderRecord.setOriginalTotalPayableAmount(Float.valueOf(resultSetMap.get(
-							"original_total_amount").toString()));
+					retailOrderRecord.setOriginalTotalPayableAmount(
+							Float.valueOf(resultSetMap.get("original_total_amount").toString()));
 				}
 
 				if (resultSetMap.get("express_delivery_charge") != null) {
-					retailOrderRecord.getDeliveryChargesRecord().setExpressCharge(
-							Float.valueOf(resultSetMap.get("express_delivery_charge").toString()));
+					retailOrderRecord.getDeliveryChargesRecord()
+							.setExpressCharge(Float.valueOf(resultSetMap.get("express_delivery_charge").toString()));
 				}
 
 				if (resultSetMap.get("original_express_delivery_charge") != null) {
@@ -192,21 +201,18 @@ public class OrderMasterBC extends BackingClass {
 				}
 
 				if (resultSetMap.get("duties") != null) {
-					retailOrderRecord.getDeliveryChargesRecord().setDutiesCharge(
-							Float.valueOf(resultSetMap.get("duties").toString()));
+					retailOrderRecord.getDeliveryChargesRecord()
+							.setDutiesCharge(Float.valueOf(resultSetMap.get("duties").toString()));
 				}
 
 				if (resultSetMap.get("original_duties") != null) {
-					retailOrderRecord.getDeliveryChargesRecord().setOriginalDutiesCharge(
-							Float.valueOf(resultSetMap.get("original_duties").toString()));
+					retailOrderRecord.getDeliveryChargesRecord()
+							.setOriginalDutiesCharge(Float.valueOf(resultSetMap.get("original_duties").toString()));
 				}
 
 				if (resultSetMap.get("currency_conversion_rate") != null) {
-					retailOrderRecord
-							.getDeliveryChargesRecord()
-							.getCurrencyRecord()
-							.setCurrencyConversionMultiplier(
-									Float.valueOf(resultSetMap.get("currency_conversion_rate").toString()));
+					retailOrderRecord.getDeliveryChargesRecord().getCurrencyRecord().setCurrencyConversionMultiplier(
+							Float.valueOf(resultSetMap.get("currency_conversion_rate").toString()));
 				}
 
 				if (resultSetMap.get("currency_code") != null) {
@@ -220,66 +226,70 @@ public class OrderMasterBC extends BackingClass {
 				}
 
 				if (resultSetMap.get("payment_status") != null) {
-					retailOrderRecord.getPaymentStatus().setParameterStringValue(
-							(String) resultSetMap.get("payment_status").toString());
+					retailOrderRecord.getPaymentStatus()
+							.setParameterID(Integer.valueOf(resultSetMap.get("payment_status").toString()));
 				}
+				retailOrderRecord.getPaymentStatus()
+						.setParameterStringValue((String) resultSetMap.get("payment_status_value"));
 
 				if (resultSetMap.get("order_status") != null) {
-					retailOrderRecord.getOrderStatus().setParameterStringValue(
-							(String) resultSetMap.get("order_status").toString());
+					retailOrderRecord.getOrderStatus()
+							.setParameterID(Integer.valueOf(resultSetMap.get("order_status").toString()));
 				}
+				retailOrderRecord.getOrderStatus()
+						.setParameterStringValue((String) resultSetMap.get("order_status_value"));
 
 				if (resultSetMap.get("billing_status") != null) {
 				}
 
 				if (resultSetMap.get("billing_first_name") != null) {
-					retailOrderRecord.getBillingDetails().setFirstName(
-							(String) resultSetMap.get("billing_first_name").toString());
+					retailOrderRecord.getBillingDetails()
+							.setFirstName((String) resultSetMap.get("billing_first_name").toString());
 				}
 
 				if (resultSetMap.get("billing_middle_name") != null) {
-					retailOrderRecord.getBillingDetails().setMiddleName(
-							(String) resultSetMap.get("billing_middle_name").toString());
+					retailOrderRecord.getBillingDetails()
+							.setMiddleName((String) resultSetMap.get("billing_middle_name").toString());
 				}
 
 				if (resultSetMap.get("billing_last_name") != null) {
-					retailOrderRecord.getBillingDetails().setLastName(
-							(String) resultSetMap.get("billing_last_name").toString());
+					retailOrderRecord.getBillingDetails()
+							.setLastName((String) resultSetMap.get("billing_last_name").toString());
 				}
 
 				if (resultSetMap.get("billing_email_address_1") != null) {
-					retailOrderRecord.getBillingDetails().setEmail1(
-							(String) resultSetMap.get("billing_email_address_1").toString());
+					retailOrderRecord.getBillingDetails()
+							.setEmail1((String) resultSetMap.get("billing_email_address_1").toString());
 				}
 
 				if (resultSetMap.get("billing_email_address_2") != null) {
-					retailOrderRecord.getBillingDetails().setEmail2(
-							(String) resultSetMap.get("billing_email_address_2").toString());
+					retailOrderRecord.getBillingDetails()
+							.setEmail2((String) resultSetMap.get("billing_email_address_2").toString());
 				}
 
 				if (resultSetMap.get("billing_mobile_1") != null) {
-					retailOrderRecord.getBillingDetails().setMobileNo(
-							(String) resultSetMap.get("billing_mobile_1").toString());
+					retailOrderRecord.getBillingDetails()
+							.setMobileNo((String) resultSetMap.get("billing_mobile_1").toString());
 				}
 
 				if (resultSetMap.get("billing_mobile_2") != null) {
-					retailOrderRecord.getBillingDetails().setPhone1(
-							(String) resultSetMap.get("billing_mobile_2").toString());
+					retailOrderRecord.getBillingDetails()
+							.setPhone1((String) resultSetMap.get("billing_mobile_2").toString());
 				}
 
 				if (resultSetMap.get("billing_address_line_1") != null) {
-					retailOrderRecord.getBillingDetails().setAddressLine1(
-							(String) resultSetMap.get("billing_address_line_1").toString());
+					retailOrderRecord.getBillingDetails()
+							.setAddressLine1((String) resultSetMap.get("billing_address_line_1").toString());
 				}
 
 				if (resultSetMap.get("billing_address_line_2") != null) {
-					retailOrderRecord.getBillingDetails().setAddressLine2(
-							(String) resultSetMap.get("billing_address_line_2").toString());
+					retailOrderRecord.getBillingDetails()
+							.setAddressLine2((String) resultSetMap.get("billing_address_line_2").toString());
 				}
 
 				if (resultSetMap.get("billing_address_line_3") != null) {
-					retailOrderRecord.getBillingDetails().setAddressLine3(
-							(String) resultSetMap.get("billing_address_line_3").toString());
+					retailOrderRecord.getBillingDetails()
+							.setAddressLine3((String) resultSetMap.get("billing_address_line_3").toString());
 				}
 
 				if (resultSetMap.get("billing_city") != null) {
@@ -298,13 +308,13 @@ public class OrderMasterBC extends BackingClass {
 				}
 
 				if (resultSetMap.get("billing_city") != null) {
-					retailOrderRecord.getBillingDetails().setPincode(
-							(String) resultSetMap.get("billing_city").toString());
+					retailOrderRecord.getBillingDetails()
+							.setPincode((String) resultSetMap.get("billing_city").toString());
 				}
 
 				if (resultSetMap.get("order_tracking_number") != null) {
-					retailOrderRecord.setOrderTrackingNumber((String) resultSetMap.get("order_tracking_number")
-							.toString());
+					retailOrderRecord
+							.setOrderTrackingNumber((String) resultSetMap.get("order_tracking_number").toString());
 				}
 
 				if (resultSetMap.get("order_date") != null) {
@@ -316,8 +326,8 @@ public class OrderMasterBC extends BackingClass {
 				}
 
 				if (resultSetMap.get("courier_id") != null) {
-					retailOrderRecord.getCourierRecord().setParameterID(
-							Integer.valueOf(resultSetMap.get("courier_id").toString()));
+					retailOrderRecord.getCourierRecord()
+							.setParameterID(Integer.valueOf(resultSetMap.get("courier_id").toString()));
 				}
 
 				if (resultSetMap.get("voucher_code") != null) {
@@ -335,8 +345,8 @@ public class OrderMasterBC extends BackingClass {
 				}
 
 				if (resultSetMap.get("discount_value") != null) {
-					retailOrderRecord.getVoucherRecord().setVoucherDiscountValue(
-							Float.valueOf(resultSetMap.get("discount_value").toString()));
+					retailOrderRecord.getVoucherRecord()
+							.setVoucherDiscountValue(Float.valueOf(resultSetMap.get("discount_value").toString()));
 				}
 
 				if (resultSetMap.get("gift_wrapping_required") != null) {
@@ -367,8 +377,8 @@ public class OrderMasterBC extends BackingClass {
 		return editRetailOrderOpr;
 	}
 
-	public RetailOrderOpr getOrderDetailRecord(RetailOrderOpr editRetailOrderOpr) throws FrameworkException,
-			BusinessException {
+	public RetailOrderOpr getOrderDetailRecord(RetailOrderOpr editRetailOrderOpr)
+			throws FrameworkException, BusinessException {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug(" inside getOrderDetailRecord: ");
 
@@ -408,8 +418,8 @@ public class OrderMasterBC extends BackingClass {
 				}
 
 				if (resultSetMap.get("product_sku_id") != null) {
-					retailOrderDetailsRecord.getProductSkuRecord().setId(
-							Long.valueOf(resultSetMap.get("product_sku_id").toString()));
+					retailOrderDetailsRecord.getProductSkuRecord()
+							.setId(Long.valueOf(resultSetMap.get("product_sku_id").toString()));
 				}
 
 				retailOrderDetailsRecord.getProductSkuRecord().getProductRecord()
@@ -421,13 +431,13 @@ public class OrderMasterBC extends BackingClass {
 				retailOrderDetailsRecord.getProductSkuRecord().setCode((String) resultSetMap.get("sku_name"));
 
 				if (resultSetMap.get("price_per_piece") != null) {
-					retailOrderDetailsRecord.setPricePerPiece(Float.valueOf(resultSetMap.get("price_per_piece")
-							.toString()));
+					retailOrderDetailsRecord
+							.setPricePerPiece(Float.valueOf(resultSetMap.get("price_per_piece").toString()));
 				}
 
 				if (resultSetMap.get("original_price_per_piece") != null) {
-					retailOrderDetailsRecord.setOriginalPricePerPiece(Float.valueOf(resultSetMap.get(
-							"original_price_per_piece").toString()));
+					retailOrderDetailsRecord.setOriginalPricePerPiece(
+							Float.valueOf(resultSetMap.get("original_price_per_piece").toString()));
 				}
 
 				if (resultSetMap.get("total_price") != null) {
@@ -435,13 +445,13 @@ public class OrderMasterBC extends BackingClass {
 				}
 
 				if (resultSetMap.get("original_total_price") != null) {
-					retailOrderDetailsRecord.setOriginalTotalPrice(Float.valueOf(resultSetMap.get(
-							"original_total_price").toString()));
+					retailOrderDetailsRecord
+							.setOriginalTotalPrice(Float.valueOf(resultSetMap.get("original_total_price").toString()));
 				}
 
 				if (resultSetMap.get("quantity") != null) {
-					retailOrderDetailsRecord.setProductQuantity(Integer
-							.valueOf(resultSetMap.get("quantity").toString()));
+					retailOrderDetailsRecord
+							.setProductQuantity(Integer.valueOf(resultSetMap.get("quantity").toString()));
 				}
 
 				if (resultSetMap.get("delivery_date") != null) {

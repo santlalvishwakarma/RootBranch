@@ -1,21 +1,28 @@
-<ui:composition template="/pages/systemowner/template/template.xhtml" xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+<ui:composition template="/pages/systemowner/template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<ui:define name="content">
 		<h:form>
-			<p:remoteCommand name="editSelectedOrderRecord" process="@this" partialSubmit="true" update=":ordersTabView"
+			<p:remoteCommand name="editSelectedOrderRecord" process="@this"
+				partialSubmit="true" update=":ordersTabView"
 				action="#{editOrdersBB.setOrderForEdit}" />
 		</h:form>
-		<p:tabView id="ordersTabView" activeIndex="#{editOrdersBB.activeTabIndex}">
+		<p:tabView id="ordersTabView"
+			activeIndex="#{editOrdersBB.activeTabIndex}">
 			<p:tab id="searchListOrders" title="Search/List">
 				<div style="overflow-x: auto; overflow-y: auto;">
-					<ui:include src="/pages/systemowner/modules/ordermanagement/searchorders.xhtml" />
+					<ui:include
+						src="/pages/systemowner/modules/masters/ordermanagement/searchorders.xhtml" />
 				</div>
 			</p:tab>
 			<p:tab id="editOrders" title="Edit Orders" disabled="true">
 				<div style="overflow-x: auto; overflow-y: auto;">
-					<ui:include src="/pages/systemowner/modules/ordermanagement/editorders.xhtml" />
+					<ui:include
+						src="/pages/systemowner/modules/masters/ordermanagement/editorders.xhtml" />
 				</div>
 			</p:tab>
 		</p:tabView>

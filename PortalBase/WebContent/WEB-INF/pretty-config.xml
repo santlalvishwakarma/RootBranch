@@ -164,7 +164,7 @@
 
 	<url-mapping id="orderMaster">
 		<pattern value="/admin/orderMaster" />
-		<view-id value="/pages/systemowner/modules/ordermanagement/orders.jsf" />
+		<view-id value="/pages/systemowner/modules/masters/ordermanagement/orders.jsf" />
 		<action onPostback="false">#{orderBB.retrieveData}</action>
 	</url-mapping>
 

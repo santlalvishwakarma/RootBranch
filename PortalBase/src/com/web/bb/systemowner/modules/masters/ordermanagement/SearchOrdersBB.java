@@ -1,4 +1,4 @@
-package com.web.bb.systemowner.modules.ordermanagement;
+package com.web.bb.systemowner.modules.masters.ordermanagement;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
-import com.web.bf.systemowner.modules.ordermanagement.OrderMasterBF;
+import com.web.bf.systemowner.modules.masters.ordermanagement.OrderMasterBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.systemowner.RetailOrderOpr;
 import com.web.common.dvo.util.OptionsDVO;
@@ -22,7 +22,7 @@ public class SearchOrdersBB extends BackingBean {
 
 	private static final long serialVersionUID = -6444146167898579704L;
 
-	private String propertiesLocation = "/com/web/bb/systemowner/modules/ordermanagement/ordermanagement";
+	private String propertiesLocation = "/com/web/bb/systemowner/modules/masters/ordermanagement/ordermanagement";
 
 	private RetailOrderOpr searchRetailOrderOpr;
 
@@ -75,8 +75,9 @@ public class SearchOrdersBB extends BackingBean {
 		setSuccessMsg("");
 
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.ACTIVE_TAB_OPR, searchRetailOrderOpr);
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(CommonConstant.ACTIVE_TAB_OPR,
+				searchRetailOrderOpr);
+		myLog.debug(searchRetailOrderOpr.getSelectedRetailOrderRecord().getId());
 
 		RequestContext.getCurrentInstance().execute("editSelectedOrderRecord();");
 	}

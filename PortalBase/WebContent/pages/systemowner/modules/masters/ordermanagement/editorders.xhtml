@@ -43,7 +43,7 @@
 
 					<td><label class="labelClass boldClass">Order Status</label></td>
 					<td><p:selectOneMenu id="editOrderStatusList"
-							value="#{editOrdersBB.editRetailOrderOpr.retailOrderRecord.orderStatus}">
+							value="#{editOrdersBB.editRetailOrderOpr.retailOrderRecord.orderStatus.parameterID}">
 							<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
 							<f:selectItems value="#{orderBB.allOptions.allOptionsValues['orderStatusList']}" var="orderStatus"
 								itemLabel="#{orderStatus.parameterStringValue}" itemValue="#{orderStatus.parameterID}" />

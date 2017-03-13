@@ -1,9 +1,9 @@
-package com.web.bb.systemowner.modules.ordermanagement;
+package com.web.bb.systemowner.modules.masters.ordermanagement;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import com.web.bf.systemowner.modules.ordermanagement.OrderMasterBF;
+import com.web.bf.systemowner.modules.masters.ordermanagement.OrderMasterBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.systemowner.RetailOrderOpr;
 import com.web.common.dvo.util.OptionsDVO;
@@ -17,7 +17,7 @@ public class EditOrdersBB extends BackingBean {
 
 	private static final long serialVersionUID = 1598546047857812304L;
 
-	private String propertiesLocation = "/com/web/bb/systemowner/modules/ordermanagement/ordermanagement";
+	private String propertiesLocation = "/com/web/bb/systemowner/modules/masters/ordermanagement/ordermanagement";
 	private int activeTabIndex;
 
 	private RetailOrderOpr editRetailOrderOpr;
@@ -25,7 +25,8 @@ public class EditOrdersBB extends BackingBean {
 	public int getActiveTabIndex() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug(" inside getActiveTabIndex: ");
-		if (FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get(CommonConstant.ACTIVE_TAB) != null) {
+		if (FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+				.get(CommonConstant.ACTIVE_TAB) != null) {
 			activeTabIndex = (Integer) FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 					.get(CommonConstant.ACTIVE_TAB);
 			FacesContext.getCurrentInstance().getExternalContext().getRequestMap().remove(CommonConstant.ACTIVE_TAB);
@@ -81,13 +82,15 @@ public class EditOrdersBB extends BackingBean {
 	}
 
 	public RetailOrderOpr getEditRetailOrderOpr() {
-		if (FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.containsKey(CommonConstant.ACTIVE_TAB_OPR)) {
 			RetailOrderOpr selectedRetailOrderOpr = (RetailOrderOpr) FacesContext.getCurrentInstance()
-					.getExternalContext().getRequestMap().get(CommonConstant.ACTIVE_TAB_OPR);
-			FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+					.getExternalContext().getSessionMap().get(CommonConstant.ACTIVE_TAB_OPR);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 					.remove(CommonConstant.ACTIVE_TAB_OPR);
-			editRetailOrderOpr.setRetailOrderRecord(selectedRetailOrderOpr.getRetailOrderRecord());
+			editRetailOrderOpr.setRetailOrderRecord(selectedRetailOrderOpr.getSelectedRetailOrderRecord());
+			myLog.debug("Order Id: " + selectedRetailOrderOpr.getRetailOrderRecord().getId());
 			populateData();
 		}
 		if (editRetailOrderOpr == null) {

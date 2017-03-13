@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
-import javax.transaction.UserTransaction;
 
 import com.web.bc.common.OptionsHelperBC;
 import com.web.bc.retail.modules.shoppingcart.ShoppingCartBC;

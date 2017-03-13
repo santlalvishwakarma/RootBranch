@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
 	version="2.0">
 
@@ -213,19 +214,19 @@
 
 	<managed-bean>
 		<managed-bean-name>searchOrdersBB</managed-bean-name>
-		<managed-bean-class>com.web.bb.systemowner.modules.ordermanagement.SearchOrdersBB</managed-bean-class>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.ordermanagement.SearchOrdersBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>editOrdersBB</managed-bean-name>
-		<managed-bean-class>com.web.bb.systemowner.modules.ordermanagement.EditOrdersBB</managed-bean-class>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.ordermanagement.EditOrdersBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>orderBB</managed-bean-name>
-		<managed-bean-class>com.web.bb.systemowner.modules.ordermanagement.OrderBB</managed-bean-class>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.ordermanagement.OrderBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 
