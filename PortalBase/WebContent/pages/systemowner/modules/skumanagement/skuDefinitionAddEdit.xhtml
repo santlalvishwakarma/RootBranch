@@ -81,7 +81,8 @@
 								</tr>
 							</table>
 						</p:commandLink></td>
-					<td><p:commandLink value="Map Properties" /></td>
+					<td><p:commandLink value="Map Properties" process="skuAddEditPanel, @this"
+							actionListener="#{skuDefinitionAddEditBB.openMapPropertyDialog}" update="skuPropertyMappingDialogPanel" oncomplete="PF('skuPropertyMappingDialog').show();" /></td>
 					<td><label class="labelClass boldClass">Seo Description</label></td>
 					<td><p:inputText id="seoDescription"
 							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.skuSEODescription}" maxlength="60" /></td>
@@ -102,6 +103,6 @@
 				<p:tooltip for="btnAddNew" value="Click to Add New" />
 			</div>
 		</h:panelGroup>
-
+		<ui:include src="/pages/systemowner/modules/skumanagement/dialogs/skuPropertyMappingDialog.xhtml" />
 	</h:form>
 </ui:composition>

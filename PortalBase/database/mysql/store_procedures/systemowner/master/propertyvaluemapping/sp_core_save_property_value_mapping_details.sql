@@ -10,6 +10,10 @@ CREATE PROCEDURE sp_core_save_property_value_mapping_details
 	IN p_is_active TINYINT(1),
 	IN p_user_login VARCHAR(50),
 	IN p_modified_date VARCHAR(25),
+	IN p_size_code VARCHAR(25),
+	IN p_size_name VARCHAR(60),
+	IN p_unit_code VARCHAR(25),
+	IN p_unit_name VARCHAR(60),
 	OUT p_error_code VARCHAR(50),
 	OUT p_error_message VARCHAR(500)
 )
@@ -35,8 +39,8 @@ BEGIN
                
       IF v_property_value_mapping_counter = 0 THEN
          
-               INSERT INTO core_property_value_mapping(size_id, property_value, unit_id, is_active, created_by, created_date, modified_by, modified_date) 
-				VALUES( p_size_id, p_property_value, p_unit_id, p_is_active, p_user_login, NOW(), p_user_login, NOW());
+               INSERT INTO core_property_value_mapping(size_id, size_code, size_name, property_value, unit_id, unit_code, unit_name, is_active, created_by, created_date, modified_by, modified_date) 
+				VALUES( p_size_id, p_size_code, p_size_name, p_property_value, p_unit_id, p_unit_code, p_unit_name, p_is_active, p_user_login, NOW(), p_user_login, NOW());
 				
 				SELECT LAST_INSERT_ID() INTO v_last_inserted_id;
 					   		
@@ -67,8 +71,12 @@ BEGIN
         
 	              		UPDATE  core_property_value_mapping
 					      SET     size_id = p_size_id,
+					      		  size_code = p_size_code,
+					      		  size_name = p_size_name,
 					              property_value = p_property_value,
 					              unit_id = p_unit_id,
+					              unit_code = p_unit_code,
+					              unit_name = p_unit_name,
 					              is_active = p_is_active,
 					              modified_by = p_user_login,
 					              modified_date = NOW()

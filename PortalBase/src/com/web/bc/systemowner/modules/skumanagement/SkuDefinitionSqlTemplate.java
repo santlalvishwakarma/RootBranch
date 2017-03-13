@@ -20,4 +20,15 @@ public interface SkuDefinitionSqlTemplate extends SqlTemplate {
 			+ " fn_product_get_product_code(product_id) AS product_code, fn_product_get_product_name(product_id) AS product_name "
 			+ " FROM product_sku_header WHERE product_sku_id = ?;";
 
+	static final String GET_MAPPED_PROPERTY_DETAILS = "CALL sp_sku_get_mapped_properties(?,?, @p_error_code, @p_error_message);";
+
+	static final String GET_PROPERTY_VALUE_DETAILS = "SELECT property_value_mapping_id, size_id, size_code, size_name, property_value, unit_id, unit_code, unit_name, is_active, modified_by, modified_date "
+			+ " FROM core_property_value_mapping ";
+
+	static final String GET_SUGGESTED_COLOR_DETAILS = "SELECT color_id, color_code, color_name, color_description, is_active, modified_by, modified_date FROM  core_color_master ";
+
+	static final String GET_SUGGESTED_MATERIAL_DETAILS = "SELECT material_id, material_code, material_name, material_description, is_active, modified_by, modified_date FROM core_material_master ";
+
+	static final String SAVE_PRODUCT_SKU_PROPERTY_MAPPING = "CALL sp_sku_get_mapped_properties(?,?, @p_error_code, @p_error_message);";
+
 }

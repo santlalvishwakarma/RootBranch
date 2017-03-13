@@ -9,18 +9,22 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 
 import com.web.bf.systemowner.modules.skumanagement.SkuDefinitionBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.common.BaseDVO;
-import com.web.common.dvo.opr.systemowner.ProductOpr;
 import com.web.common.dvo.opr.systemowner.SkuOpr;
+import com.web.common.dvo.systemowner.ColorDVO;
 import com.web.common.dvo.systemowner.ImageDVO;
+import com.web.common.dvo.systemowner.MaterialDVO;
 import com.web.common.dvo.systemowner.ProductDVO;
+import com.web.common.dvo.systemowner.ProductSkuColorMappingDVO;
 import com.web.common.dvo.systemowner.ProductSkuDVO;
 import com.web.common.dvo.systemowner.ProductSkuImageMappingDVO;
+import com.web.common.dvo.systemowner.ProductSkuMaterialMappingDVO;
+import com.web.common.dvo.systemowner.ProductSkuSizeMappingDVO;
+import com.web.common.dvo.systemowner.PropertyValueMappingDVO;
 import com.web.common.dvo.util.File;
 import com.web.common.dvo.util.OptionsDVO;
 import com.web.common.jsf.converters.BaseDVOConverter;
@@ -60,7 +64,6 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 	private List<Object> processVariationList;
 	private List<Object> skuList;
 	private Map<Long, BaseDVO> copyOfDataMap;
-	private List<Object> propertyValuesList;
 
 	private boolean renderGetBackToAutoSku = false;
 	private ProductSkuImageMappingDVO productSkuImageMappingRecord;
@@ -237,17 +240,6 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 
 	public void setCopyOfDataMap(Map<Long, BaseDVO> copyOfDataMap) {
 		this.copyOfDataMap = copyOfDataMap;
-	}
-
-	public List<Object> getPropertyValuesList() {
-		if (propertyValuesList == null) {
-			propertyValuesList = new ArrayList<Object>();
-		}
-		return propertyValuesList;
-	}
-
-	public void setPropertyValuesList(List<Object> propertyValuesList) {
-		this.propertyValuesList = propertyValuesList;
 	}
 
 	public boolean isRenderGetBackToAutoSku() {
@@ -460,28 +452,27 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("In Product Definition Add Edit BB :: openMapPropertyDialog starts ");
 
+		skuOpr.getProductSkuRecord().setProductSkuColorMappingList(null);
+
+		skuOpr.getProductSkuRecord().setProductSkuSizeMappingList(null);
+
+		skuOpr.getProductSkuRecord().setProductSkuMaterialMappingList(null);
+
 		try {
-			if (renderForProduct)
-				productOpr.getApplicationFlags().getApplicationFlagMap().put("SAVE_FLAG", "PRODUCT");
-			else
-				productOpr.getApplicationFlags().getApplicationFlagMap().put("SAVE_FLAG", "SKU");
 
-			productOpr.getProductRecord().setProductPropertiesMappingList(null);
-			ProductOpr productOprRecd = new ProductDefinitionBD().getPropertiesMappingList(productOpr);
+			SkuOpr skuOprRet = new SkuDefinitionBF().getSkuPropertyMappingList(skuOpr);
 
-			if (!productOprRecd.getProductRecord().getProductPropertiesMappingList().isEmpty()) {
-				productOpr.getProductRecord().setProductPropertiesMappingList(
-						productOprRecd.getProductRecord().getProductPropertiesMappingList());
-				RequestContext.getCurrentInstance().execute("productPropertyMappingDialog.show();");
+			skuOpr.getProductSkuRecord().setProductSkuColorMappingList(
+					skuOprRet.getProductSkuRecord().getProductSkuColorMappingList());
 
-			} else {
-				PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
-				if (productOpr.getIconProductSKURecord().getMapHierarchy())
-					addToErrorList(propertiesReader.getValueOfKey("property_list_null"));
-				else
-					addToErrorList(propertiesReader.getValueOfKey("no_hierarchy_mapped"));
+			skuOpr.getProductSkuRecord().setProductSkuSizeMappingList(
+					skuOprRet.getProductSkuRecord().getProductSkuSizeMappingList());
 
-			}
+			skuOpr.getProductSkuRecord().setProductSkuMaterialMappingList(
+					skuOprRet.getProductSkuRecord().getProductSkuMaterialMappingList());
+
+			populateSuggestionBox();
+
 		} catch (FrameworkException e) {
 			handleException(e, propertiesLocation);
 
@@ -489,81 +480,31 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 			handleException(e, propertiesLocation);
 		}
 
-		propertyValuesList = new ArrayList<Object>();
-
-		if (!productOpr.getProductRecord().getProductPropertiesMappingList().isEmpty()) {
-			for (ProductPropertiesMappingDVO productPropertiesMappingRecord : productOpr.getProductRecord()
-					.getProductPropertiesMappingList()) {
-				for (ProductPropertiesMappingDVO productPropertiesMappingDVO : productPropertiesMappingRecord
-						.getSuggestedValuesList()) {
-					productPropertiesMappingDVO.getProductPropertiesRecord().setId(
-							productPropertiesMappingRecord.getProductPropertiesRecord().getId());
-					propertyValuesList.add(productPropertiesMappingDVO);
-				}
-			}
-		}
-		FacesContext.getCurrentInstance().getViewRoot().getViewMap()
-				.put("productPropertyValueAutoComplete", propertyValuesList);
-	}
-
-	public List<Object> getSuggestedPropertyValuesList(String query) {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		List<Object> productItemObjectList = new ArrayList<Object>();
-		Object propertyValue = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
-				.get("property");
-
-		myLog.debug(" propertyValue ---> " + propertyValue);
-
-		if (propertyValue != null && query != null) {
-			Long propertyId = Long.parseLong(propertyValue.toString());
-			myLog.debug(" propertyId ---> " + propertyId);
-
-			if (propertyValuesList != null && !propertyValuesList.isEmpty()) {
-				query = query.toUpperCase();
-				for (Object object : propertyValuesList) {
-					ProductPropertiesMappingDVO productPropertiesMappingDVO = (ProductPropertiesMappingDVO) object;
-					String name = productPropertiesMappingDVO.getName();
-					Long propertyIdDB = productPropertiesMappingDVO.getProductPropertiesRecord().getId();
-					myLog.debug(" propertyIdDB ---> " + propertyIdDB);
-
-					if (propertyIdDB != null && propertyIdDB.equals(propertyId) && name.toUpperCase().startsWith(query)) {
-						productItemObjectList.add(productPropertiesMappingDVO);
-					}
-				}
-			}
-		}
-		return productItemObjectList;
 	}
 
 	public void executeSavePropertyMapping(ActionEvent event) {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		myLog.debug("In Product Definition Add Edit BB :: executeSavePropertyMapping starts ");
+		myLog.debug("In SkuDefinitionAddEditBB :: executeSavePropertyMapping starts ");
 
-		if (validateSaveProductPropertiesMapping()
-				&& !productOpr.getProductRecord().getProductPropertiesMappingList().isEmpty()) {
+		if (validateSaveProductPropertiesMapping()) {
+
 			try {
 				String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
-				productOpr.getProductRecord().setUserLogin(userLogin);
+				skuOpr.getProductSkuRecord().setUserLogin(userLogin);
 
-				if (renderForProduct)
-					productOpr.getApplicationFlags().getApplicationFlagMap().put("SAVE_FLAG", "PRODUCT");
-				else
-					productOpr.getApplicationFlags().getApplicationFlagMap().put("SAVE_FLAG", "SKU");
+				SkuOpr skuOprRet = new SkuDefinitionBF().executeSavePropertyMapping(skuOpr);
 
-				productOpr = new ProductDefinitionBD().savePropertiesMappingList(productOpr);
+				skuOpr.getProductSkuRecord()
+						.getAuditAttributes()
+						.setLastModifiedDate(skuOprRet.getProductSkuRecord().getAuditAttributes().getLastModifiedDate());
+
+				openMapPropertyDialog(null);
 
 				PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
-				setSuccessMsg(propertiesReader.getValueOfKey("property_save_success"));
-
-				if (!productOpr.getProductRecord().getProductPropertiesMappingList().isEmpty())
-					productOpr.getIconProductSKURecord().setMapProperties(true);
-				else
-					productOpr.getIconProductSKURecord().setMapProperties(false);
-				populateEnableDisableButtons();
+				setSuccessMsg(propertiesReader.getValueOfKey("product_save_success"));
 
 			} catch (FrameworkException e) {
 				handleException(e, propertiesLocation);
-
 			} catch (BusinessException e) {
 				handleException(e, propertiesLocation);
 			}
@@ -576,66 +517,97 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 		boolean validateFlag = true;
 		setErrorList(new ArrayList<String>());
 
-		int size = productOpr.getProductRecord().getProductPropertiesMappingList().size();
-		if (size > 0) {
+		List<ProductSkuSizeMappingDVO> productSkuSizeMappingList = skuOpr.getProductSkuRecord()
+				.getProductSkuSizeMappingList();
 
-			for (int i = 0; i < size; i++) {
-				ProductPropertiesMappingDVO productPropertiesMappingRecord = productOpr.getProductRecord()
-						.getProductPropertiesMappingList().get(i);
+		if (productSkuSizeMappingList != null && !productSkuSizeMappingList.isEmpty()) {
 
-				if (!productPropertiesMappingRecord.getOperationalAttributes().getRecordDeleted()) {
-					String propertyValue = productPropertiesMappingRecord.getPropertyValue();
-					String uomName = productPropertiesMappingRecord.getProductPropertiesRecord().getUomRecord()
-							.getName();
-					Integer valueTypeSequenceNumber = productPropertiesMappingRecord.getProductPropertiesRecord()
-							.getValueType().getSequenceNumber();
+			Map<Long, Long> uniqueSizeMap = new HashMap<Long, Long>();
 
-					if (productPropertiesMappingRecord.getProductPropertiesRecord().getMandatory() != null
-							&& productPropertiesMappingRecord.getProductPropertiesRecord().getMandatory()) {
-
-						if (!CommonConstant.ParameterSequenceNumber.THREE.equals(valueTypeSequenceNumber)
-								&& !validator.validateNull(propertyValue)) {
-							addToErrorList(propertiesReader.getValueOfKey("property_value_null") + (i + 1));
-
-						}
-						if (CommonConstant.ParameterSequenceNumber.THREE.equals(valueTypeSequenceNumber)
-								&& productPropertiesMappingRecord.getPropertyValuesList().isEmpty()) {
-							addToErrorList(propertiesReader.getValueOfKey("property_value_null") + (i + 1));
-						}
-					}
-					if (!CommonConstant.ParameterSequenceNumber.THREE.equals(valueTypeSequenceNumber)) {
-						if (uomName != null && !uomName.equalsIgnoreCase(CommonConstant.UOMCodes.NONE)
-								&& propertyValue != null) {
-							try {
-								Float.parseFloat(propertyValue);
-
-							} catch (NumberFormatException e) {
-								addToErrorList(propertiesReader.getValueOfKey("property_value_numeric") + (i + 1));
-							}
-
-							if (propertyValue != null && !validator.validateForNoOfDecimals(propertyValue, 3)) {
-								addToErrorList(propertiesReader.getValueOfKey("property_value_decimal_places")
-										+ (i + 1));
-							}
-						}
+			for (int i = 0; i < productSkuSizeMappingList.size(); i++) {
+				ProductSkuSizeMappingDVO productSkuSizeMappingRecord = new ProductSkuSizeMappingDVO();
+				productSkuSizeMappingRecord = productSkuSizeMappingList.get(i);
+				if (!validator.validateLongObjectNull(productSkuSizeMappingRecord.getPropertyValueMappingRecord()
+						.getSizeRecord().getId())) {
+					addToErrorList(propertiesReader.getValueOfKey("size_name_null") + (i + 1));
+				} else if (!validator.validateLongObjectNull(productSkuSizeMappingRecord
+						.getPropertyValueMappingRecord().getUnitRecord().getId())) {
+					addToErrorList(propertiesReader.getValueOfKey("unit_null") + (i + 1));
+				} else if (!validator.validateNull(productSkuSizeMappingRecord.getPropertyValueMappingRecord()
+						.getPropertyValue())) {
+					addToErrorList(propertiesReader.getValueOfKey("property_value_null") + (i + 1));
+				} else {
+					if (uniqueSizeMap.isEmpty()) {
+						uniqueSizeMap.put(productSkuSizeMappingRecord.getPropertyValueMappingRecord().getId(),
+								productSkuSizeMappingRecord.getPropertyValueMappingRecord().getId());
 					} else {
+						if (uniqueSizeMap.containsKey(productSkuSizeMappingRecord.getPropertyValueMappingRecord()
+								.getId())) {
+							addToErrorList(propertiesReader.getValueOfKey("duplicate_size_record") + (i + 1));
 
-						HashMap<String, String> uniqueValuesMap = new HashMap<String, String>();
-						for (ProductPropertiesMappingDVO productPropertiesMappingDVO : productPropertiesMappingRecord
-								.getPropertyValuesList()) {
-
-							String propertyName = productPropertiesMappingDVO.getName();
-							if (uniqueValuesMap.containsKey(propertyName)) {
-								addToErrorList(propertiesReader.getValueOfKey("property_value_duplicate") + (i + 1));
-
-							} else {
-								uniqueValuesMap.put(propertyName, propertyName);
-							}
+						} else {
+							uniqueSizeMap.put(productSkuSizeMappingRecord.getPropertyValueMappingRecord().getId(),
+									productSkuSizeMappingRecord.getPropertyValueMappingRecord().getId());
 						}
 					}
+				}
 
+			}
+		}
+
+		List<ProductSkuColorMappingDVO> productSkuColorMappingList = skuOpr.getProductSkuRecord()
+				.getProductSkuColorMappingList();
+
+		if (productSkuColorMappingList != null && !productSkuColorMappingList.isEmpty()) {
+			Map<Long, Long> uniqueColorMap = new HashMap<Long, Long>();
+			for (int i = 0; i < productSkuColorMappingList.size(); i++) {
+				ProductSkuColorMappingDVO productSkuColorMappingRecord = productSkuColorMappingList.get(i);
+				if (!validator.validateLongObjectNull(productSkuColorMappingRecord.getColorRecord().getId())) {
+					addToErrorList(propertiesReader.getValueOfKey("color_null") + (i + 1));
+				} else {
+					if (uniqueColorMap.isEmpty()) {
+						uniqueColorMap.put(productSkuColorMappingRecord.getColorRecord().getId(),
+								productSkuColorMappingRecord.getColorRecord().getId());
+					} else {
+						if (uniqueColorMap.containsKey(productSkuColorMappingRecord.getColorRecord().getId())) {
+							addToErrorList(propertiesReader.getValueOfKey("duplicate_color_record") + (i + 1));
+						} else {
+							uniqueColorMap.put(productSkuColorMappingRecord.getColorRecord().getId(),
+									productSkuColorMappingRecord.getColorRecord().getId());
+						}
+					}
 				}
 			}
+		}
+
+		List<ProductSkuMaterialMappingDVO> productSkuMaterialMappingList = skuOpr.getProductSkuRecord()
+				.getProductSkuMaterialMappingList();
+
+		if (productSkuMaterialMappingList != null && !productSkuMaterialMappingList.isEmpty()) {
+			Map<Long, Long> uniqueMaterialMap = new HashMap<Long, Long>();
+			for (int i = 0; i < productSkuMaterialMappingList.size(); i++) {
+				ProductSkuMaterialMappingDVO productSkuMaterialMappingRecord = productSkuMaterialMappingList.get(i);
+				if (!validator.validateLongObjectNull(productSkuMaterialMappingRecord.getMaterialRecord().getId())) {
+					addToErrorList(propertiesReader.getValueOfKey("material_null") + (i + 1));
+				} else {
+					if (uniqueMaterialMap.isEmpty()) {
+						uniqueMaterialMap.put(productSkuMaterialMappingRecord.getMaterialRecord().getId(),
+								productSkuMaterialMappingRecord.getMaterialRecord().getId());
+					} else {
+						if (uniqueMaterialMap.containsKey(productSkuMaterialMappingRecord.getMaterialRecord().getId())) {
+							addToErrorList(propertiesReader.getValueOfKey("duplicate_material_record") + (i + 1));
+						} else {
+							uniqueMaterialMap.put(productSkuMaterialMappingRecord.getMaterialRecord().getId(),
+									productSkuMaterialMappingRecord.getMaterialRecord().getId());
+						}
+					}
+				}
+			}
+		}
+
+		if (productSkuSizeMappingList.isEmpty() && productSkuColorMappingList.isEmpty()
+				&& productSkuMaterialMappingList.isEmpty()) {
+			addToErrorList(propertiesReader.getValueOfKey("all_property_null"));
 		}
 
 		if (getErrorList().size() > 0) {
@@ -644,6 +616,118 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 			validateFlag = true;
 		}
 		return validateFlag;
+	}
+
+	public List<Object> getSuggestedSizeRecordForName(String query) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		if (query != null) {
+			try {
+
+				PropertyValueMappingDVO propertyValueMappingRecord = new PropertyValueMappingDVO();
+
+				propertyValueMappingRecord.getSizeRecord().setName(query);
+				propertyValueMappingRecord.setActive(true);
+
+				List<Object> list = new SkuDefinitionBF().getSuggestedSizeMappingRecord(propertyValueMappingRecord);
+				myLog.debug(" getSuggestedSizeRecord :: list size" + list.size());
+
+				@SuppressWarnings("unchecked")
+				List<Object> allSizeList = (ArrayList<Object>) FacesContext.getCurrentInstance().getViewRoot()
+						.getViewMap().get("sizeAutoComplete");
+
+				if (allSizeList == null) {
+					allSizeList = new ArrayList<Object>();
+				}
+
+				allSizeList.addAll(list);
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("sizeAutoComplete", allSizeList);
+
+				return list;
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+		return null;
+	}
+
+	public void sizeChanged(ProductSkuSizeMappingDVO productSkuSizeMappingDVO) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		productSkuSizeMappingDVO.getPropertyValueMappingRecord().setPropertyValue(null);
+		productSkuSizeMappingDVO.getPropertyValueMappingRecord().setUnitRecord(null);
+
+		if (productSkuSizeMappingDVO.getPropertyValueMappingRecord().getSizeRecord().getId() != null) {
+			try {
+				productSkuSizeMappingDVO.setPropertyValueList(new ArrayList<String>());
+				PropertyValueMappingDVO propertyValueMappingRecord = new PropertyValueMappingDVO();
+				propertyValueMappingRecord.getSizeRecord().setId(
+						productSkuSizeMappingDVO.getPropertyValueMappingRecord().getSizeRecord().getId());
+
+				List<Object> list = new SkuDefinitionBF().getSuggestedSizeMappingRecord(propertyValueMappingRecord);
+				myLog.debug(" sizeChanged :: list size" + list.size());
+				if (list != null && list.size() > 0) {
+					for (Object object : list) {
+						PropertyValueMappingDVO propertyValueMappingDVO = (PropertyValueMappingDVO) object;
+						productSkuSizeMappingDVO.getPropertyValueList().add(propertyValueMappingDVO.getPropertyValue());
+					}
+				}
+
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+	}
+
+	public void propertyValueChanged(ProductSkuSizeMappingDVO productSkuSizeMappingDVO) {
+		productSkuSizeMappingDVO.getPropertyValueMappingRecord().setUnitRecord(null);
+	}
+
+	public List<Object> getSuggestedUnitRecordForName(String query) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		Object sizeId = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+				.get("sizeId");
+		Object propertyValue = UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+				.get("propertyValue");
+
+		myLog.debug(" sizeId::" + sizeId);
+		if (query != null) {
+			try {
+
+				PropertyValueMappingDVO propertyValueMappingRecord = new PropertyValueMappingDVO();
+
+				propertyValueMappingRecord.getUnitRecord().setName(query);
+				propertyValueMappingRecord.getSizeRecord().setId((Long) sizeId);
+				propertyValueMappingRecord.setPropertyValue((String) propertyValue);
+				propertyValueMappingRecord.setActive(true);
+
+				List<Object> list = new SkuDefinitionBF().getSuggestedSizeMappingRecord(propertyValueMappingRecord);
+				myLog.debug(" getSuggestedSizeRecord :: list size" + list.size());
+
+				@SuppressWarnings("unchecked")
+				List<Object> allSizeList = (ArrayList<Object>) FacesContext.getCurrentInstance().getViewRoot()
+						.getViewMap().get("unitAutoComplete");
+
+				if (allSizeList == null) {
+					allSizeList = new ArrayList<Object>();
+				}
+
+				allSizeList.addAll(list);
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("unitAutoComplete", allSizeList);
+
+				return list;
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+		return null;
 	}
 
 	public void handleFileUploadForDefaultImage(FileUploadEvent event) {
@@ -910,5 +994,132 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 				.put(CommonConstant.IMAGE_DVO, imageRecord);
+	}
+
+	public void executeSizeAddRow(ActionEvent event) {
+		skuOpr.getProductSkuRecord().getProductSkuSizeMappingList().add(new ProductSkuSizeMappingDVO());
+	}
+
+	public void executeColorAddRow(ActionEvent event) {
+		skuOpr.getProductSkuRecord().getProductSkuColorMappingList().add(new ProductSkuColorMappingDVO());
+	}
+
+	public void executeMaterialAddRow(ActionEvent event) {
+		skuOpr.getProductSkuRecord().getProductSkuMaterialMappingList().add(new ProductSkuMaterialMappingDVO());
+	}
+
+	private void populateSuggestionBox() {
+
+		List<ProductSkuSizeMappingDVO> productSkuSizeMappingList = skuOpr.getProductSkuRecord()
+				.getProductSkuSizeMappingList();
+
+		List<ProductSkuColorMappingDVO> productSkuColorMappingList = skuOpr.getProductSkuRecord()
+				.getProductSkuColorMappingList();
+
+		List<ProductSkuMaterialMappingDVO> productSkuMaterialMappingList = skuOpr.getProductSkuRecord()
+				.getProductSkuMaterialMappingList();
+
+		if (!productSkuSizeMappingList.isEmpty()) {
+			List<Object> sizeList = new ArrayList<Object>();
+
+			for (ProductSkuSizeMappingDVO productSkuSizeMappingDVO : productSkuSizeMappingList) {
+				sizeList.add(productSkuSizeMappingDVO.getPropertyValueMappingRecord().getSizeRecord());
+			}
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("sizeAutoComplete", sizeList);
+
+			List<Object> unitList = new ArrayList<Object>();
+			for (ProductSkuSizeMappingDVO productSkuSizeMappingDVO : productSkuSizeMappingList) {
+				unitList.add(productSkuSizeMappingDVO.getPropertyValueMappingRecord().getUnitRecord());
+			}
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("unitAutoComplete", unitList);
+		}
+
+		if (!productSkuColorMappingList.isEmpty()) {
+			List<Object> colorList = new ArrayList<Object>();
+
+			for (ProductSkuColorMappingDVO productSkuColorMappingDVO : productSkuColorMappingList) {
+				colorList.add(productSkuColorMappingDVO.getColorRecord());
+			}
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("colorAutoComplete", colorList);
+		}
+
+		if (!productSkuMaterialMappingList.isEmpty()) {
+			List<Object> materialList = new ArrayList<Object>();
+
+			for (ProductSkuMaterialMappingDVO oroductSkuMaterialMappingDVO : productSkuMaterialMappingList) {
+				materialList.add(oroductSkuMaterialMappingDVO.getMaterialRecord());
+			}
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("materialAutoComplete", materialList);
+		}
+	}
+
+	public List<Object> getSuggestedColorRecord(String query) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		if (query != null) {
+			try {
+
+				ColorDVO colorRecord = new ColorDVO();
+
+				colorRecord.setName(query);
+				colorRecord.setActive(true);
+
+				List<Object> list = new SkuDefinitionBF().getSuggestedColorRecord(colorRecord);
+				myLog.debug(" getSuggestedColorRecord :: list size" + list.size());
+
+				@SuppressWarnings("unchecked")
+				List<Object> allSizeList = (ArrayList<Object>) FacesContext.getCurrentInstance().getViewRoot()
+						.getViewMap().get("colorAutoComplete");
+
+				if (allSizeList == null) {
+					allSizeList = new ArrayList<Object>();
+				}
+
+				allSizeList.addAll(list);
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("colorAutoComplete", allSizeList);
+
+				return list;
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+		return null;
+	}
+
+	public List<Object> getSuggestedMaterialRecord(String query) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		if (query != null) {
+			try {
+
+				MaterialDVO materialRecord = new MaterialDVO();
+
+				materialRecord.setName(query);
+				materialRecord.setActive(true);
+
+				List<Object> list = new SkuDefinitionBF().getSuggestedMaterialRecord(materialRecord);
+				myLog.debug(" getSuggestedMaterialRecord :: list size" + list.size());
+
+				@SuppressWarnings("unchecked")
+				List<Object> allSizeList = (ArrayList<Object>) FacesContext.getCurrentInstance().getViewRoot()
+						.getViewMap().get("materialAutoComplete");
+
+				if (allSizeList == null) {
+					allSizeList = new ArrayList<Object>();
+				}
+
+				allSizeList.addAll(list);
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("materialAutoComplete", allSizeList);
+
+				return list;
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+		return null;
 	}
 }

@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 
@@ -104,9 +105,11 @@ public class ProductSkuDVO extends BaseDVO {
 	private String skuSEOTitle;
 	private String skuSEOKeyword;
 	private String skuSEODescription;
-	private ArrayList<ProductSizeMappingDVO> productSizeMappingList;
 	private StatusDVO statusRecord;
 	private ProductSkuImageMappingDVO defaultProductSkuImageMappingDVO;
+	private List<ProductSkuSizeMappingDVO> productSkuSizeMappingList;
+	private List<ProductSkuColorMappingDVO> productSkuColorMappingList;
+	private List<ProductSkuMaterialMappingDVO> productSkuMaterialMappingList;
 
 	private Boolean defaultSku;
 	private String defaultSkuDescription;
@@ -1138,17 +1141,6 @@ public class ProductSkuDVO extends BaseDVO {
 		this.skuSEODescription = skuSEODescription;
 	}
 
-	public ArrayList<ProductSizeMappingDVO> getProductSizeMappingList() {
-		if (productSizeMappingList == null) {
-			productSizeMappingList = new ArrayList<ProductSizeMappingDVO>();
-		}
-		return productSizeMappingList;
-	}
-
-	public void setProductSizeMappingList(ArrayList<ProductSizeMappingDVO> productSizeMappingList) {
-		this.productSizeMappingList = productSizeMappingList;
-	}
-
 	public StatusDVO getStatusRecord() {
 		if (statusRecord == null) {
 			statusRecord = new StatusDVO();
@@ -1185,6 +1177,39 @@ public class ProductSkuDVO extends BaseDVO {
 
 	public void setDefaultSkuDescription(String defaultSkuDescription) {
 		this.defaultSkuDescription = defaultSkuDescription;
+	}
+
+	public List<ProductSkuSizeMappingDVO> getProductSkuSizeMappingList() {
+		if (productSkuSizeMappingList == null) {
+			productSkuSizeMappingList = new ArrayList<ProductSkuSizeMappingDVO>();
+		}
+		return productSkuSizeMappingList;
+	}
+
+	public void setProductSkuSizeMappingList(List<ProductSkuSizeMappingDVO> productSkuSizeMappingList) {
+		this.productSkuSizeMappingList = productSkuSizeMappingList;
+	}
+
+	public List<ProductSkuColorMappingDVO> getProductSkuColorMappingList() {
+		if (productSkuColorMappingList == null) {
+			productSkuColorMappingList = new ArrayList<ProductSkuColorMappingDVO>();
+		}
+		return productSkuColorMappingList;
+	}
+
+	public void setProductSkuColorMappingList(List<ProductSkuColorMappingDVO> productSkuColorMappingList) {
+		this.productSkuColorMappingList = productSkuColorMappingList;
+	}
+
+	public List<ProductSkuMaterialMappingDVO> getProductSkuMaterialMappingList() {
+		if (productSkuMaterialMappingList == null) {
+			productSkuMaterialMappingList = new ArrayList<ProductSkuMaterialMappingDVO>();
+		}
+		return productSkuMaterialMappingList;
+	}
+
+	public void setProductSkuMaterialMappingList(List<ProductSkuMaterialMappingDVO> productSkuMaterialMappingList) {
+		this.productSkuMaterialMappingList = productSkuMaterialMappingList;
 	}
 
 }

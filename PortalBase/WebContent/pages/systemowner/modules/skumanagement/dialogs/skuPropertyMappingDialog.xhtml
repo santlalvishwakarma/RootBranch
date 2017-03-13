@@ -1,0 +1,143 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<p:dialog id="skuPropertyMappingDialogId" header="Map Property" widgetVar="skuPropertyMappingDialog"
+		showEffect="explode" hideEffect="explode" modal="true" height="#{skuDefinitionAddEditBB.modalHeight}" dynamic="true"
+		resizable="false">
+		<p:ajax event="close" listener="#{skuDefinitionAddEditBB.closeModalWindow}" />
+		<p:panel id="skuPropertyMappingDialogPanel">
+			<table>
+				<tr>
+					<td></td>
+					<td><p:commandLink id="sizeAddRow" process="skuPropertyMappingDialogPanel, @this" styleClass="linkClass"
+							actionListener="#{skuDefinitionAddEditBB.executeSizeAddRow}" update="skuPropertyMappingDialogPanel">
+							<p:graphicImage alt="Add Row" value="/staticcontent/systemowner/images/add.png" />
+						</p:commandLink> <label class="addRowMsgClass">Please click here to add a new size</label></td>
+				</tr>
+				<tr>
+					<td style="width: 20%;"><label class="labelClass boldClass">Size</label></td>
+					<td><p:dataTable id="sizeListTable" rows="#{skuDefinitionAddEditBB.paginationNumber}"
+							var="propertyMappingRecord" style="width: 100%;"
+							rendered="#{!(empty skuDefinitionAddEditBB.skuOpr.productSkuRecord.productSkuSizeMappingList)}"
+							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.productSkuSizeMappingList}" paginator="false">
+							<f:facet name="header">Size</f:facet>
+							<p:column headerText="Size Name">
+								<p:autoComplete id="sizeAutoComplete" maxResults="20"
+									value="#{propertyMappingRecord.propertyValueMappingRecord}" minQueryLength="2" effect="fade"
+									forceSelection="true" completeMethod="#{skuDefinitionAddEditBB.getSuggestedSizeRecordForName}"
+									var="propertyValueRecord" itemLabel="#{propertyValueRecord.sizeRecord.name}" itemValue="#{propertyValueRecord}"
+									global="false" converter="#{skuDefinitionAddEditBB.baseDVOConverter}">
+									<p:ajax event="itemSelect" process="@this"
+										listener="#{skuDefinitionAddEditBB.sizeChanged(propertyMappingRecord)}"
+										update="propertyValue, unitAutoComplete" />
+									<p:column headerText="Code">#{propertyValueRecord.sizeRecord.code}</p:column>
+									<p:column headerText="Name">#{propertyValueRecord.sizeRecord.name}</p:column>
+								</p:autoComplete>
+								<p:watermark for="sizeAutoComplete" value="Enter first 2 chars" />
+							</p:column>
+							<p:column headerText="Property Value">
+								<p:selectOneMenu id="propertyValue" value="#{propertyMappingRecord.propertyValueMappingRecord.propertyValue}">
+									<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
+									<f:selectItems value="#{propertyMappingRecord.propertyValueList}" var="propertyValueRecord"
+										itemLabel="#{propertyValueRecord}" itemValue="#{propertyValueRecord}" />
+									<p:ajax event="change" listener="#{skuDefinitionAddEditBB.propertyValueChanged(propertyMappingRecord)}"
+										process="propertyValue,@this" partialSubmit="true" update="unitAutoComplete" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column headerText="Unit Name">
+								<p:autoComplete id="unitAutoComplete" maxResults="20"
+									value="#{propertyMappingRecord.propertyValueMappingRecord}" minQueryLength="2" effect="fade"
+									forceSelection="true" completeMethod="#{skuDefinitionAddEditBB.getSuggestedUnitRecordForName}"
+									var="propertyValueRecord" itemLabel="#{propertyValueRecord.unitRecord.name}" itemValue="#{propertyValueRecord}"
+									global="false" converter="#{skuDefinitionAddEditBB.baseDVOConverter}">
+									<p:column headerText="Code">#{propertyValueRecord.unitRecord.code}</p:column>
+									<p:column headerText="Name">#{propertyValueRecord.unitRecord.name}</p:column>
+									<f:attribute name="propertyValue" value="#{propertyMappingRecord.propertyValueMappingRecord.propertyValue}" />
+									<f:attribute name="sizeId" value="#{propertyValueRecord.sizeRecord.id}" />
+								</p:autoComplete>
+								<p:watermark for="unitAutoComplete" value="Enter first 2 chars" />
+							</p:column>
+							<p:column headerText="Delete">
+								<p:selectBooleanCheckbox value="#{propertyMappingRecord.operationalAttributes.recordDeleted}" />
+							</p:column>
+						</p:dataTable></td>
+				</tr>
+			</table>
+			<br />
+			<table>
+				<tr>
+					<td></td>
+					<td><p:commandLink id="colorAddRow" process="skuPropertyMappingDialogPanel, @this" styleClass="linkClass"
+							actionListener="#{skuDefinitionAddEditBB.executeColorAddRow}" update="skuPropertyMappingDialogPanel">
+							<p:graphicImage alt="Add Row" value="/staticcontent/systemowner/images/add.png" />
+						</p:commandLink> <label class="addRowMsgClass">Please click here to add a new color</label></td>
+				</tr>
+				<tr>
+					<td style="width: 20%;"><label class="labelClass boldClass">Color</label></td>
+					<td><p:dataTable id="colorListTable" rows="#{skuDefinitionAddEditBB.paginationNumber}"
+							var="colorMappingRecord" style="width: 100%;"
+							rendered="#{!(empty skuDefinitionAddEditBB.skuOpr.productSkuRecord.productSkuColorMappingList)}"
+							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.productSkuColorMappingList}" paginator="false">
+							<f:facet name="header">Color</f:facet>
+							<p:column headerText="Color Name">
+								<p:autoComplete id="colorAutoComplete" maxResults="20" value="#{colorMappingRecord.colorRecord}"
+									minQueryLength="2" effect="fade" forceSelection="true"
+									completeMethod="#{skuDefinitionAddEditBB.getSuggestedColorRecord}" var="colorRecord"
+									itemLabel="#{colorRecord.name}" itemValue="#{colorRecord}" global="false"
+									converter="#{skuDefinitionAddEditBB.baseDVOConverter}">
+									<p:column headerText="Code">#{colorRecord.code}</p:column>
+									<p:column headerText="Name">#{colorRecord.name}</p:column>
+								</p:autoComplete>
+								<p:watermark for="colorAutoComplete" value="Enter first 2 chars" />
+							</p:column>
+							<p:column headerText="Delete">
+								<p:selectBooleanCheckbox value="#{colorMappingRecord.operationalAttributes.recordDeleted}" />
+							</p:column>
+						</p:dataTable></td>
+				</tr>
+			</table>
+			<br />
+			<table>
+				<tr>
+					<td></td>
+					<td><p:commandLink id="materialAddRow" process="skuPropertyMappingDialogPanel, @this" styleClass="linkClass"
+							actionListener="#{skuDefinitionAddEditBB.executeMaterialAddRow}" update="skuPropertyMappingDialogPanel">
+							<p:graphicImage alt="Add Row" value="/staticcontent/systemowner/images/add.png" />
+						</p:commandLink> <label class="addRowMsgClass">Please click here to add a new material</label></td>
+				</tr>
+				<tr>
+					<td style="width: 20%;"><label class="labelClass boldClass">Material</label></td>
+					<td><p:dataTable id="materialListTable" rows="#{skuDefinitionAddEditBB.paginationNumber}"
+							var="materialMappingRecord" style="width: 100%;"
+							rendered="#{!(empty skuDefinitionAddEditBB.skuOpr.productSkuRecord.productSkuMaterialMappingList)}"
+							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.productSkuMaterialMappingList}" paginator="false">
+							<f:facet name="header">Material</f:facet>
+							<p:column headerText="Material Name">
+								<p:autoComplete id="materialAutoComplete" maxResults="20" value="#{materialMappingRecord.materialRecord}"
+									minQueryLength="2" effect="fade" forceSelection="true"
+									completeMethod="#{skuDefinitionAddEditBB.getSuggestedMaterialRecord}" var="materialRecord"
+									itemLabel="#{materialRecord.name}" itemValue="#{materialRecord}" global="false"
+									converter="#{skuDefinitionAddEditBB.baseDVOConverter}">
+									<p:column headerText="Code">#{materialRecord.code}</p:column>
+									<p:column headerText="Name">#{materialRecord.name}</p:column>
+								</p:autoComplete>
+								<p:watermark for="materialAutoComplete" value="Enter first 2 chars" />
+							</p:column>
+							<p:column headerText="Delete">
+								<p:selectBooleanCheckbox value="#{materialMappingRecord.operationalAttributes.recordDeleted}" />
+							</p:column>
+						</p:dataTable></td>
+				</tr>
+			</table>
+			<br />
+			<div align="center">
+				<p:commandButton id="savePropertyButton" process="skuPropertyMappingDialogPanel, @this" value="Save"
+					update="skuPropertyMappingDialogPanel" actionListener="#{skuDefinitionAddEditBB.executeSavePropertyMapping}" />
+				&#160;&#160;
+				<p:commandButton id="closePopup" process="@this" value="Close"
+					actionListener="#{skuDefinitionAddEditBB.closeModalWindow}" oncomplete="PF('skuPropertyMappingDialog').hide();" />
+			</div>
+			<p:messages autoUpdate="true" showDetail="false" showSummary="true" />
+		</p:panel>
+	</p:dialog>
+</ui:composition>

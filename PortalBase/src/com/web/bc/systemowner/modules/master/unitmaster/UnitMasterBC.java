@@ -353,9 +353,7 @@ public class UnitMasterBC extends BackingClass {
 				unitList.add(unitRecord);
 
 			}
-		} else {
-			throw new BusinessException("no_data_from_db_excep_msg");
-		}
+		} 
 
 		return unitList;
 	}

@@ -97,6 +97,10 @@ public class PropertyValueMasterBC extends BackingClass {
 		Long sizeId = propertyValueMappingRecord.getSizeRecord().getId();
 		String propertyValue = propertyValueMappingRecord.getPropertyValue();
 		Long unitId = propertyValueMappingRecord.getUnitRecord().getId();
+		String sizeCode = propertyValueMappingRecord.getSizeRecord().getCode();
+		String sizeName = propertyValueMappingRecord.getSizeRecord().getName();
+		String unitCode = propertyValueMappingRecord.getUnitRecord().getCode();
+		String unitName = propertyValueMappingRecord.getUnitRecord().getName();
 
 		Boolean active = propertyValueMappingRecord.getActive();
 		String userLogin = propertyValueMappingRecord.getUserLogin();
@@ -109,7 +113,7 @@ public class PropertyValueMasterBC extends BackingClass {
 		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
 		queryDetailsMap.put(IDAOConstant.SQL_TEXT, PropertyValueMasterSqlTemplate.SAVE_PROPERTY_VALUE_MAPPING_DETAILS);
 
-		Object strSqlParams[][] = new Object[7][3];
+		Object strSqlParams[][] = new Object[11][3];
 
 		strSqlParams[0][0] = "1";
 		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
@@ -145,6 +149,26 @@ public class PropertyValueMasterBC extends BackingClass {
 		strSqlParams[6][1] = IDAOConstant.STRING_DATATYPE;
 		strSqlParams[6][2] = lastModifiedDate;
 		myLog.debug(" parameter 7 lastModifiedDate:: " + lastModifiedDate);
+
+		strSqlParams[7][0] = "8";
+		strSqlParams[7][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[7][2] = sizeCode;
+		myLog.debug(" parameter 7 sizeCode:: " + sizeCode);
+
+		strSqlParams[8][0] = "9";
+		strSqlParams[8][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[8][2] = sizeName;
+		myLog.debug(" parameter 7 sizeName:: " + sizeName);
+
+		strSqlParams[9][0] = "10";
+		strSqlParams[9][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[9][2] = unitCode;
+		myLog.debug(" parameter 7 unitCode:: " + unitCode);
+
+		strSqlParams[10][0] = "11";
+		strSqlParams[10][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[10][2] = unitName;
+		myLog.debug(" parameter 7 unitName:: " + unitName);
 
 		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
 		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();

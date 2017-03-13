@@ -1,5 +1,7 @@
 package com.web.common.dvo.systemowner;
 
+import java.util.List;
+
 import com.web.common.dvo.common.BaseDVO;
 
 public class ProductSkuSizeMappingDVO extends BaseDVO {
@@ -9,6 +11,7 @@ public class ProductSkuSizeMappingDVO extends BaseDVO {
 	private ProductDVO productRecord;
 	private ProductSkuDVO productSkuRecord;
 	private PropertyValueMappingDVO propertyValueMappingRecord;
+	private List<String> propertyValueList;
 
 	public ProductDVO getProductRecord() {
 		if (productRecord == null) {
@@ -41,6 +44,14 @@ public class ProductSkuSizeMappingDVO extends BaseDVO {
 
 	public void setPropertyValueMappingRecord(PropertyValueMappingDVO propertyValueMappingRecord) {
 		this.propertyValueMappingRecord = propertyValueMappingRecord;
+	}
+
+	public List<String> getPropertyValueList() {
+		return propertyValueList;
+	}
+
+	public void setPropertyValueList(List<String> propertyValueList) {
+		this.propertyValueList = propertyValueList;
 	}
 
 }
