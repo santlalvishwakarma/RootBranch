@@ -1,5 +1,6 @@
 package com.web.common.dvo.systemowner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.web.common.dvo.common.BaseDVO;
@@ -47,6 +48,9 @@ public class ProductSkuSizeMappingDVO extends BaseDVO {
 	}
 
 	public List<String> getPropertyValueList() {
+		if (propertyValueList == null) {
+			propertyValueList = new ArrayList<String>();
+		}
 		return propertyValueList;
 	}
 

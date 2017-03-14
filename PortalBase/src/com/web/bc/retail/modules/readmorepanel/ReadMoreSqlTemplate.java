@@ -27,12 +27,6 @@ public interface ReadMoreSqlTemplate extends SqlTemplate {
 			+ " FROM product_sku_image_mapping psim, product_sku_header psh "
 			+ " WHERE psim.product_sku_id =  psh.product_sku_id AND psim.is_active = 1 AND psim.product_sku_id = ? ; ";
 
-	public static final String GET_PRODUCT_SIZES = " SELECT csm.size_id, csm.size_code, csm.size_name, "
-			+ " psh.product_id, psh.product_sku_id, pssm.product_sku_size_mapping_id "
-			+ " FROM core_size_master csm, product_sku_size_mapping pssm, product_sku_header psh "
-			+ " WHERE csm.size_id = pssm.size_id AND pssm.product_sku_id = psh.product_sku_id "
-			+ " AND psh.product_id = ? AND psh.product_sku_id = ? AND csm.is_active = 1; ";
-
 	public static final String GET_CATEGORIES_FOR_PRODUCT = " SELECT phcm.product_hierarchy_category_mapping_id, "
 			+ " phcm.hierarchy_id, fn_get_hierarchy_name_based_on_id(phcm.hierarchy_id) hierarchy_name, "
 			+ " phcm.category_level_1, fn_get_category_name_based_on_id(phcm.category_level_1) category_level_1_name, "
@@ -46,5 +40,7 @@ public interface ReadMoreSqlTemplate extends SqlTemplate {
 			+ " phcm.category_level_5, fn_get_category_name_based_on_id(phcm.category_level_5) category_level_5_name, "
 			+ " fn_get_category_code_based_on_id(phcm.category_level_5) category_level_5_code "
 			+ " FROM product_hierarchy_category_mapping phcm WHERE phcm.product_id = ?  ";
+
+	public static final String GET_PRODUCT_PROPERTIES = "CALL sp_sku_get_mapped_properties(?,?, @p_error_code, @p_error_message);";
 
 }

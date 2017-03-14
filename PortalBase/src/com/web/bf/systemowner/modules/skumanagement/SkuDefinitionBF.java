@@ -11,6 +11,7 @@ import com.web.common.dvo.common.Parameter;
 import com.web.common.dvo.opr.systemowner.SkuOpr;
 import com.web.common.dvo.systemowner.ColorDVO;
 import com.web.common.dvo.systemowner.MaterialDVO;
+import com.web.common.dvo.systemowner.ProductSkuSizeMappingDVO;
 import com.web.common.dvo.systemowner.PropertyValueMappingDVO;
 import com.web.common.parents.BusinessFacade;
 import com.web.foundation.exception.BusinessException;
@@ -72,6 +73,11 @@ public class SkuDefinitionBF extends BusinessFacade {
 
 	public SkuOpr executeSavePropertyMapping(SkuOpr skuOpr) throws FrameworkException, BusinessException {
 		return new SkuDefinitionBC().executeSavePropertyMapping(skuOpr);
+	}
+
+	public ProductSkuSizeMappingDVO getSizeMappedValueList(ProductSkuSizeMappingDVO productSkuSizeMappingDVO)
+			throws FrameworkException, BusinessException {
+		return new SkuDefinitionBC().getSizeMappedValueList(productSkuSizeMappingDVO);
 	}
 
 }

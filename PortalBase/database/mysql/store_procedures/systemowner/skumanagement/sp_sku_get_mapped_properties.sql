@@ -13,7 +13,7 @@ DETERMINISTIC
 
 BEGIN
 	
-	SELECT 'SIZ', product_sku_size_mapping_id, size_id, fn_core_get_size_code_based_on_id(size_id) 'size_code', fn_core_get_size_name_based_on_id(size_id) 'size_name', property_value, unit_id, 
+   SELECT 'SIZ', product_sku_size_mapping_id, size_id, fn_core_get_size_code_based_on_id(size_id) 'size_code', fn_core_get_size_name_based_on_id(size_id) 'size_name', property_value, unit_id, 
 		   fn_core_get_unit_name_based_on_id(unit_id) 'unit_name', fn_core_get_unit_code_based_on_id(unit_id) 'unit_code', is_active, modified_by, modified_date 
    FROM   product_sku_size_mapping
    WHERE  product_sku_id = p_sku_id

@@ -468,6 +468,11 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 			skuOpr.getProductSkuRecord().setProductSkuSizeMappingList(
 					skuOprRet.getProductSkuRecord().getProductSkuSizeMappingList());
 
+			for (ProductSkuSizeMappingDVO productSkuSizeMappingDVO : skuOpr.getProductSkuRecord()
+					.getProductSkuSizeMappingList()) {
+				productSkuSizeMappingDVO = new SkuDefinitionBF().getSizeMappedValueList(productSkuSizeMappingDVO);
+			}
+
 			skuOpr.getProductSkuRecord().setProductSkuMaterialMappingList(
 					skuOprRet.getProductSkuRecord().getProductSkuMaterialMappingList());
 
@@ -1009,6 +1014,8 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 	}
 
 	private void populateSuggestionBox() {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In Sku Definition add edit BB :: populateSuggestionBox starts ");
 
 		List<ProductSkuSizeMappingDVO> productSkuSizeMappingList = skuOpr.getProductSkuRecord()
 				.getProductSkuSizeMappingList();
@@ -1022,16 +1029,19 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 		if (!productSkuSizeMappingList.isEmpty()) {
 			List<Object> sizeList = new ArrayList<Object>();
 
-			for (ProductSkuSizeMappingDVO productSkuSizeMappingDVO : productSkuSizeMappingList) {
-				sizeList.add(productSkuSizeMappingDVO.getPropertyValueMappingRecord().getSizeRecord());
-			}
-			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("sizeAutoComplete", sizeList);
+			myLog.debug("productSkuSizeMappingList :: not empty ");
 
-			List<Object> unitList = new ArrayList<Object>();
 			for (ProductSkuSizeMappingDVO productSkuSizeMappingDVO : productSkuSizeMappingList) {
-				unitList.add(productSkuSizeMappingDVO.getPropertyValueMappingRecord().getUnitRecord());
+				sizeList.add(productSkuSizeMappingDVO.getPropertyValueMappingRecord());
+
+				myLog.debug("value::"
+						+ productSkuSizeMappingDVO.getPropertyValueMappingRecord().getSizeRecord().getCode());
 			}
-			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("unitAutoComplete", unitList);
+
+			myLog.debug("size list :: " + sizeList.size());
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("sizeAutoComplete", sizeList);
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("unitAutoComplete", sizeList);
+
 		}
 
 		if (!productSkuColorMappingList.isEmpty()) {

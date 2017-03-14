@@ -4,9 +4,11 @@ import java.util.HashMap;
 
 import com.web.common.dvo.opr.retail.ReadMoreOpr;
 import com.web.common.dvo.systemowner.HierarchyCategoryMappingDVO;
-import com.web.common.dvo.systemowner.ProductSizeMappingDVO;
+import com.web.common.dvo.systemowner.ProductSkuColorMappingDVO;
 import com.web.common.dvo.systemowner.ProductSkuDVO;
 import com.web.common.dvo.systemowner.ProductSkuImageMappingDVO;
+import com.web.common.dvo.systemowner.ProductSkuMaterialMappingDVO;
+import com.web.common.dvo.systemowner.ProductSkuSizeMappingDVO;
 import com.web.common.parents.BackingClass;
 import com.web.foundation.dao.DAOResult;
 import com.web.foundation.dao.IDAOConstant;
@@ -17,72 +19,6 @@ import com.web.foundation.logger.TSDLogger;
 public class ReadMoreBC extends BackingClass {
 
 	public ReadMoreOpr makeEnquiry(ReadMoreOpr makeEnquiryProductRecord) throws FrameworkException {
-		// BACKING CLASS METHOD TEMPLATE ver 1.0
-		// ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
-		// HashMap<String, String> queryDetailsMap = new HashMap<String,
-		// String>();
-		// DAOResult daoResult = new DAOResult();
-		//
-		// queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.INSERT_SQL);
-		// queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE,
-		// IDAOConstant.PREPARED_STATEMENT);
-		// queryDetailsMap.put(IDAOConstant.SQL_TEXT,
-		// ReadMoreSqlTemplate.MAKE_PRODUCT_ENQUIRY);
-		//
-		// Object strSqlParams[][] = new Object[8][3];
-		//
-		// strSqlParams[0][0] = "1";
-		// strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
-		// strSqlParams[0][2] =
-		// makeEnquiryProductRecord.getProductRecord().getId();
-		//
-		// strSqlParams[1][0] = "2";
-		// strSqlParams[1][1] = IDAOConstant.LONG_DATATYPE;
-		// strSqlParams[1][2] =
-		// makeEnquiryProductRecord.getProductRecord().getVariantId();
-		//
-		// strSqlParams[2][0] = "3";
-		// strSqlParams[2][1] = IDAOConstant.STRING_DATATYPE;
-		// strSqlParams[2][2] =
-		// makeEnquiryProductRecord.getSendEnquiryRecord().getAddress().getFirstName();
-		//
-		// strSqlParams[3][0] = "4";
-		// strSqlParams[3][1] = IDAOConstant.STRING_DATATYPE;
-		// strSqlParams[3][2] =
-		// makeEnquiryProductRecord.getSendEnquiryRecord().getAddress().getEmail();
-		//
-		// strSqlParams[4][0] = "5";
-		// strSqlParams[4][1] = IDAOConstant.STRING_DATATYPE;
-		// strSqlParams[4][2] =
-		// makeEnquiryProductRecord.getSendEnquiryRecord().getComments();
-		//
-		// strSqlParams[5][0] = "6";
-		// strSqlParams[5][1] = IDAOConstant.STRING_DATATYPE;
-		// strSqlParams[5][2] =
-		// makeEnquiryProductRecord.getApplicationFlags().getApplicationFlagMap()
-		// .get(CommonConstant.LOGGED_USER_KEY);
-		//
-		// strSqlParams[6][0] = "7";
-		// strSqlParams[6][1] = IDAOConstant.STRING_DATATYPE;
-		// strSqlParams[6][2] =
-		// makeEnquiryProductRecord.getApplicationFlags().getApplicationFlagMap()
-		// .get(CommonConstant.LOGGED_USER_KEY);
-		//
-		// strSqlParams[7][0] = "8";
-		// strSqlParams[7][1] = IDAOConstant.LONG_DATATYPE;
-		// strSqlParams[7][2] =
-		// makeEnquiryProductRecord.getApplicationFlags().getApplicationFlagMap()
-		// .get(CommonConstant.EXCLUSIVITY_FILTER_WEBSITE_ID);
-		// myLog.debug("ReadMoreBC : Website ID==="
-		// +
-		// makeEnquiryProductRecord.getApplicationFlags().getApplicationFlagMap()
-		// .get(CommonConstant.EXCLUSIVITY_FILTER_WEBSITE_ID));
-		//
-		// // in the following call replace null with dynamic where clause if
-		// // required
-		// daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
-		// HashMap responseMap = daoResult.getInvocationResult();
-		// myLog.debug(":: Resultset got ::" + responseMap);
 
 		return makeEnquiryProductRecord;
 	}
@@ -299,7 +235,7 @@ public class ReadMoreBC extends BackingClass {
 		return readMoreOpr;
 	}
 
-	public ReadMoreOpr getProductSizes(ReadMoreOpr readMoreOpr) throws FrameworkException {
+	public ReadMoreOpr getProductProperties(ReadMoreOpr readMoreOpr) throws FrameworkException {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug(" inside getProductSizes ::: ");
 
@@ -307,47 +243,117 @@ public class ReadMoreBC extends BackingClass {
 
 		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
 		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
-		queryDetailsMap.put(IDAOConstant.SQL_TEXT, ReadMoreSqlTemplate.GET_PRODUCT_SIZES);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT, ReadMoreSqlTemplate.GET_PRODUCT_PROPERTIES);
 
 		Object[][] strSqlParams = new Object[2][3];
 
 		strSqlParams[0][0] = "1";
 		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
 		strSqlParams[0][2] = readMoreOpr.getProductSkuRecord().getProductRecord().getId();
-		myLog.debug(" parameter 1 ::: strSqlParams[0][2] ::: " + strSqlParams[0][2]);
+		myLog.debug(" parameter 1 ::: productId ::: " + strSqlParams[0][2]);
 
 		strSqlParams[1][0] = "2";
 		strSqlParams[1][1] = IDAOConstant.LONG_DATATYPE;
 		strSqlParams[1][2] = readMoreOpr.getProductSkuRecord().getId();
-		myLog.debug(" parameter 2 ::: strSqlParams[1][2] ::: " + strSqlParams[1][2]);
+		myLog.debug(" parameter 2 ::: productSkuId ::: " + strSqlParams[1][2]);
 
 		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
-		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
-		myLog.debug(" resultSet got ::: " + responseMap);
+		HashMap<Integer, HashMap<String, Object>> sizeResponseMap = daoResult.getMultipleResultSet().get("SIZ");
+		HashMap<Integer, HashMap<String, Object>> colorResponseMap = daoResult.getMultipleResultSet().get("COL");
+		HashMap<Integer, HashMap<String, Object>> materialResponseMap = daoResult.getMultipleResultSet().get("MAT");
+		myLog.debug(" ReadMoreBC getSkuPropertyMappingList :: Resultset got size ::" + sizeResponseMap);
+		myLog.debug(" ReadMoreBC getSkuPropertyMappingList :: Resultset got color :: " + colorResponseMap);
+		myLog.debug(" ReadMoreBC getSkuPropertyMappingList :: Resultset got material :: " + materialResponseMap);
 
-		if (responseMap.size() > 0) {
-			for (int i = 0; i < responseMap.size(); i++) {
-				HashMap<String, Object> resultRow = responseMap.get(i);
-				ProductSizeMappingDVO productSizeMappingRecord = new ProductSizeMappingDVO();
+		if (sizeResponseMap.size() > 0) {
+			for (int i = 0; i < sizeResponseMap.size(); i++) {
+				ProductSkuSizeMappingDVO productSkuSizeMappingRecord = new ProductSkuSizeMappingDVO();
 
-				productSizeMappingRecord.setId(Long.valueOf(resultRow.get("product_sku_size_mapping_id").toString()));
+				HashMap<String, Object> resultSetMap = sizeResponseMap.get(i);
+				if (resultSetMap.get("product_sku_size_mapping_id") != null) {
+					productSkuSizeMappingRecord.setId(Long.valueOf(resultSetMap.get("product_sku_size_mapping_id")
+							.toString()));
+				}
 
-				productSizeMappingRecord.getProductSkuRecord().setId(
-						Long.valueOf(resultRow.get("product_sku_id").toString()));
+				if (resultSetMap.get("size_id") != null) {
+					productSkuSizeMappingRecord.getPropertyValueMappingRecord().getSizeRecord()
+							.setId(Long.valueOf(resultSetMap.get("size_id").toString()));
+				}
 
-				productSizeMappingRecord.getProductSkuRecord().getProductRecord()
-						.setId(Long.valueOf(resultRow.get("product_id").toString()));
+				productSkuSizeMappingRecord.getPropertyValueMappingRecord().getSizeRecord()
+						.setCode((String) resultSetMap.get("size_code"));
+				productSkuSizeMappingRecord.getPropertyValueMappingRecord().getSizeRecord()
+						.setName((String) resultSetMap.get("size_name"));
 
-				productSizeMappingRecord.getProductSkuRecord().getSizeRecord()
-						.setId(Long.valueOf(resultRow.get("size_id").toString()));
+				if (resultSetMap.get("unit_id") != null) {
+					productSkuSizeMappingRecord.getPropertyValueMappingRecord().getUnitRecord()
+							.setId(Long.valueOf(resultSetMap.get("unit_id").toString()));
+				}
 
-				productSizeMappingRecord.getProductSkuRecord().getSizeRecord()
-						.setCode((String) resultRow.get("size_code"));
+				productSkuSizeMappingRecord.getPropertyValueMappingRecord().getUnitRecord()
+						.setCode((String) resultSetMap.get("unit_code"));
+				productSkuSizeMappingRecord.getPropertyValueMappingRecord().getUnitRecord()
+						.setName((String) resultSetMap.get("unit_name"));
 
-				productSizeMappingRecord.getProductSkuRecord().getSizeRecord()
-						.setName((String) resultRow.get("size_name"));
+				productSkuSizeMappingRecord.getPropertyValueMappingRecord().setPropertyValue(
+						(String) resultSetMap.get("property_value"));
 
-				readMoreOpr.getProductSkuRecord().getProductSizeMappingList().add(productSizeMappingRecord);
+				setAuditAttributes(productSkuSizeMappingRecord, resultSetMap);
+
+				readMoreOpr.getProductSkuRecord().getProductSkuSizeMappingList().add(productSkuSizeMappingRecord);
+
+			}
+		}
+
+		if (colorResponseMap.size() > 0) {
+			for (int i = 0; i < colorResponseMap.size(); i++) {
+				ProductSkuColorMappingDVO productSkuColorMappingRecord = new ProductSkuColorMappingDVO();
+
+				HashMap<String, Object> resultSetMap = colorResponseMap.get(i);
+
+				if (resultSetMap.get("product_sku_color_mapping_id") != null) {
+					productSkuColorMappingRecord.setId(Long.valueOf(resultSetMap.get("product_sku_color_mapping_id")
+							.toString()));
+				}
+
+				if (resultSetMap.get("color_id") != null) {
+					productSkuColorMappingRecord.getColorRecord().setId(
+							Long.valueOf(resultSetMap.get("color_id").toString()));
+				}
+
+				productSkuColorMappingRecord.getColorRecord().setCode((String) resultSetMap.get("color_code"));
+				productSkuColorMappingRecord.getColorRecord().setName((String) resultSetMap.get("color_name"));
+
+				setAuditAttributes(productSkuColorMappingRecord, resultSetMap);
+
+				readMoreOpr.getProductSkuRecord().getProductSkuColorMappingList().add(productSkuColorMappingRecord);
+
+			}
+		}
+
+		if (materialResponseMap.size() > 0) {
+			for (int i = 0; i < materialResponseMap.size(); i++) {
+				ProductSkuMaterialMappingDVO productSkuMaterialMappingRecord = new ProductSkuMaterialMappingDVO();
+
+				HashMap<String, Object> resultSetMap = materialResponseMap.get(i);
+
+				if (resultSetMap.get("product_sku_material_mapping_id") != null) {
+					productSkuMaterialMappingRecord.setId(Long.valueOf(resultSetMap.get(
+							"product_sku_material_mapping_id").toString()));
+				}
+
+				if (resultSetMap.get("material_id") != null) {
+					productSkuMaterialMappingRecord.getMaterialRecord().setId(
+							Long.valueOf(resultSetMap.get("material_id").toString()));
+				}
+
+				productSkuMaterialMappingRecord.getMaterialRecord().setCode((String) resultSetMap.get("material_code"));
+				productSkuMaterialMappingRecord.getMaterialRecord().setName((String) resultSetMap.get("material_name"));
+
+				setAuditAttributes(productSkuMaterialMappingRecord, resultSetMap);
+
+				readMoreOpr.getProductSkuRecord().getProductSkuMaterialMappingList()
+						.add(productSkuMaterialMappingRecord);
 
 			}
 		}

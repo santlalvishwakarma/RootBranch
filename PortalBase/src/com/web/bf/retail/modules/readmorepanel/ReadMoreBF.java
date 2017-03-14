@@ -1,28 +1,16 @@
 package com.web.bf.retail.modules.readmorepanel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.faces.model.SelectItem;
-import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
-
-import com.web.bc.common.OptionsHelperBC;
 import com.web.bc.retail.modules.readmorepanel.ReadMoreBC;
-import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.retail.ReadMoreOpr;
 import com.web.common.dvo.util.OptionsDVO;
 import com.web.common.parents.BusinessFacade;
 import com.web.foundation.exception.BusinessException;
 import com.web.foundation.exception.FrameworkException;
-import com.web.foundation.mail.MailParameters;
-import com.web.util.PropertiesReader;
 
 public class ReadMoreBF extends BusinessFacade {
 	private String propertiesLocation = "/com/web/bb/retail/module/readmorepanel/readmore";
 
-	public OptionsDVO getAllOptions(OptionsDVO options)
-			throws FrameworkException, BusinessException {
+	public OptionsDVO getAllOptions(OptionsDVO options) throws FrameworkException, BusinessException {
 		// OptionsHelperBC optionsHelperBC = new OptionsHelperBC();
 		OptionsDVO optionsDVO = new OptionsDVO();
 		// HashMap<String, ArrayList<SelectItem>> allOptionsMap = new
@@ -36,13 +24,12 @@ public class ReadMoreBF extends BusinessFacade {
 		return optionsDVO;
 	}
 
-	public ReadMoreOpr getProductDetailsForReadMore(ReadMoreOpr readMoreOpr)
-			throws FrameworkException, BusinessException {
+	public ReadMoreOpr getProductDetailsForReadMore(ReadMoreOpr readMoreOpr) throws FrameworkException,
+			BusinessException {
 		return new ReadMoreBC().getProductDetailsForReadMore(readMoreOpr);
 	}
 
-	public void saveProductForLater(ReadMoreOpr readMoreSaveOpr)
-			throws FrameworkException, BusinessException {
+	public void saveProductForLater(ReadMoreOpr readMoreSaveOpr) throws FrameworkException, BusinessException {
 		// ShoppingCartIntegrationOpr shoppingCartIntegrationOpr = new
 		// ShoppingCartIntegrationOpr();
 		//
@@ -122,19 +109,16 @@ public class ReadMoreBF extends BusinessFacade {
 		// return readMoreOpr;
 	}
 
-	public ReadMoreOpr getCountryDependentData(ReadMoreOpr readMoreOpr)
-			throws FrameworkException {
+	public ReadMoreOpr getCountryDependentData(ReadMoreOpr readMoreOpr) throws FrameworkException {
 		return new ReadMoreBC().getCountryDependantData(readMoreOpr);
 	}
 
-	public ReadMoreOpr getProductAlternativeImages(ReadMoreOpr readMoreOpr)
-			throws FrameworkException {
+	public ReadMoreOpr getProductAlternativeImages(ReadMoreOpr readMoreOpr) throws FrameworkException {
 		return new ReadMoreBC().getProductAlternativeImages(readMoreOpr);
 	}
 
-	public ReadMoreOpr getProductSizes(ReadMoreOpr readMoreOpr)
-			throws FrameworkException {
-		return new ReadMoreBC().getProductSizes(readMoreOpr);
+	public ReadMoreOpr getProductProperties(ReadMoreOpr readMoreOpr) throws FrameworkException {
+		return new ReadMoreBC().getProductProperties(readMoreOpr);
 	}
 
 	public ReadMoreOpr getCategoriesForProduct(ReadMoreOpr readMoreOpr) throws FrameworkException {

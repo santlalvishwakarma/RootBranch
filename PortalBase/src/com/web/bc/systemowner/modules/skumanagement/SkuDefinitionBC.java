@@ -1190,4 +1190,42 @@ public class SkuDefinitionBC extends BackingClass {
 		}
 		return skuOpr;
 	}
+
+	public ProductSkuSizeMappingDVO getSizeMappedValueList(ProductSkuSizeMappingDVO productSkuSizeMappingDVO)
+			throws FrameworkException, BusinessException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In SkuDefinitionBC :: getSizeMappedValueList starts ");
+
+		Long sizeId = productSkuSizeMappingDVO.getPropertyValueMappingRecord().getSizeRecord().getId();
+
+		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
+		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT, SkuDefinitionSqlTemplate.GET_SIZE_MAPPED_VALUE);
+
+		Object strSqlParams[][] = new Object[1][3];
+
+		strSqlParams[0][0] = "1";
+		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
+		strSqlParams[0][2] = sizeId;
+		myLog.debug(" parameter 1 sizeId:: " + sizeId);
+
+		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
+		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
+		myLog.debug(" SkuDefinitionBC executeSavePropertyMapping :: Resultset got ::" + responseMap);
+
+		if (responseMap.size() > 0) {
+			for (int i = 0; i < responseMap.size(); i++) {
+
+				HashMap<String, Object> resultSetMap = responseMap.get(i);
+				handleAndThrowException(resultSetMap);
+
+				String propertyValue = (String) resultSetMap.get("property_value");
+
+				productSkuSizeMappingDVO.getPropertyValueList().add(propertyValue);
+			}
+		}
+
+		return productSkuSizeMappingDVO;
+	}
 }

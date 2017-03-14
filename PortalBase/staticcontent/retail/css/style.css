@@ -935,7 +935,7 @@ productdetright {
 	color: #bc7504;
 	font-size: 29px;
 	float: left !important;
-	margin: 24px 0px 0px 30px;
+	margin: 24px 0px 0px 0px;
 	font-family: Myriad Pro;
 	font-variant: normal;
 }
@@ -948,7 +948,7 @@ productdetright {
 .productpricelft {
 	float: left;
 	font-size: 12px;
-	margin: 7px 0px 0px 33px;
+	margin: 7px 0px 0px 0px;
 }
 
 .percent-discount {

@@ -51,11 +51,11 @@
 					<div class="productdetright">
 						<h:outputText styleClass="producttitle" value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.name}" />
 						<br /> <br /> <br />
-						<h:outputText style="margin: 24px 0 0 30px; color: #BC7504;"
+						<h:outputText style="margin: 24px 0 0 0px; color: #BC7504;"
 							value="Sku Code:#{retailReadMoreBB.readMoreOpr.productSkuRecord.code}" />
 						<br />
 						<div class="productprice">
-							<h:panelGroup styleClass="productpricelft" id="pricePanel">
+							<h:panelGroup styleClass="productpricelft boldClass" id="pricePanel">
 								<h:panelGroup rendered="#{(retailReadMoreBB.readMoreOpr.productSkuRecord.renderedDiscountPrice)}">
 									<span>List Price: </span>
 									<span class="WebRupee"><h:outputText value="Rs." /> </span>
@@ -80,13 +80,13 @@
 
 						</div>
 						<br /> <br /> <br />
-						<h:outputText value="Quantity:" />
-						<!-- <p:inputText value="#{retailReadMoreBB.addToCartProductRecord.shoppingCartProduct.quantity}" /> -->
-						<p:spinner min="1" prefix="1" value="#{retailReadMoreBB.addToCartProductRecord.shoppingCartProduct.quantity}"></p:spinner>
-						<br /> <br /> 
+						<h:outputText styleClass="boldClass" value="Quantity:" />
+						&#160;
+						<p:inputText style="width: 36px;" value="#{retailReadMoreBB.addToCartProductRecord.shoppingCartProduct.quantity}" />
+						<br /> <br />
 						<div>
 							<p:commandButton value="Add To Cart" process="readMoreForm, @this" id="addToCartLink"
-								action="#{retailReadMoreBB.addToCart}" update="navigationPanel" oncomplete="PF('navigationPanel').show()">
+								action="#{retailReadMoreBB.addToCart}" update="navigationPanel">
 								<f:setPropertyActionListener value="#{retailReadMoreBB.readMoreOpr.productSkuRecord}"
 									target="#{retailReadMoreBB.addToCartProductRecord.shoppingCartProduct.productSkuRecord}" />
 							</p:commandButton>

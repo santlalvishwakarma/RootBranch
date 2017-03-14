@@ -10,6 +10,8 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpServletRequest;
 
+import org.primefaces.context.RequestContext;
+
 import com.web.bf.retail.modules.readmorepanel.ReadMoreBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.opr.retail.ReadMoreOpr;
@@ -199,139 +201,156 @@ public class ReadMoreBB extends BackingBean {
 
 	public String addToCart() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+		boolean validateFlag = true;
 		boolean validateVariant = false;
 		String skuCode = readMoreOpr.getProductSkuRecord().getId().toString() + "~";
 
-		myLog.debug("check for selected size:::::" + readMoreOpr.getProductSkuRecord().getSizeRecord().getCode());
-		myLog.debug("addToCart :: skuCode ::" + skuCode);
-		myLog.debug("current sku code   " + readMoreOpr.getProductSkuRecord().getSkuCodeMap());
+		if (getAddToCartProductRecord().getShoppingCartProduct().getQuantity() != null
+				&& getAddToCartProductRecord().getShoppingCartProduct().getQuantity() > 0) {
 
-		if (readMoreOpr.getProductSkuRecord().getSkuCodeMap().isEmpty()) {
-			validateVariant = true;
-			addProductSuccessful = true;
-			myLog.debug("addToCart :: skuCode match not needed :: map empty");
-		} else {
-			if (readMoreOpr.getProductSkuRecord().getSkuCodeMap().containsKey(skuCode)) {
-				myLog.debug("addToCart :: skuCode matched ::");
+			myLog.debug("check for selected size:::::" + readMoreOpr.getProductSkuRecord().getSizeRecord().getCode());
+			myLog.debug("addToCart :: skuCode ::" + skuCode);
+			myLog.debug("current sku code   " + readMoreOpr.getProductSkuRecord().getSkuCodeMap());
+
+			if (readMoreOpr.getProductSkuRecord().getSkuCodeMap().isEmpty()) {
 				validateVariant = true;
 				addProductSuccessful = true;
+				myLog.debug("addToCart :: skuCode match not needed :: map empty");
 			} else {
-				addProductSuccessful = false;
-				myLog.error("addToCart :: skuCode match not found :: " + skuCode);
+				if (readMoreOpr.getProductSkuRecord().getSkuCodeMap().containsKey(skuCode)) {
+					myLog.debug("addToCart :: skuCode matched ::");
+					validateVariant = true;
+					addProductSuccessful = true;
+				} else {
+					addProductSuccessful = false;
+					myLog.error("addToCart :: skuCode match not found :: " + skuCode);
+				}
 			}
-		}
-		if (getAllOptions().getAllOptionsValues().get(CommonConstant.SIZE_LIST) != null
-				&& !allOptions.getAllOptionsValues().get(CommonConstant.SIZE_LIST).isEmpty()) {
-			myLog.debug("addToCart :: select size can be insert null ::");
-			if (sizeCode == null || sizeCode.trim().length() == 0) {
-				myLog.debug("inside for for size check and put in opr1111111");
-				// addToErrorList(new
-				// PropertiesReader(propertiesLocation).getValueOfKey("select_size"));
-				validateVariant = false;
-				sizeSelect = false;
-			} else if (sizeCode != null && sizeCode.trim().length() >= 0) {
+			if (getAllOptions().getAllOptionsValues().get(CommonConstant.SIZE_LIST) != null
+					&& !allOptions.getAllOptionsValues().get(CommonConstant.SIZE_LIST).isEmpty()) {
+				myLog.debug("addToCart :: select size can be insert null ::");
+				if (sizeCode == null || sizeCode.trim().length() == 0) {
+					myLog.debug("inside for for size check and put in opr1111111");
+					// addToErrorList(new
+					// PropertiesReader(propertiesLocation).getValueOfKey("select_size"));
+					validateVariant = false;
+					sizeSelect = false;
+				} else if (sizeCode != null && sizeCode.trim().length() >= 0) {
+					sizeSelect = true;
+					myLog.debug("inside for for size check and put in opr:::::::");
+					readMoreOpr.getProductSkuRecord().getSizeRecord().setCode(sizeCode.trim());
+				}
+			} else {
 				sizeSelect = true;
-				myLog.debug("inside for for size check and put in opr:::::::");
-				readMoreOpr.getProductSkuRecord().getSizeRecord().setCode(sizeCode.trim());
 			}
-		} else {
-			sizeSelect = true;
-		}
 
-		if (addProductSuccessful && sizeSelect) {
-			navigatePanel = true;
-		} else {
-			navigatePanel = false;
-		}
-		// if (sizeCode != null && sizeCode.trim().length() >= 0) {
-		// myLog.debug("inside for for size check and put in opr:::::::");
-		// readMoreOpr.getProductSkuRecord().getSizeRecord().setCode(sizeCode.trim());
-		// }
-
-		if (validateVariant) {
-			ShoppingCartOpr shoppingCartOpr = (ShoppingCartOpr) FacesContext.getCurrentInstance().getExternalContext()
-					.getSessionMap().get(CommonConstant.SHOPPING_CART_OPR);
-			if (shoppingCartOpr == null) {
-				shoppingCartOpr = new ShoppingCartOpr();
+			if (addProductSuccessful && sizeSelect) {
+				navigatePanel = true;
+			} else {
+				navigatePanel = false;
 			}
-			myLog.debug("check for engrave and seleced size:::::"
-					+ addToCartProductRecord.getShoppingCartProduct().getProductSkuRecord().getEngraveText() + "AND"
-					+ addToCartProductRecord.getShoppingCartProduct().getProductSkuRecord().getSizeRecord().getCode());
+			// if (sizeCode != null && sizeCode.trim().length() >= 0) {
+			// myLog.debug("inside for for size check and put in opr:::::::");
+			// readMoreOpr.getProductSkuRecord().getSizeRecord().setCode(sizeCode.trim());
+			// }
 
-			myLog.debug("check for original discount price in readmore bb:::::::"
-					+ addToCartProductRecord.getProductSkuRecord().getOriginalDiscountPrice());
+			if (validateVariant) {
+				ShoppingCartOpr shoppingCartOpr = (ShoppingCartOpr) FacesContext.getCurrentInstance()
+						.getExternalContext().getSessionMap().get(CommonConstant.SHOPPING_CART_OPR);
+				if (shoppingCartOpr == null) {
+					shoppingCartOpr = new ShoppingCartOpr();
+				}
+				myLog.debug("check for engrave and seleced size:::::"
+						+ addToCartProductRecord.getShoppingCartProduct().getProductSkuRecord().getEngraveText()
+						+ "AND"
+						+ addToCartProductRecord.getShoppingCartProduct().getProductSkuRecord().getSizeRecord()
+								.getCode());
 
-			// myLog.debug("Delivery time in readmore BB ::"
-			// +
-			// readMoreOpr.getProductSkuRecord().getHierarchyLevelOne().getCategoryRecord().getDeliveryTime());
-			// addToCartProductRecord
-			// .getShoppingCartProduct()
-			// .getProductSkuRecord()
-			// .getHierarchyLevelOne()
-			// .getCategoryRecord()
-			// .setDeliveryTime(
-			// readMoreOpr.getProductSkuRecord().getHierarchyLevelOne().getCategoryRecord()
-			// .getDeliveryTime());
-			// myLog.debug("Delivery time in readmore BB ::"
-			// +
-			// addToCartProductRecord.getShoppingCartProduct().getProductSkuRecord().getHierarchyLevelOne()
-			// .getCategoryRecord().getDeliveryTime());
-			// addToCartProductRecord
-			// .getShoppingCartProduct()
-			// .getProductSkuRecord()
-			// .getHierarchyLevelTwo()
-			// .getCategoryRecord()
-			// .setDeliveryTime(
-			// readMoreOpr.getProductSkuRecord().getHierarchyLevelTwo().getCategoryRecord()
-			// .getDeliveryTime());
-			// addToCartProductRecord
-			// .getShoppingCartProduct()
-			// .getProductSkuRecord()
-			// .getHierarchyLevelThree()
-			// .getCategoryRecord()
-			// .setDeliveryTime(
-			// readMoreOpr.getProductSkuRecord().getHierarchyLevelThree().getCategoryRecord()
-			// .getDeliveryTime());
-			// addToCartProductRecord
-			// .getShoppingCartProduct()
-			// .getProductSkuRecord()
-			// .getHierarchyLevelFour()
-			// .getCategoryRecord()
-			// .setDeliveryTime(
-			// readMoreOpr.getProductSkuRecord().getHierarchyLevelFour().getCategoryRecord()
-			// .getDeliveryTime());
+				myLog.debug("check for original discount price in readmore bb:::::::"
+						+ addToCartProductRecord.getProductSkuRecord().getOriginalDiscountPrice());
 
-			// GEOPLUGIN- To set original price per piece
-			addToCartProductRecord.getProductSkuRecord().setOriginalBasePrice(
-					readMoreOpr.getProductSkuRecord().getOriginalBasePrice());
-			addToCartProductRecord.getProductSkuRecord().setOriginalDiscountPrice(
-					readMoreOpr.getProductSkuRecord().getOriginalDiscountPrice());
-			addToCartProductRecord.getProductSkuRecord().setOriginalCurrencyRecord(
-					readMoreOpr.getProductSkuRecord().getOriginalCurrencyRecord());
-			addToCartProductRecord.getShoppingCartProduct().getProductSkuRecord()
-					.setProductSkuStockLevelRecord(readMoreOpr.getProductSkuRecord().getProductSkuStockLevelRecord());
-			myLog.debug("READ MORE:: stock  "
-					+ readMoreOpr.getProductSkuRecord().getProductSkuStockLevelRecord().getAvailableQuantity());
+				// myLog.debug("Delivery time in readmore BB ::"
+				// +
+				// readMoreOpr.getProductSkuRecord().getHierarchyLevelOne().getCategoryRecord().getDeliveryTime());
+				// addToCartProductRecord
+				// .getShoppingCartProduct()
+				// .getProductSkuRecord()
+				// .getHierarchyLevelOne()
+				// .getCategoryRecord()
+				// .setDeliveryTime(
+				// readMoreOpr.getProductSkuRecord().getHierarchyLevelOne().getCategoryRecord()
+				// .getDeliveryTime());
+				// myLog.debug("Delivery time in readmore BB ::"
+				// +
+				// addToCartProductRecord.getShoppingCartProduct().getProductSkuRecord().getHierarchyLevelOne()
+				// .getCategoryRecord().getDeliveryTime());
+				// addToCartProductRecord
+				// .getShoppingCartProduct()
+				// .getProductSkuRecord()
+				// .getHierarchyLevelTwo()
+				// .getCategoryRecord()
+				// .setDeliveryTime(
+				// readMoreOpr.getProductSkuRecord().getHierarchyLevelTwo().getCategoryRecord()
+				// .getDeliveryTime());
+				// addToCartProductRecord
+				// .getShoppingCartProduct()
+				// .getProductSkuRecord()
+				// .getHierarchyLevelThree()
+				// .getCategoryRecord()
+				// .setDeliveryTime(
+				// readMoreOpr.getProductSkuRecord().getHierarchyLevelThree().getCategoryRecord()
+				// .getDeliveryTime());
+				// addToCartProductRecord
+				// .getShoppingCartProduct()
+				// .getProductSkuRecord()
+				// .getHierarchyLevelFour()
+				// .getCategoryRecord()
+				// .setDeliveryTime(
+				// readMoreOpr.getProductSkuRecord().getHierarchyLevelFour().getCategoryRecord()
+				// .getDeliveryTime());
 
-			myLog.debug("check for original base price in readmore bb:::::::"
-					+ addToCartProductRecord.getProductSkuRecord().getOriginalBasePrice());
-			shoppingCartOpr.getShoppingCartProductList().add(addToCartProductRecord.getShoppingCartProduct());
+				// GEOPLUGIN- To set original price per piece
+				addToCartProductRecord.getProductSkuRecord().setOriginalBasePrice(
+						readMoreOpr.getProductSkuRecord().getOriginalBasePrice());
+				addToCartProductRecord.getProductSkuRecord().setOriginalDiscountPrice(
+						readMoreOpr.getProductSkuRecord().getOriginalDiscountPrice());
+				addToCartProductRecord.getProductSkuRecord().setOriginalCurrencyRecord(
+						readMoreOpr.getProductSkuRecord().getOriginalCurrencyRecord());
+				addToCartProductRecord
+						.getShoppingCartProduct()
+						.getProductSkuRecord()
+						.setProductSkuStockLevelRecord(
+								readMoreOpr.getProductSkuRecord().getProductSkuStockLevelRecord());
+				myLog.debug("READ MORE:: stock  "
+						+ readMoreOpr.getProductSkuRecord().getProductSkuStockLevelRecord().getAvailableQuantity());
 
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-					.put(CommonConstant.SHOPPING_CART_OPR, shoppingCartOpr);
-			// String[] messageArguments = {
-			// addToCartProductRecord.getShoppingCartProduct().getProductSkuRecord().getName()
-			// };
-			// setSuccessMsg(MessageFormatter.getFormattedMessage(
-			// new
-			// PropertiesReader(propertiesLocation).getValueOfKey("product_added_to_cart"),
-			// messageArguments));
+				myLog.debug("check for original base price in readmore bb:::::::"
+						+ addToCartProductRecord.getProductSkuRecord().getOriginalBasePrice());
+				shoppingCartOpr.getShoppingCartProductList().add(addToCartProductRecord.getShoppingCartProduct());
 
-			addToCartProductRecord = new ReadMoreOpr();
-			sizeCode = "";
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+						.put(CommonConstant.SHOPPING_CART_OPR, shoppingCartOpr);
+				// String[] messageArguments = {
+				// addToCartProductRecord.getShoppingCartProduct().getProductSkuRecord().getName()
+				// };
+				// setSuccessMsg(MessageFormatter.getFormattedMessage(
+				// new
+				// PropertiesReader(propertiesLocation).getValueOfKey("product_added_to_cart"),
+				// messageArguments));
+
+				addToCartProductRecord = new ReadMoreOpr();
+				sizeCode = "";
+			} else {
+				myLog.debug("Variant does not exist :::::: ");
+			}
+
+			RequestContext.getCurrentInstance().execute("PF('navigationPanel').show();");
+
 		} else {
-			myLog.debug("Variant does not exist :::::: ");
+			addToErrorList(propertiesReader.getValueOfKey("quantity_less_than_zero"));
 		}
+
 		return null;
 
 	}
@@ -934,7 +953,7 @@ public class ReadMoreBB extends BackingBean {
 
 			readMoreOpr = new ReadMoreBF().getProductAlternativeImages(readMoreOpr);
 
-			readMoreOpr = new ReadMoreBF().getProductSizes(readMoreOpr);
+			readMoreOpr = new ReadMoreBF().getProductProperties(readMoreOpr);
 
 			String imageUrl = null;
 			if (readMoreOpr.getProductSkuRecord().getDefaultImageRecord().getImageURL() != null) {

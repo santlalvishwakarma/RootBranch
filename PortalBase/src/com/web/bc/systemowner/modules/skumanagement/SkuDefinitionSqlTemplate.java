@@ -31,4 +31,6 @@ public interface SkuDefinitionSqlTemplate extends SqlTemplate {
 
 	static final String SAVE_PRODUCT_SKU_PROPERTY_MAPPING = "CALL sp_sku_save_property_mapping(?,?,?,?,?,?,?, @p_error_code, @p_error_message);";
 
+	static final String GET_SIZE_MAPPED_VALUE = "SELECT property_value FROM core_property_value_mapping WHERE size_id = ?; ";
+
 }
