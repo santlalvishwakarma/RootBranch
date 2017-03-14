@@ -138,10 +138,11 @@
 				<!-- Product Detail Box Ends -->
 				<!-- Action Bar Starts -->
 				<div class="contShopping">
-					<p:commandLink process="@this" value="Continue Shopping" oncomplete="PF('navigationPanel').hide()" />
+					<p:commandButton process="@this" id="contButton" value="Continue Shopping"
+						oncomplete="PF('navigationPanel').hide()"></p:commandButton>
 				</div>
 				<div class="checkout">
-					<p:commandLink process="@this" action="pretty:shoppingCart" value="Checkout Now" />
+					<p:commandButton process="@this" action="pretty:shoppingCart" value="Checkout Now" />
 				</div>
 				<!-- Action Bar Ends -->
 			</p:outputPanel>

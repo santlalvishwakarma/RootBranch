@@ -1022,6 +1022,10 @@ public class SkuDefinitionBC extends BackingClass {
 			Long sizeId = productSkuSizeMappingRecord.getPropertyValueMappingRecord().getSizeRecord().getId();
 			String propertyValue = productSkuSizeMappingRecord.getPropertyValueMappingRecord().getPropertyValue();
 			Long unitId = productSkuSizeMappingRecord.getPropertyValueMappingRecord().getUnitRecord().getId();
+			String sizeLastModifiedDate = null;
+			if (productSkuSizeMappingRecord.getAuditAttributes().getLastModifiedDate() != null)
+				sizeLastModifiedDate = productSkuSizeMappingRecord.getAuditAttributes().getLastModifiedDate()
+						.toString();
 			Boolean recordDeleted = productSkuSizeMappingRecord.getOperationalAttributes().getRecordDeleted();
 
 			if (productSkuSizeMappingId != null)
@@ -1048,6 +1052,12 @@ public class SkuDefinitionBC extends BackingClass {
 				sizeParseString.append("");
 			sizeParseString.append("~");
 
+			if (sizeLastModifiedDate != null)
+				sizeParseString.append(sizeLastModifiedDate);
+			else
+				sizeParseString.append("");
+			sizeParseString.append("~");
+
 			if (recordDeleted != null && recordDeleted)
 				sizeParseString.append("1");
 			else
@@ -1065,6 +1075,10 @@ public class SkuDefinitionBC extends BackingClass {
 				.getProductSkuColorMappingList()) {
 			Long productSkuColorMappingId = productSkuColorMappingRecord.getId();
 			Long colorId = productSkuColorMappingRecord.getColorRecord().getId();
+			String colorLastModifiedDate = null;
+			if (productSkuColorMappingRecord.getAuditAttributes().getLastModifiedDate() != null)
+				colorLastModifiedDate = productSkuColorMappingRecord.getAuditAttributes().getLastModifiedDate()
+						.toString();
 			Boolean recordDeleted = productSkuColorMappingRecord.getOperationalAttributes().getRecordDeleted();
 
 			if (productSkuColorMappingId != null)
@@ -1075,6 +1089,12 @@ public class SkuDefinitionBC extends BackingClass {
 
 			if (colorId != null)
 				colorParseString.append(colorId);
+			else
+				colorParseString.append("");
+			colorParseString.append("~");
+
+			if (colorLastModifiedDate != null)
+				colorParseString.append(colorLastModifiedDate);
 			else
 				colorParseString.append("");
 			colorParseString.append("~");
@@ -1095,6 +1115,10 @@ public class SkuDefinitionBC extends BackingClass {
 				.getProductSkuMaterialMappingList()) {
 			Long productSkuMaterialMappingId = productSkuMaterialMappingRecord.getId();
 			Long materialId = productSkuMaterialMappingRecord.getMaterialRecord().getId();
+			String materialLastModifiedDate = null;
+			if (productSkuMaterialMappingRecord.getAuditAttributes().getLastModifiedDate() != null)
+				materialLastModifiedDate = productSkuMaterialMappingRecord.getAuditAttributes().getLastModifiedDate()
+						.toString();
 			Boolean recordDeleted = productSkuMaterialMappingRecord.getOperationalAttributes().getRecordDeleted();
 
 			if (productSkuMaterialMappingId != null)
@@ -1108,6 +1132,12 @@ public class SkuDefinitionBC extends BackingClass {
 			else
 				materialParseString.append("");
 			materialParseString.append("~");
+
+			if (materialLastModifiedDate != null)
+				colorParseString.append(materialLastModifiedDate);
+			else
+				colorParseString.append("");
+			colorParseString.append("~");
 
 			if (recordDeleted != null && recordDeleted)
 				materialParseString.append("1");

@@ -497,15 +497,15 @@ a img {
 
 .ui-button {
 	font-size: 15px !important;
-	background-color: #55a32a;
-    border-color: #55a32a;
+	background-color: #55a32a !important;
+    border-color: #55a32a !important;
     color: #ffffff !important;
-    background-image: none;
+    background-image: none !important;
 }
 
 .ui-button:hover {
-	background-color: #3d8901;
-    border-color: #3d8901;
+	background-color: #3d8901 !important;
+    border-color: #3d8901 !important;
 }
 
 .mandRed {
@@ -999,7 +999,7 @@ productdetright {
 }
 
 .contShopping {
-	background-image: url("/p/staticcontent/retail/images/portalimages/countShopping.png");
+	/* background-image: url("/p/staticcontent/retail/images/portalimages/countShopping.png"); */
 	height: 24px;
 	margin: 27px 0 14px 31px;
 	width: 170px;
@@ -1015,7 +1015,7 @@ productdetright {
 }
 
 .checkout {
-	background-image: url("/p/staticcontent/retail/images/portalimages/checkout.png");
+	/* background-image: url("/p/staticcontent/retail/images/portalimages/checkout.png"); */
 	height: 24px;
 	margin: 27px 0 14px 31px;
 	width: 151px;

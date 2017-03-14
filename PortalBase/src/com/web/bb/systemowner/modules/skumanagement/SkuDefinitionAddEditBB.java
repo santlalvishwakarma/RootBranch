@@ -517,6 +517,8 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 	}
 
 	public boolean validateSaveProductPropertiesMapping() {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In SkuDefinitionAddEditBB :: validateSaveProductPropertiesMapping starts ");
 		FoundationValidator validator = new FoundationValidator();
 		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 		boolean validateFlag = true;
@@ -532,27 +534,32 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 			for (int i = 0; i < productSkuSizeMappingList.size(); i++) {
 				ProductSkuSizeMappingDVO productSkuSizeMappingRecord = new ProductSkuSizeMappingDVO();
 				productSkuSizeMappingRecord = productSkuSizeMappingList.get(i);
-				if (!validator.validateLongObjectNull(productSkuSizeMappingRecord.getPropertyValueMappingRecord()
-						.getSizeRecord().getId())) {
-					addToErrorList(propertiesReader.getValueOfKey("size_name_null") + (i + 1));
-				} else if (!validator.validateLongObjectNull(productSkuSizeMappingRecord
-						.getPropertyValueMappingRecord().getUnitRecord().getId())) {
-					addToErrorList(propertiesReader.getValueOfKey("unit_null") + (i + 1));
-				} else if (!validator.validateNull(productSkuSizeMappingRecord.getPropertyValueMappingRecord()
-						.getPropertyValue())) {
-					addToErrorList(propertiesReader.getValueOfKey("property_value_null") + (i + 1));
-				} else {
-					if (uniqueSizeMap.isEmpty()) {
-						uniqueSizeMap.put(productSkuSizeMappingRecord.getPropertyValueMappingRecord().getId(),
-								productSkuSizeMappingRecord.getPropertyValueMappingRecord().getId());
-					} else {
-						if (uniqueSizeMap.containsKey(productSkuSizeMappingRecord.getPropertyValueMappingRecord()
-								.getId())) {
-							addToErrorList(propertiesReader.getValueOfKey("duplicate_size_record") + (i + 1));
 
-						} else {
+				if (!productSkuSizeMappingRecord.getOperationalAttributes().getRecordDeleted()
+						|| productSkuSizeMappingRecord.getOperationalAttributes().getRecordDeleted() == null) {
+
+					if (!validator.validateLongObjectNull(productSkuSizeMappingRecord.getPropertyValueMappingRecord()
+							.getSizeRecord().getId())) {
+						addToErrorList(propertiesReader.getValueOfKey("size_name_null") + (i + 1));
+					} else if (!validator.validateLongObjectNull(productSkuSizeMappingRecord
+							.getPropertyValueMappingRecord().getUnitRecord().getId())) {
+						addToErrorList(propertiesReader.getValueOfKey("unit_null") + (i + 1));
+					} else if (!validator.validateNull(productSkuSizeMappingRecord.getPropertyValueMappingRecord()
+							.getPropertyValue())) {
+						addToErrorList(propertiesReader.getValueOfKey("property_value_null") + (i + 1));
+					} else {
+						if (uniqueSizeMap.isEmpty()) {
 							uniqueSizeMap.put(productSkuSizeMappingRecord.getPropertyValueMappingRecord().getId(),
 									productSkuSizeMappingRecord.getPropertyValueMappingRecord().getId());
+						} else {
+							if (uniqueSizeMap.containsKey(productSkuSizeMappingRecord.getPropertyValueMappingRecord()
+									.getId())) {
+								addToErrorList(propertiesReader.getValueOfKey("duplicate_size_record") + (i + 1));
+
+							} else {
+								uniqueSizeMap.put(productSkuSizeMappingRecord.getPropertyValueMappingRecord().getId(),
+										productSkuSizeMappingRecord.getPropertyValueMappingRecord().getId());
+							}
 						}
 					}
 				}
@@ -567,18 +574,24 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 			Map<Long, Long> uniqueColorMap = new HashMap<Long, Long>();
 			for (int i = 0; i < productSkuColorMappingList.size(); i++) {
 				ProductSkuColorMappingDVO productSkuColorMappingRecord = productSkuColorMappingList.get(i);
-				if (!validator.validateLongObjectNull(productSkuColorMappingRecord.getColorRecord().getId())) {
-					addToErrorList(propertiesReader.getValueOfKey("color_null") + (i + 1));
-				} else {
-					if (uniqueColorMap.isEmpty()) {
-						uniqueColorMap.put(productSkuColorMappingRecord.getColorRecord().getId(),
-								productSkuColorMappingRecord.getColorRecord().getId());
+				myLog.debug("In record deleted:: "
+						+ productSkuColorMappingRecord.getOperationalAttributes().getRecordDeleted());
+				if (!productSkuColorMappingRecord.getOperationalAttributes().getRecordDeleted()
+						|| productSkuColorMappingRecord.getOperationalAttributes().getRecordDeleted() == null) {
+
+					if (!validator.validateLongObjectNull(productSkuColorMappingRecord.getColorRecord().getId())) {
+						addToErrorList(propertiesReader.getValueOfKey("color_null") + (i + 1));
 					} else {
-						if (uniqueColorMap.containsKey(productSkuColorMappingRecord.getColorRecord().getId())) {
-							addToErrorList(propertiesReader.getValueOfKey("duplicate_color_record") + (i + 1));
-						} else {
+						if (uniqueColorMap.isEmpty()) {
 							uniqueColorMap.put(productSkuColorMappingRecord.getColorRecord().getId(),
 									productSkuColorMappingRecord.getColorRecord().getId());
+						} else {
+							if (uniqueColorMap.containsKey(productSkuColorMappingRecord.getColorRecord().getId())) {
+								addToErrorList(propertiesReader.getValueOfKey("duplicate_color_record") + (i + 1));
+							} else {
+								uniqueColorMap.put(productSkuColorMappingRecord.getColorRecord().getId(),
+										productSkuColorMappingRecord.getColorRecord().getId());
+							}
 						}
 					}
 				}
@@ -592,18 +605,24 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 			Map<Long, Long> uniqueMaterialMap = new HashMap<Long, Long>();
 			for (int i = 0; i < productSkuMaterialMappingList.size(); i++) {
 				ProductSkuMaterialMappingDVO productSkuMaterialMappingRecord = productSkuMaterialMappingList.get(i);
-				if (!validator.validateLongObjectNull(productSkuMaterialMappingRecord.getMaterialRecord().getId())) {
-					addToErrorList(propertiesReader.getValueOfKey("material_null") + (i + 1));
-				} else {
-					if (uniqueMaterialMap.isEmpty()) {
-						uniqueMaterialMap.put(productSkuMaterialMappingRecord.getMaterialRecord().getId(),
-								productSkuMaterialMappingRecord.getMaterialRecord().getId());
+
+				if (!productSkuMaterialMappingRecord.getOperationalAttributes().getRecordDeleted()
+						|| productSkuMaterialMappingRecord.getOperationalAttributes().getRecordDeleted() == null) {
+
+					if (!validator.validateLongObjectNull(productSkuMaterialMappingRecord.getMaterialRecord().getId())) {
+						addToErrorList(propertiesReader.getValueOfKey("material_null") + (i + 1));
 					} else {
-						if (uniqueMaterialMap.containsKey(productSkuMaterialMappingRecord.getMaterialRecord().getId())) {
-							addToErrorList(propertiesReader.getValueOfKey("duplicate_material_record") + (i + 1));
-						} else {
+						if (uniqueMaterialMap.isEmpty()) {
 							uniqueMaterialMap.put(productSkuMaterialMappingRecord.getMaterialRecord().getId(),
 									productSkuMaterialMappingRecord.getMaterialRecord().getId());
+						} else {
+							if (uniqueMaterialMap.containsKey(productSkuMaterialMappingRecord.getMaterialRecord()
+									.getId())) {
+								addToErrorList(propertiesReader.getValueOfKey("duplicate_material_record") + (i + 1));
+							} else {
+								uniqueMaterialMap.put(productSkuMaterialMappingRecord.getMaterialRecord().getId(),
+										productSkuMaterialMappingRecord.getMaterialRecord().getId());
+							}
 						}
 					}
 				}

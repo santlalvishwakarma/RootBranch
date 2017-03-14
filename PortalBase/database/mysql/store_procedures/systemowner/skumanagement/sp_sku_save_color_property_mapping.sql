@@ -114,6 +114,8 @@ outer_parse: WHILE v_current_index > 0
 	                      		 ELSEIF v_column_sequence_number = 2 THEN 
 	                        	     SET v_color_id = v_inner_current_node1;
 	                        	 ELSEIF v_column_sequence_number = 3 THEN
+	                        	 	 SET v_modified_date = v_inner_current_node1;
+	                        	 ELSEIF v_column_sequence_number = 4 THEN
 	                        	 	 SET v_deleteYN = v_inner_current_node1;
 	                     		 END IF;   
 	                     	                     
@@ -172,6 +174,7 @@ outer_parse: WHILE v_current_index > 0
 	                    	SET v_product_sku_color_Mapping_id = NULL;
 	                        SET v_color_id = NULL;
 	                        SET v_deleteYN = NULL;
+	                        SET v_modified_date = NULL;
 	                        SET v_counter = NULL;
 	                      
 	                    END WHILE inner_parse;
