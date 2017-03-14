@@ -34,7 +34,7 @@ body {
 	background: #FFFFFF;
 }
 
-.homeBody{
+.homeBody {
 	background: #FFFFFF;
 }
 
@@ -235,14 +235,16 @@ h4 {
 	float: left;
 	height: 35px;
 	width: 10px;
-	background: #272727 url(/s/staticcontent/images/templatemo_menu_left.gif) no-repeat;
+	background: #272727 url(/s/staticcontent/images/templatemo_menu_left.gif)
+		no-repeat;
 }
 
 .menuright {
 	float: right;
 	height: 42px;
 	width: 10px;
-	background: #272727 url(/s/staticcontent/images/templatemo_menu_right.gif) no-repeat;
+	background: #272727 url(/s/staticcontent/images/templatemo_menu_right.gif)
+		no-repeat;
 }
 
 #templatemo_menu ul {
@@ -271,7 +273,7 @@ h4 {
 	color: #ffffff;
 }
 
-#templatemo_menu ul li a:hover,#templatemo_menu ul li .current { 
+#templatemo_menu ul li a:hover,#templatemo_menu ul li .current {
 	text-decoration: none;
 	background: #285fc2;
 	color: #285fc2;
@@ -289,7 +291,6 @@ h4 {
 	width: 5px !important;
 }
 /* end of menu */
-
 * html .boxbottom {
 	width: 280px;
 	height: 10px;
@@ -498,14 +499,14 @@ a img {
 .ui-button {
 	font-size: 15px !important;
 	background-color: #55a32a !important;
-    border-color: #55a32a !important;
-    color: #ffffff !important;
-    background-image: none !important;
+	border-color: #55a32a !important;
+	color: #ffffff !important;
+	background-image: none !important;
 }
 
 .ui-button:hover {
 	background-color: #3d8901 !important;
-    border-color: #3d8901 !important;
+	border-color: #3d8901 !important;
 }
 
 .mandRed {
@@ -543,10 +544,13 @@ ul {
 	color: #FF0000;
 }
 
-.ui-state-highlight,.ui-widget-content .ui-state-highlight,.ui-widget-header .ui-state-highlight {
+.ui-state-highlight,.ui-widget-content .ui-state-highlight,.ui-widget-header .ui-state-highlight
+	{
 	/*  background: url("/s/javax.faces.resource/images/ui-bg_highlight-soft_25_ffef8f_1x100.png.jsf?ln=primefaces-bluesky") repeat-x scroll 50% top #FFEF8F;
     border: 1px solid #F9DD34; */
-	background: url("/s/javax.faces.resource/images/default.png.jsf?ln=primefaces-bluesky") repeat-x scroll 0 0 #C6DEFF;
+	background:
+		url("/s/javax.faces.resource/images/default.png.jsf?ln=primefaces-bluesky")
+		repeat-x scroll 0 0 #C6DEFF;
 	border: 1px solid #BED6F8;
 	color: #363636;
 }
@@ -624,7 +628,8 @@ ul {
 }
 
 .footer-container { /* background-color: #6E6D71; */
-	background: url("/s/staticcontent/images/footer-image.png") repeat scroll 0 0 #6E6D71;
+	background: url("/s/staticcontent/images/footer-image.png") repeat scroll 0 0
+		#6E6D71;
 	/* background-image: url("/s/staticcontent/images/footer-image.png"); */
 }
 
@@ -843,7 +848,8 @@ div#breadcrumbs ul li a:hover {
 
 .buyBtn1 {
 	display: block;
-	background-image: url('/p/staticcontent/retail/images/portalimages/BuyNow_Button1.png');
+	background-image:
+		url('/p/staticcontent/retail/images/portalimages/BuyNow_Button1.png');
 	background-repeat: no-repeat;
 	width: 95px;
 	height: 24px;
@@ -876,7 +882,7 @@ div#breadcrumbs ul li a:hover {
 	font-size: 12px;
 }
 
-.header { 
+.header {
 	background-repeat: repeat-x;
 	background-position: 0px top;
 	background: #FFFFFF;
@@ -970,7 +976,8 @@ productdetright {
 .discount-rate {
 	float: right;
 	margin: 4px 273px 0px 0px;
-	background-image: url("/p/staticcontent/retail/images/portalimages/discount.png");
+	background-image:
+		url("/p/staticcontent/retail/images/portalimages/discount.png");
 	height: 64px;
 	width: 66px;
 }
@@ -1148,9 +1155,9 @@ productdetright {
 }
 
 .payment {
-	margin: 10px auto;
-	background-image: url("/p/staticcontent/retail/images/portalimages/payment.png");
-	width: 129px;
+	margin: 10px auto 15px;
+	/* background-image: url("/p/staticcontent/retail/images/portalimages/payment.png"); */
+	width: 178px;
 	height: 24px;
 }
 
@@ -1306,7 +1313,8 @@ productdetright {
 /* payment page ends */
 
 /* footer page starts   */
-.footer { /* background-image: url('/p/staticcontent/retail/images/portalimages/body_bg8.jpg'); */
+.footer {
+	/* background-image: url('/p/staticcontent/retail/images/portalimages/body_bg8.jpg'); */
 	background-repeat: repeat-x;
 	background-position: 0px bottom;
 	background-color: #FFFFFF;
@@ -1318,13 +1326,16 @@ productdetright {
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.79);
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eeeeee+0,eeeeee+55,eeeeee+100 */
 	background: rgb(238, 238, 238); /* Old browsers */
-	background: -moz-linear-gradient(top, rgba(238, 238, 238, 1) 0%, rgba(238, 238, 238, 1) 55%, rgba(238, 238, 238, 1) 100%
-		); /* FF3.6-15 */
-	background: -webkit-linear-gradient(top, rgba(238, 238, 238, 1) 0%, rgba(238, 238, 238, 1) 55%, rgba(238, 238, 238, 1)
-		100% ); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to bottom, rgba(238, 238, 238, 1) 0%, rgba(238, 238, 238, 1) 55%, rgba(238, 238, 238, 1)
-		100% ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient(   startColorstr='#eeeeee', endColorstr='#eeeeee', GradientType=0 );
+	background: -moz-linear-gradient(top, rgba(238, 238, 238, 1) 0%,
+		rgba(238, 238, 238, 1) 55%, rgba(238, 238, 238, 1) 100% ); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, rgba(238, 238, 238, 1) 0%,
+		rgba(238, 238, 238, 1) 55%, rgba(238, 238, 238, 1) 100% );
+	/* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, rgba(238, 238, 238, 1) 0%,
+		rgba(238, 238, 238, 1) 55%, rgba(238, 238, 238, 1) 100% );
+	/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient(    startColorstr='#eeeeee',
+		endColorstr='#eeeeee', GradientType=0 );
 	/* IE6-9 */
 }
 
@@ -1405,7 +1416,8 @@ productdetright {
 }
 
 .footer_widget1 .icon {
-	background-image: url("/p/staticcontent/retail/images/portalimages/footer-icon1.png");
+	background-image:
+		url("/p/staticcontent/retail/images/portalimages/footer-icon1.png");
 	display: block;
 	background-repeat: no-repeat;
 	margin: 0px 0 0 16px;
@@ -1417,7 +1429,7 @@ productdetright {
 
 .footer_widget1 .icon:hover {
 	zoom: 1;
-	filter: alpha(opacity =     70);
+	filter: alpha(opacity =       70);
 	opacity: 0.7;
 }
 
@@ -1557,6 +1569,14 @@ productdetright {
 
 .productbox ul li:HOVER {
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.89);
+}
+
+#shoppingCartTable .ui-datatable-tablewrapper {
+	overflow: inherit;
+}
+
+#shoppingCartTable1 .ui-datatable-tablewrapper {
+	overflow: inherit;
 }
 
 /* Added for portal base end*/

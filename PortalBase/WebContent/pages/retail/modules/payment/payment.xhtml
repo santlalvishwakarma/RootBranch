@@ -87,7 +87,7 @@
 						</div> -->
 						<div class="clear"></div>
 						<!-- Row One Ends -->
-						<div class="purchasetitle">Purchase Details</div>
+						<div class="purchasetitle">Quotation Details</div>
 						<table cellpadding="5" cellspacing="0" width="100%">
 							<tr align="center">
 								<td class="cell-border-left">Total Quality</td>
@@ -96,8 +96,8 @@
 								<h:panelGroup rendered="#{!(retailPaymentBB.paymentOpr.retailOrderRecord.voucherRecord.promoCode eq null)}">
 									<td class="cell-border-left">Promo Code</td>
 								</h:panelGroup>
-								<td class="cell-border-left">Shipping Charges</td>
-								<td class="cell-border-left">Delivery Time(days)</td>
+								<!-- <td class="cell-border-left">Shipping Charges</td>
+								<td class="cell-border-left">Delivery Time(days)</td> -->
 								<td class="cell-border-left">Total Order Value</td>
 								<td class="cell-border-left1">Order Number</td>
 							</tr>
@@ -125,11 +125,11 @@
 											<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 										</h:outputText>
 									</p:outputPanel></td>
-								<h:panelGroup rendered="#{!(retailPaymentBB.paymentOpr.retailOrderRecord.voucherRecord.promoCode eq null)}">
+								<!-- <h:panelGroup rendered="#{!(retailPaymentBB.paymentOpr.retailOrderRecord.voucherRecord.promoCode eq null)}">
 									<td class="cell-border-left2"><h:outputText
 											value="#{retailPaymentBB.paymentOpr.retailOrderRecord.voucherRecord.promoCode}" /></td>
-								</h:panelGroup>
-								<td class="cell-border-left2"><p:outputPanel rendered="#{sessionScope['CURRENCY_FLAG']}">
+								</h:panelGroup> -->
+								<!-- <td class="cell-border-left2"><p:outputPanel rendered="#{sessionScope['CURRENCY_FLAG']}">
 										<p:outputPanel
 											rendered="#{retailPaymentBB.paymentOpr.retailOrderRecord.deliveryChargesRecord.deliveryCharge > 0}">
 											<span class="WebRupee"><h:outputText value="Rs." /> </span>
@@ -149,9 +149,9 @@
 										<h:outputText value="#{retailPaymentBB.paymentOpr.retailOrderRecord.deliveryChargesRecord.deliveryCharge}">
 											<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 										</h:outputText>
-									</p:outputPanel></td>
-								<td class="cell-border-left2"><h:outputText
-										value="#{retailPaymentBB.paymentOpr.retailOrderRecord.deliveryTimeRecord.leadTimeInDays}" /></td>
+									</p:outputPanel></td> -->
+								<!-- <td class="cell-border-left2"><h:outputText
+										value="#{retailPaymentBB.paymentOpr.retailOrderRecord.deliveryTimeRecord.leadTimeInDays}" /></td> -->
 								<td class="cell-border-left2"><p:outputPanel rendered="#{sessionScope['CURRENCY_FLAG']}">
 										<span class="WebRupee"><h:outputText value="Rs." /> </span>
 										<h:outputText value="#{retailPaymentBB.paymentOpr.totalOrderPriceIntValue}">
@@ -241,14 +241,10 @@
 									<div class="clear"></div>
 									<div class="lnkbtn">
 										<ul>
-											<li><p:commandLink id="cancelPayment" styleClass="secondary-action"
+											<li><p:commandButton id="cancelPayment" styleClass="secondary-action"
 													actionListener="#{retailPaymentBB.cancelPayment}" process="@this" value="Cancel Order"
 													action="pretty:shoppingCart">
-												</p:commandLink></li>
-											<li><p:commandLink styleClass="secondary-action" action="#{retailPaymentBB.saveToWishlist}"
-													process="@this" value="Save To Wishlist" rendered="#{!(empty sessionScope['LOGGED_USER_KEY'])}" /></li>
-											<li><p:commandLink styleClass="secondary-action" action="#{retailPaymentBB.registerSaveToWishlist}"
-													process="@this" value="Regsiter and Save To Wishlist" rendered="#{empty sessionScope['LOGGED_USER_KEY']}" /></li>
+												</p:commandButton></li>
 										</ul>
 									</div></td>
 							</tr>

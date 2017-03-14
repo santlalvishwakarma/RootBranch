@@ -5,7 +5,8 @@
 	<ui:define name="content">
 		<!-- Page Content Wrapper Start -->
 		<style type="text/css">
-.ui-datatable.borderless thead th,.ui-datatable.borderless tbody,.ui-datatable.borderless tbody td {
+.ui-datatable.borderless thead th,.ui-datatable.borderless tbody,.ui-datatable.borderless tbody td
+	{
 	border-style: none;
 }
 
@@ -20,7 +21,7 @@
 }
 </style>
 		<div id="homecat-wrapper" class="wrapper">
-			<h:form id="shoppingCartForm">
+			<h:form id="shoppingCartForm" prependId="false">
 				<div class="ttletxt3">Shopping Cart</div>
 				<div class="shoppingcart">
 					<p:panel rendered="#{(empty retailShoppingCartBB.shoppingCartOpr.shoppingCartProductList)}"
@@ -52,7 +53,8 @@
 														oncomplete="PF('enlargeImageDialog').show()" action="#{retailShoppingCartBB.enlargeImageClicked}">
 														<f:setPropertyActionListener value="#{shoppingCartProduct.productSkuRecord}"
 															target="#{retailShoppingCartBB.shoppingCartOpr.shoppingCartProductRecord.productSkuRecord}" />
-														<h:graphicImage value="#{shoppingCartProduct.productSkuRecord.defaultImageRecord.thumbnailImageURL}"
+														<h:graphicImage
+															value="#{applicationScope['imageURL']}#{shoppingCartProduct.productSkuRecord.defaultImageRecord.thumbnailImageURL}"
 															styleClass="vamtac" style="width: 58px;height:51px;border:0" />
 														<p:tooltip for="imagelink" value="Click to View Enlarged Image" />
 													</p:commandLink>
@@ -112,7 +114,8 @@
 														oncomplete="PF('enlargeImageDialog').show()" action="#{retailShoppingCartBB.enlargeImageClicked}">
 														<f:setPropertyActionListener value="#{shoppingCartProduct.productSkuRecord}"
 															target="#{retailShoppingCartBB.shoppingCartOpr.shoppingCartProductRecord.productSkuRecord}" />
-														<h:graphicImage value="#{shoppingCartProduct.productSkuRecord.defaultImageRecord.thumbnailImageURL}"
+														<h:graphicImage
+															value="#{applicationScope['imageURL']}#{shoppingCartProduct.productSkuRecord.defaultImageRecord.thumbnailImageURL}"
 															styleClass="vamtac" style="width: 58px;height:51px;border:0" />
 														<p:tooltip for="imagelink" value="Click to View Enlarged Image" />
 													</p:commandLink>
@@ -163,19 +166,6 @@
 							</h:panelGroup>
 						</h:panelGroup>
 						<!-- Products info Ends -->
-						<div class="codetxt">
-							<p>Enter a coupon code and click on 'Apply Discount' to redeem deals &amp; discounts</p>
-							<h:inputText value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.voucherRecord.promoCode}"
-								id="voucherCode" maxlength="40" style="width:186px;	height:15px; margin-right:10px;">
-							</h:inputText>
-							<div class="discount">
-								<p:commandLink actionListener="#{retailShoppingCartBB.recalculateTotalPriceBasedOnAction}"
-									update="purchaseSummaryTable,newdiscountedPrice, voucherCode" process="@this" value="Apply Discount">
-									<p:tooltip for="voucherCode" value="Click to Apply Discount and recalculate transaction amount" />
-								</p:commandLink>
-							</div>
-							<br />
-						</div>
 						<div class="devider"></div>
 						<!-- Coupon Box Ends -->
 						<h:panelGroup id="purchaseSummaryTable">
@@ -232,13 +222,13 @@
 												</h:outputText></td>
 										</tr>
 									</h:panelGroup>
-									<tr>
+									<!-- <tr>
 										<td style="text-align: right;">Shipping Charges :</td>
 										<td style="text-align: left;"><span class="WebRupee"><h:outputText value="Rs." /> </span> <h:outputText
 												value="#{retailShoppingCartBB.shoppingCartOpr.retailOrderRecord.deliveryChargesRecord.deliveryCharge}">
 												<f:convertNumber minFractionDigits="0" maxFractionDigits="0" />
 											</h:outputText></td>
-									</tr>
+									</tr> -->
 									<h:panelGroup id="expressDeliveryRegion">
 										<h:panelGroup rendered="#{(retailShoppingCartBB.expressDeliveryCharge > 0)}">
 											<tr>
@@ -269,20 +259,22 @@
 							</div>
 						</h:panelGroup>
 						<div class="clear"></div>
-						<div class="devider"></div>
 						<h:panelGroup>
-							<div class="agreement">
-								<h:panelGroup rendered="#{(empty sessionScope['LOGGED_USER_KEY'])}">
+							<h:panelGroup rendered="#{(empty sessionScope['LOGGED_USER_KEY'])}">
+								<div class="devider"></div>
+								<div class="agreement">
+
 									<h:selectBooleanCheckbox value="#{retailShoppingCartBB.registerFlag}" />
-								&#160;&#160;
-								<h:outputText value="Use my details to register" styleClass="vamtal" />
-								</h:panelGroup>
-							</div>
-							<div class="clear"></div>
-							<div class="devider"></div>
+									&#160;&#160;
+									<h:outputText value="Use my details to register" styleClass="vamtal" />
+
+								</div>
+								<div class="clear"></div>
+								<div class="devider"></div>
+							</h:panelGroup>
 							<div class="paymentbtn">
 								<div class="payment">
-									<p:commandLink id="confirmOrderPanel" process="@form" value="Proceed To Quotation"
+									<p:commandButton id="confirmOrderPanel" process="@form" value="Proceed To Quotation"
 										oncomplete="PF('navigationPanelDialog').show()" />
 								</div>
 							</div>
@@ -291,7 +283,13 @@
 					</h:panelGroup>
 				</div>
 				<p:dialog id="navigationPanel" header="Terms and Conditions" widgetVar="navigationPanelDialog" showEffect="explode"
-					hideEffect="explode" modal="true" dynamic="false">
+					closable="false" hideEffect="explode" modal="true" dynamic="false">
+					<f:facet name="header">
+						<p:commandLink styleClass="closeIcon" onclick="PF('navigationPanelDialog').hide()">
+							<img src="/p/staticcontent/retail/images/portalimages/closeIcon.png"></img>
+						</p:commandLink>
+
+					</f:facet>
 					<h:panelGroup>
 						<div class="condition" style="margin: 0 auto !important;">
 							<h:selectBooleanCheckbox id="conditionsAccepted" value="#{retailShoppingCartBB.conditionAccepted}"
@@ -305,9 +303,9 @@
 						<br />
 						<div class="paymentbtn">
 							<div class="payment">
-								<p:commandLink id="confirmOrder" action="#{retailShoppingCartBB.confirmOrder}" process="shoppingCartForm"
+								<p:commandButton id="confirmOrder" action="#{retailShoppingCartBB.confirmOrder}" process="shoppingCartForm"
 									update="shoppingCartForm" value="Proceed To Quotation">
-								</p:commandLink>
+								</p:commandButton>
 							</div>
 						</div>
 					</h:panelGroup>
