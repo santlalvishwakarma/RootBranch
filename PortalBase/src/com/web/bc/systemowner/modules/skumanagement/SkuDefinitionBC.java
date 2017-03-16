@@ -1134,10 +1134,10 @@ public class SkuDefinitionBC extends BackingClass {
 			materialParseString.append("~");
 
 			if (materialLastModifiedDate != null)
-				colorParseString.append(materialLastModifiedDate);
+				materialParseString.append(materialLastModifiedDate);
 			else
-				colorParseString.append("");
-			colorParseString.append("~");
+				materialParseString.append("");
+			materialParseString.append("~");
 
 			if (recordDeleted != null && recordDeleted)
 				materialParseString.append("1");

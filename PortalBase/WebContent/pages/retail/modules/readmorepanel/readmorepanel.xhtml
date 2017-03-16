@@ -79,18 +79,46 @@
 							</h:panelGroup>
 
 						</div>
-						<br /> <br /> <br />
+						<br /> <br />
 						<h:outputText styleClass="boldClass" value="Quantity:" />
 						&#160;
 						<p:inputText style="width: 36px;" value="#{retailReadMoreBB.addToCartProductRecord.shoppingCartProduct.quantity}" />
 						<br /> <br />
+						<h:panelGroup rendered="#{not empty retailReadMoreBB.readMoreOpr.productSkuRecord.productSkuSizeMappingList}">
+							<h:outputText styleClass="boldClass" value="Size:" />
+						&#160;
+						<ui:repeat var="sizeRecord" value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.productSkuSizeMappingList}">
+								<h:outputText
+									value="#{sizeRecord.propertyValueMappingRecord.sizeRecord.name} #{sizeRecord.propertyValueMappingRecord.propertyValue}  #{sizeRecord.propertyValueMappingRecord.unitRecord.name}"></h:outputText>
+							</ui:repeat>
+							<br />
+						</h:panelGroup>
+						<h:panelGroup rendered="#{not empty retailReadMoreBB.readMoreOpr.productSkuRecord.productSkuColorMappingList}">
+							<h:outputText styleClass="boldClass" value="Color:" />
+						&#160;
+						<ui:repeat var="colorMappingRecord"
+								value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.productSkuColorMappingList}">
+								<h:outputText value="#{colorMappingRecord.colorRecord.name}" />
+							</ui:repeat>
+							<br />
+						</h:panelGroup>
+						<h:panelGroup rendered="#{not empty retailReadMoreBB.readMoreOpr.productSkuRecord.productSkuMaterialMappingList}">
+							<h:outputText styleClass="boldClass" value="Material:" />
+						&#160;
+						<ui:repeat var="materialMappingRecord"
+								value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.productSkuMaterialMappingList}">
+								<h:outputText value="#{materialMappingRecord.materialRecord.name}" />
+							</ui:repeat>
+							<br />
+						</h:panelGroup>
+						<br />
 						<div>
-							<p:commandButton value="Add To Cart" process="readMoreForm, @this" id="addToCartLink"
+							<p:commandButton value="
+								Add To Cart" process="readMoreForm, @this" id="addToCartLink"
 								action="#{retailReadMoreBB.addToCart}" update="navigationPanel">
 								<f:setPropertyActionListener value="#{retailReadMoreBB.readMoreOpr.productSkuRecord}"
 									target="#{retailReadMoreBB.addToCartProductRecord.shoppingCartProduct.productSkuRecord}" />
 							</p:commandButton>
-
 						</div>
 						<div class="productcontent">
 							<h:outputText value="#{retailReadMoreBB.readMoreOpr.productSkuRecord.description}" />
@@ -141,7 +169,7 @@
 						oncomplete="PF('navigationPanel').hide()"></p:commandButton>
 				</div>
 				<div class="checkout">
-					<p:commandButton process="@this" action="pretty:shoppingCart" value="Checkout Now" />
+					<p:commandButton process="@this" action="pretty:shoppingCart" value="Proceed To Quotation" />
 				</div>
 				<!-- Action Bar Ends -->
 			</p:outputPanel>

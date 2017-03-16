@@ -730,18 +730,18 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 				propertyValueMappingRecord.setActive(true);
 
 				List<Object> list = new SkuDefinitionBF().getSuggestedSizeMappingRecord(propertyValueMappingRecord);
-				myLog.debug(" getSuggestedSizeRecord :: list size" + list.size());
+				myLog.debug(" getSuggestedUnitRecordForName :: list size" + list.size());
 
 				@SuppressWarnings("unchecked")
-				List<Object> allSizeList = (ArrayList<Object>) FacesContext.getCurrentInstance().getViewRoot()
+				List<Object> allUnitList = (ArrayList<Object>) FacesContext.getCurrentInstance().getViewRoot()
 						.getViewMap().get("unitAutoComplete");
 
-				if (allSizeList == null) {
-					allSizeList = new ArrayList<Object>();
+				if (allUnitList == null) {
+					allUnitList = new ArrayList<Object>();
 				}
 
-				allSizeList.addAll(list);
-				FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("unitAutoComplete", allSizeList);
+				allUnitList.addAll(list);
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("unitAutoComplete", allUnitList);
 
 				return list;
 			} catch (FrameworkException e) {
