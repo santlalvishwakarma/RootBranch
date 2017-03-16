@@ -11,15 +11,7 @@
 					<td><p:inputText value="#{searchOrdersBB.searchRetailOrderOpr.retailOrderRecord.userRecord.userLogin}" /></td>
 				</tr>
 				<tr>
-					<td><label class="labelClass boldClass">Payment Status</label></td>
-					<td><p:selectOneMenu id="searchPaymentStatusList"
-							value="#{searchOrdersBB.searchRetailOrderOpr.retailOrderRecord.paymentStatus.parameterID}">
-							<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
-							<f:selectItems value="#{orderBB.allOptions.allOptionsValues['paymentStatusList']}" var="paymentStatus"
-								itemLabel="#{paymentStatus.parameterStringValue}" itemValue="#{paymentStatus.parameterID}" />
-						</p:selectOneMenu></td>
-
-					<td><label class="labelClass boldClass">Order Status</label></td>
+					<td><label class="labelClass boldClass">Quotation Status</label></td>
 					<td><p:selectOneMenu id="searchOrderStatusList"
 							value="#{searchOrdersBB.searchRetailOrderOpr.retailOrderRecord.orderStatus.parameterID}">
 							<f:selectItem itemLabel="#{commonLabel.select_label}" itemValue="" />
@@ -84,14 +76,9 @@
 					<f:facet name="header">Total Quantity</f:facet>
 					<h:outputText value="#{orderRecord.totalQuantity}" styleClass="labelClass" />
 				</p:column>
-				<p:column sortBy="#{orderRecord.paymentStatus.parameterStringValue}"
-					filterBy="#{orderRecord.paymentStatus.parameterStringValue}" filterMatchMode="contains">
-					<f:facet name="header">Payment Status</f:facet>
-					<h:outputText value="#{orderRecord.paymentStatus.parameterStringValue}" styleClass="labelClass" />
-				</p:column>
 				<p:column sortBy="#{orderRecord.orderStatus.parameterStringValue}"
 					filterBy="#{orderRecord.orderStatus.parameterStringValue}" filterMatchMode="contains">
-					<f:facet name="header">Order Status</f:facet>
+					<f:facet name="header">Quotation Status</f:facet>
 					<h:outputText value="#{orderRecord.orderStatus.parameterStringValue}" styleClass="labelClass" />
 				</p:column>
 			</p:dataTable>
