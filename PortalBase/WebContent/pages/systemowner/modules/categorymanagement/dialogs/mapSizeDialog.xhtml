@@ -1,0 +1,13 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="mapSizeDialogForm">
+		<p:dialog id="mapSizeToCategory" header="Map Sizes" widgetVar="mapSizeToCategory" showEffect="explode"
+			hideEffect="explode" dynamic="true" modal="true" height="#{addEditCategoryBB.modalHeight}">
+			<p:ajax event="close" listener="#{addEditCategoryBB.closeModalWindow}" />
+			<p:panel id="mapSizeToCategoryDialogPanel">
+				
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</ui:composition>

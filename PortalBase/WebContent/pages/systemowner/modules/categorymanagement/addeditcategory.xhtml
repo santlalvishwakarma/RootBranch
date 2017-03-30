@@ -48,27 +48,35 @@
 
 			<table style="width: 40%">
 				<tr>
-					<td><p:commandButton id="mapCategoryToCategopryLevelButton" process="@this" value="Map Level"
+					<td><p:commandLink id="mapCategoryToCategopryLevelButton" process="@this" value="Map Level"
 							actionListener="#{addEditCategoryBB.getMappedCategoryLevel}"
 							rendered="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.id ne null}"
 							update=":categoryTabView:categoryLevelMappingForm:categoryLevelMappingPanelGroup"
 							oncomplete="PF('categoryLevelMappingDialog').show();" /> <p:tooltip for="mapCategoryToCategopryLevelButton"
 							value="Map Category Level" /></td>
-					<td><p:commandButton id="mapHierarchyToCategoryButton" process="@this" value="Map Hierarchy"
+					<td><p:commandLink id="mapHierarchyToCategoryButton" process="@this" value="Map Hierarchy"
 							actionListener="#{addEditCategoryBB.openHierarchyCategoryMappingDialogBox}"
 							rendered="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.id ne null}"
 							update=":categoryTabView:categoryHierarchyMappingForm" oncomplete="PF('categoryHierarchyMappingDialog').show();" />
 						<p:tooltip for="mapHierarchyToCategoryButton" value="Map Hierarchy Category" /></td>
-					<td><p:commandButton id="btnSearch" update="addEditCategoryField" process="@this, addEditCategoryField"
-							actionListener="#{addEditCategoryBB.executeSave}" value="Save" /> <p:tooltip for="btnSearch"
-							value="Click to Save" /> <p:hotkey bind="ctrl+shift+s" /></td>
-					<td><p:commandButton id="btnClear" action="#{addEditCategoryBB.clearPage}" value="Clear" process="@this"
-							update="addEditCategoryField" /> <p:tooltip for="btnClear" value="Click to Clear" /></td>
+					<td><p:commandLink id="mapSize" value="Map Size" actionListener="#{addEditCategoryBB.openMapSizeDialoge}"/></td>
 				</tr>
 			</table>
+			<br />
+			<div align="center">
+				<p:commandButton id="btnSave" update="addEditCategoryField" process="@this, addEditCategoryField"
+					actionListener="#{addEditCategoryBB.executeSave}" value="Save" />
+				<p:tooltip for="btnSearch" value="Click to Save" />
+				<p:hotkey bind="ctrl+shift+s" />
+				&#160;
+				<p:commandButton id="btnClear" action="#{addEditCategoryBB.clearPage}" value="Clear" process="@this"
+					update="addEditCategoryField" />
+				<p:tooltip for="btnClear" value="Click to Clear" />
+			</div>
 		</h:panelGroup>
 	</h:form>
 	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/categorylevelmapping.xhtml" />
 	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/categoryhierarchymapping.xhtml" />
+	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/mappedHierarchyToCategory.xhtml" />
 	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/mappedHierarchyToCategory.xhtml" />
 </ui:composition>
