@@ -54,6 +54,7 @@ BEGIN
 	DECLARE v_product_is_active TINYINT(1);
 	
 	DECLARE v_sku_id INT(10);
+	DECLARE v_product_id INT(10);
 	
     SET v_modified_date = DATE_FORMAT(p_modified_date, '%Y-%m-%d %H:%i:%s');                      	    
 	
@@ -117,7 +118,15 @@ BEGIN
 			                    modified_by = p_user_login,
 			                    modified_date = NOW()
 			            WHERE   product_sku_id = p_product_sku_id;
-					
+			            
+			            UPDATE  product_header
+			            SET     product_code = p_sku_code,
+			            		product_name = p_sku_name, 	
+			            		product_description = p_sku_description,
+			            		is_active = p_is_active,
+								modified_by = p_user_login,
+			                    modified_date = NOW()
+			            WHERE   product_id = p_product_id;
 					
 					END IF;
 		         
@@ -157,12 +166,18 @@ BEGIN
 		        
 		         IF v_sku_name_counter = 0 THEN 
 		         
+		         	INSERT INTO product_header
+		         	(product_code, product_name, product_description, is_active, created_by, created_date, modified_by, modified_date)
+		         	VALUES(p_sku_code, p_sku_name, p_sku_description, p_is_active, p_user_login, NOW(), p_user_login, NOW());
+		         	
+		         	SELECT LAST_INSERT_ID() INTO v_product_id;
+		         
 		         	INSERT INTO product_sku_header
 		            (  product_id, sku_code, sku_name, sku_description, sku_property_text, seo_title, seo_keyword, seo_description, 
 		            	base_price, discount_amount, discount_percent, final_base_price, default_sku, is_active, created_by, created_date, modified_by, modified_date
 		            )  
 		            VALUES
-		            (   p_product_id, p_sku_code, p_sku_name, p_sku_description, NULL, p_sku_seo_title, p_sku_seo_keyword, p_sku_seo_description, p_base_price, p_discount_amount, p_discount_percent,
+		            (   v_product_id, p_sku_code, p_sku_name, p_sku_description, NULL, p_sku_seo_title, p_sku_seo_keyword, p_sku_seo_description, p_base_price, p_discount_amount, p_discount_percent,
 		            	p_final_base_price, p_default_sku, p_is_active, p_user_login, NOW(), p_user_login, NOW()
 		            );
 		            

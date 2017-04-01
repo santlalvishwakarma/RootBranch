@@ -714,14 +714,6 @@ public class AddEditCategoryBB extends BackingBean {
 				addEditCategoryOpr.getCategoryRecord().setCategorySizeMappingRecord(
 						addEditCategoryOprRet.getCategoryRecord().getCategorySizeMappingRecord());
 
-				// addEditCategoryOpr
-				// .getCategoryRecord()
-				// .getCategorySizeMappingRecord()
-				// .getAuditAttributes()
-				// .setLastModifiedDate(
-				// addEditCategoryOprRet.getCategoryRecord().getCategorySizeMappingRecord()
-				// .getAuditAttributes().getLastModifiedDate());
-
 				PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 				setSuccessMsg(propertiesReader.getValueOfKey("category_size_save_success"));
 

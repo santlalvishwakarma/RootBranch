@@ -33,44 +33,20 @@
 				<tr>
 					<td><label class="labelClass boldClass">Make Default</label></td>
 					<td><p:selectBooleanCheckbox value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.defaultSku}" /></td>
-					<td><label class="labelClass boldClass">Base Price</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
-					<td><p:inputText id="basePrice" value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.basePrice}"
-							maxlength="60" /></td>
-				</tr>
-				<tr>
-					<td><label class="labelClass boldClass">Discount Amount</label><label class="mandGreen">#{commonLabel.one_cap}</label></td>
-					<td><p:inputText id="discountAmount" value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.discountAmount}"
-							maxlength="60" /></td>
-					<td><label class="labelClass boldClass">Discount Percent</label><label class="mandGreen">#{commonLabel.one_cap}</label></td>
-					<td><p:inputText id="discountPercent"
-							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.discountPercent}" maxlength="60" /></td>
-				</tr>
-				<tr>
-					<td><label class="labelClass boldClass">Final Price</label></td>
-					<td><p:inputText id="finalBasePrice" disabled="true"
-							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.finalBasePrice}" maxlength="60" /></td>
 					<td><label class="labelClass boldClass">Seo Title</label></td>
 					<td><p:inputText id="seoTitle" value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.skuSEOTitle}"
 							maxlength="60" /></td>
 				</tr>
 				<tr>
-					<td><label class="labelClass boldClass">Product</label> <label class="mandRed">#{commonLabel.mand_star}</label>
-					</td>
-					<td><p:autoComplete id="productCodeAutoComplete"
-							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.productRecord}"
-							converter="#{skuDefinitionAddEditBB.baseDVOConverter}"
-							completeMethod="#{skuDefinitionAddEditBB.getSuggestedProductsList}" minQueryLength="2"
-							itemLabel="#{productRecord.name}" var="productRecord" itemValue="#{productRecord}" effect="fade" multiple="false"
-							maxResults="20">
-							<p:column headerText="Code">#{productRecord.code}</p:column>
-							<p:column headerText="Name">#{productRecord.name}</p:column>
-						</p:autoComplete></td>
+					<td><label class="labelClass boldClass">Seo Description</label></td>
+					<td><p:inputText id="seoDescription"
+							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.skuSEODescription}" maxlength="60" /></td>
 					<td><label class="labelClass boldClass">Seo Keyword</label></td>
 					<td><p:inputText id="seoKeyword" value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.skuSEOKeyword}"
 							maxlength="60" /></td>
 				</tr>
 				<tr>
-					<td><p:commandLink id="mapImageLink" process="@this" style="text-decoration: none;"
+					<td><p:commandLink id="mapImageLink" process="@this"
 							actionListener="#{skuDefinitionAddEditBB.openImageMappingDialog}" styleClass="linkClass"
 							update=":skuImageDialogPanelGroup" oncomplete="PF('skuImageDialog').show()">
 							<table style="width: 100%;" class="linkButton">
@@ -82,10 +58,8 @@
 							</table>
 						</p:commandLink></td>
 					<td><p:commandLink value="Map Properties" process="skuAddEditPanel, @this"
-							actionListener="#{skuDefinitionAddEditBB.openMapPropertyDialog}" update="skuPropertyMappingDialogPanel" oncomplete="PF('skuPropertyMappingDialog').show();" /></td>
-					<td><label class="labelClass boldClass">Seo Description</label></td>
-					<td><p:inputText id="seoDescription"
-							value="#{skuDefinitionAddEditBB.skuOpr.productSkuRecord.skuSEODescription}" maxlength="60" /></td>
+							actionListener="#{skuDefinitionAddEditBB.openMapPropertyDialog}" update="skuPropertyMappingDialogPanel"
+							oncomplete="PF('skuPropertyMappingDialog').show();" /></td>
 				</tr>
 			</table>
 			<br />

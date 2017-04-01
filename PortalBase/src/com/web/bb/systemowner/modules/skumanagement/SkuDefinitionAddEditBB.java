@@ -323,10 +323,10 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 		ProductSkuDVO productSkuRecord = skuOpr.getProductSkuRecord();
 		String skuCode = productSkuRecord.getCode();
 		String skuName = productSkuRecord.getName();
-		Float basePrice = productSkuRecord.getBasePrice();
-		Float discountAmount = productSkuRecord.getDiscountAmount();
-		Float discountPercent = productSkuRecord.getDiscountPercent();
-		Long productId = productSkuRecord.getProductRecord().getId();
+		// Float basePrice = productSkuRecord.getBasePrice();
+		// Float discountAmount = productSkuRecord.getDiscountAmount();
+		// Float discountPercent = productSkuRecord.getDiscountPercent();
+		// Long productId = productSkuRecord.getProductRecord().getId();
 
 		if (!validator.validateNull(skuCode)) {
 			addToErrorList(propertiesReader.getValueOfKey("sku_code_null"));
@@ -339,20 +339,22 @@ public class SkuDefinitionAddEditBB extends BackingBean {
 			addToErrorList(propertiesReader.getValueOfKey("sku_name_null"));
 		}
 
-		if (basePrice == null || basePrice <= 0) {
-			addToErrorList(propertiesReader.getValueOfKey("base_price_null"));
-		}
-
-		if ((discountAmount != null && discountAmount > 0) || (discountPercent != null && discountPercent > 0)) {
-
-			if ((discountAmount != null && discountPercent != null) && (discountAmount > 0 && discountPercent > 0)) {
-				addToErrorList(propertiesReader.getValueOfKey("discount_amount_percent_both_entered"));
-			}
-		}
-
-		if (productId == null) {
-			addToErrorList(propertiesReader.getValueOfKey("product_id_null"));
-		}
+		// if (basePrice == null || basePrice <= 0) {
+		// addToErrorList(propertiesReader.getValueOfKey("base_price_null"));
+		// }
+		//
+		// if ((discountAmount != null && discountAmount > 0) ||
+		// (discountPercent != null && discountPercent > 0)) {
+		//
+		// if ((discountAmount != null && discountPercent != null) &&
+		// (discountAmount > 0 && discountPercent > 0)) {
+		// addToErrorList(propertiesReader.getValueOfKey("discount_amount_percent_both_entered"));
+		// }
+		// }
+		//
+		// if (productId == null) {
+		// addToErrorList(propertiesReader.getValueOfKey("product_id_null"));
+		// }
 
 		if (getErrorList().size() > 0) {
 			validateFlag = false;
