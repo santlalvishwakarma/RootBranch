@@ -59,14 +59,17 @@
 							rendered="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.id ne null}"
 							update=":categoryTabView:categoryHierarchyMappingForm" oncomplete="PF('categoryHierarchyMappingDialog').show();" />
 						<p:tooltip for="mapHierarchyToCategoryButton" value="Map Hierarchy Category" /></td>
-					<td><p:commandLink id="mapSize" value="Map Size" actionListener="#{addEditCategoryBB.openMapSizeDialoge}"/></td>
+					<td><p:commandLink id="mapSize" value="Map Size" actionListener="#{addEditCategoryBB.openMapSizeDialoge}"
+							rendered="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.id ne null}" process="categoryAddEditForm, @this"
+							update=":categoryTabView:mapSizeDialogForm:mapSizeToCategoryDialogPanel"
+							oncomplete="PF('mapSizeToCategory').show();" /></td>
 				</tr>
 			</table>
 			<br />
 			<div align="center">
 				<p:commandButton id="btnSave" update="addEditCategoryField" process="@this, addEditCategoryField"
 					actionListener="#{addEditCategoryBB.executeSave}" value="Save" />
-				<p:tooltip for="btnSearch" value="Click to Save" />
+				<p:tooltip for="btnSave" value="Click to Save" />
 				<p:hotkey bind="ctrl+shift+s" />
 				&#160;
 				<p:commandButton id="btnClear" action="#{addEditCategoryBB.clearPage}" value="Clear" process="@this"
@@ -78,5 +81,5 @@
 	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/categorylevelmapping.xhtml" />
 	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/categoryhierarchymapping.xhtml" />
 	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/mappedHierarchyToCategory.xhtml" />
-	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/mappedHierarchyToCategory.xhtml" />
+	<ui:include src="/pages/systemowner/modules/categorymanagement/dialogs/mapSizeDialog.xhtml" />
 </ui:composition>

@@ -6,7 +6,40 @@
 			hideEffect="explode" dynamic="true" modal="true" height="#{addEditCategoryBB.modalHeight}">
 			<p:ajax event="close" listener="#{addEditCategoryBB.closeModalWindow}" />
 			<p:panel id="mapSizeToCategoryDialogPanel">
-				
+				<table>
+					<tr>
+						<td><label class="labelClass boldClass">Size Value 1</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+						<td><p:inputText
+								value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.categorySizeMappingRecord.sizeValue1}" /></td>
+						<td><label class="labelClass boldClass">Size Value 2</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+						<td><p:inputText
+								value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.categorySizeMappingRecord.sizeValue2}" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Unit</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+						<td><p:autoComplete id="unitSuggestionBox" size="20"
+								value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.categorySizeMappingRecord.unitRecord}"
+								completeMethod="#{addEditCategoryBB.getSuggestedUnitRecord}" var="unitRecord" itemLabel="#{unitRecord.name}"
+								itemValue="#{unitRecord}" converter="#{propertyValueMasterBB.baseDVOConverter}" minQueryLength="2"
+								global="false" forceSelection="true">
+								<p:column>#{unitRecord.name}</p:column>
+								<p:column>#{unitRecord.code}</p:column>
+							</p:autoComplete> <p:watermark for="unitSuggestionBox" value="Enter first 2 chars" /></td>
+						<td><label class="labelClass boldClass">Is Active</label></td>
+						<td><p:selectBooleanCheckbox
+								value="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.categorySizeMappingRecord.active}" /></td>
+					</tr>
+				</table>
+				<br />
+				<div align="center">
+					<p:commandButton id="saveSizeButton" process="mapSizeToCategoryDialogPanel, @this" value="Save"
+						actionListener="#{addEditCategoryBB.executeSaveSize}" />
+					&#160;&#160;
+					<p:commandButton id="closeSizePopup" process="@this" value="Close"
+						actionListener="#{addEditCategoryBB.closeModalWindow}" oncomplete="PF('mapSizeToCategory').hide();" />
+				</div>
+				<br/>
+				<p:messages autoUpdate="true" showDetail="false" showSummary="true" />
 			</p:panel>
 		</p:dialog>
 	</h:form>

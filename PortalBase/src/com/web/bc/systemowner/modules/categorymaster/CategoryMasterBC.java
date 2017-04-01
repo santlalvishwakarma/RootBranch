@@ -7,6 +7,7 @@ import java.util.List;
 import com.web.common.dvo.opr.systemowner.CategoryOpr;
 import com.web.common.dvo.systemowner.CategoryDVO;
 import com.web.common.dvo.systemowner.CategoryLevelDVO;
+import com.web.common.dvo.systemowner.CategorySizeMappingDVO;
 import com.web.common.dvo.systemowner.HierarchyCategoryMappingDVO;
 import com.web.common.parents.BackingClass;
 import com.web.foundation.dao.DAOResult;
@@ -923,6 +924,153 @@ public class CategoryMasterBC extends BackingClass {
 					.add(hierarchyCategoryMappingRecord);
 		}
 
+		return addEditCategoryOpr;
+	}
+
+	public CategoryOpr executeSaveSize(CategoryOpr addEditCategoryOpr) throws FrameworkException, BusinessException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In PropertyValueMasterBC executeSave ");
+
+		CategorySizeMappingDVO categorySizeMappingRecord = addEditCategoryOpr.getCategoryRecord()
+				.getCategorySizeMappingRecord();
+
+		Long categoryId = addEditCategoryOpr.getCategoryRecord().getId();
+		Long categorySizeMappingId = categorySizeMappingRecord.getId();
+		Float sizeValue1 = categorySizeMappingRecord.getSizeValue1();
+		Float sizeValue2 = categorySizeMappingRecord.getSizeValue2();
+		Long unitId = categorySizeMappingRecord.getUnitRecord().getId();
+
+		Boolean active = categorySizeMappingRecord.getActive();
+		String userLogin = addEditCategoryOpr.getCategoryRecord().getUserLogin();
+		String lastModifiedDate = null;
+		if (categorySizeMappingRecord.getAuditAttributes().getLastModifiedDate() != null)
+			lastModifiedDate = categorySizeMappingRecord.getAuditAttributes().getLastModifiedDate().toString();
+
+		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
+		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT, CategoryMasterSqlTemplate.SAVE_CATEGORY_SIZE_MAPPING);
+
+		Object strSqlParams[][] = new Object[8][3];
+
+		strSqlParams[0][0] = "1";
+		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
+		strSqlParams[0][2] = categoryId;
+		myLog.debug(" parameter 1 categoryId:: " + categoryId);
+
+		strSqlParams[1][0] = "2";
+		strSqlParams[1][1] = IDAOConstant.LONG_DATATYPE;
+		strSqlParams[1][2] = categorySizeMappingId;
+		myLog.debug(" parameter 2 categorySizeMappingId:: " + categorySizeMappingId);
+
+		strSqlParams[2][0] = "3";
+		strSqlParams[2][1] = IDAOConstant.FLOAT_DATATYPE;
+		strSqlParams[2][2] = sizeValue1;
+		myLog.debug(" parameter 3 sizeValue1:: " + sizeValue1);
+
+		strSqlParams[3][0] = "4";
+		strSqlParams[3][1] = IDAOConstant.FLOAT_DATATYPE;
+		strSqlParams[3][2] = sizeValue2;
+		myLog.debug(" parameter 4 sizeValue2:: " + sizeValue2);
+
+		strSqlParams[4][0] = "5";
+		strSqlParams[4][1] = IDAOConstant.BOOLEAN_DATATYPE;
+		strSqlParams[4][2] = active;
+		myLog.debug(" parameter 5 active:: " + active);
+
+		strSqlParams[5][0] = "6";
+		strSqlParams[5][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[5][2] = userLogin;
+		myLog.debug(" parameter 6 userLogin:: " + userLogin);
+
+		strSqlParams[6][0] = "7";
+		strSqlParams[6][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[6][2] = lastModifiedDate;
+		myLog.debug(" parameter 7 lastModifiedDate:: " + lastModifiedDate);
+
+		strSqlParams[7][0] = "8";
+		strSqlParams[7][1] = IDAOConstant.LONG_DATATYPE;
+		strSqlParams[7][2] = unitId;
+		myLog.debug(" parameter 7 unitId:: " + unitId);
+
+		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
+		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
+		myLog.debug("PropertyValueMasterBC executeSave:: Resultset got ::" + responseMap);
+
+		if (responseMap.size() > 0) {
+			for (int i = 0; i < responseMap.size(); i++) {
+
+				HashMap<String, Object> resultSetMap = responseMap.get(i);
+				handleAndThrowException(resultSetMap);
+
+				if (resultSetMap.get("category_size_mapping_id") != null)
+					addEditCategoryOpr.getCategoryRecord().getCategorySizeMappingRecord()
+							.setId(Long.valueOf(resultSetMap.get("category_size_mapping_id").toString()));
+
+				setAuditAttributes(addEditCategoryOpr.getCategoryRecord(), resultSetMap);
+
+			}
+		}
+		return getMappedCategorySizes(addEditCategoryOpr);
+	}
+
+	public CategoryOpr getMappedCategorySizes(CategoryOpr addEditCategoryOpr) throws FrameworkException,
+			BusinessException {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In CategoryMasterBC :: getMappedCategorySizes starts ");
+
+		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
+		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.SELECT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT, CategoryMasterSqlTemplate.GET_SIZE_MAPPING_DETAILS);
+
+		Object strSqlParams[][] = new Object[1][3];
+
+		strSqlParams[0][0] = "1";
+		strSqlParams[0][1] = IDAOConstant.LONG_DATATYPE;
+		strSqlParams[0][2] = addEditCategoryOpr.getCategoryRecord().getId();
+		myLog.debug(" parameter 1 categoryId:: " + addEditCategoryOpr.getCategoryRecord().getId());
+
+		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
+		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
+		myLog.debug(" CategoryMasterBC getMappedCategorySizes :: Resultset got ::" + responseMap);
+
+		if (responseMap.size() > 0) {
+			for (int i = 0; i < responseMap.size(); i++) {
+
+				HashMap<String, Object> resultSetMap = responseMap.get(i);
+
+				CategorySizeMappingDVO categorySizeMappingRecord = new CategorySizeMappingDVO();
+
+				if (resultSetMap.get("category_size_mapping_id") != null)
+					categorySizeMappingRecord.setId(Long.valueOf(resultSetMap.get("category_size_mapping_id")
+							.toString()));
+
+				if (resultSetMap.get("size_value_1") != null)
+					categorySizeMappingRecord.setSizeValue1(Float.valueOf(resultSetMap.get("size_value_1").toString()));
+
+				if (resultSetMap.get("size_value_2") != null)
+					categorySizeMappingRecord.setSizeValue2(Float.valueOf(resultSetMap.get("size_value_2").toString()));
+
+				if (resultSetMap.get("unit_id") != null)
+					categorySizeMappingRecord.getUnitRecord().setId(
+							Long.valueOf(resultSetMap.get("unit_id").toString()));
+
+				categorySizeMappingRecord.getUnitRecord().setCode((String) resultSetMap.get("unit_code"));
+				categorySizeMappingRecord.getUnitRecord().setName((String) resultSetMap.get("unit_name"));
+
+				if (resultSetMap.get("is_active") != null) {
+					categorySizeMappingRecord.setActive((Boolean) resultSetMap.get("is_active"));
+				} else {
+					categorySizeMappingRecord.setActive(false);
+				}
+
+				setAuditAttributes(categorySizeMappingRecord, resultSetMap);
+
+				addEditCategoryOpr.getCategoryRecord().setCategorySizeMappingRecord(categorySizeMappingRecord);
+
+			}
+		}
 		return addEditCategoryOpr;
 	}
 

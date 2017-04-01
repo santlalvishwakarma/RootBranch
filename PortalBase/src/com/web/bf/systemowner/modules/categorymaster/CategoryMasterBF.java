@@ -6,9 +6,11 @@ import java.util.List;
 import com.web.bc.systemowner.modules.categorymaster.CategoryMasterBC;
 import com.web.common.dvo.opr.systemowner.CategoryOpr;
 import com.web.common.dvo.systemowner.CategoryDVO;
+import com.web.common.dvo.systemowner.UnitDVO;
 import com.web.common.parents.BusinessFacade;
 import com.web.foundation.exception.BusinessException;
 import com.web.foundation.exception.FrameworkException;
+import com.web.sf.modules.core.CoreSF;
 
 public class CategoryMasterBF extends BusinessFacade {
 
@@ -60,6 +62,19 @@ public class CategoryMasterBF extends BusinessFacade {
 	public CategoryOpr getMappedHierarchyCategory(CategoryOpr addEditCategoryOpr) throws FrameworkException,
 			BusinessException {
 		return new CategoryMasterBC().getMappedHierarchyCategory(addEditCategoryOpr);
+	}
+
+	public List<Object> getSuggestedUnitRecord(UnitDVO unitDVO) throws FrameworkException, BusinessException {
+		return new CoreSF().getSuggestedUnitRecord(unitDVO);
+	}
+
+	public CategoryOpr executeSaveSize(CategoryOpr addEditCategoryOpr) throws FrameworkException, BusinessException {
+		return new CategoryMasterBC().executeSaveSize(addEditCategoryOpr);
+	}
+
+	public CategoryOpr getMappedCategorySizes(CategoryOpr addEditCategoryOpr) throws FrameworkException,
+			BusinessException {
+		return new CategoryMasterBC().getMappedCategorySizes(addEditCategoryOpr);
 	}
 
 }

@@ -17,6 +17,7 @@ public class CategoryDVO extends BaseDVO {
 	private Boolean publishToHome;
 	private Integer publishPosition;
 	private CategoryDVO publishCategoryRecord;
+	private CategorySizeMappingDVO categorySizeMappingRecord;
 
 	private List<CategoryLevelDVO> categoryLevels;
 	private List<HierarchyCategoryMappingDVO> hierarchyCategoryMappingList;
@@ -125,6 +126,17 @@ public class CategoryDVO extends BaseDVO {
 	public void setHierarchyCategoryMappingList(List<HierarchyCategoryMappingDVO> hierarchyCategoryMappingList) {
 		this.hierarchyCategoryMappingList = hierarchyCategoryMappingList;
 
+	}
+
+	public CategorySizeMappingDVO getCategorySizeMappingRecord() {
+		if (categorySizeMappingRecord == null) {
+			categorySizeMappingRecord = new CategorySizeMappingDVO();
+		}
+		return categorySizeMappingRecord;
+	}
+
+	public void setCategorySizeMappingRecord(CategorySizeMappingDVO categorySizeMappingRecord) {
+		this.categorySizeMappingRecord = categorySizeMappingRecord;
 	}
 
 }

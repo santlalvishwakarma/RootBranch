@@ -18,6 +18,7 @@ import com.web.common.dvo.opr.systemowner.CategoryOpr;
 import com.web.common.dvo.systemowner.CategoryDVO;
 import com.web.common.dvo.systemowner.CategoryLevelDVO;
 import com.web.common.dvo.systemowner.HierarchyCategoryMappingDVO;
+import com.web.common.dvo.systemowner.UnitDVO;
 import com.web.common.dvo.util.File;
 import com.web.common.dvo.util.OptionsDVO;
 import com.web.common.jsf.converters.BaseDVOConverter;
@@ -638,5 +639,118 @@ public class AddEditCategoryBB extends BackingBean {
 		}
 
 		return validateFlag;
+	}
+
+	public List<Object> getSuggestedUnitRecord(String query) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		if (query != null) {
+			try {
+				UnitDVO unitDVO = new UnitDVO();
+				unitDVO.setCode(query);
+				unitDVO.setActive(true);
+				List<Object> list = new CategoryMasterBF().getSuggestedUnitRecord(unitDVO);
+				myLog.debug(" getSuggestedUnitRecord :: list size" + list.size());
+				FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("unitSuggestionBox", list);
+				return list;
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+		return null;
+	}
+
+	public boolean validateCategorySizeMapping() {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("Inside validateCategorySizeMapping: ");
+
+		boolean validateFlag = true;
+
+		FoundationValidator validator = new FoundationValidator();
+		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+
+		getErrorList().clear();
+		setSuccessMsg("");
+
+		Float sizeValue1 = addEditCategoryOpr.getCategoryRecord().getCategorySizeMappingRecord().getSizeValue1();
+		Float sizeValue2 = addEditCategoryOpr.getCategoryRecord().getCategorySizeMappingRecord().getSizeValue2();
+		Long unitId = addEditCategoryOpr.getCategoryRecord().getCategorySizeMappingRecord().getUnitRecord().getId();
+
+		if (!(validator.validateLongObjectNull(unitId))) {
+			addToErrorList(propertiesReader.getValueOfKey("unit_null"));
+		}
+
+		if (!(validator.validateFloatObjectNull(sizeValue1))) {
+			addToErrorList(propertiesReader.getValueOfKey("size_value_1_null"));
+		}
+
+		if (!(validator.validateFloatObjectNull(sizeValue2))) {
+			addToErrorList(propertiesReader.getValueOfKey("size_value_2_null"));
+		}
+
+		if (getErrorList().size() > 0) {
+			validateFlag = false;
+		} else {
+			validateFlag = true;
+		}
+
+		return validateFlag;
+	}
+
+	public void executeSaveSize(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In AddEditCategoryBB :: executeSave starts ");
+
+		if (validateCategorySizeMapping()) {
+
+			try {
+				String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
+				addEditCategoryOpr.getCategoryRecord().setUserLogin(userLogin);
+
+				CategoryOpr addEditCategoryOprRet = new CategoryMasterBF().executeSaveSize(addEditCategoryOpr);
+
+				addEditCategoryOpr.getCategoryRecord().setCategorySizeMappingRecord(
+						addEditCategoryOprRet.getCategoryRecord().getCategorySizeMappingRecord());
+
+				// addEditCategoryOpr
+				// .getCategoryRecord()
+				// .getCategorySizeMappingRecord()
+				// .getAuditAttributes()
+				// .setLastModifiedDate(
+				// addEditCategoryOprRet.getCategoryRecord().getCategorySizeMappingRecord()
+				// .getAuditAttributes().getLastModifiedDate());
+
+				PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+				setSuccessMsg(propertiesReader.getValueOfKey("category_size_save_success"));
+
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+	}
+
+	public void openMapSizeDialoge(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug(" inside openHierarchyCategoryMappingDialogBox::: ");
+
+		addEditCategoryOpr.getCategoryRecord().setCategorySizeMappingRecord(null);
+
+		try {
+			addEditCategoryOpr = new CategoryMasterBF().getMappedCategorySizes(addEditCategoryOpr);
+
+			List<Object> list = new ArrayList<Object>();
+			list.add(addEditCategoryOpr.getCategoryRecord().getCategorySizeMappingRecord().getUnitRecord());
+			myLog.debug(" openMapSizeDialoge :: list size" + list.size());
+			FacesContext.getCurrentInstance().getViewRoot().getViewMap().put("unitSuggestionBox", list);
+
+		} catch (FrameworkException e) {
+			handleException(e, propertiesLocation);
+		} catch (BusinessException e) {
+			handleException(e, propertiesLocation);
+		}
 	}
 }

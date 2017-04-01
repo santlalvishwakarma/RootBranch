@@ -72,4 +72,9 @@ public interface CategoryMasterSqlTemplate extends SqlTemplate {
 
 	public static final String MAP_HIERARCHY_TO_CATEGORY_LEVEL = " CALL sp_save_edit_hierarchy_to_category_level(?, ?, ?, ?, ?, ?, ?, ?, ?, @p_error_code, @p_error_message); ";
 
+	static final String SAVE_CATEGORY_SIZE_MAPPING = "CALL sp_save_category_size_mapping(?,?,?,?,?,?,?,?, @p_error_code, @p_error_message)";
+
+	static final String GET_SIZE_MAPPING_DETAILS = "SELECT category_size_mapping_id, category_id, size_value_1, size_value_2, unit_id, fn_core_get_unit_code_based_on_id(unit_id) 'unit_code', "
+			+ " fn_core_get_unit_name_based_on_id(unit_id) 'unit_name',  is_active, modified_by, modified_date FROM category_size_mapping WHERE category_size_mapping_id = ? ;";
+
 }
