@@ -2,8 +2,10 @@ package com.web.bb.retail.module.loginpanel;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -285,7 +287,31 @@ public class LoginPanelBB extends BackingBean {
 						putObjectInCache(CommonConstant.LOGGED_USER_DATA, loginPanelOpr.getUserDetails());
 						FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 								.put(CommonConstant.LOGGED_USER_NAME, loginPanelOpr.getUserDetails().getFirstName());
-						RequestContext.getCurrentInstance().execute("refreshLoginDetails();");
+						// RequestContext.getCurrentInstance().execute("refreshLoginDetails();");
+
+						List<String> updateList = new ArrayList<String>();
+
+						if (getUIComponent("shoppingCartForm") != null) {
+							updateList.add("shoppingCartForm");
+						}
+
+						if (getUIComponent("browseProductsForm") != null) {
+							updateList.add("browseProductsForm");
+						}
+
+						if (getUIComponent("readMoreForm") != null) {
+							updateList.add("readMoreForm");
+						}
+
+						if (getUIComponent("homeForm") != null) {
+							updateList.add("homeForm");
+						}
+
+						if (getUIComponent("paymentForm") != null) {
+							updateList.add("paymentForm");
+						}
+
+						RequestContext.getCurrentInstance().update(updateList);
 					}
 				} else {
 					String errorMessage = propertiesReader.getValueOfKey("system_error_login_type_null");
@@ -303,6 +329,12 @@ public class LoginPanelBB extends BackingBean {
 			}
 
 		}
+
+	}
+
+	private UIComponent getUIComponent(String formId) {
+
+		return FacesContext.getCurrentInstance().getViewRoot().findComponent(formId);
 	}
 
 	public void executeLogin(ActionEvent ae) {
@@ -525,9 +557,30 @@ public class LoginPanelBB extends BackingBean {
 			PropertiesReader propertiesReader = new PropertiesReader(commonPropertiesLocation);
 			setSuccessMsg(propertiesReader.getValueOfKey("logout_success"));
 
-			// externalContext.redirect("http://localhost:8080/p/admin/login");
-			// RequestContext.getCurrentInstance().execute(
-			// "refreshLoginDetails();");
+			List<String> updateList = new ArrayList<String>();
+
+			if (getUIComponent("shoppingCartForm") != null) {
+				updateList.add("shoppingCartForm");
+			}
+
+			if (getUIComponent("browseProductsForm") != null) {
+				updateList.add("browseProductsForm");
+			}
+
+			if (getUIComponent("readMoreForm") != null) {
+				updateList.add("readMoreForm");
+			}
+
+			if (getUIComponent("homeForm") != null) {
+				updateList.add("homeForm");
+			}
+
+			if (getUIComponent("paymentForm") != null) {
+				updateList.add("paymentForm");
+			}
+
+			RequestContext.getCurrentInstance().update(updateList);
+			;
 
 		} catch (Exception e) {
 			handleException(e, "Logout was not successfull.");
