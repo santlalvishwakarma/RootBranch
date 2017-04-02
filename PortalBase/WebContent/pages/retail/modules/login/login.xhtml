@@ -24,7 +24,7 @@
 				<div align="center">
 					<p:commandButton id="loginSubmit" rendered="#{(sessionScope['LOGIN_TYPE'] eq 'RETAIL_LOGIN_TYPE')}"
 						actionListener="#{loginPanelBean.executeLogin}" value="Login" process="loginDialogPanel, @this"
-						oncomplete="PF('loginDialog').hide()" />
+						update=":headerForm" oncomplete="PF('loginDialog').hide()" />
 					<p:tooltip for="loginSubmit" value="Click to Login" />
 					<p:commandButton id="executeLoginSystemOwner" process="loginDialogPanel, @this" value="Login admin"
 						actionListener="#{loginPanelBean.executeLogin}" oncomplete="PF('loginDialog').hide()"
