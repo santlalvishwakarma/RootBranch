@@ -3067,4 +3067,62 @@ public class ShoppingCartBC extends BackingClass {
 
 		return shoppingCartOprRet;
 	}
+
+	public ShoppingCartOpr saveGuestUserDetails(ShoppingCartOpr shoppingCartOpr) throws FrameworkException,
+			BusinessException {
+
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In ShoppingCartBC :: saveGuestUserDetails starts ");
+
+		String name = shoppingCartOpr.getGuestRecord().getName();
+		String email = shoppingCartOpr.getGuestRecord().getEmailId();
+		String phone = shoppingCartOpr.getGuestRecord().getPhoneNumber();
+		String userLogin = shoppingCartOpr.getGuestRecord().getUserLogin();
+
+		HashMap<String, String> queryDetailsMap = new HashMap<String, String>();
+		queryDetailsMap.put(IDAOConstant.SQL_TYPE, IDAOConstant.INSERT_SQL);
+		queryDetailsMap.put(IDAOConstant.STATEMENT_TYPE, IDAOConstant.PREPARED_STATEMENT);
+		queryDetailsMap.put(IDAOConstant.SQL_TEXT, ShoppingCartSqlTemplate.SAVE_GUEST_USER_DETAILS);
+
+		Object strSqlParams[][] = new Object[5][3];
+
+		strSqlParams[0][0] = "1";
+		strSqlParams[0][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[0][2] = name;
+		myLog.debug(" parameter 1 name:: " + name);
+
+		strSqlParams[1][0] = "2";
+		strSqlParams[1][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[1][2] = email;
+		myLog.debug("parameter 2 email: :::" + email);
+
+		strSqlParams[2][0] = "3";
+		strSqlParams[2][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[2][2] = phone;
+		myLog.debug("parameter 3  phone:::" + phone);
+
+		strSqlParams[3][0] = "4";
+		strSqlParams[3][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[3][2] = userLogin;
+		myLog.debug("parameter 4  createdBy:::" + userLogin);
+
+		strSqlParams[4][0] = "5";
+		strSqlParams[4][1] = IDAOConstant.STRING_DATATYPE;
+		strSqlParams[4][2] = userLogin;
+		myLog.debug("parameter 5  modifiedBy:::" + userLogin);
+
+		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, null);
+		HashMap<Integer, HashMap<String, Object>> responseMap = daoResult.getInvocationResult();
+		myLog.debug(" ShoppingCartBC saveGuestUserDetails :: Resultset got ::" + responseMap);
+
+		if (responseMap.size() > 0) {
+			for (int i = 0; i < responseMap.size(); i++) {
+
+				HashMap<String, Object> resultSetMap = responseMap.get(i);
+				handleAndThrowException(resultSetMap);
+			}
+		}
+
+		return shoppingCartOpr;
+	}
 }

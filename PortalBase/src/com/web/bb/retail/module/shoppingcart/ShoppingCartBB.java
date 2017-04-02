@@ -19,6 +19,7 @@ import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.common.CountryDVO;
 import com.web.common.dvo.common.StateDVO;
 import com.web.common.dvo.opr.retail.ShoppingCartOpr;
+import com.web.common.dvo.retail.modules.GuestDVO;
 import com.web.common.dvo.retail.modules.ShoppingCartProductDVO;
 import com.web.common.dvo.retail.modules.user.UserDVO;
 import com.web.common.dvo.systemowner.DeliveryChargesDVO;
@@ -2352,6 +2353,87 @@ public class ShoppingCartBB extends BackingBean {
 
 	@Override
 	public void executeAddRow(ActionEvent event) {
+	}
+
+	public void saveGuestUserDetails(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In AddEditCategoryBB :: executeSave starts ");
+
+		if (validateGuestUserDetails()) {
+
+			try {
+				String userLogin = getUserLogin(FacesContext.getCurrentInstance().getExternalContext());
+				shoppingCartOpr.getGuestRecord().setUserLogin(userLogin);
+
+				ShoppingCartOpr shoppingCartOprRet = new ShoppingCartBF().saveGuestUserDetails(shoppingCartOpr);
+
+				// FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				// .put(CommonConstant.LOGGED_USER_KEY,
+				// CommonConstant.GUEST_USER);
+				//
+				// UserDVO userDVO = new UserDVO();
+				// userDVO.setUserLogin((String)
+				// FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				// .get(CommonConstant.LOGGED_USER_KEY));
+				//
+				// FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				// .put((CommonConstant.LOGGED_USER_DATA), userDVO);
+				//
+				// RequestContext.getCurrentInstance().execute("updateHeader();");
+
+			} catch (FrameworkException e) {
+				handleException(e, propertiesLocation);
+			} catch (BusinessException e) {
+				handleException(e, propertiesLocation);
+			}
+		}
+	}
+
+	private boolean validateGuestUserDetails() {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("Inside validateGuestUserDetails: ");
+
+		boolean validateFlag = true;
+
+		FoundationValidator validator = new FoundationValidator();
+		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
+
+		getErrorList().clear();
+		setSuccessMsg("");
+
+		String name = shoppingCartOpr.getGuestRecord().getName();
+		String email = shoppingCartOpr.getGuestRecord().getEmailId();
+		String phone = shoppingCartOpr.getGuestRecord().getPhoneNumber();
+
+		if (!validator.validateNull(email)) {
+			addToErrorList(propertiesReader.getValueOfKey("email_null"));
+		} else if (!validator.validateEmail(email)) {
+			addToErrorList(propertiesReader.getValueOfKey("email_invalid"));
+		}
+
+		if (!(validator.validateNull(phone))) {
+			addToErrorList(propertiesReader.getValueOfKey("phone_null"));
+		}
+
+		if (!(validator.validateNull(name))) {
+			addToErrorList(propertiesReader.getValueOfKey("name_null"));
+		}
+
+		if (getErrorList().size() > 0) {
+			validateFlag = false;
+		} else {
+			validateFlag = true;
+		}
+
+		return validateFlag;
+	}
+
+	public void addNewGuest(ActionEvent event) {
+		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		myLog.debug("In AddEditCategoryBB :: addNewGuest starts ");
+
+		shoppingCartOpr.setGuestRecord(new GuestDVO());
+
 	}
 
 }

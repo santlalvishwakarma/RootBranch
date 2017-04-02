@@ -249,4 +249,7 @@ public interface ShoppingCartSqlTemplate extends SqlTemplate {
 			+ " FROM core_product_variants_view tdm WHERE tdm.core_products_id = ? AND tdm.core_product_variants_id = ? ; ";
 
 	static final String POPULATE_SHIPPING_CHARGES = "Call sp_core_get_shipping_charges_yes(?,?,?,?,?,?);";
+
+	static final String SAVE_GUEST_USER_DETAILS = "INSERT INTO core_guest_master(name, email_id, phone_number, is_active, created_by, created_date, modified_by, modified_date) "
+			+ " VALUES(?,?,?, 1, ?, NOW(), ?, NOW());";
 }

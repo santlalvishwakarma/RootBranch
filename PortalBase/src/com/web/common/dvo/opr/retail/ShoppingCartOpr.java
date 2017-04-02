@@ -4,14 +4,13 @@ import java.util.ArrayList;
 
 import com.web.common.dvo.common.CountryDVO;
 import com.web.common.dvo.common.OperationalDataValueObject;
+import com.web.common.dvo.retail.modules.GuestDVO;
 import com.web.common.dvo.retail.modules.PaymentDVO;
 import com.web.common.dvo.retail.modules.RetailOrderDVO;
 import com.web.common.dvo.retail.modules.ShoppingCartProductDVO;
 import com.web.common.dvo.retail.modules.user.UserDVO;
 import com.web.common.dvo.systemowner.CurrencyDVO;
 import com.web.common.dvo.systemowner.ProductSkuStockLevelDVO;
-import com.web.foundation.logger.ITSDLogger;
-import com.web.foundation.logger.TSDLogger;
 
 public class ShoppingCartOpr extends OperationalDataValueObject {
 
@@ -40,6 +39,7 @@ public class ShoppingCartOpr extends OperationalDataValueObject {
 	private ArrayList<ProductSkuStockLevelDVO> currentProductSkuStockLevels;
 	private CurrencyDVO currencyRecord;
 	private String chargesMode;
+	private GuestDVO guestRecord;
 
 	// private SmsGateWayDVO smsGateWayRecord;
 
@@ -72,7 +72,8 @@ public class ShoppingCartOpr extends OperationalDataValueObject {
 						: getRetailOrderRecord().getDeliveryChargesRecord().getDeliveryCharge())
 				+ (getRetailOrderRecord().getDeliveryChargesRecord().getExpressCharge() == null ? Float.valueOf(0)
 						: getRetailOrderRecord().getDeliveryChargesRecord().getExpressCharge());
-		// + (getRetailOrderRecord().getTreeAmt() == null ? Float.valueOf(0) : getRetailOrderRecord().getTreeAmt());
+		// + (getRetailOrderRecord().getTreeAmt() == null ? Float.valueOf(0) :
+		// getRetailOrderRecord().getTreeAmt());
 		if (getGreenFlag()) {
 			totalOrderPrice = totalOrderPrice
 					+ (getRetailOrderRecord().getTreeAmt() == null ? Float.valueOf(0) : getRetailOrderRecord()
@@ -173,7 +174,7 @@ public class ShoppingCartOpr extends OperationalDataValueObject {
 	}
 
 	public Float getNewDiscountedPrice() {
-		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
+		// ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		newDiscountedPrice = getTotalPrice();
 
 		// Added by Dheeraj
@@ -358,15 +359,15 @@ public class ShoppingCartOpr extends OperationalDataValueObject {
 		this.chargesMode = chargesMode;
 	}
 
-	// public SmsGateWayDVO getSmsGateWayRecord() {
-	// if (smsGateWayRecord == null) {
-	// smsGateWayRecord = new SmsGateWayDVO();
-	// }
-	// return smsGateWayRecord;
-	// }
-	//
-	// public void setSmsGateWayRecord(SmsGateWayDVO smsGateWayRecord) {
-	// this.smsGateWayRecord = smsGateWayRecord;
-	// }
+	public GuestDVO getGuestRecord() {
+		if (guestRecord == null) {
+			guestRecord = new GuestDVO();
+		}
+		return guestRecord;
+	}
+
+	public void setGuestRecord(GuestDVO guestRecord) {
+		this.guestRecord = guestRecord;
+	}
 
 }

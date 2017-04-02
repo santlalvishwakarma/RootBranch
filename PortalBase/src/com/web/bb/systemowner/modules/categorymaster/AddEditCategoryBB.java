@@ -662,7 +662,7 @@ public class AddEditCategoryBB extends BackingBean {
 		return null;
 	}
 
-	public boolean validateCategorySizeMapping() {
+	private boolean validateCategorySizeMapping() {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("Inside validateCategorySizeMapping: ");
 

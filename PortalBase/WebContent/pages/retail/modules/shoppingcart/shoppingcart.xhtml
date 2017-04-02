@@ -5,7 +5,8 @@
 	<ui:define name="content">
 		<!-- Page Content Wrapper Start -->
 		<style type="text/css">
-.ui-datatable.borderless thead th,.ui-datatable.borderless tbody,.ui-datatable.borderless tbody td {
+.ui-datatable.borderless thead th,.ui-datatable.borderless tbody,.ui-datatable.borderless tbody td
+	{
 	border-style: none;
 }
 
@@ -253,14 +254,56 @@
 						<h:panelGroup>
 							<div class="paymentbtn">
 								<div class="payment">
-									<p:commandButton id="confirmOrderPanel" process="@form" value="Submit Quotation"
-										oncomplete="PF('navigationPanelDialog').show()" />
+									<p:commandButton id="confirmOrderPanel1" process="@form" value="Submit Quotation"
+										rendered="#{!(empty sessionScope['LOGGED_USER_KEY'])}" oncomplete="PF('navigationPanelDialog').show()" />
+
+									<p:commandButton id="confirmOrderPanel2" process="@form" value="Submit Quotation"
+										actionListener="#{retailShoppingCartBB.addNewGuest}" update="userConfirmationDialog"
+										rendered="#{(empty sessionScope['LOGGED_USER_KEY'])}" oncomplete="PF('userConfirmationDialog').show()" />
 								</div>
 							</div>
 						</h:panelGroup>
 						<div class="clear"></div>
 					</h:panelGroup>
 				</div>
+				<p:dialog id="userConfirmationDialog" header="User Details" widgetVar="userConfirmationDialog" showEffect="explode"
+					width="450" height="350" closable="false" hideEffect="explode" modal="true" dynamic="false">
+					<f:facet name="header">
+						<span class="productTitleHeader"><h:outputText value="User Details" /></span>
+						<p:commandLink styleClass="closeIcon" onclick="PF('userConfirmationDialog').hide()">
+							<img src="/p/staticcontent/retail/images/portalimages/closeIcon.png"></img>
+						</p:commandLink>
+					</f:facet>
+
+					<span style="text-align: center"><h1>Please Give the details to proceed further.</h1></span>
+					<br />
+
+					<h:panelGroup id="guestUser">
+						<div align="center">
+							<table>
+								<tr style="height: 50px;">
+									<td style="width: 35%;"><label class="labelClass boldClass">Name:</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+									<td><p:inputText value="#{retailShoppingCartBB.shoppingCartOpr.guestRecord.name}" /></td>
+								</tr>
+								<tr style="height: 50px;">
+									<td style="width: 35%;"><label class="labelClass boldClass">Email id:</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+									<td><p:inputText value="#{retailShoppingCartBB.shoppingCartOpr.guestRecord.emailId}" /></td>
+								</tr>
+								<tr style="height: 50px;">
+									<td style="width: 35%;"><label class="labelClass boldClass">Phone:</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+									<td><p:inputText value="#{retailShoppingCartBB.shoppingCartOpr.guestRecord.phoneNumber}" /></td>
+								</tr>
+							</table>
+						</div>
+						<br />
+						<div align="center">
+							<p:commandButton value="Submit" onclick="PF('userConfirmationDialog').hide();" process="guestUser"
+								oncomplete="PF('navigationPanelDialog').show();" actionListener="#{retailShoppingCartBB.saveGuestUserDetails}" />
+						</div>
+					</h:panelGroup>
+
+				</p:dialog>
+
 				<p:dialog id="navigationPanel" header="Terms and Conditions" widgetVar="navigationPanelDialog" showEffect="explode"
 					closable="false" hideEffect="explode" modal="true" dynamic="false">
 					<f:facet name="header">
@@ -289,6 +332,7 @@
 						</div>
 					</h:panelGroup>
 				</p:dialog>
+				<p:remoteCommand name="updateHeader" update=":headerForm" process="@this" partialSubmit="true" />
 			</h:form>
 		</div>
 		<!-- Page Content Wrapper Ends -->
