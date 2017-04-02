@@ -1,0 +1,25 @@
+<ui:composition template="/pages/systemowner/template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<ui:define name="content">
+		<p:tabView id="skuPropertyTabView"
+			activeIndex="#{skuPropertyBB.activeTabIndex}">
+			<p:ajax event="tabChange" listener="#{skuPropertyBB.tabChanged}"
+				process="@this" update=":skuPropertyTabView" />
+			<p:tab id="searchSkuPropertyList" title="Search/List">
+				<div style="overflow-x: auto; overflow-y: auto;">
+					<ui:include src="searchskuproperty.xhtml" />
+				</div>
+			</p:tab>
+			<p:tab id="addEditSkuProperty" title="Add/Edit">
+				<div style="overflow-x: auto; overflow-y: auto;">
+					<ui:include src="addeditskuproperty.xhtml" />
+				</div>
+			</p:tab>
+		</p:tabView>
+	</ui:define>
+</ui:composition>

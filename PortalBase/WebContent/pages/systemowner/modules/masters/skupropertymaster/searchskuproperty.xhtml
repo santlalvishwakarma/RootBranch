@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="skuSearchPropertyForm">
+		<h:panelGroup id="skuSearchPropertyFormSearchFields" layout="block">
+			<table style="width: 100%;">
+				<tr>
+					<td><label class="labelClass boldClass">Name</label></td>
+					<td><p:inputText
+							value="#{skuPropertySearchBB.searchSkuPropertyOpr.skuPropertyRecord.name}" /></td>
+					<td><label class="labelClass boldClass">Code</label></td>
+					<td><p:inputText
+							value="#{skuPropertySearchBB.searchSkuPropertyOpr.skuPropertyRecord.code}" /></td>
+				</tr>
+				<tr>
+					<td><label class="labelClass boldClass">Sku Property
+							Type</label></td>
+					<td><p:selectOneMenu id="skuPropertyList"
+							value="#{skuPropertySearchBB.searchSkuPropertyOpr.skuPropertyRecord.skuPropertyType.parameterID}">
+							<f:selectItem itemLabel="#{commonLabel.select_label}"
+								itemValue="" />
+							<f:selectItems
+								value="#{skuPropertyBB.allOptions.allOptionsValues['skuPropertyList']}"
+								var="skuPropertyType"
+								itemLabel="#{skuPropertyType.parameterStringValue}"
+								itemValue="#{skuPropertyType.parameterID}" />
+						</p:selectOneMenu></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+		</h:panelGroup>
+		<br />
+		<div align="center">
+			<p:commandButton id="btnSearch"
+				actionListener="#{skuPropertySearchBB.executeSearch}" value="Search"
+				update="skuSearchListPanelGroup"
+				process="@this, skuSearchPropertyFormSearchFields" />
+			<p:tooltip for="btnSearch" value="Click to Search" />
+			<p:hotkey bind="ctrl+shift+s"
+				update=",skuSearchPropertyFormSearchFields, skuSearchListPanelGroup"
+				actionListener="#{skuPropertySearchBB.executeSearch}" />
+			&#160;&#160;
+			<p:commandButton id="btnCancel"
+				action="#{skuPropertySearchBB.clearPage}" value="Clear Search"
+				process="@this" />
+			<p:tooltip for="btnCancel" value="Click to Cancel" />
+		</div>
+		<br />
+		<h:panelGroup id="skuSearchListPanelGroup">
+			<p:panel
+				rendered="#{!(empty skuPropertySearchBB.searchSkuPropertyOpr.skuPropertyList)}">
+				<h:commandLink id="excelLink">
+					<p:graphicImage alt="Export to Xls"
+						value="/staticcontent/systemowner/images/excel.png"
+						styleClass="imageClass" />
+					<p:dataExporter type="xls" target="searchSkuPropertyList"
+						fileName="SkuProperty" />
+				</h:commandLink>
+				<p:tooltip for="excelLink"
+					value="Click to export data in the list to MS-Excel" />
+				<h:commandLink id="pdfLink">
+					<p:graphicImage alt="Export to PDF"
+						value="/staticcontent/systemowner/images/pdf.png"
+						styleClass="imageClass" />
+					<p:dataExporter type="pdf" target="searchSkuPropertyList"
+						fileName="SkuProperty" />
+				</h:commandLink>
+				<p:tooltip for="pdfLink"
+					value="Click to export data in the list to PDF" />
+				<h:commandLink id="xmlLink">
+					<p:graphicImage alt="Export to XML"
+						value="/staticcontent/systemowner/images/xml.png"
+						styleClass="imageClass" />
+					<p:dataExporter type="xml" target="searchSkuPropertyList"
+						fileName="SkuProperty" />
+				</h:commandLink>
+				<p:tooltip for="xmlLink"
+					value="Click to export data in the list to XML" />
+			</p:panel>
+			<p:dataTable id="searchSkuPropertyList"
+				rows="#{skuPropertySearchBB.paginationNumber}"
+				var="skuPropertyRecord" rowsPerPageTemplate="5,10,15"
+				style="width: 100%;"
+				rendered="#{!(empty skuPropertySearchBB.searchSkuPropertyOpr.skuPropertyList)}"
+				value="#{skuPropertySearchBB.searchSkuPropertyOpr.skuPropertyList}"
+				paginator="true"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} records per page">
+				<f:facet name="header">Sku Property</f:facet>
+				<p:column sortBy="#{skuPropertyRecord.name}"
+					filterBy="#{skuPropertyRecord.name}" filterMatchMode="contains">
+					<f:facet name="header">Sku Property Name</f:facet>
+					<p:commandLink styleClass="linkClass"
+						action="#{skuPropertySearchBB.editDetails}"
+						update=":skuPropertyTabView" value="#{skuPropertyRecord.name}">
+						<f:setPropertyActionListener
+							target="#{skuPropertySearchBB.searchSkuPropertyOpr.selectedSkuPropertyRecord}"
+							value="#{skuPropertyRecord}" />
+					</p:commandLink>
+				</p:column>
+				<p:column sortBy="#{skuPropertyRecord.code}"
+					filterBy="#{skuPropertyRecord.code}" filterMatchMode="contains">
+					<f:facet name="header">Code</f:facet>
+					<h:outputText value="#{skuPropertyRecord.code}"
+						styleClass="labelClass" />
+				</p:column>
+				<p:column sortBy="#{skuPropertyRecord.description}"
+					filterBy="#{skuPropertyRecord.description}"
+					filterMatchMode="contains">
+					<f:facet name="header">Description</f:facet>
+					<h:outputText value="#{skuPropertyRecord.description}"
+						styleClass="labelClass" />
+				</p:column>
+			</p:dataTable>
+		</h:panelGroup>
+	</h:form>
+</ui:composition>

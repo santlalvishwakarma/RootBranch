@@ -230,4 +230,22 @@
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 
+	<managed-bean>
+		<managed-bean-name>skuPropertySearchBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.skupropertymaster.SkuPropertySearchBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>skuPropertyAddEditBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.skupropertymaster.SkuPropertyAddEditBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>skuPropertyBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.skupropertymaster.SkuPropertyBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
 </faces-config>

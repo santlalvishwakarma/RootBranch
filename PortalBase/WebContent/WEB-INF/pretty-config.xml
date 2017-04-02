@@ -168,4 +168,10 @@
 		<action onPostback="false">#{orderBB.retrieveData}</action>
 	</url-mapping>
 
+	<url-mapping id="skuPropertyMaster">
+		<pattern value="/admin/skupropertymaster" />
+		<view-id value="/pages/systemowner/modules/masters/skupropertymaster/skuproperty.jsf" />
+		<action onPostback="false">#{skuPropertyBB.retrieveData}</action>
+	</url-mapping>
+
 </pretty-config>

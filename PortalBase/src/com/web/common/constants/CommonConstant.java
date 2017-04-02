@@ -152,6 +152,8 @@ public interface CommonConstant {
 
 		public static final String PAYMENT_STATUS = "PAYMENT_STATUS";
 		public static final String ORDER_STATUS = "ORDER_STATUS";
+
+		public static final String SKU_PROPERTY_TYPE = "SKU_PROPERTY_TYPE";
 	}
 
 	public interface ParamDatatype {

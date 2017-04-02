@@ -71,7 +71,6 @@ public class OrderMasterBC extends BackingClass {
 		}
 
 		myLog.debug("Dynamic Where : " + dynamicWhere);
-		System.out.println(dynamicWhere);
 		Object strSqlParams[][] = new Object[0][3];
 
 		DAOResult daoResult = performDBOperation(queryDetailsMap, strSqlParams, dynamicWhere.toString());

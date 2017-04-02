@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="skuAddEditPropertyForm">
+		<h:panelGroup id="skuAddEditPropertyFormFields" layout="block">
+			<table style="width: 100%;">
+				<tr>
+					<td>Code: <label class="mandRed">#{commonLabel.mand_star}</label></td>
+					<td><p:inputText
+							value="#{skuPropertyAddEditBB.addEditSkuPropertyOpr.skuPropertyRecord.code}"
+							disabled="#{skuPropertyAddEditBB.addEditSkuPropertyOpr.skuPropertyRecord.id ne null}" /></td>
+					<td>Name: <label class="mandRed">#{commonLabel.mand_star}</label></td>
+					<td><p:inputText
+							value="#{skuPropertyAddEditBB.addEditSkuPropertyOpr.skuPropertyRecord.name}" /></td>
+				</tr>
+				<tr>
+					<td>Description:</td>
+					<td><p:inputText
+							value="#{skuPropertyAddEditBB.addEditSkuPropertyOpr.skuPropertyRecord.description}" /></td>
+					<td>Active:</td>
+					<td><p:selectBooleanCheckbox
+							value="#{skuPropertyAddEditBB.addEditSkuPropertyOpr.skuPropertyRecord.active}" /></td>
+				</tr>
+				<tr>
+					<td>Price:</td>
+					<td><p:inputText
+							value="#{skuPropertyAddEditBB.addEditSkuPropertyOpr.skuPropertyRecord.skuPropertyPrice}" /></td>
+					<td>Type <label class="mandRed">#{commonLabel.mand_star}</label></td>
+					<td><p:selectOneMenu id="skuPropertyList"
+							value="#{skuPropertyAddEditBB.addEditSkuPropertyOpr.skuPropertyRecord.skuPropertyType.parameterID}"
+							disabled="#{skuPropertyAddEditBB.addEditSkuPropertyOpr.skuPropertyRecord.id ne null}">
+							<f:selectItem itemLabel="#{commonLabel.select_label}"
+								itemValue="" />
+							<f:selectItems
+								value="#{skuPropertyBB.allOptions.allOptionsValues['skuPropertyList']}"
+								var="skuPropertyType"
+								itemLabel="#{skuPropertyType.parameterStringValue}"
+								itemValue="#{skuPropertyType.parameterID}" />
+						</p:selectOneMenu></td>
+				</tr>
+			</table>
+		</h:panelGroup>
+		<br />
+		<div align="center">
+			<p:commandButton id="btnSave"
+				actionListener="#{skuPropertyAddEditBB.executeSave}" value="Save"
+				update="skuAddEditPropertyFormFields"
+				process="@this, skuAddEditPropertyFormFields" />
+			<p:tooltip for="btnSave" value="Click to Save" />
+			<p:hotkey bind="ctrl+shift+s" update="skuAddEditPropertyFormFields"
+				actionListener="#{skuPropertyAddEditBB.executeSave}" />
+			&#160;&#160;
+			<p:commandButton id="btnCancel"
+				action="#{skuPropertyAddEditBB.clearPage}" value="Cancel Save"
+				process="@this" />
+			<p:tooltip for="btnCancel" value="Click to Cancel" />
+		</div>
+	</h:form>
+</ui:composition>

@@ -119,6 +119,7 @@ public class SkuDefinitionSearchBB extends BackingBean {
 	@Override
 	public boolean validateSearch() {
 		FoundationValidator validator = new FoundationValidator();
+		PropertiesReader propertiesReaderCommon = new PropertiesReader(CommonConstant.MessageLocation.COMMON_MESSAGES);
 		PropertiesReader propertiesReader = new PropertiesReader(propertiesLocation);
 		boolean validateFlag = true;
 		setErrorList(new ArrayList<String>());
@@ -126,9 +127,9 @@ public class SkuDefinitionSearchBB extends BackingBean {
 		ProductSkuDVO productSkuRecord = skuOpr.getProductSkuRecord();
 		if (!(validator.validateNull(productSkuRecord.getCode()) || validator.validateNull(productSkuRecord.getName())
 				|| validator.validateNull(productSkuRecord.getDescription())
-				|| validator.validateNull(productSkuRecord.getProductRecord().getCode()) || validator
-					.validateNull(productSkuRecord.getStatusRecord().getCode()))) {
-			addToErrorList(propertiesReader.getValueOfKey("all_fields_null"));
+				|| validator.validateNull(productSkuRecord.getProductRecord().getCode())
+				|| validator.validateNull(productSkuRecord.getStatusRecord().getCode()))) {
+			addToErrorList(propertiesReaderCommon.getValueOfKey("all_fields_null"));
 		}
 
 		if (getErrorList().size() > 0) {
@@ -163,8 +164,8 @@ public class SkuDefinitionSearchBB extends BackingBean {
 				.setThumbnailImageURL(selectedSkuRecord.getDefaultImageRecord().getThumbnailImageURL());
 
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.ACTIVE_TAB_OPR, skuOprSent);
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB_OPR,
+				skuOprSent);
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("EDIT_DETAILS", "SKU");
 
 	}
@@ -179,8 +180,8 @@ public class SkuDefinitionSearchBB extends BackingBean {
 		SkuOpr skuOprSent = new SkuOpr();
 
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB, 1);
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.ACTIVE_TAB_OPR, skuOprSent);
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.ACTIVE_TAB_OPR,
+				skuOprSent);
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("EDIT_DETAILS", "SKU");
 	}
 
@@ -229,8 +230,8 @@ public class SkuDefinitionSearchBB extends BackingBean {
 		myLog.debug("In Sku Definition Search BB :: zoom image url::"
 				+ getSelectedSkuRecord().getDefaultImageRecord().getZoomImageURL());
 
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-				.put(CommonConstant.IMAGE_DVO, imageRecord);
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CommonConstant.IMAGE_DVO,
+				imageRecord);
 	}
 
 	private void populateData() throws FrameworkException, BusinessException {
