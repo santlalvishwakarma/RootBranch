@@ -1,8 +1,6 @@
 package com.web.bb.retail.module.shoppingcart;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 import javax.faces.component.UIComponent;
@@ -183,6 +181,7 @@ public class ShoppingCartBB extends BackingBean {
 					handleException(e, propertiesLocation);
 				}
 				userDVO = returnShoppingCartOpr.getRetailUserDetails();
+				shoppingCartOpr.setRetailUserDetails(userDVO);
 			}
 		}
 
@@ -494,82 +493,59 @@ public class ShoppingCartBB extends BackingBean {
 				// send an email to system owner if the available level for any
 				// product has failed below the reorder
 				// mark
-				for (int i = 0; i < shoppingCartSendOpr.getCurrentProductSkuStockLevels().size(); i++) {
-					ProductSkuStockLevelDVO productStockLevelDVO = shoppingCartSendOpr
-							.getCurrentProductSkuStockLevels().get(i);
-					if (productStockLevelDVO.getAvailableQuantity() != null
-							&& productStockLevelDVO.getReorderLevel() != null) {
-						if (productStockLevelDVO.getAvailableQuantity() <= productStockLevelDVO.getReorderLevel()) {
-							// send email
-							PropertiesReader propertiesReaderCommon = new PropertiesReader(
-									CommonConstant.MessageLocation.COMMON_MESSAGES);
-							MailParameters mailParameters = new MailParameters();
 
-							InternetAddress[] addressTo = new InternetAddress[1];
-							InternetAddress[] addressCC = new InternetAddress[2];
+				// send email
+				PropertiesReader propertiesReaderCommon = new PropertiesReader(
+						CommonConstant.MessageLocation.COMMON_MESSAGES);
+				MailParameters mailParameters = new MailParameters();
 
-							InternetAddress ia = new InternetAddress();
-							ia.setAddress(propertiesReaderCommon.getValueOfKey("system_owner_email_id"));
-							addressTo[0] = ia;
-							InternetAddress iaCC = new InternetAddress();
-							iaCC.setAddress(propertiesReaderCommon.getValueOfKey("system_owner_email_id_2"));
-							InternetAddress iaCC1 = new InternetAddress();
-							iaCC1.setAddress(propertiesReaderCommon.getValueOfKey("system_owner_email_id_3"));
-							addressCC[0] = iaCC;
-							addressCC[1] = iaCC1;
+				InternetAddress[] addressTo = new InternetAddress[1];
+				// InternetAddress[] addressCC = new InternetAddress[2];
+				InternetAddress[] addressBCC = new InternetAddress[1];
 
-							mailParameters.setMailRecipients(addressTo);
-							mailParameters.setMailRecipientsCC(addressCC);
-							String[] messageSubjectArguments = {
-									new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new Date()),
-									productStockLevelDVO.getProductSkuRecord().getName(),
-									productStockLevelDVO.getProductSkuRecord().getCode() };
-							String subject = MessageFormatter.getFormattedMessage(new PropertiesReader(
-									propertiesLocation).getValueOfKey("product_reorder_required_subject"),
-									messageSubjectArguments);
-							mailParameters.setMailSubject(subject);
-							String[] messageBodyArguments = {
-									productStockLevelDVO.getProductSkuRecord().getName(),
-									productStockLevelDVO.getProductSkuRecord().getCode(),
-									productStockLevelDVO.getReorderLevel().toString(),
-									new SimpleDateFormat("dd/mmm/yyyy HH:MM").format(new Date()),
-									shoppingCartOpr.getRetailOrderRecord().getOrderNumber(),
-									productStockLevelDVO.getAvailableQuantity().toString(),
-									productStockLevelDVO.getBlockedQuantity() == null ? "0" : productStockLevelDVO
-											.getBlockedQuantity().toString(),
-									// productStockLevelDVO.getShippedQuantity()
-									// == null ? "0" : productStockLevelDVO
-									// .getShippedQuantity().toString(),
-									productStockLevelDVO.getReorderLevel().toString() };
-							String mailMessage = MessageFormatter.getFormattedMessage(new PropertiesReader(
-									propertiesLocation).getValueOfKey("product_reorder_required_body"),
-									messageBodyArguments);
-							mailParameters.setMailMessage(mailMessage);
-							// mailParameters.setMailDVOObject(shoppingCartOpr);
+				InternetAddress ia = new InternetAddress();
+				ia.setAddress(shoppingCartSendOpr.getGuestRecord().getEmailId() == null ? shoppingCartOpr
+						.getRetailUserDetails().getPrimaryEmailId() : shoppingCartSendOpr.getGuestRecord().getEmailId());
+				addressTo[0] = ia;
+				// InternetAddress iaCC = new InternetAddress();
+				// iaCC.setAddress(propertiesReaderCommon.getValueOfKey("system_owner_email_id_2"));
+				// InternetAddress iaCC1 = new InternetAddress();
+				// iaCC1.setAddress(propertiesReaderCommon.getValueOfKey("system_owner_email_id_3"));
+				// addressCC[0] = iaCC;
+				// addressCC[1] = iaCC1;
 
-							mailParameters.setCustomerKey(propertiesReaderCommon.getValueOfKey("customer_key"));
-							mailParameters.setMailFormat(CommonConstant.MimeType.TEXT_HTML);
-							// mailParameters.setRoutingKey(propertiesReaderCommon
-							// .getValueOfKey("rabbitmq_email_routing_key"));
-							mailParameters.setMessageQueue(propertiesReaderCommon
-									.getValueOfKey("rabbitmq_email_queue_name"));
+				InternetAddress iaBCC1 = new InternetAddress();
+				iaBCC1.setAddress(propertiesReaderCommon.getValueOfKey("system_owner_email_id"));
+				addressBCC[0] = iaBCC1;
+				myLog.debug("InternetAddress :: iaBCC1.getAddress() :: " + iaBCC1.getAddress());
 
-							try {
-								WebMail webMail = new WebMail(mailParameters);
-								webMail.sendMultipleMail();
-							} catch (MessagingException e) {
-								// we are in the shopping cart and the user is
-								// about to make a payment
-								// cant afford to let the transaction bomb even
-								// if the reorder level mail doesn't go
+				mailParameters.setMailRecipients(addressTo);
+				mailParameters.setMailRecipientsBCC(addressBCC);
+				mailParameters.setMailSubject("Quotation" + shoppingCartOpr.getRetailOrderRecord().getOrderNumber()
+						+ " places Successfully");
+				String mailMessage = "Your Quotation " + shoppingCartOpr.getRetailOrderRecord().getOrderNumber()
+						+ " places successfully. Our Team will contact you shortly.";
+				mailParameters.setMailMessage(mailMessage);
+				// mailParameters.setMailDVOObject(shoppingCartOpr);
 
-								// throw new
-								// FrameworkException("messaging_exception",
-								// e.getCause());
-							}
+				mailParameters.setCustomerKey(propertiesReaderCommon.getValueOfKey("customer_key"));
+				mailParameters.setMailFormat(CommonConstant.MimeType.TEXT_HTML);
+				// mailParameters.setRoutingKey(propertiesReaderCommon
+				// .getValueOfKey("rabbitmq_email_routing_key"));
+				// mailParameters.setMessageQueue(propertiesReaderCommon.getValueOfKey("rabbitmq_email_queue_name"));
 
-						}
-					}
+				try {
+					WebMail webMail = new WebMail(mailParameters);
+					webMail.sendMultipleMail();
+				} catch (MessagingException e) {
+					// we are in the shopping cart and the user is
+					// about to make a payment
+					// cant afford to let the transaction bomb even
+					// if the reorder level mail doesn't go
+
+					// throw new
+					// FrameworkException("messaging_exception",
+					// e.getCause());
 				}
 
 				if (shoppingCartSendOpr.getRetailOrderRecord().getOrderNumber() != null) {

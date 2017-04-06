@@ -130,7 +130,7 @@ BEGIN
 	
 	SELECT last_insert_id() INTO v_order_header_id;
 	
-	SET v_order_number = CONCAT('PORTAL-',v_order_header_id);
+	SET v_order_number = CONCAT('QUO-',v_order_header_id);
 	
 	UPDATE order_header SET order_no = v_order_number WHERE order_header_id = v_order_header_id;
 	
