@@ -1,0 +1,39 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<h:form id="addEditGuestUserForm">
+		<p:dialog id="addEditGuestUserDialog" header="Guest User" widgetVar="addEditGuestUserDialog" showEffect="explode"
+			hideEffect="explode" dynamic="true" modal="true">
+			<p:ajax event="close" listener="#{guestUserBB.closeModalWindow}" />
+			<p:panel id="addEditGuestUserPanel">
+				<table>
+					<tr>
+						<td><label class="labelClass boldClass">Name</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+						<td><p:inputText value="#{guestUserBB.guestUserOpr.selectedUserRecord.name}" /></td>
+						<td><label class="labelClass boldClass">Email id</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+						<td><p:inputText value="#{guestUserBB.guestUserOpr.selectedUserRecord.emailId}" /></td>
+					</tr>
+					<tr>
+						<td><label class="labelClass boldClass">Phone</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
+						<td><p:inputText value="#{guestUserBB.guestUserOpr.selectedUserRecord.phoneNumber}" /></td>
+						<td><label class="labelClass boldClass">Active</label></td>
+						<td style="text-align: left"><p:selectBooleanCheckbox
+								value="#{guestUserBB.guestUserOpr.selectedUserRecord.active}" /></td>
+					</tr>
+				</table>
+				<br />
+				<div align="center">
+					<p:commandButton id="saveButton"
+						process="addEditGuestUserForm, addEditGuestUserPanel, addEditGuestUserDialog, @this" value="Save"
+						actionListener="#{guestUserBB.executeSave}" />
+					&#160;&#160;
+					<p:commandButton id="closePopup" process="@this" value="Close" actionListener="#{guestUserBB.closeModalWindow}"
+						oncomplete="PF('addEditGuestUserDialog').hide();" />
+				</div>
+			</p:panel>
+			<p:messages autoUpdate="true" showDetail="false" showSummary="true" />
+		</p:dialog>
+		<p:remoteCommand name="updateSearchList" update="addEditGuestUserPanel, :guestUserForm" process="@this"
+			partialSubmit="true" />
+	</h:form>
+</ui:composition>

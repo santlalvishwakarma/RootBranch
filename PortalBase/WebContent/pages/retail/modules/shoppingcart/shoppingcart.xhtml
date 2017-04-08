@@ -291,14 +291,13 @@
 								</tr>
 								<tr style="height: 50px;">
 									<td style="width: 35%;"><label class="labelClass boldClass">Phone:</label><label class="mandRed">#{commonLabel.mand_star}</label></td>
-									<td><p:inputText value="#{retailShoppingCartBB.shoppingCartOpr.guestRecord.phoneNumber}" /></td>
+									<td><p:inputText value="#{retailShoppingCartBB.shoppingCartOpr.guestRecord.phoneNumber}" maxlength="10" /></td>
 								</tr>
 							</table>
 						</div>
 						<br />
 						<div align="center">
-							<p:commandButton value="Submit" onclick="PF('userConfirmationDialog').hide();" process="guestUser"
-								oncomplete="PF('navigationPanelDialog').show();" actionListener="#{retailShoppingCartBB.saveGuestUserDetails}" />
+							<p:commandButton value="Submit" process="guestUser" actionListener="#{retailShoppingCartBB.saveGuestUserDetails}" />
 						</div>
 					</h:panelGroup>
 

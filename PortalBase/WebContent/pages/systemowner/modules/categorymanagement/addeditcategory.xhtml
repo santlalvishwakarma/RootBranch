@@ -59,7 +59,7 @@
 							rendered="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.id ne null}"
 							update=":categoryTabView:categoryHierarchyMappingForm" oncomplete="PF('categoryHierarchyMappingDialog').show();" />
 						<p:tooltip for="mapHierarchyToCategoryButton" value="Map Hierarchy Category" /></td>
-					<td><p:commandLink id="mapSize" value="Map Size" actionListener="#{addEditCategoryBB.openMapSizeDialoge}"
+					<td><p:commandLink id="mapSize" value="Map Default Size" actionListener="#{addEditCategoryBB.openMapSizeDialoge}"
 							rendered="#{addEditCategoryBB.addEditCategoryOpr.categoryRecord.id ne null}" process="categoryAddEditForm, @this"
 							update=":categoryTabView:mapSizeDialogForm:mapSizeToCategoryDialogPanel"
 							oncomplete="PF('mapSizeToCategory').show();" /></td>

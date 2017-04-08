@@ -3,6 +3,7 @@ package com.web.sf.modules.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.web.bc.common.OptionsHelperBC;
 import com.web.bc.systemowner.modules.categorymaster.CategoryMasterBC;
 import com.web.bc.systemowner.modules.hierarchymaster.HierarchyMasterBC;
 import com.web.bc.systemowner.modules.productskuproperty.ProductSkuPropertyBC;
@@ -10,6 +11,8 @@ import com.web.bf.systemowner.modules.masters.unitmaster.UnitMasterBF;
 import com.web.bf.systemowner.modules.productmanagement.ProductDefinitionBF;
 import com.web.bf.systemowner.modules.websitemaster.WebsiteMasterBF;
 import com.web.bf.systemowner.rolemanagement.RoleManagementBF;
+import com.web.common.constants.CommonConstant;
+import com.web.common.dvo.common.Parameter;
 import com.web.common.dvo.opr.systemowner.RoleManagementOpr;
 import com.web.common.dvo.opr.systemowner.WebsiteOpr;
 import com.web.common.dvo.systemowner.CategoryDVO;
@@ -54,5 +57,10 @@ public class CoreSF extends BusinessFacade {
 
 	public List<Object> getSuggestedUnitRecord(UnitDVO unitDVO) throws FrameworkException, BusinessException {
 		return new UnitMasterBF().getSuggestedUnitRecord(unitDVO);
+	}
+
+	public ArrayList<Object> getStatusCodeList() throws FrameworkException, BusinessException {
+		return new OptionsHelperBC().getStatusCodeListBasedOnParameter(new Parameter(
+				CommonConstant.ParameterCode.ACTIVE_INACTIVE_STATUS, null));
 	}
 }

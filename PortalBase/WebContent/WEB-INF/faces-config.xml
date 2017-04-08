@@ -247,5 +247,11 @@
 		<managed-bean-class>com.web.bb.systemowner.modules.masters.skupropertymaster.SkuPropertyBB</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>guestUserBB</managed-bean-name>
+		<managed-bean-class>com.web.bb.systemowner.modules.masters.guestusermaster.GuestUserMasterBB</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

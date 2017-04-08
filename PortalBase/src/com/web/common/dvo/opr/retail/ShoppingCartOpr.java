@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.web.common.dvo.common.CountryDVO;
 import com.web.common.dvo.common.OperationalDataValueObject;
-import com.web.common.dvo.retail.modules.GuestDVO;
+import com.web.common.dvo.retail.modules.GuestUserDVO;
 import com.web.common.dvo.retail.modules.PaymentDVO;
 import com.web.common.dvo.retail.modules.RetailOrderDVO;
 import com.web.common.dvo.retail.modules.ShoppingCartProductDVO;
@@ -39,7 +39,7 @@ public class ShoppingCartOpr extends OperationalDataValueObject {
 	private ArrayList<ProductSkuStockLevelDVO> currentProductSkuStockLevels;
 	private CurrencyDVO currencyRecord;
 	private String chargesMode;
-	private GuestDVO guestRecord;
+	private GuestUserDVO guestRecord;
 
 	// private SmsGateWayDVO smsGateWayRecord;
 
@@ -359,14 +359,14 @@ public class ShoppingCartOpr extends OperationalDataValueObject {
 		this.chargesMode = chargesMode;
 	}
 
-	public GuestDVO getGuestRecord() {
+	public GuestUserDVO getGuestRecord() {
 		if (guestRecord == null) {
-			guestRecord = new GuestDVO();
+			guestRecord = new GuestUserDVO();
 		}
 		return guestRecord;
 	}
 
-	public void setGuestRecord(GuestDVO guestRecord) {
+	public void setGuestRecord(GuestUserDVO guestRecord) {
 		this.guestRecord = guestRecord;
 	}
 

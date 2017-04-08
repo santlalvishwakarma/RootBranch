@@ -173,5 +173,11 @@
 		<view-id value="/pages/systemowner/modules/masters/skupropertymaster/skuproperty.jsf" />
 		<action onPostback="false">#{skuPropertyBB.retrieveData}</action>
 	</url-mapping>
+	
+	<url-mapping id="guestUserMaster">
+		<pattern value="/admin/guestusermaster/" />
+		<view-id value="/pages/systemowner/modules/masters/guestusermaster/guestUsermaster.jsf" />
+		<action onPostback="false">#{guestUserBB.retrieveData}</action>
+	</url-mapping>
 
 </pretty-config>

@@ -11,13 +11,15 @@ import javax.faces.model.SelectItem;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 
+import org.primefaces.context.RequestContext;
+
 import com.ocpsoft.pretty.PrettyContext;
 import com.web.bf.retail.modules.shoppingcart.ShoppingCartBF;
 import com.web.common.constants.CommonConstant;
 import com.web.common.dvo.common.CountryDVO;
 import com.web.common.dvo.common.StateDVO;
 import com.web.common.dvo.opr.retail.ShoppingCartOpr;
-import com.web.common.dvo.retail.modules.GuestDVO;
+import com.web.common.dvo.retail.modules.GuestUserDVO;
 import com.web.common.dvo.retail.modules.ShoppingCartProductDVO;
 import com.web.common.dvo.retail.modules.user.UserDVO;
 import com.web.common.dvo.systemowner.DeliveryChargesDVO;
@@ -333,8 +335,13 @@ public class ShoppingCartBB extends BackingBean {
 				}
 				String userLogin = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 						.get(CommonConstant.LOGGED_USER_KEY);
+
 				if (userLogin == null) {
-					userLogin = CommonConstant.GUEST_USER;
+					if (shoppingCartOpr.getGuestRecord().getName() != null) {
+						userLogin = shoppingCartOpr.getGuestRecord().getName();
+					} else {
+						userLogin = CommonConstant.GUEST_USER;
+					}
 				}
 
 				shoppingCartOpr.getApplicationFlags().getApplicationFlagMap()
@@ -2342,6 +2349,8 @@ public class ShoppingCartBB extends BackingBean {
 				shoppingCartOpr.getGuestRecord().setUserLogin(userLogin);
 
 				ShoppingCartOpr shoppingCartOprRet = new ShoppingCartBF().saveGuestUserDetails(shoppingCartOpr);
+				RequestContext.getCurrentInstance().execute("PF('userConfirmationDialog').hide();");
+				RequestContext.getCurrentInstance().execute("PF('navigationPanelDialog').show();");
 
 				// FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				// .put(CommonConstant.LOGGED_USER_KEY,
@@ -2408,7 +2417,7 @@ public class ShoppingCartBB extends BackingBean {
 		ITSDLogger myLog = TSDLogger.getLogger(this.getClass().getName());
 		myLog.debug("In AddEditCategoryBB :: addNewGuest starts ");
 
-		shoppingCartOpr.setGuestRecord(new GuestDVO());
+		shoppingCartOpr.setGuestRecord(new GuestUserDVO());
 
 	}
 

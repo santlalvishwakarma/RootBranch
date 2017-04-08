@@ -122,7 +122,7 @@ BEGIN
 	VALUES ((SELECT user_id from core_user_master where user_login = v_login_name) , v_login_name, UUID() ,p_total_quantity, v_lead_time, p_total_amount ,p_original_total_amount, 
 	IFNULL(p_purchased_delivery_charges,0) ,IFNULL(p_original_purchased_delivery_charges,0) ,
 	p_currency_conversion_rate ,p_converted_currency_symbol ,p_currency_symbol_flag , (SELECT parameter_id from core_parameter_master where param_code='PAYMENT_STATUS' and sequence_number=1), 
-	(SELECT parameter_id from core_parameter_master where param_code='ORDER_STATUS' and sequence_number=1), p_customer_billing_fname , p_customer_billing_sname, 
+	(SELECT parameter_id from core_parameter_master where param_code='ORDER_STATUS' and sequence_number=5), p_customer_billing_fname , p_customer_billing_sname, 
 	p_customer_billing_email_id, NULL, p_customer_billing_primary_phone_number, p_customer_billing_alternate_phone_number, p_customer_billing_address_line1, p_customer_billing_address_line2,
 	p_customer_shipping_address_line3, p_customer_billing_address_city, p_customer_billing_address_zip_code, p_customer_billing_address_state, p_customer_billing_address_country, NULL, 
 	NOW(), DATE_ADD(NOW(), INTERVAL v_lead_time day), NULL, p_promo_code, p_voucher_discount, p_gift_wrapping_required, NULL, p_user_login, NOW(), p_user_login, NOW());
