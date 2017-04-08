@@ -3,6 +3,8 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<h:head />
 	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<title><ui:insert name="title">Meet Your Makers</ui:insert></title>
 		<link rel="icon" href="/p/staticcontent/images/favicon.ico" type="image/x-icon" />
 		<link rel="shortcut icon" href="/p/staticcontent/images/favicon.ico" type="image/x-icon" />
@@ -19,7 +21,6 @@
 			content="#{empty requestScope['WEB_ATTRIBUTES_ROBOTS'] ? ''
 			:requestScope['WEB_ATTRIBUTES_ROBOTS']} " />
 		<title>#{empty requestScope['WEB_ATTRIBUTES_PAGE_TITLE'] ? "ACK" :requestScope['WEB_ATTRIBUTES_PAGE_TITLE']}</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="Portal-User" content="#{ sessionScope['LOGGED_USER_KEY']}" />
 		<meta http-equiv="Set-Cookie"
 			content="Portal-User-Cookie=
