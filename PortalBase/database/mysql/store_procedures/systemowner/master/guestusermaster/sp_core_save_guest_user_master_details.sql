@@ -84,6 +84,6 @@ BEGIN
     							
 	   SELECT v_modified_date AS modified_date, p_error_code, p_error_message, v_last_inserted_id AS guest_id;
      	 
-END$$
+END $$
 
 DELIMITER ;
