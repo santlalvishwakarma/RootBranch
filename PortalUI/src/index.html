@@ -7,6 +7,31 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="assets/js/jQuery.zSlider.js" type="text/javascript"></script>
+  <script type="text/javascript">
+		$('#image-rotator').zSlider({
+
+			// interval time in ms
+			interval : 2000,
+
+			// 'a': horizontal sliding
+			// 'b': vertical sliding
+			// 'c': cross fading
+			turnTo : "c",
+
+			// shows pagiantion
+			paper : true,
+
+			// width and height of the rotator
+			height : 438
+
+		});
+
+		$(document).ready(function() {
+			$('#image-rotator').zSlider();
+		});
+	</script>
 </head>
 <body>
   <app-root></app-root>
