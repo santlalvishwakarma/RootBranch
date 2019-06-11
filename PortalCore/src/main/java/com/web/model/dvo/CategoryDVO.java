@@ -3,25 +3,42 @@ package com.web.model.dvo;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
-@Table(name = "category_master")
+@Table(name = "category_master_new")
+@AttributeOverrides({
+    @AttributeOverride(name = "id", column = @Column(name = "category_id")),
+    @AttributeOverride(name = "code", column = @Column(name = "category_code")),
+    @AttributeOverride(name = "name", column = @Column(name = "category_name")),
+    @AttributeOverride(name = "description", column = @Column(name = "category_description")),
+    @AttributeOverride(name = "active", column = @Column(name = "is_active"))
+})
 public class CategoryDVO extends BaseDVO {
 	private static final long serialVersionUID = -191198761087365578L;
+
+	@Transient
 	private String extraInformation;
+	@Transient
 	private Integer deliveryTime;
 	private String seoTitle;
 	private String seoDescription;
 	private String imageUrl;
 	private String seoKeyword;
+	@Transient
 	private Boolean selectedCategory;
-	private Boolean publishToHome;
+	private Boolean publishToHomePage;
 	private Integer publishPosition;
+	@Transient
 	private CategoryDVO publishCategoryRecord;
-
+	@Transient
 	private List<CategoryLevelDVO> categoryLevels;
+	@Transient
 	private List<HierarchyCategoryMappingDVO> hierarchyCategoryMappingList;
 
 	public String getExtraInformation() {
@@ -91,12 +108,12 @@ public class CategoryDVO extends BaseDVO {
 		this.categoryLevels = categoryLevels;
 	}
 
-	public Boolean getPublishToHome() {
-		return publishToHome;
+	public Boolean getPublishToHomePage() {
+		return publishToHomePage;
 	}
 
-	public void setPublishToHome(Boolean publishToHome) {
-		this.publishToHome = publishToHome;
+	public void setPublishToHomePage(Boolean publishToHomePage) {
+		this.publishToHomePage = publishToHomePage;
 	}
 
 	public Integer getPublishPosition() {

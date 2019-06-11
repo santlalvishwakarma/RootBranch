@@ -1,26 +1,41 @@
 package com.web.model.dvo;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
+@MappedSuperclass
 public abstract class BaseDVO extends ImplDataValueObject {
 
 	private static final long serialVersionUID = 3832835498961840907L;
 	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	protected Long id;
 	protected String code;
 	protected String name;
 	protected String description;
-	protected Date effectiveFrom;
-	protected Date effectiveTo;
+	@Transient
 	protected String idString;
 	protected Boolean active;
+	@Transient
 	protected String activeDescription;
+	@Transient
 	protected String userLogin;
+	@Transient
 	protected WebResourceAttributes webResourceAttributes;
+	private String createdBy;
+	private Date createdDate;
+	private String modifiedBy;
+	private Date modifiedDate;
+	@Transient
+	private String createdDateString;
+	@Transient
+	private String lastModifiedDateString;
 
 	public BaseDVO() {
 	}
@@ -102,77 +117,6 @@ public abstract class BaseDVO extends ImplDataValueObject {
 		this.description = description;
 	}
 
-	/**
-	 * @return the effectiveFrom
-	 */
-	public Date getEffectiveFrom() {
-		return effectiveFrom;
-	}
-
-	/**
-	 * @param effectiveFrom
-	 *            the effectiveFrom to set
-	 */
-	public void setEffectiveFrom(Date effectiveFrom) {
-		this.effectiveFrom = effectiveFrom;
-	}
-
-	/**
-	 * @return the effectiveTo
-	 */
-	public Date getEffectiveTo() {
-		return effectiveTo;
-	}
-
-	/**
-	 * @param effectiveTo
-	 *            the effectiveTo to set
-	 */
-	public void setEffectiveTo(Date effectiveTo) {
-		this.effectiveTo = effectiveTo;
-	}
-
-	public String getEffectiveFromString() {
-		String effectiveFromString;
-		if (effectiveFrom != null) {
-			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-			effectiveFromString = sdf.format(effectiveFrom);
-		} else {
-			effectiveFromString = "";
-		}
-		return effectiveFromString;
-	}
-
-	public void setEffectiveFromString(String effectiveFromString) {
-		if (effectiveFromString != null) {
-			try {
-				effectiveFrom = new SimpleDateFormat().parse(effectiveFromString);
-			} catch (ParseException e) {
-
-			}
-		}
-	}
-
-	public String getEffectiveToString() {
-		String effectiveToString;
-		if (effectiveTo != null) {
-			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-			effectiveToString = sdf.format(effectiveTo);
-		} else {
-			effectiveToString = "";
-		}
-		return effectiveToString;
-	}
-
-	public void setEffectiveToString(String effectiveToString) {
-		if (effectiveToString != null) {
-			try {
-				effectiveTo = new SimpleDateFormat().parse(effectiveToString);
-			} catch (ParseException e) {
-
-			}
-		}
-	}
 
 	public Boolean getActive() {
 		if (active == null) {
@@ -224,4 +168,66 @@ public abstract class BaseDVO extends ImplDataValueObject {
 	public void setUserLogin(String userLogin) {
 		this.userLogin = userLogin;
 	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+	
+	public String getCreatedDateString() {
+		if (createdDate != null) {
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+			createdDateString = sdf.format(createdDate);
+		} else {
+			createdDateString = "";
+		}
+		return createdDateString;
+	}
+
+	public void setCreatedDateString(String createdDateString) {
+		this.createdDateString = createdDateString;
+	}
+
+	public String getLastModifiedDateString() {
+		if (modifiedDate != null) {
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+			lastModifiedDateString = sdf.format(modifiedDate);
+		} else {
+			lastModifiedDateString = "";
+		}
+		return lastModifiedDateString;
+	}
+
+	public void setLastModifiedDateString(String lastModifiedDateString) {
+		this.lastModifiedDateString = lastModifiedDateString;
+	}
+	
+	
 }
